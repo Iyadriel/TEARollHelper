@@ -2,11 +2,7 @@ local _, ns = ...
 
 local MAX_ROLL = 20
 
-local isCrit
-local calculateAttackValue, calculateAttackDmg, applyCritModifier
-local calculateDefendValue, calculateDamageTaken, calculateRetaliationDamage
-
-function isCrit(roll)
+local function isCrit(roll)
     local critReq = MAX_ROLL
     if TeaRollHelper.db.profile.feats.keenSense then
         critReq = critReq - 1
@@ -16,11 +12,11 @@ end
 
 -- [[ Offence ]]
 
-function calculateAttackValue(roll, offence, buff)
+local function calculateAttackValue(roll, offence, buff)
     return roll + offence + buff
 end
 
-function calculateAttackDmg(threshold, attackValue)
+local function calculateAttackDmg(threshold, attackValue)
     local overkill = attackValue - threshold
     if overkill >= 0 then
         return 1 + floor(overkill / 2)
@@ -28,17 +24,17 @@ function calculateAttackDmg(threshold, attackValue)
     return 0
 end
 
-function applyCritModifier(dmg)
+local function applyCritModifier(dmg)
     return dmg * 2
 end
 
 -- [[ Defence ]]
 
-function calculateDefendValue(roll, defence, buff)
+local function calculateDefendValue(roll, defence, buff)
     return roll + defence + buff
 end
 
-function calculateDamageTaken(threshold, defendValue, dmgRisk)
+local function calculateDamageTaken(threshold, defendValue, dmgRisk)
     local safetyMargin = defendValue - threshold
     if safetyMargin >= 0 then
         return 0
@@ -46,7 +42,7 @@ function calculateDamageTaken(threshold, defendValue, dmgRisk)
     return dmgRisk
 end
 
-function calculateRetaliationDamage(defence)
+local function calculateRetaliationDamage(defence)
     return 1 + defence
 end
 
