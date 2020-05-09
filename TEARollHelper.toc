@@ -1,0 +1,22 @@
+## Interface: 80300
+## Title: The Evernight Aegis Roll Helper
+## Author: Iyadriel
+## Version: 0.0.3
+## Notes: RP roll utilities for The Evernight Aegis guild
+## SavedVariables: TeaRollHelperDB
+
+embeds.xml
+
+main.lua
+
+actions.lua
+character.lua
+db.lua
+events.lua
+rules.lua
+turns.lua
+
+ui.lua
+ui/buffs.lua
+ui/character.lua
+ui/roll.lua
