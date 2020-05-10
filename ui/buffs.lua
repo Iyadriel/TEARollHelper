@@ -1,5 +1,7 @@
 local _, ns = ...
 
+local COLOURS = TEARollHelper.COLOURS
+
 local turns = ns.turns
 local ui = ns.ui
 
@@ -40,6 +42,15 @@ ui.modules.buffs = {
             desc = "Buff your character's defence stat",
             order = 1
         },
+            clear = {
+                type = "execute",
+                name = "Clear",
+                desc = "Clear your current buffs",
+                order = 2,
+                func = function()
+                    turns.clearCurrentBuffs()
+                end
+            },
         description = {
             type = "description",
             name = "Buffs expire after one turn.",
