@@ -13,6 +13,10 @@ function getPlayerDefence()
     return tonumber(TeaRollHelper.db.profile.stats.defence)
 end
 
+function getPlayerSpirit()
+    return tonumber(TeaRollHelper.db.profile.stats.spirit)
+end
+
 --[[ function characterSheetToString()
     local offence = getPlayerOffence()
     local defence = getPlayerDefence()
@@ -38,3 +42,4 @@ end ]]
 
 character.getPlayerOffence = getPlayerOffence
 character.getPlayerDefence = getPlayerDefence
+character.getPlayerSpirit = getPlayerSpirit

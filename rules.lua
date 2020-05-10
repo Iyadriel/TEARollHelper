@@ -46,6 +46,28 @@ local function calculateRetaliationDamage(defence)
     return 1 + defence
 end
 
+-- [[ Healing ]]
+
+local function calculateHealValue(roll, spirit)
+    return roll + spirit
+end
+
+local function calculateAmountHealed(healValue)
+    if healValue > 19 then
+        return 5
+    elseif healValue > 14 then
+        return 4
+    elseif healValue > 9 then
+        return 3
+    elseif healValue > 4 then
+        return 2
+    elseif healValue > 1 then
+        return 1
+    end
+
+    return 0
+end
+
 -- [[ Export ]]
 
 ns.rules.MAX_ROLL = MAX_ROLL
@@ -59,4 +81,8 @@ ns.rules.defence = {
     calculateDefendValue = calculateDefendValue,
     calculateDamageTaken = calculateDamageTaken,
     calculateRetaliationDamage = calculateRetaliationDamage
+}
+ns.rules.healing = {
+    calculateHealValue = calculateHealValue,
+    calculateAmountHealed = calculateAmountHealed
 }

@@ -9,7 +9,8 @@ local defaults = {
     profile = {
         stats = {
             offence = 0,
-            defence = 0
+            defence = 0,
+            spirit = 0
         },
         feats = {
             keenSense = false
