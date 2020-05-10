@@ -1,5 +1,7 @@
 local _, ns = ...
 
+local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
+
 local actions = ns.actions
 local events = ns.events
 local rules = ns.rules
@@ -7,6 +9,7 @@ local turns = ns.turns
 
 local TURN_MODE_ATTACK = 0
 local TURN_MODE_DEFEND = 1
+local TURN_MODE_FREE = 2
 local BUFF_TYPES = {
     OFFENCE = "offence",
     DEFENCE = "defence"
@@ -14,6 +17,7 @@ local BUFF_TYPES = {
 
 local setTurnMode, setCurrentRoll, getCurrentTurnValues, handleRollResult
 local setAttackValues, setDefendValues
+local roll
 local startAttackTurn, startDefendTurn
 local getCurrentBuffs, setCurrentBuff, clearCurrentBuffs, expireCurrentBuff
 
@@ -29,6 +33,10 @@ local currentBuffs = {
     [BUFF_TYPES.OFFENCE] = 0,
     [BUFF_TYPES.DEFENCE] = 0
 }
+
+local function notifyChange()
+    AceConfigRegistry:NotifyChange("TEARollHelperRolls")
+end
 
 function setTurnMode(mode)
     currentTurnValues.turnMode = mode
@@ -55,13 +63,17 @@ function setDefendValues(defendThreshold, damageRisk)
     end
 end
 
+function roll()
+    RandomRoll(1, rules.MAX_ROLL)
+end
+
 function startAttackTurn(attackThreshold)
     events.listenForRolls()
 
     setTurnMode(TURN_MODE_ATTACK)
     setAttackValues(attackThreshold)
 
-    RandomRoll(1, rules.MAX_ROLL)
+    roll()
 end
 
 function startDefendTurn(defendThreshold, damageRisk)
@@ -70,7 +82,13 @@ function startDefendTurn(defendThreshold, damageRisk)
     setTurnMode(TURN_MODE_DEFEND)
     setDefendValues(defendThreshold, damageRisk)
 
-    RandomRoll(1, rules.MAX_ROLL)
+    roll()
+end
+
+function freeRoll()
+    events.listenForRolls()
+    setTurnMode(TURN_MODE_FREE)
+    roll()
 end
 
 function handleRollResult(roll)
@@ -80,6 +98,7 @@ function handleRollResult(roll)
     elseif currentTurnValues.turnMode == TURN_MODE_DEFEND then
         actions.performDefence(roll)
     end
+    notifyChange()
 end
 
 function getCurrentBuffs()
@@ -91,11 +110,13 @@ end
 
 function setCurrentBuff(buffType, amount)
     currentBuffs[buffType] = amount
+    notifyChange()
 end
 
 function clearCurrentBuffs()
     setCurrentBuff(BUFF_TYPES.OFFENCE, 0)
     setCurrentBuff(BUFF_TYPES.DEFENCE, 0)
+    notifyChange()
 end
 
 function expireCurrentBuff(buffType)
@@ -103,6 +124,7 @@ function expireCurrentBuff(buffType)
         TEARollHelper:Print("|cFFBBBBBBYour temporary "..buffType.." buff has expired.")
     end
     currentBuffs[buffType] = 0
+    notifyChange()
 end
 
 turns.BUFF_TYPES = BUFF_TYPES
@@ -110,6 +132,7 @@ turns.getCurrentTurnValues = getCurrentTurnValues
 turns.setCurrentRoll = setCurrentRoll
 turns.setAttackValues = setAttackValues
 turns.setDefendValues = setDefendValues
+turns.freeRoll = freeRoll
 turns.startAttackTurn = startAttackTurn
 turns.startDefendTurn = startDefendTurn
 turns.handleRollResult = handleRollResult

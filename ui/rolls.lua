@@ -25,7 +25,7 @@ ui.modules.rolls = {
             end
         }, ]]
         roll = {
-            name = "Roll",
+            name = "Roll result",
             type = "range",
             desc = "The number you rolled",
             order = 0,
@@ -39,11 +39,18 @@ ui.modules.rolls = {
                 turns.setCurrentRoll(value)
             end
         },
+        performRoll = {
+            name = "Roll",
+            type = "execute",
+            desc = "Do a /roll " .. rules.MAX_ROLL .. ".",
+            order = 1,
+            func = turns.freeRoll
+        },
         buffs = ui.modules.buffs.getOptions(),
         playerTurn = {
             name = "Player turn",
             type = "group",
-            order = 1,
+            order = 3,
             args = {
                 attack = {
                     name = "Attack",
@@ -124,7 +131,7 @@ ui.modules.rolls = {
             name = "Enemy turn",
             type = "group",
             --inline = true,
-            order = 2,
+            order = 4,
             args = {
                 defendThreshold = {
                     name = "Defend threshold",
