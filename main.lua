@@ -8,12 +8,12 @@ ns.rules = {}
 ns.turns = {}
 ns.ui = {}
 
-TeaRollHelper = LibStub("AceAddon-3.0"):NewAddon("TeaRollHelper", "AceConsole-3.0", "AceEvent-3.0")
+TEARollHelper = LibStub("AceAddon-3.0"):NewAddon("TEARollHelper", "AceConsole-3.0", "AceEvent-3.0")
 
 local AceConfig = LibStub("AceConfig-3.0")
 
-function TeaRollHelper:OnInitialize()
+function TEARollHelper:OnInitialize()
     local options = ns.ui.getOptions()
-    AceConfig:RegisterOptionsTable("TeaRollHelper", options, {"tea"})
+    AceConfig:RegisterOptionsTable("TEARollHelper", options, {"tea"})
     ns.db.initDb(options)
 end

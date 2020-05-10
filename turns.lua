@@ -83,18 +83,18 @@ end
 function setCurrentBuff(buffType, amount)
     if amount > 0 then
         currentBuffs[buffType] = amount
-        TeaRollHelper:Print("Applied temporary "..buffType.." buff of |cFF00FF00"..currentBuffs[buffType].."|r.")
+        TEARollHelper:Print("Applied temporary "..buffType.." buff of |cFF00FF00"..currentBuffs[buffType].."|r.")
     elseif amount == 0 then
         currentBuffs[buffType] = 0
-        TeaRollHelper:Print("Removed temporary "..buffType.." buff.")
+        TEARollHelper:Print("Removed temporary "..buffType.." buff.")
     else
-        TeaRollHelper:Print("Buff amount must be greater than 0.")
+        TEARollHelper:Print("Buff amount must be greater than 0.")
     end
 end
 
 function clearCurrentBuff(buffType)
     if currentBuffs[buffType] > 0 then
-        TeaRollHelper:Print("|cFFBBBBBBYour temporary "..buffType.." buff has expired.")
+        TEARollHelper:Print("|cFFBBBBBBYour temporary "..buffType.." buff has expired.")
     end
     currentBuffs[buffType] = 0
 end

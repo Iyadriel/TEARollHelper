@@ -4,7 +4,7 @@ local MAX_ROLL = 20
 
 local function isCrit(roll)
     local critReq = MAX_ROLL
-    if TeaRollHelper.db.profile.feats.keenSense then
+    if TEARollHelper.db.profile.feats.keenSense then
         critReq = critReq - 1
     end
     return roll >= critReq

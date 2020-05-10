@@ -41,7 +41,7 @@ ui.getOptions = function()
                         guiHidden = true,
                         order = 0,
                         func = function()
-                            AceConfigDialog:Open("TeaRollHelper")
+                            AceConfigDialog:Open("TEARollHelper")
                         end
                     },
                 }

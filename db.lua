@@ -19,6 +19,6 @@ local defaults = {
 }
 
 db.initDb = function(options)
-    TeaRollHelper.db = AceDB:New("TeaRollHelperDB", defaults)
-    options.args.profile = AceDBOptions:GetOptionsTable(TeaRollHelper.db)
+    TEARollHelper.db = AceDB:New("TeaRollHelperDB", defaults)
+    options.args.profile = AceDBOptions:GetOptionsTable(TEARollHelper.db)
 end

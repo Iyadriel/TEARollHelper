@@ -6,15 +6,15 @@ local turns = ns.turns
 local getPlayerOffence, getPlayerDefence,characterSheetToString
 
 function getPlayerOffence()
-    return tonumber(TeaRollHelper.db.profile.stats.offence)
+    return tonumber(TEARollHelper.db.profile.stats.offence)
 end
 
 function getPlayerDefence()
-    return tonumber(TeaRollHelper.db.profile.stats.defence)
+    return tonumber(TEARollHelper.db.profile.stats.defence)
 end
 
 function getPlayerSpirit()
-    return tonumber(TeaRollHelper.db.profile.stats.spirit)
+    return tonumber(TEARollHelper.db.profile.stats.spirit)
 end
 
 --[[ function characterSheetToString()

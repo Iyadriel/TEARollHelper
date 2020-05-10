@@ -15,14 +15,14 @@ ui.modules.character = {
             inline = true,
             order = 0,
             get = function(info)
-                return tostring(TeaRollHelper.db.profile.stats[info[#info]])
+                return tostring(TEARollHelper.db.profile.stats[info[#info]])
             end,
             set = function(info, value)
                 local stat = info[#info]
-                TeaRollHelper.db.profile.stats[stat] = tonumber(value)
+                TEARollHelper.db.profile.stats[stat] = tonumber(value)
                 -- if slash command, print feedback
                 if info[0] and info[0] ~= "" then
-                    TeaRollHelper:Print("Your character's " .. stat .. " has been set to "..value..".")
+                    TEARollHelper:Print("Your character's " .. stat .. " has been set to "..value..".")
                 end
             end,
             validate = function(info, input)
@@ -60,16 +60,16 @@ ui.modules.character = {
             inline = true,
             order = 1,
             get = function(info)
-                return TeaRollHelper.db.profile.feats[info[#info]]
+                return TEARollHelper.db.profile.feats[info[#info]]
             end,
             set = function(info, value)
                 local feat = info[#info]
                 local featName = info.option.name
-                TeaRollHelper.db.profile.feats[feat] = value
+                TEARollHelper.db.profile.feats[feat] = value
                 -- if slash command, print feedback
                 if info[0] and info[0] ~= "" then
                     local status = value and "enabled" or "disabled"
-                    TeaRollHelper:Print("Feat '" .. featName .. "' has been " .. status .. ".")
+                    TEARollHelper:Print("Feat '" .. featName .. "' has been " .. status .. ".")
                 end
             end,
             args = {

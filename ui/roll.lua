@@ -24,7 +24,7 @@ ui.modules.roll = {
                 return true
             end,
             set = function(info, threshold)
-                TeaRollHelper:Print("Attacking with threshold "..threshold..".")
+                TEARollHelper:Print("Attacking with threshold "..threshold..".")
                 turns.startAttackTurn(threshold)
             end
         },
@@ -34,7 +34,7 @@ ui.modules.roll = {
             desc = "Perform a defence roll",
             order = 1,
             validate = function(info, input)
-                local threshold, dmg = TeaRollHelper:GetArgs(input, 2)
+                local threshold, dmg = TEARollHelper:GetArgs(input, 2)
                 threshold = tonumber(threshold)
                 dmg = tonumber(dmg)
                 if threshold == nil or dmg == nil then
@@ -43,10 +43,10 @@ ui.modules.roll = {
                 return true
             end,
             set = function(info, input)
-                local threshold, dmg = TeaRollHelper:GetArgs(input, 2)
+                local threshold, dmg = TEARollHelper:GetArgs(input, 2)
                 threshold = tonumber(threshold)
                 dmg = tonumber(dmg)
-                TeaRollHelper:Print("Defending with threshold "..threshold.." and a risk of "..dmg.." damage.")
+                TEARollHelper:Print("Defending with threshold "..threshold.." and a risk of "..dmg.." damage.")
                 turns.startDefendTurn(threshold, dmg)
             end
         },

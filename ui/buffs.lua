@@ -9,7 +9,7 @@ ui.modules.buffs = {
     desc = "Apply a temporary buff",
     order = 1,
     validate = function(info, input)
-        local amount = TeaRollHelper:GetArgs(input)
+        local amount = TEARollHelper:GetArgs(input)
         if tonumber(amount) == nil then
             return "Buff value must be a number! |cFFBBBBBBExample: /tea buff offence 6"
         end
@@ -20,7 +20,7 @@ ui.modules.buffs = {
     end,
     set = function(info, input)
         local buffType = info[#info]
-        local amount = TeaRollHelper:GetArgs(input)
+        local amount = TEARollHelper:GetArgs(input)
         turns.setCurrentBuff(buffType, tonumber(amount))
     end,
     args = {

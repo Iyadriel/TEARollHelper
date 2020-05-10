@@ -5,7 +5,7 @@ local turns = ns.turns
 local PLAYER_NAME = UnitName("player")
 local listenForRolls
 
-function TeaRollHelper:CHAT_MSG_SYSTEM(event, msg)
+function TEARollHelper:CHAT_MSG_SYSTEM(event, msg)
     local author, rollResult, rollMin, rollMax = string.match(msg, "(.+) rolls (%d+) %((%d+)-(%d+)%)")
     if author == PLAYER_NAME then
         --print(author, rollResult, rollMin, rollMax)
@@ -20,7 +20,7 @@ function TeaRollHelper:CHAT_MSG_SYSTEM(event, msg)
 end
 
 function listenForRolls()
-    TeaRollHelper:RegisterEvent("CHAT_MSG_SYSTEM")
+    TEARollHelper:RegisterEvent("CHAT_MSG_SYSTEM")
 end
 
 ns.events.listenForRolls = listenForRolls
