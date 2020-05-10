@@ -4,7 +4,7 @@ local character = ns.character
 local rules = ns.rules
 local turns = ns.turns
 
-local getAttack, getDefence
+local getAttack, getDefence, getHealing
 local performAttack, performDefence
 
 function getAttack(roll, threshold, offence, buff)
@@ -38,6 +38,16 @@ function getDefence(roll, threshold, dmgRisk, defence, buff)
         damageTaken = damageTaken,
         canRetaliate = isCrit,
         retaliateDmg = retaliateDmg
+    }
+end
+
+function getHealing(roll, spirit)
+    local healValue = rules.healing.calculateHealValue(roll, spirit)
+    local amountHealed = rules.healing.calculateAmountHealed(healValue)
+
+    return {
+        amountHealed = amountHealed,
+        isCrit = rules.isCrit(roll)
     }
 end
 
@@ -101,5 +111,6 @@ end
 
 ns.actions.getAttack = getAttack
 ns.actions.getDefence = getDefence
+ns.actions.getHealing = getHealing
 ns.actions.performAttack = performAttack
 ns.actions.performDefence = performDefence
