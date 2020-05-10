@@ -81,14 +81,7 @@ function getCurrentBuffs()
 end
 
 function setCurrentBuff(buffType, amount)
-    if amount > 0 then
         currentBuffs[buffType] = amount
-        TEARollHelper:Print("Applied temporary "..buffType.." buff of |cFF00FF00"..currentBuffs[buffType].."|r.")
-    elseif amount == 0 then
-        currentBuffs[buffType] = 0
-        TEARollHelper:Print("Removed temporary "..buffType.." buff.")
-    else
-        TEARollHelper:Print("Buff amount must be greater than 0.")
     end
 end
 

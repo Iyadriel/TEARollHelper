@@ -22,6 +22,10 @@ ui.modules.buffs = {
         local buffType = info[#info]
         local amount = TEARollHelper:GetArgs(input)
         turns.setCurrentBuff(buffType, tonumber(amount))
+            -- if slash command, print feedback
+            if info[0] and info[0] ~= "" then
+                TEARollHelper:Print("Applied temporary " .. buffType .. " buff of " .. COLOURS.BUFF .. amount .. "|r.")
+            end
     end,
     args = {
         offence = {
