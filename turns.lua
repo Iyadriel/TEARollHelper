@@ -20,9 +20,9 @@ local getCurrentBuffs, setCurrentBuff, clearCurrentBuffs, expireCurrentBuff
 local currentTurnValues = {
     turnMode = TURN_MODE_ATTACK,
     roll = 1,
-    attackThreshold = 0,
-    defendThreshold = 0,
-    damageRisk = 0
+    attackThreshold = 12,
+    defendThreshold = 10,
+    damageRisk = 4
 }
 
 local currentBuffs = {
