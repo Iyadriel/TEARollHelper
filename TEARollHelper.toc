@@ -19,4 +19,5 @@ turns.lua
 ui.lua
 ui/buffs.lua
 ui/character.lua
+ui/colours.lua
 ui/roll.lua
