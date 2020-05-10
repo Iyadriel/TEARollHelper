@@ -74,15 +74,21 @@ ui.modules.character = {
                 end
             end,
             args = {
-                desc = {
-                    type = "description",
-                    name = "More Feats may be supported in the future."
-                },
                 keenSense = {
                     type = "toggle",
                     name = "Keen sense",
                     desc = "The threshold for getting a critical roll is reduced to 19 from 20."
-                }
+                },
+                phalanx = {
+                    type = "toggle",
+                    name = "Phalanx",
+                    desc = "The threshold for taking double damage on a failed Melee Save is increased to 8 below target threshold, up from 5 below target threshold."
+                },
+                desc = {
+                    type = "description",
+                    name = "More Feats may be supported in the future.",
+                    order = 2
+                },
             }
         }
     }

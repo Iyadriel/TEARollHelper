@@ -49,7 +49,8 @@ end
 -- [[ Melee save ]]
 
 local function isSaveBigFail(defendValue, threshold)
-    return (defendValue + 5) <= threshold
+    local failThreshold = TEARollHelper.db.profile.feats.phalanx and 8 or 5
+    return (defendValue + failThreshold) <= threshold
 end
 
 local function applyBigFailModifier(damageTaken)

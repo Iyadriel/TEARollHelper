@@ -13,7 +13,8 @@ local defaults = {
             spirit = 0
         },
         feats = {
-            keenSense = false
+            keenSense = false,
+            phalanx = false
         }
     }
 }
