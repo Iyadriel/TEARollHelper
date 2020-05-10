@@ -13,7 +13,7 @@ local BUFF_TYPES = {
 
 local setTurnMode, getCurrentTurnValues, clearCurrentTurnValues, handleRollResult
 local startAttackTurn, startDefendTurn
-local getCurrentBuffs, setCurrentBuff, clearCurrentBuff
+local getCurrentBuffs, setCurrentBuff, clearCurrentBuffs, expireCurrentBuff
 
 local currentTurnValues = {
     turnMode = TURN_MODE_ATTACK,
@@ -92,7 +92,7 @@ function setCurrentBuff(buffType, amount)
     end
 end
 
-function clearCurrentBuff(buffType)
+function expireCurrentBuff(buffType)
     if currentBuffs[buffType] > 0 then
         TEARollHelper:Print("|cFFBBBBBBYour temporary "..buffType.." buff has expired.")
     end

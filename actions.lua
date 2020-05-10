@@ -77,7 +77,7 @@ function performAttack(roll)
         TEARollHelper:Print("Attack failed. "..details)
     end
 
-    turns.clearCurrentBuff(turns.BUFF_TYPES.OFFENCE)
+    turns.expireCurrentBuff(turns.BUFF_TYPES.OFFENCE)
 end
 
 function performDefence(roll)
@@ -106,7 +106,7 @@ function performDefence(roll)
         TEARollHelper:Print("Defence failed. You take |cFFFF0000"..result.damageTaken.."|r damage. "..details)
     end
 
-    turns.clearCurrentBuff(turns.BUFF_TYPES.DEFENCE)
+    turns.expireCurrentBuff(turns.BUFF_TYPES.DEFENCE)
 end
 
 ns.actions.getAttack = getAttack
