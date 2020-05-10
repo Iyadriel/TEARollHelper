@@ -113,16 +113,46 @@ ui.modules.rolls = {
                                 local healing = actions.getHealing(turns.getCurrentTurnValues().roll, spirit)
 
                                 if healing.amountHealed > 0 then
+                                    local amount = tostring(healing.amountHealed)
                                     if healing.isCrit then
-                                        return COLOURS.CRITICAL .. "CRITICAL HEAL!|r " .. COLOURS.HEALING .. "You can heal everyone in line of sight for " .. tostring(healing.amountHealed) .. " HP."
+                                        return COLOURS.CRITICAL .. "MANY HEALS!|r " .. COLOURS.HEALING .. "You can heal everyone in line of sight for " .. amount .. " HP."
                                     else
-                                        return COLOURS.HEALING .. "You can heal for " .. tostring(healing.amountHealed) .. " HP."
+                                        return COLOURS.HEALING .. "You can heal someone for " .. amount .. " HP."
                                     end
                                 else
                                     return "You can't heal anyone with this roll."
                                 end
                             end
                         },
+                    }
+                },
+                buff = {
+                    name = "Buff",
+                    type = "group",
+                    inline = true,
+                    order = 2,
+                    args = {
+                        buff = {
+                            name = "Buffing",
+                            type = "description",
+                            desc = "How much you can buff for",
+                            order = 4,
+                            name = function()
+                                local spirit = character.getPlayerSpirit()
+                                local buff = actions.getBuff(turns.getCurrentTurnValues().roll, spirit)
+
+                                if buff.amountBuffed > 0 then
+                                    local amount = tostring(buff.amountBuffed)
+                                    if buff.isCrit then
+                                        return COLOURS.CRITICAL .. "BIG BUFF!|r " .. COLOURS.BUFF .. "You can buff everyone in line of sight for " .. amount .. "."
+                                    else
+                                        return COLOURS.BUFF .. "You can buff someone for " .. amount .. "."
+                                    end
+                                else
+                                    return "You can't buff anyone with this roll."
+                                end
+                            end
+                        }
                     }
                 }
             }

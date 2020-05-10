@@ -4,7 +4,7 @@ local character = ns.character
 local rules = ns.rules
 local turns = ns.turns
 
-local getAttack, getDefence, getHealing
+local getAttack, getDefence, getHealing, getBuff
 local performAttack, performDefence
 
 function getAttack(roll, threshold, offence, buff)
@@ -47,6 +47,16 @@ function getHealing(roll, spirit)
 
     return {
         amountHealed = amountHealed,
+        isCrit = rules.isCrit(roll)
+    }
+end
+
+function getBuff(roll, spirit)
+    local buffValue = rules.buffing.calculateBuffValue(roll, spirit)
+    local amountBuffed = rules.buffing.calculateBuffAmount(buffValue)
+
+    return {
+        amountBuffed = amountBuffed,
         isCrit = rules.isCrit(roll)
     }
 end
@@ -112,5 +122,6 @@ end
 ns.actions.getAttack = getAttack
 ns.actions.getDefence = getDefence
 ns.actions.getHealing = getHealing
+ns.actions.getBuff = getBuff
 ns.actions.performAttack = performAttack
 ns.actions.performDefence = performDefence

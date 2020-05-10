@@ -68,6 +68,16 @@ local function calculateAmountHealed(healValue)
     return 0
 end
 
+-- [[ Buffing ]]
+
+local function calculateBuffValue(roll, spirit)
+    return roll + spirit
+end
+
+local function calculateBuffAmount(buffValue)
+    return ceil(buffValue / 2)
+end
+
 -- [[ Export ]]
 
 ns.rules.MAX_ROLL = MAX_ROLL
@@ -85,4 +95,8 @@ ns.rules.defence = {
 ns.rules.healing = {
     calculateHealValue = calculateHealValue,
     calculateAmountHealed = calculateAmountHealed
+}
+ns.rules.buffing = {
+    calculateBuffValue = calculateBuffValue,
+    calculateBuffAmount = calculateBuffAmount
 }
