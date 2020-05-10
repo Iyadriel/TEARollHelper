@@ -4,7 +4,7 @@ local character = ns.character
 local rules = ns.rules
 local turns = ns.turns
 
-local getAttack, getDefence, getHealing, getBuff
+local getAttack, getDefence, getMeleeSave, getHealing, getBuff
 local performAttack, performDefence
 
 function getAttack(roll, threshold, offence, buff)
@@ -38,6 +38,22 @@ function getDefence(roll, threshold, dmgRisk, defence, buff)
         damageTaken = damageTaken,
         canRetaliate = isCrit,
         retaliateDmg = retaliateDmg
+    }
+end
+
+function getMeleeSave(roll, threshold, dmgRisk, defence, buff)
+    local defendValue = rules.defence.calculateDefendValue(roll, defence, buff)
+    local damageTaken = rules.defence.calculateDamageTaken(threshold, defendValue, dmgRisk)
+    local isBigFail = rules.meleeSave.isSaveBigFail(defendValue, threshold)
+
+    if isBigFail then
+        damageTaken = rules.meleeSave.applyBigFailModifier(damageTaken)
+    end
+
+    return {
+        defendValue = defendValue,
+        damageTaken = damageTaken,
+        isBigFail = isBigFail
     }
 end
 
@@ -121,6 +137,7 @@ end
 
 ns.actions.getAttack = getAttack
 ns.actions.getDefence = getDefence
+ns.actions.getMeleeSave = getMeleeSave
 ns.actions.getHealing = getHealing
 ns.actions.getBuff = getBuff
 ns.actions.performAttack = performAttack

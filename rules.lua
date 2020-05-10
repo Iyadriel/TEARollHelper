@@ -46,6 +46,16 @@ local function calculateRetaliationDamage(defence)
     return 1 + defence
 end
 
+-- [[ Melee save ]]
+
+local function isSaveBigFail(defendValue, threshold)
+    return (defendValue + 5) <= threshold
+end
+
+local function applyBigFailModifier(damageTaken)
+    return damageTaken * 2
+end
+
 -- [[ Healing ]]
 
 local function calculateHealValue(roll, spirit)
@@ -91,6 +101,10 @@ ns.rules.defence = {
     calculateDefendValue = calculateDefendValue,
     calculateDamageTaken = calculateDamageTaken,
     calculateRetaliationDamage = calculateRetaliationDamage
+}
+ns.rules.meleeSave = {
+    isSaveBigFail = isSaveBigFail,
+    applyBigFailModifier = applyBigFailModifier
 }
 ns.rules.healing = {
     calculateHealValue = calculateHealValue,

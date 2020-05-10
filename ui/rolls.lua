@@ -160,7 +160,6 @@ ui.modules.rolls = {
         enemyTurn = {
             name = "Enemy turn",
             type = "group",
-            --inline = true,
             order = 4,
             args = {
                 defendThreshold = {
@@ -191,27 +190,65 @@ ui.modules.rolls = {
                         turns.setDefendValues(nil, tonumber(value))
                     end
                 },
-                damageTaken = {
-                    name = "Damage taken",
-                    type = "description",
-                    desc = "How much damage you take this turn",
+                defend = {
+                    name = "Defend",
+                    type = "group",
+                    inline = true,
                     order = 2,
-                    name = function()
-                        local defence = character.getPlayerDefence()
-                        local buff = turns.getCurrentBuffs().defence
-                        local values = turns.getCurrentTurnValues()
-                        local defend = actions.getDefence(values.roll, values.defendThreshold, values.damageRisk, defence, buff)
+                    args = {
+                        damageTaken = {
+                            name = "Damage taken",
+                            type = "description",
+                            desc = "How much damage you take this turn",
+                            order = 0,
+                            name = function()
+                                local defence = character.getPlayerDefence()
+                                local buff = turns.getCurrentBuffs().defence
+                                local values = turns.getCurrentTurnValues()
+                                local defend = actions.getDefence(values.roll, values.defendThreshold, values.damageRisk, defence, buff)
 
-                        if defend.damageTaken > 0 then
-                            return COLOURS.DAMAGE .. "You take " .. tostring(defend.damageTaken) .. " damage."
-                        else
-                            local msg = "Safe! You don't take damage this turn."
-                            if defend.canRetaliate then
-                                msg = msg .. COLOURS.CRITICAL .. "\nRETALIATE!|r You can deal "..defend.retaliateDmg.." damage to your attacker!"
+                                if defend.damageTaken > 0 then
+                                    return COLOURS.DAMAGE .. "You take " .. tostring(defend.damageTaken) .. " damage."
+                                else
+                                    local msg = "Safe! You don't take damage this turn."
+                                    if defend.canRetaliate then
+                                        msg = msg .. COLOURS.CRITICAL .. "\nRETALIATE!|r You can deal "..defend.retaliateDmg.." damage to your attacker!"
+                                    end
+                                    return msg
+                                end
                             end
-                            return msg
-                        end
-                    end
+                        },
+                    },
+                },
+                save = {
+                    name = "Melee save",
+                    type = "group",
+                    inline = true,
+                    order = 3,
+                    args = {
+                        saveDamageTaken = {
+                            name = "Damage taken",
+                            type = "description",
+                            desc = "How much damage you take this turn",
+                            order = 0,
+                            name = function()
+                                local defence = character.getPlayerDefence()
+                                local buff = turns.getCurrentBuffs().defence
+                                local values = turns.getCurrentTurnValues()
+                                local save = actions.getMeleeSave(values.roll, values.defendThreshold, values.damageRisk, defence, buff)
+
+                                if save.damageTaken > 0 then
+                                    local msg = ""
+                                    if save.isBigFail then
+                                        msg = COLOURS.DAMAGE .. "Bad save! |r"
+                                    end
+                                    return msg .. "You can save your ally, |r" .. COLOURS.DAMAGE .. "but you will take " .. tostring(save.damageTaken) .. " damage."
+                                else
+                                    return COLOURS.SAVE .. "You can save your ally without taking any damage yourself."
+                                end
+                            end
+                        },
+                    },
                 },
             }
         },
