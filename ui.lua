@@ -6,25 +6,32 @@ local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 ui.modules = {}
 
 ui.getOptions = function()
-    return {
-        name = "TeaRollHelper",
+    local options = {
+        name = "TEA Roll Helper",
         handler = TeaRollHelper,
         type = 'group',
         args = {
-            roll = ui.modules.roll,
+            roll = {
+                name = "Show roll window",
+                type = "execute",
+                order = 0,
+                func = function()
+                    AceConfigDialog:Open("TEARollHelperRolls")
+                end
+            },
+            rolls = ui.modules.roll,
             character = {
                 name = "Character",
                 type = "group",
                 desc = "Character setup",
                 cmdInline = true,
                 childGroups = "tab",
-                order = 1,
+                order = 2,
                 args = {
+                    buff = ui.modules.buffs.getOptions(),
                     character = ui.modules.character,
-                    buff = ui.modules.buffs
                 }
             },
-            rolls = ui.modules.rolls,
             -- this group just serves to have a nice header at the bottom of the cmd printout
             config = {
                 name = "config",
@@ -32,12 +39,11 @@ ui.getOptions = function()
                 desc = "Configuration",
                 guiHidden = true,
                 cmdInline = true,
-                order = 2,
+                order = 3,
                 args = {
                     config = {
-                        name = "config",
+                        name = "Show config UI",
                         type = "execute",
-                        desc = "Show config UI",
                         guiHidden = true,
                         order = 0,
                         func = function()
@@ -48,4 +54,13 @@ ui.getOptions = function()
             }
         }
     }
+
+    -- We want this in the cmd line and in the roll window, but not the config window, so disable it here.
+    options.args.character.args.buff.guiHidden = true
+
+    return options
+end
+
+ui.getRollOptions = function()
+    return ui.modules.rolls
 end

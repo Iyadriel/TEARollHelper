@@ -83,7 +83,7 @@ end
 function performDefence(roll)
     local currentTurnValues = turns.getCurrentTurnValues()
 
-    local threshold = currentTurnValues.defendTreshold
+    local threshold = currentTurnValues.defendThreshold
     local dmgRisk = currentTurnValues.damageRisk
     local defence = character.getPlayerDefence()
     local buff = turns.getCurrentBuffs().defence
