@@ -52,8 +52,12 @@ ui.modules.buffs.getOptions = function()
                 name = "Clear",
                 desc = "Clear your current buffs",
                 order = 2,
-                func = function()
+                func = function(info)
                     turns.clearCurrentBuffs()
+                    -- if slash command, print feedback
+                    if info[0] and info[0] ~= "" then
+                        TEARollHelper:Print("Temporary buffs have been cleared.")
+                    end
                 end
             },
             description = {
