@@ -4,7 +4,42 @@ local character = ns.character
 local rules = ns.rules
 local turns = ns.turns
 
+local getAttack, getDefence
 local performAttack, performDefence
+
+function getAttack(roll, threshold, offence, buff)
+    local attackValue = rules.offence.calculateAttackValue(roll, offence, buff)
+    local dmg = rules.offence.calculateAttackDmg(threshold, attackValue)
+    local isCrit = rules.isCrit(roll)
+
+    if isCrit then
+        dmg = rules.offence.applyCritModifier(dmg)
+    end
+
+    return {
+        attackValue = attackValue,
+        dmg = dmg,
+        isCrit = isCrit
+    }
+end
+
+function getDefence(roll, threshold, dmgRisk, defence, buff)
+    local defendValue = rules.defence.calculateDefendValue(roll, defence, buff)
+    local damageTaken = rules.defence.calculateDamageTaken(threshold, defendValue, dmgRisk)
+    local isCrit = rules.isCrit(roll)
+    local retaliateDmg = 0
+
+    if isCrit then
+        retaliateDmg = rules.defence.calculateRetaliationDamage(defence)
+    end
+
+    return {
+        defendValue = defendValue,
+        damageTaken = damageTaken,
+        canRetaliate = isCrit,
+        retaliateDmg = retaliateDmg
+    }
+end
 
 function performAttack(roll)
     local currentTurnValues = turns.getCurrentTurnValues()
@@ -13,25 +48,23 @@ function performAttack(roll)
     local offence = character.getPlayerOffence()
     local buff = turns.getCurrentBuffs().offence
 
-    local attackValue = rules.offence.calculateAttackValue(roll, offence, buff)
-    local dmg = rules.offence.calculateAttackDmg(threshold, attackValue)
+    local attack = getAttack(roll, threshold, offence, buff)
 
     local details
     if buff > 0 then
-        details = "|cFFBBBBBB("..threshold.." to beat, your attack was "..roll.." + "..offence.." |cFF00FF00+ "..buff.."|r = "..attackValue..")"
+        details = "|cFFBBBBBB("..threshold.." to beat, your attack was "..roll.." + "..offence.." |cFF00FF00+ "..buff.."|r = "..attack.attackValue..")"
     else
-        details = "|cFFBBBBBB("..threshold.." to beat, your attack was "..roll.." + "..offence.." = "..attackValue..")"
+        details = "|cFFBBBBBB("..threshold.." to beat, your attack was "..roll.." + "..offence.." = "..attack.attackValue..")"
     end
 
-    if dmg > 0 then
-        if rules.isCrit(roll) then
-            dmg = rules.offence.applyCritModifier(dmg)
-            TeaRollHelper:Print("CRITICAL HIT! You deal "..dmg.." damage. "..details)
+    if attack.dmg > 0 then
+        if attack.isCrit then
+            TEARollHelper:Print("CRITICAL HIT! You deal "..attack.dmg.." damage. "..details)
         else
-            TeaRollHelper:Print("Attack successful! You deal "..dmg.." damage. "..details)
+            TEARollHelper:Print("Attack successful! You deal "..attack.dmg.." damage. "..details)
         end
     else
-        TeaRollHelper:Print("Attack failed. "..details)
+        TEARollHelper:Print("Attack failed. "..details)
     end
 
     turns.clearCurrentBuff(turns.BUFF_TYPES.OFFENCE)
@@ -45,28 +78,28 @@ function performDefence(roll)
     local defence = character.getPlayerDefence()
     local buff = turns.getCurrentBuffs().defence
 
-    local defendValue = rules.defence.calculateDefendValue(roll, defence, buff)
-    local damageTaken = rules.defence.calculateDamageTaken(threshold, defendValue, dmgRisk)
+    local result = getDefence(roll, threshold, dmgRisk, defence, buff)
 
     local details
     if buff > 0 then
-        details = "|cFFBBBBBB("..threshold.." to beat, your defence was "..roll.." + "..defence.." |cFF00FF00+ "..buff.."|r = "..defendValue..")"
+        details = "|cFFBBBBBB("..threshold.." to beat, your defence was "..roll.." + "..defence.." |cFF00FF00+ "..buff.."|r = "..result.defendValue..")"
     else
-        details = "|cFFBBBBBB("..threshold.." to beat, your defence was "..roll.." + "..defence.." = "..defendValue..")"
+        details = "|cFFBBBBBB("..threshold.." to beat, your defence was "..roll.." + "..defence.." = "..result.defendValue..")"
     end
 
-    if damageTaken == 0 then
-        TeaRollHelper:Print("Safe! You take no damage. "..details)
-        if rules.isCrit(roll) then
-            local retaliateDmg = rules.defence.calculateRetaliationDamage(defence)
-            TeaRollHelper:Print("RETALIATE! You can deal "..retaliateDmg.." damage to your attacker!")
+    if result.damageTaken == 0 then
+        TEARollHelper:Print("Safe! You take no damage. "..details)
+        if result.canRetaliate then
+            TEARollHelper:Print("RETALIATE! You can deal "..result.retaliateDmg.." damage to your attacker!")
         end
     else
-        TeaRollHelper:Print("Defence failed. You take |cFFFF0000"..damageTaken.."|r damage. "..details)
+        TEARollHelper:Print("Defence failed. You take |cFFFF0000"..result.damageTaken.."|r damage. "..details)
     end
 
     turns.clearCurrentBuff(turns.BUFF_TYPES.DEFENCE)
 end
 
+ns.actions.getAttack = getAttack
+ns.actions.getDefence = getDefence
 ns.actions.performAttack = performAttack
 ns.actions.performDefence = performDefence
