@@ -15,6 +15,7 @@ ui.modules.buffs.getOptions = function()
         guiInline = true,
         order = 2,
         validate = function(info, input)
+            if not input then return true end
             local amount = TEARollHelper:GetArgs(input)
             if tonumber(amount) == nil then
                 return "Buff value must be a number! |cFFBBBBBBExample: /tea buff offence 6"
