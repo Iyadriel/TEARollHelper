@@ -72,7 +72,7 @@ local function calculateAmountHealed(healValue)
         return 3
     elseif healValue > 4 then
         return 2
-    elseif healValue > 1 then
+    elseif healValue > 0 then
         return 1
     end
 
