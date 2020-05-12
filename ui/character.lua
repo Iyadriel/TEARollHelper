@@ -3,6 +3,7 @@ local _, ns = ...
 local COLOURS = TEARollHelper.COLOURS
 
 local character = ns.character
+local feats = ns.resources.feats
 local racialTraits = ns.resources.racialTraits
 local turns = ns.turns
 local ui = ns.ui
@@ -76,7 +77,7 @@ ui.modules.character = {
             inline = true,
             order = 1,
             get = function(info)
-                return TEARollHelper.db.profile.feats[info[#info]]
+                return character.hasFeatByID(info[#info])
             end,
             set = function(info, value)
                 local feat = info[#info]
@@ -88,23 +89,25 @@ ui.modules.character = {
                     TEARollHelper:Print("Feat '" .. featName .. "' has been " .. status .. ".")
                 end
             end,
-            args = {
-                keenSense = {
-                    type = "toggle",
-                    name = "Keen sense",
-                    desc = "The threshold for getting a critical roll is reduced to 19 from 20."
-                },
-                phalanx = {
-                    type = "toggle",
-                    name = "Phalanx",
-                    desc = "The threshold for taking double damage on a failed Melee Save is increased to 8 below target threshold, up from 5 below target threshold."
-                },
-                desc = {
+            args = (function()
+                local featOptions = {}
+                for i = 1, #feats.FEAT_KEYS do
+                    local key = feats.FEAT_KEYS[i]
+                    local feat = feats.FEATS[key]
+                    featOptions[key] = {
+                        type = "toggle",
+                        name = feat.name,
+                        desc = feat.desc,
+                        order = i
+                    }
+                end
+                featOptions.desc = {
                     type = "description",
                     name = "More Feats may be supported in the future.",
-                    order = 2
-                },
-            }
+                    order = #feats.FEAT_KEYS + 1
+                }
+                return featOptions
+            end)()
         },
         racialTrait = {
             name = "Racial trait (partially implemented)",

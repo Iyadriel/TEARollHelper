@@ -5,7 +5,7 @@ local turns = ns.turns
 
 local getPlayerOffence, getPlayerDefence, getPlayerSpirit
 local hasOffenceMastery
-local hasRacialTrait
+local hasFeat, hasFeatByID, hasRacialTrait
 
 function getPlayerOffence()
     return tonumber(TEARollHelper.db.profile.stats.offence)
@@ -21,6 +21,14 @@ end
 
 function hasOffenceMastery()
     return getPlayerOffence() >= 6
+end
+
+function hasFeat(feat)
+    return hasFeatByID(feat.id)
+end
+
+function hasFeatByID(featID)
+    return TEARollHelper.db.profile.feats[featID]
 end
 
 function hasRacialTrait(racialTrait)
@@ -54,4 +62,6 @@ character.getPlayerOffence = getPlayerOffence
 character.getPlayerDefence = getPlayerDefence
 character.getPlayerSpirit = getPlayerSpirit
 character.hasOffenceMastery = hasOffenceMastery
+character.hasFeat = hasFeat
+character.hasFeatByID = hasFeatByID
 character.hasRacialTrait = hasRacialTrait

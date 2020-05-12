@@ -5,6 +5,7 @@ ns.character = {}
 ns.db = {}
 ns.events = {}
 ns.resources = {
+    feats = {},
     racialTraits = {}
 }
 ns.rules = {}

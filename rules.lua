@@ -1,6 +1,7 @@
 local _, ns = ...
 
 local character = ns.character
+local FEATS = ns.resources.feats.FEATS
 local racialTraits = ns.resources.racialTraits
 
 local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
@@ -9,7 +10,7 @@ local MAX_ROLL = 20
 
 local function isCrit(roll)
     local critReq = MAX_ROLL
-    if TEARollHelper.db.profile.feats.keenSense then
+    if character.hasFeat(FEATS.KEEN_SENSE) then
         critReq = critReq - 1
     end
     return roll >= critReq
