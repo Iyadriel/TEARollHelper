@@ -19,14 +19,13 @@ ui.getOptions = function()
                     AceConfigDialog:Open("TEARollHelperRolls")
                 end
             },
-            rolls = ui.modules.roll,
             character = {
                 name = "Character",
                 type = "group",
                 desc = "Character setup",
                 cmdInline = true,
                 childGroups = "tab",
-                order = 2,
+                order = 1,
                 args = {
                     buff = ui.modules.buffs.getOptions(),
                     character = ui.modules.character,
@@ -39,7 +38,7 @@ ui.getOptions = function()
                 desc = "Configuration",
                 guiHidden = true,
                 cmdInline = true,
-                order = 3,
+                order = 2,
                 args = {
                     config = {
                         name = "Show config UI",
