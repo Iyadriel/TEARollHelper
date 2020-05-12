@@ -1,6 +1,5 @@
 local _, ns = ...
 
-local character = ns.character
 local rules = ns.rules
 local turns = ns.turns
 
