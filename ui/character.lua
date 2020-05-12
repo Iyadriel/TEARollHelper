@@ -5,8 +5,8 @@ local turns = ns.turns
 local ui = ns.ui
 
 local RACIAL_TRAIT_LIST = {}
-for raceID, raceName in pairs(racialTraits.RACE_NAMES) do
-    RACIAL_TRAIT_LIST[raceID] = raceName .. " (" .. racialTraits.RACIAL_TRAITS[raceID].name .. ")"
+for key, trait in pairs(racialTraits.RACIAL_TRAITS) do
+    RACIAL_TRAIT_LIST[trait.id] = racialTraits.RACE_NAMES[trait.id] .. " (" .. trait.name .. ")"
 end
 
 ui.modules.character = {
@@ -102,16 +102,16 @@ ui.modules.character = {
             type = "select",
             order = 2,
             get = function()
-                return TEARollHelper.db.profile.racialTrait
+                return TEARollHelper.db.profile.racialTraitID
             end,
             set = function(info, value)
-                TEARollHelper.db.profile.racialTrait = tonumber(value)
+                TEARollHelper.db.profile.racialTraitID = tonumber(value)
             end,
             values = RACIAL_TRAIT_LIST
         },
         racialTraitDesc = {
             name = function()
-                local trait = racialTraits.RACIAL_TRAITS[TEARollHelper.db.profile.racialTrait]
+                local trait = racialTraits.getRacialTrait(TEARollHelper.db.profile.racialTraitID)
                 return trait and trait.desc or ""
             end,
             type = "description",

@@ -3,7 +3,7 @@ local _, ns = ...
 local character = ns.character
 local turns = ns.turns
 
-local getPlayerOffence, getPlayerDefence,characterSheetToString
+local getPlayerOffence, getPlayerDefence, getPlayerSpirit, hasRacialTrait
 
 function getPlayerOffence()
     return tonumber(TEARollHelper.db.profile.stats.offence)
@@ -15,6 +15,10 @@ end
 
 function getPlayerSpirit()
     return tonumber(TEARollHelper.db.profile.stats.spirit)
+end
+
+function hasRacialTrait(racialTrait)
+    return TEARollHelper.db.profile.racialTraitID == racialTrait.id
 end
 
 --[[ function characterSheetToString()
@@ -43,3 +47,4 @@ end ]]
 character.getPlayerOffence = getPlayerOffence
 character.getPlayerDefence = getPlayerDefence
 character.getPlayerSpirit = getPlayerSpirit
+character.hasRacialTrait = hasRacialTrait
