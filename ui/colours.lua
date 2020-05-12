@@ -4,5 +4,8 @@ TEARollHelper.COLOURS = {
     SAVE = '|cff00ff00',
     BUFF = '|cff0070dd',
     CRITICAL = '|cffa335ee',
-    MASTERY = '|cffff8000'
+    MASTERY = '|cffff8000',
+    DAMAGE_TYPES = {
+        SHADOW = '|cff7669b8'
+    }
 }

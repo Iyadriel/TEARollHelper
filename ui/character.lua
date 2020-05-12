@@ -107,7 +107,7 @@ ui.modules.character = {
             }
         },
         racialTrait = {
-            name = "Racial trait (not yet implemented)",
+            name = "Racial trait (partially implemented)",
             type = "select",
             order = 2,
             get = function()

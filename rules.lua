@@ -1,6 +1,9 @@
 local _, ns = ...
 
 local character = ns.character
+local racialTraits = ns.resources.racialTraits
+
+local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
 
 local MAX_ROLL = 20
 
@@ -32,6 +35,14 @@ end
 
 local function applyCritModifier(dmg)
     return dmg * 2
+end
+
+local function canProcEntropicEmbrace()
+    return character.hasRacialTrait(RACIAL_TRAITS.ENTROPIC_EMBRACE)
+end
+
+local function hasEntropicEmbraceProc(roll, threshold)
+    return roll == threshold
 end
 
 -- [[ Defence ]]
@@ -102,7 +113,9 @@ ns.rules.isCrit = isCrit
 ns.rules.offence = {
     calculateAttackValue = calculateAttackValue,
     calculateAttackDmg = calculateAttackDmg,
-    applyCritModifier = applyCritModifier
+    applyCritModifier = applyCritModifier,
+    canProcEntropicEmbrace = canProcEntropicEmbrace,
+    hasEntropicEmbraceProc = hasEntropicEmbraceProc
 }
 ns.rules.defence = {
     calculateDefendValue = calculateDefendValue,

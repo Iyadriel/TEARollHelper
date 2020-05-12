@@ -83,16 +83,23 @@ ui.modules.rolls = {
                                 local values = turns.getCurrentTurnValues()
 
                                 local attack = actions.getAttack(values.roll, values.attackThreshold, offence, buff)
+                                local msg
 
                                 if attack.dmg > 0 then
                                     if attack.isCrit then
-                                        return COLOURS.CRITICAL .. "CRITICAL HIT!|r You can deal " .. tostring(attack.dmg) .. " damage!"
+                                        msg = COLOURS.CRITICAL .. "CRITICAL HIT!|r You can deal " .. tostring(attack.dmg) .. " damage!"
                                     else
-                                        return "You can deal " .. tostring(attack.dmg) .. " damage."
+                                        msg = "You can deal " .. tostring(attack.dmg) .. " damage."
+                                    end
+
+                                    if attack.entropicEmbraceProc then
+                                        msg = msg .. COLOURS.DAMAGE_TYPES.SHADOW .. " Entropic Embrace: You deal 3 extra Shadow damage!"
                                     end
                                 else
-                                    return "You can't deal any damage with this roll."
+                                    msg = "You can't deal any damage with this roll."
                                 end
+
+                                return msg
                             end
                         },
                     }
