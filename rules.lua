@@ -67,7 +67,7 @@ end
 -- [[ Melee save ]]
 
 local function isSaveBigFail(defendValue, threshold)
-    local failThreshold = TEARollHelper.db.profile.feats.phalanx and 8 or 5
+    local failThreshold = character.hasFeat(FEATS.PHALANX) and 8 or 5
     return (defendValue + failThreshold) <= threshold
 end
 
