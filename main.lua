@@ -4,6 +4,9 @@ ns.actions = {}
 ns.character = {}
 ns.db = {}
 ns.events = {}
+ns.resources = {
+    racialTraits = {}
+}
 ns.rules = {}
 ns.turns = {}
 ns.ui = {}

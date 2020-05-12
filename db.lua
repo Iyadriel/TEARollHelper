@@ -15,7 +15,8 @@ local defaults = {
         feats = {
             keenSense = false,
             phalanx = false
-        }
+        },
+        racialTrait = select(3, UnitRace("player"))
     }
 }
 

@@ -1,7 +1,13 @@
 local _, ns = ...
 
+local racialTraits = ns.resources.racialTraits
 local turns = ns.turns
 local ui = ns.ui
+
+local RACIAL_TRAIT_LIST = {}
+for raceID, raceName in pairs(racialTraits.RACE_NAMES) do
+    RACIAL_TRAIT_LIST[raceID] = raceName .. " (" .. racialTraits.RACIAL_TRAITS[raceID].name .. ")"
+end
 
 ui.modules.character = {
     name = "Character sheet",
@@ -90,6 +96,27 @@ ui.modules.character = {
                     order = 2
                 },
             }
+        },
+        racialTrait = {
+            name = "Racial trait (not yet implemented)",
+            type = "select",
+            order = 2,
+            get = function()
+                return TEARollHelper.db.profile.racialTrait
+            end,
+            set = function(info, value)
+                TEARollHelper.db.profile.racialTrait = tonumber(value)
+            end,
+            values = RACIAL_TRAIT_LIST
+        },
+        racialTraitDesc = {
+            name = function()
+                local trait = racialTraits.RACIAL_TRAITS[TEARollHelper.db.profile.racialTrait]
+                return trait and trait.desc or ""
+            end,
+            type = "description",
+            fontSize = "medium",
+            order = 3
         }
     }
 }

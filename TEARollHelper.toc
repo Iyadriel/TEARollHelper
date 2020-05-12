@@ -9,6 +9,8 @@ embeds.xml
 
 main.lua
 
+resources/racialTraits.lua
+
 actions.lua
 character.lua
 db.lua
