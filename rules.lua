@@ -1,5 +1,7 @@
 local _, ns = ...
 
+local character = ns.character
+
 local MAX_ROLL = 20
 
 local function isCrit(roll)
@@ -12,6 +14,10 @@ end
 
 -- [[ Offence ]]
 
+local function getBaseDamage()
+    return character.hasOffenceMastery() and 3 or 1
+end
+
 local function calculateAttackValue(roll, offence, buff)
     return roll + offence + buff
 end
@@ -19,7 +25,7 @@ end
 local function calculateAttackDmg(threshold, attackValue)
     local overkill = attackValue - threshold
     if overkill >= 0 then
-        return 1 + floor(overkill / 2)
+        return getBaseDamage() + floor(overkill / 2)
     end
     return 0
 end

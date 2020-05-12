@@ -1,5 +1,8 @@
 local _, ns = ...
 
+local COLOURS = TEARollHelper.COLOURS
+
+local character = ns.character
 local racialTraits = ns.resources.racialTraits
 local turns = ns.turns
 local ui = ns.ui
@@ -43,8 +46,14 @@ ui.modules.character = {
             args = {
                 offence = {
                     type = "input",
-                    name = "Offence",
-                    desc = "Your character's offence stat",
+                    name = function()
+                        local label = "Offence"
+                        if character.hasOffenceMastery() then
+                            label = label .. COLOURS.MASTERY .. " Mastery unlocked!"
+                        end
+                        return label
+                    end,
+                    desc = "Mastery bonus: +2 base damage",
                     order = 0
                 },
                 defence = {
