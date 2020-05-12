@@ -62,7 +62,7 @@ ui.modules.buffs.getOptions = function()
             },
             description = {
                 type = "description",
-                name = "Buffs expire automatically after one roll.\nIf using the roll window, they must be cleared manually.",
+                name = "Buffs must be cleared manually.",
                 order = 3
             }
         }

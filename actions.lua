@@ -5,7 +5,6 @@ local rules = ns.rules
 local turns = ns.turns
 
 local getAttack, getDefence, getMeleeSave, getHealing, getBuff
-local performAttack, performDefence
 
 function getAttack(roll, threshold, offence, buff)
     local attackValue = rules.offence.calculateAttackValue(roll, offence, buff)
@@ -83,68 +82,8 @@ function getBuff(roll, spirit)
     }
 end
 
-function performAttack(roll)
-    local currentTurnValues = turns.getCurrentTurnValues()
-
-    local threshold = currentTurnValues.attackThreshold
-    local offence = character.getPlayerOffence()
-    local buff = turns.getCurrentBuffs().offence
-
-    local attack = getAttack(roll, threshold, offence, buff)
-
-    local details
-    if buff > 0 then
-        details = "|cFFBBBBBB("..threshold.." to beat, your attack was "..roll.." + "..offence.." |cFF00FF00+ "..buff.."|r = "..attack.attackValue..")"
-    else
-        details = "|cFFBBBBBB("..threshold.." to beat, your attack was "..roll.." + "..offence.." = "..attack.attackValue..")"
-    end
-
-    if attack.dmg > 0 then
-        if attack.isCrit then
-            TEARollHelper:Print("CRITICAL HIT! You deal "..attack.dmg.." damage. "..details)
-        else
-            TEARollHelper:Print("Attack successful! You deal "..attack.dmg.." damage. "..details)
-        end
-    else
-        TEARollHelper:Print("Attack failed. "..details)
-    end
-
-    turns.expireCurrentBuff(turns.BUFF_TYPES.OFFENCE)
-end
-
-function performDefence(roll)
-    local currentTurnValues = turns.getCurrentTurnValues()
-
-    local threshold = currentTurnValues.defendThreshold
-    local dmgRisk = currentTurnValues.damageRisk
-    local defence = character.getPlayerDefence()
-    local buff = turns.getCurrentBuffs().defence
-
-    local result = getDefence(roll, threshold, dmgRisk, defence, buff)
-
-    local details
-    if buff > 0 then
-        details = "|cFFBBBBBB("..threshold.." to beat, your defence was "..roll.." + "..defence.." |cFF00FF00+ "..buff.."|r = "..result.defendValue..")"
-    else
-        details = "|cFFBBBBBB("..threshold.." to beat, your defence was "..roll.." + "..defence.." = "..result.defendValue..")"
-    end
-
-    if result.damageTaken == 0 then
-        TEARollHelper:Print("Safe! You take no damage. "..details)
-        if result.canRetaliate then
-            TEARollHelper:Print("RETALIATE! You can deal "..result.retaliateDmg.." damage to your attacker!")
-        end
-    else
-        TEARollHelper:Print("Defence failed. You take |cFFFF0000"..result.damageTaken.."|r damage. "..details)
-    end
-
-    turns.expireCurrentBuff(turns.BUFF_TYPES.DEFENCE)
-end
-
 ns.actions.getAttack = getAttack
 ns.actions.getDefence = getDefence
 ns.actions.getMeleeSave = getMeleeSave
 ns.actions.getHealing = getHealing
 ns.actions.getBuff = getBuff
-ns.actions.performAttack = performAttack
-ns.actions.performDefence = performDefence
