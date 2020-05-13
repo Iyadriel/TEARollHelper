@@ -25,3 +25,4 @@ ui/colours.lua
 ui/buffs.lua
 ui/character.lua
 ui/rolls.lua
+ui/settings.lua

@@ -20,7 +20,7 @@ local defaults = {
     },
     global = {
         settings = {
-            minimap = {}
+            minimapIcon = {}
         }
     }
 }

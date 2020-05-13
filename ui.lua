@@ -31,6 +31,7 @@ ui.getOptions = function()
                     character = ui.modules.character,
                 }
             },
+            settings = ui.modules.settings,
             -- this group just serves to have a nice header at the bottom of the cmd printout
             config = {
                 name = "config",
@@ -38,7 +39,7 @@ ui.getOptions = function()
                 desc = "Configuration",
                 guiHidden = true,
                 cmdInline = true,
-                order = 2,
+                order = 3,
                 args = {
                     config = {
                         name = "Show config UI",
