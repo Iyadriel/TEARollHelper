@@ -7,18 +7,35 @@ local events = ns.events
 local rules = ns.rules
 local turns = ns.turns
 
+local ROLL_MODES = {
+    DISADVANTAGE = -1,
+    NORMAL = 0,
+    ADVANTAGE = 1
+}
+
+local ROLL_MODE_LABELS = {
+    [ROLL_MODES.DISADVANTAGE] = "Disadvantage",
+    [ROLL_MODES.NORMAL] = "Normal",
+    [ROLL_MODES.ADVANTAGE] = "Advantage"
+}
+
 local BUFF_TYPES = {
     OFFENCE = "offence",
     DEFENCE = "defence"
 }
 
-local setCurrentRoll, getCurrentTurnValues, handleRollResult
+local isRolling, setCurrentRoll, getCurrentTurnValues, handleRollResult
+local getRollMode, setRollMode
 local setAttackValues, setDefendValues
 local roll
 local getCurrentBuffs, setCurrentBuff, clearCurrentBuffs
 
 local currentTurnValues = {
+    isRolling = false,
     roll = 1,
+    rollMode = ROLL_MODES.NORMAL,
+    totalRequiredRolls = 1,
+    remainingRolls = 1,
     attackThreshold = 12,
     defendThreshold = 10,
     damageRisk = 4
@@ -33,12 +50,24 @@ local function notifyChange()
     AceConfigRegistry:NotifyChange("TEARollHelperRolls")
 end
 
+function isRolling()
+    return currentTurnValues.isRolling
+end
+
 function setCurrentRoll(roll)
     currentTurnValues.roll = roll
 end
 
 function getCurrentTurnValues()
     return currentTurnValues
+end
+
+function getRollMode()
+    return currentTurnValues.rollMode
+end
+
+function setRollMode(mode)
+    currentTurnValues.rollMode = mode
 end
 
 function setAttackValues(attackThreshold)
@@ -54,18 +83,47 @@ function setDefendValues(defendThreshold, damageRisk)
     end
 end
 
-function roll()
+local function sendRoll()
+    events.listenForRolls()
     RandomRoll(1, rules.MAX_ROLL)
 end
 
-function freeRoll()
-    events.listenForRolls()
-    roll()
+function roll()
+    currentTurnValues.isRolling = true
+    notifyChange() -- so we can update the button state
+
+    local numRolls
+
+    if getRollMode() == ROLL_MODES.NORMAL then
+        numRolls = 1
+    else
+        numRolls = 2
+    end
+
+    currentTurnValues.totalRequiredRolls = numRolls
+    currentTurnValues.remainingRolls = numRolls
+
+    sendRoll()
 end
 
-function handleRollResult(roll)
-    setCurrentRoll(roll)
-    notifyChange()
+function handleRollResult(result)
+    local rollMode = getRollMode()
+
+    if
+        (currentTurnValues.remainingRolls == currentTurnValues.totalRequiredRolls) or
+        (rollMode == ROLL_MODES.ADVANTAGE and result > currentTurnValues.roll) or
+        (rollMode == ROLL_MODES.DISADVANTAGE and result < currentTurnValues.roll) then
+        setCurrentRoll(result)
+    end
+
+    currentTurnValues.remainingRolls = currentTurnValues.remainingRolls - 1
+
+    if currentTurnValues.remainingRolls > 0 then
+        sendRoll()
+    else
+        currentTurnValues.isRolling = false
+        notifyChange()
+    end
 end
 
 function getCurrentBuffs()
@@ -86,12 +144,16 @@ function clearCurrentBuffs()
     notifyChange()
 end
 
+turns.ROLL_MODE_LABELS = ROLL_MODE_LABELS
 turns.BUFF_TYPES = BUFF_TYPES
 turns.getCurrentTurnValues = getCurrentTurnValues
+turns.isRolling = isRolling
 turns.setCurrentRoll = setCurrentRoll
+turns.getRollMode = getRollMode
+turns.setRollMode = setRollMode
 turns.setAttackValues = setAttackValues
 turns.setDefendValues = setDefendValues
-turns.freeRoll = freeRoll
+turns.roll = roll
 turns.handleRollResult = handleRollResult
 turns.getCurrentBuffs = getCurrentBuffs
 turns.setCurrentBuff = setCurrentBuff

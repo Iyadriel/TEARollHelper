@@ -16,27 +16,42 @@ ui.modules.rolls = {
     order = 3,
     childGroups = "tab",
     args = {
+        rollMode = {
+            name = "Roll mode",
+            type = "select",
+            order = 0,
+            values = turns.ROLL_MODE_LABELS,
+            get = turns.getRollMode,
+            set = function(info, value)
+                turns.setRollMode(value)
+            end
+        },
+        performRoll = {
+            name = function()
+                return turns.isRolling() and "Rolling..." or "Roll"
+            end,
+            type = "execute",
+            desc = "Do a /roll " .. rules.MAX_ROLL .. ".",
+            disabled = function()
+                return turns.isRolling()
+            end,
+            order = 1,
+            func = turns.roll
+        },
         roll = {
             name = "Roll result",
             type = "range",
             desc = "The number you rolled",
-            order = 0,
             min = 1,
             max = rules.MAX_ROLL,
             step = 1,
+            order = 2,
             get = function()
                 return turns.getCurrentTurnValues().roll
             end,
             set = function(info, value)
                 turns.setCurrentRoll(value)
             end
-        },
-        performRoll = {
-            name = "Roll",
-            type = "execute",
-            desc = "Do a /roll " .. rules.MAX_ROLL .. ".",
-            order = 1,
-            func = turns.freeRoll
         },
 --[[         tempEffects = {
             name = "Temporary effects",
@@ -59,7 +74,7 @@ ui.modules.rolls = {
         playerTurn = {
             name = "Player turn",
             type = "group",
-            order = 3,
+            order = 4,
             args = {
                 attack = {
                     name = "Attack",
@@ -191,7 +206,7 @@ ui.modules.rolls = {
         enemyTurn = {
             name = "Enemy turn",
             type = "group",
-            order = 4,
+            order = 5,
             args = {
                 defendThreshold = {
                     name = "Defend threshold",

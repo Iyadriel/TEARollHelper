@@ -8,6 +8,7 @@ local listenForRolls
 function TEARollHelper:CHAT_MSG_SYSTEM(event, msg)
     local author, rollResult, rollMin, rollMax = string.match(msg, "(.+) rolls (%d+) %((%d+)-(%d+)%)")
     if author == PLAYER_NAME then
+        self:UnregisterEvent("CHAT_MSG_SYSTEM")
         --print(author, rollResult, rollMin, rollMax)
         local rollResultNumber = tonumber(rollResult)
         if rollResultNumber ~= nil then
@@ -15,7 +16,6 @@ function TEARollHelper:CHAT_MSG_SYSTEM(event, msg)
         else
             self:Print("Could not convert roll result to number! Roll result was:", rollResult)
         end
-        self:UnregisterEvent("CHAT_MSG_SYSTEM")
     end
 end
 

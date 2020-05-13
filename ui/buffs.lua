@@ -13,7 +13,7 @@ ui.modules.buffs.getOptions = function()
         desc = "Apply a temporary buff",
 
         guiInline = true,
-        order = 2,
+        order = 3,
         validate = function(info, input)
             if not input then return true end
             local amount = TEARollHelper:GetArgs(input)
