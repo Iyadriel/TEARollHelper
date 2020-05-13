@@ -103,7 +103,7 @@ ui.modules.character = {
             order = 2
         },
         racialTrait = {
-            name = "Racial trait (partially implemented)",
+            name = "Racial trait",
             type = "select",
             order = 3,
             get = function()
@@ -117,8 +117,15 @@ ui.modules.character = {
         racialTraitDesc = {
             type = "description",
             name = function()
+                local msg = ""
                 local trait = racialTraits.getRacialTrait(TEARollHelper.db.profile.racialTraitID)
-                return trait and trait.desc or ""
+                if trait and trait.desc then
+                    if not trait.supported then
+                        msg = COLOURS.NOTE .. "(Not implemented)|r "
+                    end
+                    msg = msg .. trait.desc
+                end
+                return msg
             end,
             fontSize = "medium",
             order = 4
