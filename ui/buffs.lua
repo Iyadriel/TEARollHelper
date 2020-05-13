@@ -39,18 +39,21 @@ ui.modules.buffs.getOptions = function()
                 type = "input",
                 name = "Offence",
                 desc = "Buff your character's offence stat",
+                width = "half",
                 order = 0
             },
             defence = {
                 type = "input",
                 name = "Defence",
                 desc = "Buff your character's defence stat",
+                width = "half",
                 order = 1
             },
             clear = {
                 type = "execute",
                 name = "Clear",
                 desc = "Clear your current buffs",
+                width = "half",
                 order = 2,
                 func = function(info)
                     turns.clearCurrentBuffs()
@@ -59,11 +62,6 @@ ui.modules.buffs.getOptions = function()
                         TEARollHelper:Print("Temporary buffs have been cleared.")
                     end
                 end
-            },
-            description = {
-                type = "description",
-                name = "Buffs must be cleared manually.",
-                order = 3
             }
         }
     }
