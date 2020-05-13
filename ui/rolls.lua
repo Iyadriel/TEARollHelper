@@ -46,7 +46,24 @@ ui.modules.rolls = {
             order = 1,
             func = turns.freeRoll
         },
-        buffs = ui.modules.buffs.getOptions(),
+--[[         tempEffects = {
+            name = "Temporary effects",
+            type = "group",
+            order = 2,
+            args = { ]]
+                buffs = ui.modules.buffs.getOptions(),
+--[[                 racialTrait = {
+                    name = "Racial trait",
+                    type = "toggle",
+                    get = function()
+                        return racialTraitActive
+                    end,
+                    set = function(info, value)
+                        racialTraitActive = value
+                    end
+                }
+            }
+        }, ]]
         playerTurn = {
             name = "Player turn",
             type = "group",
@@ -60,16 +77,18 @@ ui.modules.rolls = {
                     args = {
                         attackThreshold = {
                             name = "Attack threshold",
-                            type = "input",
+                            type = "range",
                             desc = "The minimum required roll to hit the target",
+                            min = 1,
+                            softMax = 20,
+                            max = 100,
+                            step = 1,
                             order = 1,
-                            pattern = "%d",
-                            usage = "Must be a number",
                             get = function()
-                                return tostring(turns.getCurrentTurnValues().attackThreshold)
+                                return turns.getCurrentTurnValues().attackThreshold
                             end,
                             set = function(info, value)
-                                turns.setAttackValues(tonumber(value))
+                                turns.setAttackValues(value)
                             end
                         },
                         dmg = {
@@ -180,30 +199,34 @@ ui.modules.rolls = {
             args = {
                 defendThreshold = {
                     name = "Defend threshold",
-                    type = "input",
+                    type = "range",
                     desc = "The minimum required roll to not take any damage",
+                    min = 1,
+                    softMax = 20,
+                    max = 100,
+                    step = 1,
                     order = 0,
-                    pattern = "%d",
-                    usage = "Must be a number",
                     get = function()
-                        return tostring(turns.getCurrentTurnValues().defendThreshold)
+                        return turns.getCurrentTurnValues().defendThreshold
                     end,
                     set = function(info, value)
-                        turns.setDefendValues(tonumber(value), nil)
+                        turns.setDefendValues(value, nil)
                     end
                 },
                 damageRisk = {
                     name = "Damage risk",
-                    type = "input",
+                    type = "range",
                     desc = "How much damage you will take if you fail the roll",
+                    min = 1,
+                    softMax = 20,
+                    max = 100,
+                    step = 1,
                     order = 1,
-                    pattern = "%d",
-                    usage = "Must be a number",
                     get = function()
-                        return tostring(turns.getCurrentTurnValues().damageRisk)
+                        return turns.getCurrentTurnValues().damageRisk
                     end,
                     set = function(info, value)
-                        turns.setDefendValues(nil, tonumber(value))
+                        turns.setDefendValues(nil, value)
                     end
                 },
                 defend = {
