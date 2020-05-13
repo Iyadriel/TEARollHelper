@@ -1,8 +1,9 @@
 local _, ns = ...
 
 local db = ns.db
+local feats = ns.resources.feats
 
-local FEAT_KEYS = ns.resources.feats.FEAT_KEYS
+local FEATS = feats.FEATS
 
 local AceDB = LibStub("AceDB-3.0")
 local AceDBOptions = LibStub("AceDBOptions-3.0")
@@ -14,13 +15,7 @@ local defaults = {
             defence = 0,
             spirit = 0
         },
-        feats = (function()
-            local featDefaults = {}
-            for _, featKey in ipairs(FEAT_KEYS) do
-                featDefaults[featKey] = false
-            end
-            return featDefaults
-        end)(),
+        featID = FEATS.NONE.id,
         racialTraitID = select(3, UnitRace("player"))
     }
 }

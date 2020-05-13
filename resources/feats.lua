@@ -2,9 +2,13 @@ local _, ns = ...
 
 local feats = ns.resources.feats
 
-feats.FEAT_KEYS = {"ADRENALINE", "KEEN_SENSE", "PHALANX"}
+feats.FEAT_KEYS = {"NONE", "ADRENALINE", "KEEN_SENSE", "PHALANX"}
 
 feats.FEATS = {
+    NONE = {
+        id = "NONE",
+        name = "None / other"
+    },
     ADRENALINE = {
         id = "ADRENALINE",
         name = "Adrenaline",

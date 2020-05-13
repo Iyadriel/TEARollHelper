@@ -72,47 +72,40 @@ ui.modules.character = {
             }
         },
         feats = {
-            name = "Feats",
-            type = "group",
-            inline = true,
+            name = "Feat",
+            type = "select",
+            desc = "More Feats may be supported in the future.",
             order = 1,
-            get = function(info)
-                return character.hasFeatByID(info[#info])
-            end,
-            set = function(info, value)
-                local feat = info[#info]
-                local featName = info.option.name
-                TEARollHelper.db.profile.feats[feat] = value
-                -- if slash command, print feedback
-                if info[0] and info[0] ~= "" then
-                    local status = value and "enabled" or "disabled"
-                    TEARollHelper:Print("Feat '" .. featName .. "' has been " .. status .. ".")
-                end
-            end,
-            args = (function()
+            values = (function()
                 local featOptions = {}
                 for i = 1, #feats.FEAT_KEYS do
                     local key = feats.FEAT_KEYS[i]
                     local feat = feats.FEATS[key]
-                    featOptions[key] = {
-                        type = "toggle",
-                        name = feat.name,
-                        desc = feat.desc,
-                        order = i
-                    }
+                    featOptions[key] = feat.name
                 end
-                featOptions.desc = {
-                    type = "description",
-                    name = "More Feats may be supported in the future.",
-                    order = #feats.FEAT_KEYS + 1
-                }
                 return featOptions
-            end)()
+            end)(),
+            get = function()
+                local feat = character.getPlayerFeat()
+                return feat and feat.id
+            end,
+            set = function(info, value)
+                character.setPlayerFeatByID(value)
+            end
+        },
+        featDesc = {
+            type = "description",
+            name = function()
+                local feat = character.getPlayerFeat()
+                return feat and feat.desc or ""
+            end,
+            fontSize = "medium",
+            order = 2
         },
         racialTrait = {
             name = "Racial trait (partially implemented)",
             type = "select",
-            order = 2,
+            order = 3,
             get = function()
                 return TEARollHelper.db.profile.racialTraitID
             end,
@@ -122,13 +115,13 @@ ui.modules.character = {
             values = RACIAL_TRAIT_LIST
         },
         racialTraitDesc = {
+            type = "description",
             name = function()
                 local trait = racialTraits.getRacialTrait(TEARollHelper.db.profile.racialTraitID)
                 return trait and trait.desc or ""
             end,
-            type = "description",
             fontSize = "medium",
-            order = 3
+            order = 4
         }
     }
 }
