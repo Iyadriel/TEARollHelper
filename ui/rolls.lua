@@ -99,7 +99,7 @@ ui.modules.rolls = {
                                 local excited = false
 
                                 if attack.dmg > 0 then
-                                    if attack.isCrit then
+                                    if attack.isCrit and attack.critType == rules.CRIT_TYPES.DAMAGE then
                                         excited = true
                                         msg = COLOURS.CRITICAL .. "CRITICAL HIT!|r "
                                     end
@@ -108,10 +108,14 @@ ui.modules.rolls = {
                                         msg = msg .. COLOURS.FEATS.ADRENALINE .. "ADRENALINE!|r "
                                     end
 
-                                    msg = msg .. "You can deal " .. tostring(attack.dmg) .. " damage" .. (excited and "!" or ".")
+                                    if attack.isCrit and attack.critType == rules.CRIT_TYPES.REAPER then
+                                        msg = COLOURS.FEATS.REAPER .. "TIME TO REAP!|r You can deal " .. tostring(attack.dmg) .. " damage to all enemies in melee range of you or your target!"
+                                    else
+                                        msg = msg .. "You can deal " .. tostring(attack.dmg) .. " damage" .. (excited and "!" or ".")
+                                    end
 
                                     if attack.hasEntropicEmbraceProc then
-                                        msg = msg .. COLOURS.DAMAGE_TYPES.SHADOW .. "\nEntropic Embrace: You deal " .. attack.entropicEmbraceDmg .. " extra Shadow damage!"
+                                        msg = msg .. COLOURS.DAMAGE_TYPES.SHADOW .. "|nEntropic Embrace: You deal " .. attack.entropicEmbraceDmg .. " extra Shadow damage!"
                                     end
                                 else
                                     msg = COLOURS.NOTE .. "You can't deal any damage with this roll."

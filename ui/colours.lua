@@ -7,7 +7,8 @@ TEARollHelper.COLOURS = {
     MASTERY = '|cffff8000',
     NOTE = '|cffbbbbbb',
     FEATS = {
-        ADRENALINE = '|cffff6b6b'
+        ADRENALINE = '|cffff6b6b',
+        REAPER = '|cffc41f3b'
     },
     DAMAGE_TYPES = {
         SHADOW = '|cff7669b8'

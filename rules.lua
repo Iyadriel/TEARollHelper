@@ -7,6 +7,10 @@ local racialTraits = ns.resources.racialTraits
 local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
 
 local MAX_ROLL = 20
+local CRIT_TYPES = {
+    DAMAGE = 0,
+    REAPER = 1
+}
 
 local function isCrit(roll)
     local critReq = MAX_ROLL
@@ -14,6 +18,13 @@ local function isCrit(roll)
         critReq = critReq - 1
     end
     return roll >= critReq
+end
+
+local function getCritType()
+    if character.hasFeat(FEATS.REAPER) then
+        return CRIT_TYPES.REAPER
+    end
+    return CRIT_TYPES.DAMAGE
 end
 
 -- [[ Offence ]]
@@ -130,7 +141,10 @@ end
 -- [[ Export ]]
 
 ns.rules.MAX_ROLL = MAX_ROLL
+ns.rules.CRIT_TYPES = CRIT_TYPES
+
 ns.rules.isCrit = isCrit
+ns.rules.getCritType = getCritType
 ns.rules.offence = {
     calculateAttackValue = calculateAttackValue,
     calculateAttackDmg = calculateAttackDmg,

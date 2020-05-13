@@ -9,6 +9,7 @@ function getAttack(roll, threshold, offence, buff)
     local attackValue = rules.offence.calculateAttackValue(roll, offence, buff)
     local dmg = rules.offence.calculateAttackDmg(threshold, attackValue)
     local isCrit = rules.isCrit(roll)
+    local critType = rules.getCritType()
     local hasAdrenalineProc = nil
     local hasEntropicEmbraceProc = nil
     local entropicEmbraceDmg = 0
@@ -28,14 +29,17 @@ function getAttack(roll, threshold, offence, buff)
     end
 
     if isCrit then
-        dmg = rules.offence.applyCritModifier(dmg)
-        entropicEmbraceDmg = rules.offence.applyCritModifier(entropicEmbraceDmg)
+        if critType == rules.CRIT_TYPES.DAMAGE then
+            dmg = rules.offence.applyCritModifier(dmg)
+            entropicEmbraceDmg = rules.offence.applyCritModifier(entropicEmbraceDmg)
+        end
     end
 
     return {
         attackValue = attackValue,
         dmg = dmg,
         isCrit = isCrit,
+        critType = critType,
         hasAdrenalineProc = hasAdrenalineProc,
         hasEntropicEmbraceProc = hasEntropicEmbraceProc,
         entropicEmbraceDmg = entropicEmbraceDmg
