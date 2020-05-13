@@ -122,7 +122,7 @@ ui.modules.rolls = {
                                         msg = msg .. COLOURS.DAMAGE_TYPES.SHADOW .. "\nEntropic Embrace: You deal " .. attack.entropicEmbraceDmg .. " extra Shadow damage!"
                                     end
                                 else
-                                    msg = "You can't deal any damage with this roll."
+                                    msg = COLOURS.NOTE .. "You can't deal any damage with this roll."
                                 end
 
                                 return msg
@@ -154,7 +154,7 @@ ui.modules.rolls = {
                                         return COLOURS.HEALING .. "You can heal someone for " .. amount .. " HP."
                                     end
                                 else
-                                    return "You can't heal anyone with this roll."
+                                    return COLOURS.NOTE .. "You can't heal anyone with this roll."
                                 end
                             end
                         },
@@ -184,7 +184,7 @@ ui.modules.rolls = {
                                         return COLOURS.BUFF .. "You can buff someone for " .. amount .. "."
                                     end
                                 else
-                                    return "You can't buff anyone with this roll."
+                                    return COLOURS.NOTE .. "You can't buff anyone with this roll."
                                 end
                             end
                         }
