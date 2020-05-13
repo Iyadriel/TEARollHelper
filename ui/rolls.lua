@@ -92,7 +92,7 @@ ui.modules.rolls = {
                                         msg = "You can deal " .. tostring(attack.dmg) .. " damage."
                                     end
 
-                                    if attack.entropicEmbraceProc then
+                                    if attack.hasEntropicEmbraceProc then
                                         msg = msg .. COLOURS.DAMAGE_TYPES.SHADOW .. " Entropic Embrace: You deal 3 extra Shadow damage!"
                                     end
                                 else
