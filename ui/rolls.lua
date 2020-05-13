@@ -83,17 +83,23 @@ ui.modules.rolls = {
                                 local values = turns.getCurrentTurnValues()
 
                                 local attack = actions.getAttack(values.roll, values.attackThreshold, offence, buff)
-                                local msg
+                                local msg = ""
+                                local excited = false
 
                                 if attack.dmg > 0 then
                                     if attack.isCrit then
-                                        msg = COLOURS.CRITICAL .. "CRITICAL HIT!|r You can deal " .. tostring(attack.dmg) .. " damage!"
-                                    else
-                                        msg = "You can deal " .. tostring(attack.dmg) .. " damage."
+                                        excited = true
+                                        msg = COLOURS.CRITICAL .. "CRITICAL HIT!|r "
                                     end
 
+                                    if attack.hasAdrenalineProc then
+                                        msg = msg .. COLOURS.FEATS.ADRENALINE .. "ADRENALINE!|r "
+                                    end
+
+                                    msg = msg .. "You can deal " .. tostring(attack.dmg) .. " damage" .. (excited and "!" or ".")
+
                                     if attack.hasEntropicEmbraceProc then
-                                        msg = msg .. COLOURS.DAMAGE_TYPES.SHADOW .. " Entropic Embrace: You deal 3 extra Shadow damage!"
+                                        msg = msg .. COLOURS.DAMAGE_TYPES.SHADOW .. "\nEntropic Embrace: You deal 3 extra Shadow damage!"
                                     end
                                 else
                                     msg = "You can't deal any damage with this roll."

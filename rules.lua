@@ -38,6 +38,22 @@ local function applyCritModifier(dmg)
     return dmg * 2
 end
 
+local function canProcAdrenaline()
+    return character.hasFeat(FEATS.ADRENALINE)
+end
+
+local function hasAdrenalineProc(threshold, attackValue)
+    return attackValue >= threshold + 4
+end
+
+local function calculateAdrenalineProcDmg(offence)
+    return ceil(offence / 2)
+end
+
+local function applyAdrenalineProcModifier(dmg, offence)
+    return dmg + calculateAdrenalineProcDmg(offence)
+end
+
 local function canProcEntropicEmbrace()
     return character.hasRacialTrait(RACIAL_TRAITS.ENTROPIC_EMBRACE)
 end
@@ -115,6 +131,11 @@ ns.rules.offence = {
     calculateAttackValue = calculateAttackValue,
     calculateAttackDmg = calculateAttackDmg,
     applyCritModifier = applyCritModifier,
+
+    canProcAdrenaline = canProcAdrenaline,
+    hasAdrenalineProc = hasAdrenalineProc,
+    applyAdrenalineProcModifier = applyAdrenalineProcModifier,
+
     canProcEntropicEmbrace = canProcEntropicEmbrace,
     hasEntropicEmbraceProc = hasEntropicEmbraceProc
 }

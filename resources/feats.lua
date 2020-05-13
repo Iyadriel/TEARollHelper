@@ -2,9 +2,14 @@ local _, ns = ...
 
 local feats = ns.resources.feats
 
-feats.FEAT_KEYS = {"KEEN_SENSE", "PHALANX"}
+feats.FEAT_KEYS = {"ADRENALINE", "KEEN_SENSE", "PHALANX"}
 
 feats.FEATS = {
+    ADRENALINE = {
+        id = "ADRENALINE",
+        name = "Adrenaline",
+        desc = "Beating the threshold by 4 or more with an offence attack roll yields bonus damage equal to half of your Offence stat rounded up."
+    },
     KEEN_SENSE = {
         id = "KEEN_SENSE",
         name = "Keen sense",

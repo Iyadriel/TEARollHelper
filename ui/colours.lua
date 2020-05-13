@@ -5,6 +5,9 @@ TEARollHelper.COLOURS = {
     BUFF = '|cff0070dd',
     CRITICAL = '|cffa335ee',
     MASTERY = '|cffff8000',
+    FEATS = {
+        ADRENALINE = '|cffff6b6b'
+    },
     DAMAGE_TYPES = {
         SHADOW = '|cff7669b8'
     }
