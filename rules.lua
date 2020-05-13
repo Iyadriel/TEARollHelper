@@ -62,6 +62,10 @@ local function hasEntropicEmbraceProc(roll, threshold)
     return roll == threshold
 end
 
+local function getEntropicEmbraceDmg()
+    return 3
+end
+
 -- [[ Defence ]]
 
 local function calculateDefendValue(roll, defence, buff)
@@ -137,7 +141,8 @@ ns.rules.offence = {
     applyAdrenalineProcModifier = applyAdrenalineProcModifier,
 
     canProcEntropicEmbrace = canProcEntropicEmbrace,
-    hasEntropicEmbraceProc = hasEntropicEmbraceProc
+    hasEntropicEmbraceProc = hasEntropicEmbraceProc,
+    getEntropicEmbraceDmg = getEntropicEmbraceDmg
 }
 ns.rules.defence = {
     calculateDefendValue = calculateDefendValue,
