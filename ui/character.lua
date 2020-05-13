@@ -1,5 +1,7 @@
 local _, ns = ...
 
+local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
+
 local COLOURS = TEARollHelper.COLOURS
 
 local character = ns.character
@@ -11,6 +13,11 @@ local ui = ns.ui
 local RACIAL_TRAIT_LIST = {}
 for key, trait in pairs(racialTraits.RACIAL_TRAITS) do
     RACIAL_TRAIT_LIST[trait.id] = racialTraits.RACE_NAMES[trait.id] .. " (" .. trait.name .. ")"
+end
+
+-- Update roll UI, in case it is also open
+local function notifyChange()
+    AceConfigRegistry:NotifyChange("TEARollHelperRolls")
 end
 
 ui.modules.character = {
@@ -35,6 +42,7 @@ ui.modules.character = {
                 if info[0] and info[0] ~= "" then
                     TEARollHelper:Print("Your character's " .. stat .. " has been set to "..value..".")
                 end
+                notifyChange()
             end,
             validate = function(info, input)
                 if tonumber(input) == nil then
@@ -91,6 +99,7 @@ ui.modules.character = {
             end,
             set = function(info, value)
                 character.setPlayerFeatByID(value)
+                notifyChange()
             end
         },
         featDesc = {
@@ -111,6 +120,7 @@ ui.modules.character = {
             end,
             set = function(info, value)
                 TEARollHelper.db.profile.racialTraitID = tonumber(value)
+                notifyChange()
             end,
             values = RACIAL_TRAIT_LIST
         },
