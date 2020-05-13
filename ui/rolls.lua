@@ -284,14 +284,6 @@ ui.modules.rolls = {
                     },
                 },
             }
-        },
-        config = {
-            name = "Show config UI",
-            type = "execute",
-            order = 0,
-            func = function()
-                AceConfigDialog:Open("TEARollHelper")
-            end
-        },
+        }
     }
 }
