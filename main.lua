@@ -4,6 +4,7 @@ ns.actions = {}
 ns.character = {}
 ns.db = {}
 ns.events = {}
+ns.launchers = {}
 ns.resources = {
     feats = {},
     racialTraits = {}
@@ -24,4 +25,6 @@ function TEARollHelper:OnInitialize()
 
     AceConfig:RegisterOptionsTable("TEARollHelperRolls", ns.ui.getRollOptions())
     AceConfigDialog:SetDefaultSize("TEARollHelperRolls", 450, 535)
+
+    ns.launchers.initLaunchers()
 end

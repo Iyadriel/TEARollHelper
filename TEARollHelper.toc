@@ -16,6 +16,7 @@ actions.lua
 character.lua
 db.lua
 events.lua
+launchers.lua
 rules.lua
 turns.lua
 

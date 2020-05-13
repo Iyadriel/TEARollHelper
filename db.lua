@@ -17,6 +17,11 @@ local defaults = {
         },
         featID = FEATS.NONE.id,
         racialTraitID = select(3, UnitRace("player"))
+    },
+    global = {
+        settings = {
+            minimap = {}
+        }
     }
 }
 

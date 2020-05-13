@@ -16,14 +16,6 @@ ui.modules.rolls = {
     order = 3,
     childGroups = "tab",
     args = {
---[[         config = {
-            name = "Show config UI",
-            type = "execute",
-            order = 0,
-            func = function()
-                AceConfigDialog:Open("TEARollHelper")
-            end
-        }, ]]
         roll = {
             name = "Roll result",
             type = "range",
@@ -292,6 +284,14 @@ ui.modules.rolls = {
                     },
                 },
             }
+        },
+        config = {
+            name = "Show config UI",
+            type = "execute",
+            order = 0,
+            func = function()
+                AceConfigDialog:Open("TEARollHelper")
+            end
         },
     }
 }
