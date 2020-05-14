@@ -7,7 +7,7 @@ feats.FEAT_KEYS = {"NONE", "ADRENALINE", "KEEN_SENSE", "LEADER", "MENDER", "PHAL
 feats.FEATS = {
     NONE = {
         id = "NONE",
-        name = "None / other"
+        name = "Featless / other"
     },
     ADRENALINE = {
         id = "ADRENALINE",
