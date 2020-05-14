@@ -208,7 +208,9 @@ ui.modules.rolls = {
                             order = 4,
                             name = function()
                                 local spirit = character.getPlayerSpirit()
-                                local buff = actions.getBuff(turns.getCurrentTurnValues().roll, spirit)
+                                local offence = character.getPlayerOffence()
+                                local offenceBuff = turns.getCurrentBuffs().offence
+                                local buff = actions.getBuff(turns.getCurrentTurnValues().roll, spirit, offence, offenceBuff)
 
                                 if buff.amountBuffed > 0 then
                                     local amount = tostring(buff.amountBuffed)

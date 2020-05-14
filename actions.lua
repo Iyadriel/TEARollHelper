@@ -101,8 +101,8 @@ local function getHealing(roll, spirit, numGreaterHealSlots)
     }
 end
 
-local function getBuff(roll, spirit)
-    local buffValue = rules.buffing.calculateBuffValue(roll, spirit)
+local function getBuff(roll, spirit, offence, offenceBuff)
+    local buffValue = rules.buffing.calculateBuffValue(roll, spirit, offence, offenceBuff)
     local amountBuffed = rules.buffing.calculateBuffAmount(buffValue)
 
     return {

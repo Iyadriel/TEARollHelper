@@ -2,7 +2,7 @@ local _, ns = ...
 
 local feats = ns.resources.feats
 
-feats.FEAT_KEYS = {"NONE", "ADRENALINE", "KEEN_SENSE", "MENDER", "PHALANX", "REAPER", "WARDER"}
+feats.FEAT_KEYS = {"NONE", "ADRENALINE", "KEEN_SENSE", "LEADER", "MENDER", "PHALANX", "REAPER", "WARDER"}
 
 feats.FEATS = {
     NONE = {
@@ -19,6 +19,13 @@ feats.FEATS = {
         id = "KEEN_SENSE",
         name = "Keen sense",
         desc = "The threshold for getting a critical roll is reduced to 19 from 20.",
+        supported = true
+    },
+    LEADER = {
+        id = "LEADER",
+        name = "Leader",
+        desc = "You can now buff with the Offence stat instead of the Spirit stat.",
+        note = "The addon will automatically use the highest stat.",
         supported = true
     },
     MENDER = {

@@ -33,8 +33,12 @@ local function getBaseDamage()
     return character.hasOffenceMastery() and 3 or 1
 end
 
+local function calculateOffenceStat(offence, buff)
+    return offence + buff
+end
+
 local function calculateAttackValue(roll, offence, buff)
-    return roll + offence + buff
+    return roll + calculateOffenceStat(offence, buff)
 end
 
 local function calculateAttackDmg(threshold, attackValue)
@@ -79,8 +83,12 @@ end
 
 -- [[ Defence ]]
 
+local function calculateDefenceStat(defence, buff)
+    return defence + buff
+end
+
 local function calculateDefendValue(roll, defence, buff)
-    return roll + defence + buff
+    return roll + calculateDefenceStat(defence, buff)
 end
 
 local function calculateDamageTaken(threshold, defendValue, dmgRisk)
@@ -163,8 +171,15 @@ end
 
 -- [[ Buffing ]]
 
-local function calculateBuffValue(roll, spirit)
-    return roll + spirit
+local function calculateBuffValue(roll, spirit, offence, offenceBuff)
+    local stat
+    if character.hasFeat(FEATS.LEADER) then
+        local offenceStat = calculateOffenceStat(offence, offenceBuff)
+        stat = max(spirit, offenceStat)
+    else
+        stat = spirit
+    end
+    return roll + stat
 end
 
 local function calculateBuffAmount(buffValue)

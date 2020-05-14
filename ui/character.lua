@@ -132,10 +132,18 @@ ui.modules.character = {
             fontSize = "medium",
             order = 2
         },
+        featNote = {
+            type = "description",
+            name = function()
+                local feat = character.getPlayerFeat()
+                return COLOURS.NOTE .. (feat and (feat.note and feat.note .. "|n ") or "")
+            end,
+            order = 3
+        },
         racialTrait = {
             name = "Racial trait",
             type = "select",
-            order = 3,
+            order = 4,
             get = function()
                 return TEARollHelper.db.profile.racialTraitID
             end,
@@ -159,7 +167,7 @@ ui.modules.character = {
                 return msg
             end,
             fontSize = "medium",
-            order = 4
+            order = 5
         }
     }
 }
