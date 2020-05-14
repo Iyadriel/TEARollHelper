@@ -111,13 +111,13 @@ ui.modules.rolls = {
                                 local values = turns.getCurrentTurnValues()
 
                                 local attack = actions.getAttack(values.roll, values.attackThreshold, offence, buff)
-                                local msg = ""
+                                local msg = " |n"
                                 local excited = false
 
                                 if attack.dmg > 0 then
                                     if attack.isCrit and attack.critType == rules.CRIT_TYPES.DAMAGE then
                                         excited = true
-                                        msg = COLOURS.CRITICAL .. "CRITICAL HIT!|r "
+                                        msg = msg .. COLOURS.CRITICAL .. "CRITICAL HIT!|r "
                                     end
 
                                     if attack.hasAdrenalineProc then
@@ -125,7 +125,7 @@ ui.modules.rolls = {
                                     end
 
                                     if attack.isCrit and attack.critType == rules.CRIT_TYPES.REAPER then
-                                        msg = COLOURS.FEATS.REAPER .. "TIME TO REAP!|r You can deal " .. tostring(attack.dmg) .. " damage to all enemies in melee range of you or your target!"
+                                        msg = msg .. COLOURS.FEATS.REAPER .. "TIME TO REAP!|r You can deal " .. tostring(attack.dmg) .. " damage to all enemies in melee range of you or your target!"
                                     else
                                         msg = msg .. "You can deal " .. tostring(attack.dmg) .. " damage" .. (excited and "!" or ".")
                                     end
@@ -134,7 +134,7 @@ ui.modules.rolls = {
                                         msg = msg .. COLOURS.DAMAGE_TYPES.SHADOW .. "|nEntropic Embrace: You deal " .. attack.entropicEmbraceDmg .. " extra Shadow damage!"
                                     end
                                 else
-                                    msg = COLOURS.NOTE .. "You can't deal any damage with this roll."
+                                    msg = msg .. COLOURS.NOTE .. "You can't deal any damage with this roll."
                                 end
 
                                 return msg
@@ -179,17 +179,20 @@ ui.modules.rolls = {
                             name = function()
                                 local spirit = character.getPlayerSpirit()
                                 local healing = actions.getHealing(turns.getCurrentTurnValues().roll, spirit, turns.getNumGreaterHealSlots())
+                                local msg = " |n"
 
                                 if healing.amountHealed > 0 then
                                     local amount = tostring(healing.amountHealed)
                                     if healing.isCrit then
-                                        return COLOURS.CRITICAL .. "MANY HEALS!|r " .. COLOURS.HEALING .. "You can heal everyone in line of sight for " .. amount .. " HP."
+                                        msg = msg .. COLOURS.CRITICAL .. "MANY HEALS!|r " .. COLOURS.HEALING .. "You can heal everyone in line of sight for " .. amount .. " HP."
                                     else
-                                        return COLOURS.HEALING .. "You can heal someone for " .. amount .. " HP."
+                                        msg = msg .. COLOURS.HEALING .. "You can heal someone for " .. amount .. " HP."
                                     end
                                 else
-                                    return COLOURS.NOTE .. "You can't heal anyone with this roll."
+                                    msg = msg .. COLOURS.NOTE .. "You can't heal anyone with this roll."
                                 end
+
+                                return msg
                             end
                         },
                     }
