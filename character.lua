@@ -26,6 +26,10 @@ function hasOffenceMastery()
     return getPlayerOffence() >= 6
 end
 
+function hasSpiritMastery()
+    return getPlayerSpirit() >= 6
+end
+
 function getPlayerFeat()
     return FEATS[TEARollHelper.db.profile.featID]
 end
@@ -73,6 +77,7 @@ character.getPlayerOffence = getPlayerOffence
 character.getPlayerDefence = getPlayerDefence
 character.getPlayerSpirit = getPlayerSpirit
 character.hasOffenceMastery = hasOffenceMastery
+character.hasSpiritMastery = hasSpiritMastery
 character.getPlayerFeat = getPlayerFeat
 character.hasFeat = hasFeat
 character.hasFeatByID = hasFeatByID

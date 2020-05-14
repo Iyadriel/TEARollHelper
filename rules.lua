@@ -128,6 +128,25 @@ local function calculateAmountHealed(healValue)
     return 0
 end
 
+local function getMaxGreaterHealSlots()
+    local spirit = character.getPlayerSpirit()
+    local numSlots = max(0, floor(spirit / 2))
+
+    if character.hasSpiritMastery() then
+        numSlots = numSlots + 1
+    end
+
+    if character.hasFeat(FEATS.MENDER) then
+        numSlots = numSlots + 1
+    end
+
+    return numSlots
+end
+
+local function calculateGreaterHealBonus(numGreaterHealSlots)
+    return numGreaterHealSlots * 3
+end
+
 -- [[ Buffing ]]
 
 local function calculateBuffValue(roll, spirit)
@@ -169,7 +188,9 @@ ns.rules.meleeSave = {
 }
 ns.rules.healing = {
     calculateHealValue = calculateHealValue,
-    calculateAmountHealed = calculateAmountHealed
+    calculateAmountHealed = calculateAmountHealed,
+    getMaxGreaterHealSlots = getMaxGreaterHealSlots,
+    calculateGreaterHealBonus = calculateGreaterHealBonus
 }
 ns.rules.buffing = {
     calculateBuffValue = calculateBuffValue,

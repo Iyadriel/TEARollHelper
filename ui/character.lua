@@ -73,8 +73,14 @@ ui.modules.character = {
                 },
                 spirit = {
                     type = "input",
-                    name = "Spirit",
-                    desc = "Your character's spirit stat",
+                    name = function()
+                        local label = "Spirit"
+                        if character.hasSpiritMastery() then
+                            label = label .. COLOURS.MASTERY .. " Mastery unlocked!"
+                        end
+                        return label
+                    end,
+                    desc = "Mastery bonus: +1 Greater Heal slot",
                     order = 2
                 }
             }

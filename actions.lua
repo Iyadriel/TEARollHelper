@@ -1,7 +1,6 @@
 local _, ns = ...
 
 local rules = ns.rules
-local turns = ns.turns
 
 local getAttack, getDefence, getMeleeSave, getHealing, getBuff
 
@@ -80,9 +79,11 @@ function getMeleeSave(roll, threshold, dmgRisk, defence, buff)
     }
 end
 
-function getHealing(roll, spirit)
+function getHealing(roll, spirit, numGreaterHealSlots)
     local healValue = rules.healing.calculateHealValue(roll, spirit)
     local amountHealed = rules.healing.calculateAmountHealed(healValue)
+
+    amountHealed = amountHealed + rules.healing.calculateGreaterHealBonus(numGreaterHealSlots)
 
     return {
         amountHealed = amountHealed,

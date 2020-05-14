@@ -26,7 +26,7 @@ local BUFF_TYPES = {
 
 local isRolling, setCurrentRoll, getCurrentTurnValues, handleRollResult
 local getRollMode, setRollMode
-local setAttackValues, setDefendValues
+local setAttackValues, getNumGreaterHealSlots, setNumGreaterHealSlots, setDefendValues
 local roll
 local getCurrentBuffs, setCurrentBuff, clearCurrentBuffs
 
@@ -37,6 +37,7 @@ local currentTurnValues = {
     totalRequiredRolls = 1,
     remainingRolls = 1,
     attackThreshold = 12,
+    numGreaterHealSlots = 0,
     defendThreshold = 10,
     damageRisk = 4
 }
@@ -72,6 +73,14 @@ end
 
 function setAttackValues(attackThreshold)
     currentTurnValues.attackThreshold = attackThreshold
+end
+
+function getNumGreaterHealSlots()
+    return currentTurnValues.numGreaterHealSlots
+end
+
+function setNumGreaterHealSlots(numGreaterHealSlots)
+    currentTurnValues.numGreaterHealSlots = numGreaterHealSlots
 end
 
 function setDefendValues(defendThreshold, damageRisk)
@@ -152,6 +161,8 @@ turns.setCurrentRoll = setCurrentRoll
 turns.getRollMode = getRollMode
 turns.setRollMode = setRollMode
 turns.setAttackValues = setAttackValues
+turns.getNumGreaterHealSlots = getNumGreaterHealSlots
+turns.setNumGreaterHealSlots = setNumGreaterHealSlots
 turns.setDefendValues = setDefendValues
 turns.roll = roll
 turns.handleRollResult = handleRollResult

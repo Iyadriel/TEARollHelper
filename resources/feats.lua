@@ -2,7 +2,7 @@ local _, ns = ...
 
 local feats = ns.resources.feats
 
-feats.FEAT_KEYS = {"NONE", "ADRENALINE", "KEEN_SENSE", "PHALANX", "REAPER"}
+feats.FEAT_KEYS = {"NONE", "ADRENALINE", "KEEN_SENSE", "MENDER", "PHALANX", "REAPER"}
 
 feats.FEATS = {
     NONE = {
@@ -19,6 +19,12 @@ feats.FEATS = {
         id = "KEEN_SENSE",
         name = "Keen sense",
         desc = "The threshold for getting a critical roll is reduced to 19 from 20.",
+        supported = true
+    },
+    MENDER = {
+        id = "MENDER",
+        name = "Mender",
+        desc = "Gain 1 additional Greater Heal Slot.",
         supported = true
     },
     PHALANX = {

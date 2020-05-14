@@ -147,15 +147,37 @@ ui.modules.rolls = {
                     inline = true,
                     order = 1,
                     args = {
+                        greaterHeals = {
+                            name = "Greater Heals",
+                            type = "select",
+                            desc = "The amount of Greater Heals to use.",
+                            values = function()
+                                local values = {}
+                                for i = 0, rules.healing.getMaxGreaterHealSlots() do
+                                    values[i] = tostring(i)
+                                end
+                                return values
+                            end,
+                            disabled = function()
+                                return rules.healing.getMaxGreaterHealSlots() == 0
+                            end,
+                            order = 0,
+                            get = function()
+                                return turns.getNumGreaterHealSlots()
+                            end,
+                            set = function(info, value)
+                                turns.setNumGreaterHealSlots(value)
+                            end
+                        },
                         healing = {
                             name = "Healing",
                             type = "description",
                             desc = "How much you can heal for",
                             fontSize = "medium",
-                            order = 4,
+                            order = 1,
                             name = function()
                                 local spirit = character.getPlayerSpirit()
-                                local healing = actions.getHealing(turns.getCurrentTurnValues().roll, spirit)
+                                local healing = actions.getHealing(turns.getCurrentTurnValues().roll, spirit, turns.getNumGreaterHealSlots())
 
                                 if healing.amountHealed > 0 then
                                     local amount = tostring(healing.amountHealed)
