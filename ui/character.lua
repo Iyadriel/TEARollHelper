@@ -33,11 +33,11 @@ ui.modules.character = {
             inline = true,
             order = 0,
             get = function(info)
-                return tostring(TEARollHelper.db.profile.stats[info[#info]])
+                return TEARollHelper.db.profile.stats[info[#info]]
             end,
             set = function(info, value)
                 local stat = info[#info]
-                TEARollHelper.db.profile.stats[stat] = tonumber(value)
+                TEARollHelper.db.profile.stats[stat] = value
                 -- if slash command, print feedback
                 if info[0] and info[0] ~= "" then
                     TEARollHelper:Print("Your character's " .. stat .. " has been set to "..value..".")
@@ -45,7 +45,7 @@ ui.modules.character = {
                 notifyChange()
             end,
             validate = function(info, input)
-                if tonumber(input) == nil then
+                if input == nil then
                     local stat = info[#info]
                     local statName = info.option.name
                     return statName .. " stat must be a number! |cFFBBBBBBExample: /tea " .. stat .. " 4"
@@ -54,7 +54,7 @@ ui.modules.character = {
             end,
             args = {
                 offence = {
-                    type = "input",
+                    type = "range",
                     name = function()
                         local label = "Offence"
                         if character.hasOffenceMastery() then
@@ -63,16 +63,26 @@ ui.modules.character = {
                         return label
                     end,
                     desc = "Mastery bonus: +2 base damage",
+                    min = -100,
+                    max = 100,
+                    softMin = -4,
+                    softMax = 6,
+                    step = 1,
                     order = 0
                 },
                 defence = {
-                    type = "input",
+                    type = "range",
                     name = "Defence",
                     desc = "Your character's defence stat",
+                    min = -100,
+                    max = 100,
+                    softMin = -4,
+                    softMax = 6,
+                    step = 1,
                     order = 1
                 },
                 spirit = {
-                    type = "input",
+                    type = "range",
                     name = function()
                         local label = "Spirit"
                         if character.hasSpiritMastery() then
@@ -81,6 +91,11 @@ ui.modules.character = {
                         return label
                     end,
                     desc = "Mastery bonus: +1 Greater Heal slot",
+                    min = -100,
+                    max = 100,
+                    softMin = -4,
+                    softMax = 6,
+                    step = 1,
                     order = 2
                 }
             }
