@@ -89,11 +89,15 @@ local function getRangedSave(roll, threshold, dmgRisk, spirit)
     }
 end
 
-local function getHealing(roll, spirit, numGreaterHealSlots)
+local function getHealing(roll, spirit, numGreaterHealSlots, outOfCombat)
     local healValue = rules.healing.calculateHealValue(roll, spirit)
     local amountHealed = rules.healing.calculateAmountHealed(healValue)
 
     amountHealed = amountHealed + rules.healing.calculateGreaterHealBonus(numGreaterHealSlots)
+
+    if outOfCombat then
+        amountHealed = amountHealed + rules.healing.calculateOutOfCombatBonus()
+    end
 
     return {
         amountHealed = amountHealed,

@@ -3,7 +3,9 @@ local ui = ns.ui
 
 local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 
-ui.modules = {}
+ui.modules = {
+    rolls = {}
+}
 
 ui.getOptions = function()
     local options = {
@@ -62,5 +64,5 @@ ui.getOptions = function()
 end
 
 ui.getRollOptions = function()
-    return ui.modules.rolls
+    return ui.modules.rolls.getOptions()
 end

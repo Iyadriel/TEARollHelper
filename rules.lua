@@ -26,6 +26,8 @@ local STAT_POINT_COSTS = {
     [6] = 12
 }
 
+local NUM_SPIRIT_PER_GREATER_HEAL_SLOT = 2
+
 -- [[ Stat allocation ]]
 
 local function getNegativePointsAssigned()
@@ -245,7 +247,7 @@ end
 
 local function getMaxGreaterHealSlots()
     local spirit = character.getPlayerSpirit()
-    local numSlots = max(0, floor(spirit / 2))
+    local numSlots = max(0, floor(spirit / NUM_SPIRIT_PER_GREATER_HEAL_SLOT))
 
     if character.hasSpiritMastery() then
         numSlots = numSlots + 1
@@ -260,6 +262,13 @@ end
 
 local function calculateGreaterHealBonus(numGreaterHealSlots)
     return numGreaterHealSlots * 3
+end
+
+local function calculateOutOfCombatBonus()
+    if character.getPlayerSpirit() >= NUM_SPIRIT_PER_GREATER_HEAL_SLOT then
+        return 3
+    end
+    return 0
 end
 
 -- [[ Buffing ]]
@@ -324,7 +333,8 @@ ns.rules.healing = {
     calculateHealValue = calculateHealValue,
     calculateAmountHealed = calculateAmountHealed,
     getMaxGreaterHealSlots = getMaxGreaterHealSlots,
-    calculateGreaterHealBonus = calculateGreaterHealBonus
+    calculateGreaterHealBonus = calculateGreaterHealBonus,
+    calculateOutOfCombatBonus = calculateOutOfCombatBonus
 }
 ns.rules.buffing = {
     calculateBuffValue = calculateBuffValue,
