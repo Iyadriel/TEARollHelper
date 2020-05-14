@@ -2,7 +2,7 @@ local _, ns = ...
 
 local feats = ns.resources.feats
 
-feats.FEAT_KEYS = {"NONE", "ADRENALINE", "KEEN_SENSE", "LEADER", "MENDER", "PHALANX", "PROFESSIONAL", "REAPER", "WARDER"}
+feats.FEAT_KEYS = {"NONE", "ADRENALINE", "COUNTER_FORCE", "KEEN_SENSE", "LEADER", "MENDER", "PHALANX", "PROFESSIONAL", "REAPER", "WARDER"}
 
 feats.FEATS = {
     NONE = {
@@ -13,6 +13,12 @@ feats.FEATS = {
         id = "ADRENALINE",
         name = "Adrenaline",
         desc = "Beating the threshold by 4 or more with an offence attack roll yields bonus damage equal to half of your Offence stat rounded up.",
+        supported = true
+    },
+    COUNTER_FORCE = {
+        id = "COUNTER_FORCE",
+        name = "Counter-Force",
+        desc = "Your melee save rolls no longer benefit from your Defence stat, but if you manage the roll you deal damage back to the attacker by an amount equal to your Defence stat.",
         supported = true
     },
     KEEN_SENSE = {

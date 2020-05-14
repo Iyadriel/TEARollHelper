@@ -220,15 +220,22 @@ ui.modules.rolls.getOptions = function()
                                     local racialTrait = turns.getRacialTrait()
                                     local save = actions.getMeleeSave(values.roll, values.defendThreshold, values.damageRisk, defence, buff, racialTrait)
 
+                                    local msg = ""
+
                                     if save.damageTaken > 0 then
-                                        local msg = ""
                                         if save.isBigFail then
                                             msg = COLOURS.DAMAGE .. "Bad save! |r"
                                         end
-                                        return msg .. "You can save your ally, |r" .. COLOURS.DAMAGE .. "but you will take " .. tostring(save.damageTaken) .. " damage."
+                                        msg = msg .. "You can save your ally, |r" .. COLOURS.DAMAGE .. "but you will take " .. tostring(save.damageTaken) .. " damage."
                                     else
-                                        return COLOURS.SAVE .. "You can save your ally without taking any damage yourself."
+                                        msg = COLOURS.SAVE .. "You can save your ally without taking any damage yourself."
                                     end
+
+                                    if save.hasCounterForceProc then
+                                        msg = msg .. COLOURS.CRITICAL .. "\nCOUNTER-FORCE!|r You can deal "..save.counterForceDmg.." damage to your attacker!"
+                                    end
+
+                                    return msg
                                 end
                             },
                         },

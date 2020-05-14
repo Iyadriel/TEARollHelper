@@ -25,11 +25,9 @@ local function getAttack(roll, threshold, offence, buff)
         end
     end
 
-    if isCrit then
-        if critType == rules.CRIT_TYPES.DAMAGE then
-            dmg = rules.offence.applyCritModifier(dmg)
-            entropicEmbraceDmg = rules.offence.applyCritModifier(entropicEmbraceDmg)
-        end
+    if isCrit and critType == rules.CRIT_TYPES.DAMAGE then
+        dmg = rules.offence.applyCritModifier(dmg)
+        entropicEmbraceDmg = rules.offence.applyCritModifier(entropicEmbraceDmg)
     end
 
     return {
@@ -62,18 +60,29 @@ local function getDefence(roll, threshold, dmgRisk, defence, buff, racialTrait)
 end
 
 local function getMeleeSave(roll, threshold, dmgRisk, defence, buff, racialTrait)
-    local defendValue = rules.defence.calculateDefendValue(roll, defence, buff, racialTrait)
-    local damageTaken = rules.defence.calculateDamageTaken(threshold, defendValue, dmgRisk)
-    local isBigFail = rules.meleeSave.isSaveBigFail(defendValue, threshold)
+    local meleeSaveValue = rules.meleeSave.calculateMeleeSaveValue(roll, defence, buff, racialTrait)
+    local damageTaken = rules.defence.calculateDamageTaken(threshold, meleeSaveValue, dmgRisk)
+    local isBigFail = rules.meleeSave.isSaveBigFail(meleeSaveValue, threshold)
+    local hasCounterForceProc = nil
+    local counterForceDmg = 0
 
     if isBigFail then
         damageTaken = rules.meleeSave.applyBigFailModifier(damageTaken)
     end
 
+    if rules.meleeSave.canProcCounterForce() then
+        hasCounterForceProc = rules.meleeSave.hasCounterForceProc(meleeSaveValue, threshold)
+        if hasCounterForceProc then
+            counterForceDmg = rules.meleeSave.calculateCounterForceProcDmg(defence)
+        end
+    end
+
     return {
-        defendValue = defendValue,
+        meleeSaveValue = meleeSaveValue,
         damageTaken = damageTaken,
-        isBigFail = isBigFail
+        isBigFail = isBigFail,
+        hasCounterForceProc = hasCounterForceProc,
+        counterForceDmg = counterForceDmg
     }
 end
 

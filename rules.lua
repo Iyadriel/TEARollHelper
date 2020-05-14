@@ -200,6 +200,26 @@ end
 
 -- [[ Melee save ]]
 
+local function calculateMeleeSaveValue(roll, defence, buff, racialTrait)
+    local value = roll
+    if not character.hasFeat(FEATS.COUNTER_FORCE) then
+        value = value + calculateDefenceStat(defence, buff, racialTrait)
+    end
+    return value
+end
+
+local function canProcCounterForce()
+    return character.hasFeat(FEATS.COUNTER_FORCE)
+end
+
+local function hasCounterForceProc(meleeSaveValue, threshold)
+    return meleeSaveValue >= threshold
+end
+
+local function calculateCounterForceProcDmg(defence)
+    return defence -- big maths
+end
+
 local function isSaveBigFail(defendValue, threshold)
     local failThreshold = character.hasFeat(FEATS.PHALANX) and 8 or 5
     return (defendValue + failThreshold) <= threshold
@@ -333,6 +353,10 @@ ns.rules.stamina = {
     calculateMaxHP = calculateMaxHP
 }
 ns.rules.meleeSave = {
+    calculateMeleeSaveValue = calculateMeleeSaveValue,
+    canProcCounterForce = canProcCounterForce,
+    hasCounterForceProc = hasCounterForceProc,
+    calculateCounterForceProcDmg = calculateCounterForceProcDmg,
     isSaveBigFail = isSaveBigFail,
     applyBigFailModifier = applyBigFailModifier
 }
