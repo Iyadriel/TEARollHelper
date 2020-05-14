@@ -17,6 +17,9 @@ local function isCrit(roll)
     if character.hasFeat(FEATS.KEEN_SENSE) then
         critReq = critReq - 1
     end
+    if character.hasRacialTrait(RACIAL_TRAITS.VICIOUSNESS) then
+        critReq = critReq - 1
+    end
     return roll >= critReq
 end
 

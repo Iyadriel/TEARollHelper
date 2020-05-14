@@ -70,7 +70,7 @@ local RACIAL_TRAITS = {
     QUICKNESS = { id = 4, desc = DESCRIPTIONS.QUICKNESS, name = "Quickness", supported = false, manualActivation = true },
     EXPANSIVE_MIND = { id = 7, desc = DESCRIPTIONS.EXPANSIVE_MIND, name = "Expansive Mind", supported = false, manualActivation = true },
     HEROIC_PRESENCE = { id = 11, desc = DESCRIPTIONS.HEROIC_PRESENCE, name = "Heroic Presence", supported = false, manualActivation = true },
-    VICIOUSNESS = { id = 22, desc = DESCRIPTIONS.VICIOUSNESS, name = "Viciousness", supported = false, manualActivation = false },
+    VICIOUSNESS = { id = 22, desc = DESCRIPTIONS.VICIOUSNESS, name = "Viciousness", supported = true, manualActivation = false },
     INNER_PEACE = { id = 25, desc = DESCRIPTIONS.INNER_PEACE, name = "Inner Peace", supported = false, manualActivation = true },
     ENTROPIC_EMBRACE = { id = 29, desc = DESCRIPTIONS.ENTROPIC_EMBRACE, name = "Entropic Embrace", supported = true, manualActivation = false },
     DEMONBANE = { id = 30, desc = DESCRIPTIONS.DEMONBANE, name = "Demonbane", supported = false, manualActivation = true },
