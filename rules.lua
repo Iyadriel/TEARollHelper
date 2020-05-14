@@ -86,12 +86,16 @@ end
 
 -- [[ Defence ]]
 
-local function calculateDefenceStat(defence, buff)
-    return defence + buff
+local function calculateDefenceStat(defence, buff, racialTrait)
+    local stat = defence + buff
+    if racialTraits.equals(racialTrait, RACIAL_TRAITS.QUICKNESS) then
+        stat = stat + 2
+    end
+    return stat
 end
 
-local function calculateDefendValue(roll, defence, buff)
-    return roll + calculateDefenceStat(defence, buff)
+local function calculateDefendValue(roll, defence, buff, racialTrait)
+    return roll + calculateDefenceStat(defence, buff, racialTrait)
 end
 
 local function calculateDamageTaken(threshold, defendValue, dmgRisk)

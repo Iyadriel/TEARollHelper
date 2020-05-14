@@ -43,8 +43,8 @@ local function getAttack(roll, threshold, offence, buff)
     }
 end
 
-local function getDefence(roll, threshold, dmgRisk, defence, buff)
-    local defendValue = rules.defence.calculateDefendValue(roll, defence, buff)
+local function getDefence(roll, threshold, dmgRisk, defence, buff, racialTrait)
+    local defendValue = rules.defence.calculateDefendValue(roll, defence, buff, racialTrait)
     local damageTaken = rules.defence.calculateDamageTaken(threshold, defendValue, dmgRisk)
     local isCrit = rules.isCrit(roll)
     local retaliateDmg = 0
@@ -61,8 +61,8 @@ local function getDefence(roll, threshold, dmgRisk, defence, buff)
     }
 end
 
-local function getMeleeSave(roll, threshold, dmgRisk, defence, buff)
-    local defendValue = rules.defence.calculateDefendValue(roll, defence, buff)
+local function getMeleeSave(roll, threshold, dmgRisk, defence, buff, racialTrait)
+    local defendValue = rules.defence.calculateDefendValue(roll, defence, buff, racialTrait)
     local damageTaken = rules.defence.calculateDamageTaken(threshold, defendValue, dmgRisk)
     local isBigFail = rules.meleeSave.isSaveBigFail(defendValue, threshold)
 

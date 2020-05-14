@@ -2,13 +2,14 @@ local _, ns = ...
 
 local character = ns.character
 local feats = ns.resources.feats
+local racialTraits = ns.resources.racialTraits
 local turns = ns.turns
 
 local FEATS = feats.FEATS
 
 local getPlayerOffence, getPlayerDefence, getPlayerSpirit
 local hasOffenceMastery
-local getPlayerFeat, hasFeat, hasFeatByID, setPlayerFeatByID, hasRacialTrait
+local getPlayerFeat, hasFeat, hasFeatByID, setPlayerFeatByID, getPlayerRacialTrait, hasRacialTrait
 
 function getPlayerOffence()
     return tonumber(TEARollHelper.db.profile.stats.offence)
@@ -44,6 +45,10 @@ end
 
 function setPlayerFeatByID(featID)
     TEARollHelper.db.profile.featID = featID
+end
+
+function getPlayerRacialTrait()
+    return racialTraits.getRacialTrait(TEARollHelper.db.profile.racialTraitID)
 end
 
 function hasRacialTrait(racialTrait)
@@ -82,4 +87,5 @@ character.getPlayerFeat = getPlayerFeat
 character.hasFeat = hasFeat
 character.hasFeatByID = hasFeatByID
 character.setPlayerFeatByID = setPlayerFeatByID
+character.getPlayerRacialTrait = getPlayerRacialTrait
 character.hasRacialTrait = hasRacialTrait

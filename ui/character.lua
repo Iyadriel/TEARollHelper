@@ -143,6 +143,9 @@ ui.modules.character = {
         racialTrait = {
             name = "Racial trait",
             type = "select",
+            disabled = function()
+                return turns.getRacialTrait() ~= nil
+            end,
             order = 4,
             get = function()
                 return TEARollHelper.db.profile.racialTraitID
@@ -168,6 +171,16 @@ ui.modules.character = {
             end,
             fontSize = "medium",
             order = 5
+        },
+        racialTraitDisabledNote = {
+            type = "description",
+            name = function()
+                if turns.getRacialTrait() ~= nil then
+                    return COLOURS.NOTE .. "You must deactivate your racial trait before you can change it."
+                end
+                return ""
+            end,
+            order = 6
         }
     }
 }

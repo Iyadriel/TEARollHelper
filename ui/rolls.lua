@@ -1,5 +1,7 @@
 local _, ns = ...
 
+local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
+
 local COLOURS = TEARollHelper.COLOURS
 
 local actions = ns.actions
@@ -7,6 +9,12 @@ local character = ns.character
 local rules = ns.rules
 local turns = ns.turns
 local ui = ns.ui
+
+-- Update config UI, in case it is also open
+local function notifyChange()
+    AceConfigRegistry:NotifyChange("TEARollHelper")
+end
+
 
 ui.modules.rolls = {
     name = "TEA Roll View",
@@ -72,10 +80,32 @@ ui.modules.rolls = {
                 }
             }
         }, ]]
+        racialTrait = {
+            type = "toggle",
+            name = function()
+                return "Activate racial trait (" .. character.getPlayerRacialTrait().name .. ")"
+            end,
+            desc = function()
+                return character.getPlayerRacialTrait().desc
+            end,
+            width = "full",
+            order = 4,
+            hidden = function()
+                local trait = character.getPlayerRacialTrait()
+                return not (trait.supported and trait.manualActivation)
+            end,
+            get = function()
+                return turns.getRacialTrait() ~= nil
+            end,
+            set = function(info, value)
+                turns.setRacialTrait(value and character.getPlayerRacialTrait() or nil)
+                notifyChange() -- so we can disable/enable the trait selection
+            end
+        },
         playerTurn = {
             name = "Player turn",
             type = "group",
-            order = 4,
+            order = 5,
             args = {
                 attack = {
                     name = "Attack",
@@ -234,7 +264,7 @@ ui.modules.rolls = {
         enemyTurn = {
             name = "Enemy turn",
             type = "group",
-            order = 5,
+            order = 6,
             args = {
                 defendThreshold = {
                     name = "Defend threshold",
@@ -284,7 +314,8 @@ ui.modules.rolls = {
                                 local defence = character.getPlayerDefence()
                                 local buff = turns.getCurrentBuffs().defence
                                 local values = turns.getCurrentTurnValues()
-                                local defend = actions.getDefence(values.roll, values.defendThreshold, values.damageRisk, defence, buff)
+                                local racialTrait = turns.getRacialTrait()
+                                local defend = actions.getDefence(values.roll, values.defendThreshold, values.damageRisk, defence, buff, racialTrait)
 
                                 if defend.damageTaken > 0 then
                                     return COLOURS.DAMAGE .. "You take " .. tostring(defend.damageTaken) .. " damage."
@@ -313,7 +344,8 @@ ui.modules.rolls = {
                                 local defence = character.getPlayerDefence()
                                 local buff = turns.getCurrentBuffs().defence
                                 local values = turns.getCurrentTurnValues()
-                                local save = actions.getMeleeSave(values.roll, values.defendThreshold, values.damageRisk, defence, buff)
+                                local racialTrait = turns.getRacialTrait()
+                                local save = actions.getMeleeSave(values.roll, values.defendThreshold, values.damageRisk, defence, buff, racialTrait)
 
                                 if save.damageTaken > 0 then
                                     local msg = ""

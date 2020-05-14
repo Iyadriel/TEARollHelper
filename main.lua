@@ -24,7 +24,7 @@ function TEARollHelper:OnInitialize()
     ns.db.initDb(options)
 
     AceConfig:RegisterOptionsTable("TEARollHelperRolls", ns.ui.getRollOptions())
-    AceConfigDialog:SetDefaultSize("TEARollHelperRolls", 450, 565)
+    AceConfigDialog:SetDefaultSize("TEARollHelperRolls", 450, 620)
 
     ns.launchers.initLaunchers()
 end

@@ -26,6 +26,7 @@ local BUFF_TYPES = {
 
 local isRolling, setCurrentRoll, getCurrentTurnValues, handleRollResult
 local getRollMode, setRollMode
+local getRacialTrait, setRacialTrait
 local setAttackValues, getNumGreaterHealSlots, setNumGreaterHealSlots, setDefendValues
 local roll
 local getCurrentBuffs, setCurrentBuff, clearCurrentBuffs
@@ -36,6 +37,9 @@ local currentTurnValues = {
     rollMode = ROLL_MODES.NORMAL,
     totalRequiredRolls = 1,
     remainingRolls = 1,
+
+    racialTrait = nil,
+
     attackThreshold = 12,
     numGreaterHealSlots = 0,
     defendThreshold = 10,
@@ -69,6 +73,14 @@ end
 
 function setRollMode(mode)
     currentTurnValues.rollMode = mode
+end
+
+function getRacialTrait()
+    return currentTurnValues.racialTrait
+end
+
+function setRacialTrait(trait)
+    currentTurnValues.racialTrait = trait
 end
 
 function setAttackValues(attackThreshold)
@@ -155,17 +167,25 @@ end
 
 turns.ROLL_MODE_LABELS = ROLL_MODE_LABELS
 turns.BUFF_TYPES = BUFF_TYPES
+
 turns.getCurrentTurnValues = getCurrentTurnValues
+
 turns.isRolling = isRolling
 turns.setCurrentRoll = setCurrentRoll
 turns.getRollMode = getRollMode
 turns.setRollMode = setRollMode
+
+turns.getRacialTrait = getRacialTrait
+turns.setRacialTrait = setRacialTrait
+
 turns.setAttackValues = setAttackValues
 turns.getNumGreaterHealSlots = getNumGreaterHealSlots
 turns.setNumGreaterHealSlots = setNumGreaterHealSlots
 turns.setDefendValues = setDefendValues
+
 turns.roll = roll
 turns.handleRollResult = handleRollResult
+
 turns.getCurrentBuffs = getCurrentBuffs
 turns.setCurrentBuff = setCurrentBuff
 turns.clearCurrentBuffs = clearCurrentBuffs
