@@ -12,6 +12,8 @@ local CRIT_TYPES = {
     REAPER = 1
 }
 
+local BASE_STAMINA = 25
+
 local BASE_STAT_POINTS = 12
 local MAX_STAT_POINTS = 16
 local NEGATIVE_POINTS_BUDGET = MAX_STAT_POINTS - BASE_STAT_POINTS
@@ -23,6 +25,8 @@ local STAT_POINT_COSTS = {
     [5] = 9,
     [6] = 12
 }
+
+-- [[ Stat allocation ]]
 
 local function getNegativePointsAssigned()
     local negativePointsAllocated = 0
@@ -186,6 +190,12 @@ local function calculateRetaliationDamage(defence)
     return 1 + defence
 end
 
+-- [[ Stamina ]]
+
+local function calculateMaxHP(stamina)
+    return BASE_STAMINA + (stamina * 2)
+end
+
 -- [[ Melee save ]]
 
 local function isSaveBigFail(defendValue, threshold)
@@ -298,6 +308,9 @@ ns.rules.defence = {
     calculateDefendValue = calculateDefendValue,
     calculateDamageTaken = calculateDamageTaken,
     calculateRetaliationDamage = calculateRetaliationDamage
+}
+ns.rules.stamina = {
+    calculateMaxHP = calculateMaxHP
 }
 ns.rules.meleeSave = {
     isSaveBigFail = isSaveBigFail,
