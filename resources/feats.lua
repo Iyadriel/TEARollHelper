@@ -2,7 +2,7 @@ local _, ns = ...
 
 local feats = ns.resources.feats
 
-feats.FEAT_KEYS = {"NONE", "ADRENALINE", "KEEN_SENSE", "MENDER", "PHALANX", "REAPER"}
+feats.FEAT_KEYS = {"NONE", "ADRENALINE", "KEEN_SENSE", "MENDER", "PHALANX", "REAPER", "WARDER"}
 
 feats.FEATS = {
     NONE = {
@@ -37,6 +37,12 @@ feats.FEATS = {
         id = "REAPER",
         name = "Reaper",
         desc = "When scoring a nat 20 on an Offence attack roll, you no longer deal double damage, but instead activate the Reap trait without cost. You do not have to have Reap as a chosen trait.",
+        supported = true
+    },
+    WARDER = {
+        id = "WARDER",
+        name = "Warder",
+        desc = "The base amount of damage reduced on a failed Ranged Save is increased to 4 up from 2.",
         supported = true
     },
 }

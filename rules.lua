@@ -116,7 +116,8 @@ local function calculateDamageReduction(threshold, dmgRisk, saveValue, spirit)
     if saveValue >= threshold then
         return dmgRisk
     end
-    return 2 + max(0, floor(spirit / 2))
+    local baseReduction = character.hasFeat(FEATS.WARDER) and 4 or 2
+    return baseReduction + max(0, floor(spirit / 2))
 end
 
 -- [[ Healing ]]
