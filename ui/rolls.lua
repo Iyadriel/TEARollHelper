@@ -62,24 +62,7 @@ ui.modules.rolls = {
                 turns.setCurrentRoll(value)
             end
         },
---[[         tempEffects = {
-            name = "Temporary effects",
-            type = "group",
-            order = 2,
-            args = { ]]
-                buffs = ui.modules.buffs.getOptions(),
---[[                 racialTrait = {
-                    name = "Racial trait",
-                    type = "toggle",
-                    get = function()
-                        return racialTraitActive
-                    end,
-                    set = function(info, value)
-                        racialTraitActive = value
-                    end
-                }
-            }
-        }, ]]
+        buffs = ui.modules.buffs.getOptions(),
         racialTrait = {
             type = "toggle",
             name = function()
