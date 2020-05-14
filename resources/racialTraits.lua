@@ -74,6 +74,7 @@ local RACIAL_TRAITS = {
         id = 1,
         desc = DESCRIPTIONS.DIPLOMACY,
         name = "Diplomacy",
+        icon = "Interface\\Icons\\inv_misc_note_02",
         supported = false,
         manualActivation = true
     },
@@ -81,6 +82,7 @@ local RACIAL_TRAITS = {
         id = 3,
         desc = DESCRIPTIONS.MIGHT_OF_THE_MOUNTAIN,
         name = "Might of the Mountain",
+        icon = "Interface\\Icons\\inv_hammer_05",
         supported = false,
         manualActivation = false
     },
@@ -88,6 +90,7 @@ local RACIAL_TRAITS = {
         id = 4,
         desc = DESCRIPTIONS.QUICKNESS,
         name = "Quickness",
+        icon = "Interface\\Icons\\ability_racial_shadowmeld",
         supported = true,
         manualActivation = true
     },
@@ -95,6 +98,7 @@ local RACIAL_TRAITS = {
         id = 7,
         desc = DESCRIPTIONS.EXPANSIVE_MIND,
         name = "Expansive Mind",
+        icon = "Interface\\Icons\\inv_enchant_essenceeternallarge",
         supported = false,
         manualActivation = true
     },
@@ -102,6 +106,7 @@ local RACIAL_TRAITS = {
         id = 11,
         desc = DESCRIPTIONS.HEROIC_PRESENCE,
         name = "Heroic Presence",
+        icon = "Interface\\Icons\\inv_helmet_21",
         supported = false,
         manualActivation = true
     },
@@ -109,6 +114,7 @@ local RACIAL_TRAITS = {
         id = 22,
         desc = DESCRIPTIONS.VICIOUSNESS,
         name = "Viciousness",
+        icon = "Interface\\Icons\\ability_hunter_pet_wolf",
         supported = true,
         manualActivation = false
     },
@@ -116,6 +122,7 @@ local RACIAL_TRAITS = {
         id = 25,
         desc = DESCRIPTIONS.INNER_PEACE,
         name = "Inner Peace",
+        icon = "Interface\\Icons\\pandarenracial_innerpeace",
         supported = false,
         manualActivation = true
     },
@@ -123,6 +130,7 @@ local RACIAL_TRAITS = {
         id = 29,
         desc = DESCRIPTIONS.ENTROPIC_EMBRACE,
         name = "Entropic Embrace",
+        icon = "Interface\\Icons\\ability_racial_entropicembrace",
         supported = true,
         manualActivation = false
     },
@@ -130,6 +138,7 @@ local RACIAL_TRAITS = {
         id = 30,
         desc = DESCRIPTIONS.DEMONBANE,
         name = "Demonbane",
+        icon = "Interface\\Icons\\ability_racial_demonbane",
         supported = false,
         manualActivation = true
     },
@@ -137,6 +146,7 @@ local RACIAL_TRAITS = {
         id = 32,
         desc = DESCRIPTIONS.BRUSH_IT_OFF,
         name = "Brush It Off",
+        icon = "Interface\\Icons\\ability_racial_brushitoff",
         supported = false,
         manualActivation = false
     },
@@ -144,6 +154,7 @@ local RACIAL_TRAITS = {
         id = 34,
         desc = DESCRIPTIONS.DUNGEON_DELVER,
         name = "Dungeon Delver",
+        icon = "Interface\\Icons\\ability_racial_dungeondelver",
         supported = false,
         manualActivation = false
     },
@@ -151,6 +162,7 @@ local RACIAL_TRAITS = {
         id = 37,
         desc = DESCRIPTIONS.MASTERCRAFT,
         name = "Mastercraft",
+        icon = "Interface\\Icons\\ability_racial_mastercraft",
         supported = false,
         manualActivation = true
     },
@@ -158,6 +170,7 @@ local RACIAL_TRAITS = {
         id = 100,
         desc = DESCRIPTIONS.ARCANE_AFFINITY,
         name = "Arcane Affinity",
+        icon = "Interface\\Icons\\inv_enchant_shardglimmeringlarge",
         supported = false,
         manualActivation = true
     },

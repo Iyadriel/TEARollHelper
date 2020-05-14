@@ -199,6 +199,11 @@ ui.modules.character = {
         },
         racialTraitDesc = {
             type = "description",
+            image = function()
+                local trait = racialTraits.getRacialTrait(TEARollHelper.db.profile.racialTraitID)
+                return trait and trait.icon
+            end,
+            imageCoords = {.08, .92, .08, .92},
             name = function()
                 local msg = ""
                 local trait = racialTraits.getRacialTrait(TEARollHelper.db.profile.racialTraitID)
