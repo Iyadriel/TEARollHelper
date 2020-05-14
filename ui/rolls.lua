@@ -293,18 +293,16 @@ ui.modules.rolls = {
                         },
                     },
                 },
-                save = {
+                meleeSave = {
                     name = "Melee save",
                     type = "group",
                     inline = true,
                     order = 3,
                     args = {
                         saveDamageTaken = {
-                            name = "Damage taken",
                             type = "description",
                             desc = "How much damage you take this turn",
                             fontSize = "medium",
-                            order = 0,
                             name = function()
                                 local defence = character.getPlayerDefence()
                                 local buff = turns.getCurrentBuffs().defence
@@ -319,6 +317,31 @@ ui.modules.rolls = {
                                     return msg .. "You can save your ally, |r" .. COLOURS.DAMAGE .. "but you will take " .. tostring(save.damageTaken) .. " damage."
                                 else
                                     return COLOURS.SAVE .. "You can save your ally without taking any damage yourself."
+                                end
+                            end
+                        },
+                    },
+                },
+                rangedSave = {
+                    name = "Ranged save",
+                    type = "group",
+                    inline = true,
+                    order = 4,
+                    args = {
+                        saveResult = {
+                            type = "description",
+                            fontSize = "medium",
+                            name = function()
+                                local spirit = character.getPlayerSpirit()
+                                local values = turns.getCurrentTurnValues()
+                                local save = actions.getRangedSave(values.roll, values.defendThreshold, values.damageRisk, spirit)
+
+                                if save.thresholdMet then
+                                    return COLOURS.SAVE .. "You can fully protect your ally."
+                                elseif save.damageReduction > 0 then
+                                    return "You can reduce the damage your ally takes by " .. save.damageReduction .. ".|n" .. COLOURS.NOTE .. "However, you cannot act during the next player turn."
+                                else
+                                    return COLOURS.NOTE .. "You can't reduce the damage your ally takes with this roll."
                                 end
                             end
                         },

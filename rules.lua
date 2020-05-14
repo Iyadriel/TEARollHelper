@@ -106,6 +106,19 @@ local function applyBigFailModifier(damageTaken)
     return damageTaken * 2
 end
 
+-- [[ Ranged save ]]
+
+local function calculateRangedSaveValue(roll, spirit)
+    return roll + spirit
+end
+
+local function calculateDamageReduction(threshold, dmgRisk, saveValue, spirit)
+    if saveValue >= threshold then
+        return dmgRisk
+    end
+    return max(0, 2 + floor(spirit / 2))
+end
+
 -- [[ Healing ]]
 
 local function calculateHealValue(roll, spirit)
@@ -185,6 +198,10 @@ ns.rules.defence = {
 ns.rules.meleeSave = {
     isSaveBigFail = isSaveBigFail,
     applyBigFailModifier = applyBigFailModifier
+}
+ns.rules.rangedSave = {
+    calculateRangedSaveValue = calculateRangedSaveValue,
+    calculateDamageReduction = calculateDamageReduction,
 }
 ns.rules.healing = {
     calculateHealValue = calculateHealValue,

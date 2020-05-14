@@ -2,9 +2,7 @@ local _, ns = ...
 
 local rules = ns.rules
 
-local getAttack, getDefence, getMeleeSave, getHealing, getBuff
-
-function getAttack(roll, threshold, offence, buff)
+local function getAttack(roll, threshold, offence, buff)
     local attackValue = rules.offence.calculateAttackValue(roll, offence, buff)
     local dmg = rules.offence.calculateAttackDmg(threshold, attackValue)
     local isCrit = rules.isCrit(roll)
@@ -45,7 +43,7 @@ function getAttack(roll, threshold, offence, buff)
     }
 end
 
-function getDefence(roll, threshold, dmgRisk, defence, buff)
+local function getDefence(roll, threshold, dmgRisk, defence, buff)
     local defendValue = rules.defence.calculateDefendValue(roll, defence, buff)
     local damageTaken = rules.defence.calculateDamageTaken(threshold, defendValue, dmgRisk)
     local isCrit = rules.isCrit(roll)
@@ -63,7 +61,7 @@ function getDefence(roll, threshold, dmgRisk, defence, buff)
     }
 end
 
-function getMeleeSave(roll, threshold, dmgRisk, defence, buff)
+local function getMeleeSave(roll, threshold, dmgRisk, defence, buff)
     local defendValue = rules.defence.calculateDefendValue(roll, defence, buff)
     local damageTaken = rules.defence.calculateDamageTaken(threshold, defendValue, dmgRisk)
     local isBigFail = rules.meleeSave.isSaveBigFail(defendValue, threshold)
@@ -79,7 +77,19 @@ function getMeleeSave(roll, threshold, dmgRisk, defence, buff)
     }
 end
 
-function getHealing(roll, spirit, numGreaterHealSlots)
+local function getRangedSave(roll, threshold, dmgRisk, spirit)
+    local saveValue = rules.rangedSave.calculateRangedSaveValue(roll, spirit)
+    local damageReduction = rules.rangedSave.calculateDamageReduction(threshold, dmgRisk, saveValue, spirit)
+    local thresholdMet = saveValue >= threshold
+
+    return {
+        saveValue = saveValue,
+        damageReduction = damageReduction,
+        thresholdMet = thresholdMet
+    }
+end
+
+local function getHealing(roll, spirit, numGreaterHealSlots)
     local healValue = rules.healing.calculateHealValue(roll, spirit)
     local amountHealed = rules.healing.calculateAmountHealed(healValue)
 
@@ -91,7 +101,7 @@ function getHealing(roll, spirit, numGreaterHealSlots)
     }
 end
 
-function getBuff(roll, spirit)
+local function getBuff(roll, spirit)
     local buffValue = rules.buffing.calculateBuffValue(roll, spirit)
     local amountBuffed = rules.buffing.calculateBuffAmount(buffValue)
 
@@ -104,5 +114,6 @@ end
 ns.actions.getAttack = getAttack
 ns.actions.getDefence = getDefence
 ns.actions.getMeleeSave = getMeleeSave
+ns.actions.getRangedSave = getRangedSave
 ns.actions.getHealing = getHealing
 ns.actions.getBuff = getBuff
