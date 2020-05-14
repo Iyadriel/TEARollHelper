@@ -7,6 +7,7 @@ local COLOURS = TEARollHelper.COLOURS
 local character = ns.character
 local feats = ns.resources.feats
 local racialTraits = ns.resources.racialTraits
+local rules = ns.rules
 local turns = ns.turns
 local ui = ns.ui
 
@@ -97,6 +98,44 @@ ui.modules.character = {
                     softMax = 6,
                     step = 1,
                     order = 2
+                },
+                stamina = {
+                    type = "range",
+                    name = "Stamina",
+                    desc = "Affects your character's maximum HP.",
+                    min = -100,
+                    max = 100,
+                    softMin = -4,
+                    softMax = 6,
+                    step = 1,
+                    order = 3
+                },
+                availablePoints = {
+                    type = "description",
+                    name = function()
+                        local availablePoints = rules.getAvailableStatPoints()
+                        local availableNegativePoints = rules.getAvailableNegativePoints()
+                        local msg = " |n"
+
+                        if availablePoints > 0 then
+                            msg = msg .. "Available points: " .. availablePoints
+                        elseif availablePoints == 0 then
+                            local negativePointsTooMany = rules.getNegativePointsAssigned() - rules.getNegativePointsUsed()
+                            if negativePointsTooMany > 0 then
+                                msg = msg .. "You have " .. negativePointsTooMany .. " more negative point(s) than you can use. This is allowed, but it will not benefit you."
+                            else
+                                msg = msg .. COLOURS.SUCCESS .. "You have allocated all available points."
+                                if availableNegativePoints > 0 then
+                                    msg = msg .. COLOURS.NOTE .. "|nYou can unlock " .. availableNegativePoints .. " more points by going negative in one or more stats."
+                                end
+                            end
+                        else
+                            msg = msg .. COLOURS.ERROR .. "You have spent " .. abs(availablePoints) .. " point(s) too many."
+                        end
+
+                        return msg
+                    end,
+                    order = 4
                 }
             }
         },

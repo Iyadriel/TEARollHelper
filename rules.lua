@@ -12,6 +12,82 @@ local CRIT_TYPES = {
     REAPER = 1
 }
 
+local BASE_STAT_POINTS = 12
+local MAX_STAT_POINTS = 16
+local NEGATIVE_POINTS_BUDGET = MAX_STAT_POINTS - BASE_STAT_POINTS
+local STAT_POINT_COSTS = {
+    [1] = 1,
+    [2] = 2,
+    [3] = 4,
+    [4] = 6,
+    [5] = 9,
+    [6] = 12
+}
+
+local function getNegativePointsAssigned()
+    local negativePointsAllocated = 0
+
+    local offence = character.getPlayerOffence()
+    local defence = character.getPlayerDefence()
+    local spirit = character.getPlayerSpirit()
+    local stamina = character.getPlayerStamina()
+
+    if offence < 0 then
+        negativePointsAllocated = negativePointsAllocated - offence
+    end
+
+    if defence < 0 then
+        negativePointsAllocated = negativePointsAllocated - defence
+    end
+
+    if spirit < 0 then
+        negativePointsAllocated = negativePointsAllocated - spirit
+    end
+
+    if stamina < 0 then
+        negativePointsAllocated = negativePointsAllocated - stamina
+    end
+
+    return negativePointsAllocated
+end
+
+local function getNegativePointsUsed()
+    return min(NEGATIVE_POINTS_BUDGET, getNegativePointsAssigned())
+end
+
+local function getAvailableNegativePoints()
+    return NEGATIVE_POINTS_BUDGET - getNegativePointsUsed()
+end
+
+local function getAvailableStatPoints()
+    local points = BASE_STAT_POINTS
+
+    local offence = character.getPlayerOffence()
+    local defence = character.getPlayerDefence()
+    local spirit = character.getPlayerSpirit()
+    local stamina = character.getPlayerStamina()
+
+    if offence > 0 then
+        points = points - STAT_POINT_COSTS[offence]
+    end
+
+    if defence > 0 then
+        points = points - STAT_POINT_COSTS[defence]
+    end
+
+    if spirit > 0 then
+        points = points - STAT_POINT_COSTS[spirit]
+    end
+
+    if stamina > 0 then
+        points = points - STAT_POINT_COSTS[stamina]
+    end
+
+    points = points + getNegativePointsUsed()
+
+    return points
+end
+
 local function isCrit(roll)
     local critReq = MAX_ROLL
     if character.hasFeat(FEATS.KEEN_SENSE) then
@@ -197,6 +273,11 @@ end
 
 ns.rules.MAX_ROLL = MAX_ROLL
 ns.rules.CRIT_TYPES = CRIT_TYPES
+
+ns.rules.getNegativePointsAssigned = getNegativePointsAssigned
+ns.rules.getNegativePointsUsed = getNegativePointsUsed
+ns.rules.getAvailableNegativePoints = getAvailableNegativePoints
+ns.rules.getAvailableStatPoints = getAvailableStatPoints
 
 ns.rules.isCrit = isCrit
 ns.rules.getCritType = getCritType

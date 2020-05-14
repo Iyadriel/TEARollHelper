@@ -13,7 +13,8 @@ local defaults = {
         stats = {
             offence = 0,
             defence = 0,
-            spirit = 0
+            spirit = 0,
+            stamina = 0
         },
         featID = FEATS.NONE.id,
         racialTraitID = select(3, UnitRace("player"))
