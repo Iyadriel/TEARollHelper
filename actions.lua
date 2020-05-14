@@ -115,9 +115,14 @@ local function getBuff(roll, spirit, offence, offenceBuff)
     }
 end
 
+local function getUtility(roll, useUtilityTrait)
+    return rules.utility.calculateUtilityValue(roll, useUtilityTrait)
+end
+
 ns.actions.getAttack = getAttack
 ns.actions.getDefence = getDefence
 ns.actions.getMeleeSave = getMeleeSave
 ns.actions.getRangedSave = getRangedSave
 ns.actions.getHealing = getHealing
 ns.actions.getBuff = getBuff
+ns.actions.getUtility = getUtility

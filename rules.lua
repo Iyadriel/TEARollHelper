@@ -288,6 +288,16 @@ local function calculateBuffAmount(buffValue)
     return ceil(buffValue / 2)
 end
 
+-- [[ Utility ]]
+
+local function calculateUtilityValue(roll, useUtilityTrait)
+    local value = roll
+    if useUtilityTrait then
+        value = value + 5
+    end
+    return value
+end
+
 -- [[ Export ]]
 
 ns.rules.MAX_ROLL = MAX_ROLL
@@ -339,4 +349,7 @@ ns.rules.healing = {
 ns.rules.buffing = {
     calculateBuffValue = calculateBuffValue,
     calculateBuffAmount = calculateBuffAmount
+}
+ns.rules.utility = {
+    calculateUtilityValue = calculateUtilityValue
 }

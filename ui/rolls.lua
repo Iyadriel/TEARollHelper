@@ -268,7 +268,38 @@ ui.modules.rolls.getOptions = function()
                     heal = ui.modules.rolls.modules.healing.getOptions({
                         order = 0,
                         outOfCombat = true
-                    })
+                    }),
+                    utility = {
+                        type = "group",
+                        name = "Utility",
+                        inline = true,
+                        order = 1,
+                        args = {
+                            useUtilityTrait = {
+                                type = "toggle",
+                                name = "Use utility trait",
+                                desc = "Enable if you have a utility trait that fits what you are rolling for.",
+                                order = 0,
+                                get = turns.utility.getUseUtilityTrait,
+                                set = function(info, value)
+                                    turns.utility.setUseUtilityTrait(value)
+                                end
+                            },
+                            utility = {
+                                type = "description",
+                                name = "Utility",
+                                desc = "The result of your utility roll",
+                                fontSize = "medium",
+                                order = 1,
+                                name = function()
+                                    local roll = turns.getCurrentTurnValues().roll
+                                    local useUtilityTrait = turns.utility.getUseUtilityTrait()
+
+                                    return " |nYour total utility roll: " .. actions.getUtility(roll, useUtilityTrait)
+                                end
+                            }
+                        }
+                    }
                 }
             }
         }

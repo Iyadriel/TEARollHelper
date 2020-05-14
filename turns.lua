@@ -43,7 +43,11 @@ local currentTurnValues = {
     attackThreshold = 12,
     numGreaterHealSlots = 0,
     defendThreshold = 10,
-    damageRisk = 4
+    damageRisk = 4,
+
+    utility = {
+        useUtilityTrait = false
+    }
 }
 
 local currentBuffs = {
@@ -103,6 +107,15 @@ function setDefendValues(defendThreshold, damageRisk)
         currentTurnValues.damageRisk = damageRisk
     end
 end
+
+local function getUseUtilityTrait()
+    return currentTurnValues.utility.useUtilityTrait
+end
+
+local function setUseUtilityTrait(useUtilityTrait)
+    currentTurnValues.utility.useUtilityTrait = useUtilityTrait
+end
+
 
 local function sendRoll()
     events.listenForRolls()
@@ -182,6 +195,11 @@ turns.setAttackValues = setAttackValues
 turns.getNumGreaterHealSlots = getNumGreaterHealSlots
 turns.setNumGreaterHealSlots = setNumGreaterHealSlots
 turns.setDefendValues = setDefendValues
+
+turns.utility = {
+    getUseUtilityTrait = getUseUtilityTrait,
+    setUseUtilityTrait = setUseUtilityTrait
+}
 
 turns.roll = roll
 turns.handleRollResult = handleRollResult
