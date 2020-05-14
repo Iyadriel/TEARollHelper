@@ -116,7 +116,7 @@ local function calculateDamageReduction(threshold, dmgRisk, saveValue, spirit)
     if saveValue >= threshold then
         return dmgRisk
     end
-    return max(0, 2 + floor(spirit / 2))
+    return 2 + max(0, floor(spirit / 2))
 end
 
 -- [[ Healing ]]
