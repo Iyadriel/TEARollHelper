@@ -2,7 +2,7 @@ local _, ns = ...
 
 local feats = ns.resources.feats
 
-feats.FEAT_KEYS = {"NONE", "ADRENALINE", "KEEN_SENSE", "LEADER", "MENDER", "PHALANX", "REAPER", "WARDER"}
+feats.FEAT_KEYS = {"NONE", "ADRENALINE", "KEEN_SENSE", "LEADER", "MENDER", "PHALANX", "PROFESSIONAL", "REAPER", "WARDER"}
 
 feats.FEATS = {
     NONE = {
@@ -38,6 +38,12 @@ feats.FEATS = {
         id = "PHALANX",
         name = "Phalanx",
         desc = "The threshold for taking double damage on a failed Melee Save is increased to 8 below target threshold, up from 5 below target threshold.",
+        supported = true
+    },
+    PROFESSIONAL = {
+        id = "PROFESSIONAL",
+        name = "Professional",
+        desc = "You may pick 2 additional Utility Traits. Furthermore your Utility Traits now grant you a bonus of +8 rather than +5.",
         supported = true
     },
     REAPER = {

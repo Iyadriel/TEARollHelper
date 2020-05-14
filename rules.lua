@@ -293,7 +293,8 @@ end
 local function calculateUtilityValue(roll, useUtilityTrait)
     local value = roll
     if useUtilityTrait then
-        value = value + 5
+        local bonus = character.hasFeat(FEATS.PROFESSIONAL) and 8 or 5
+        value = value + bonus
     end
     return value
 end
