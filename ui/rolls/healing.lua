@@ -44,14 +44,34 @@ ui.modules.rolls.modules.healing.getOptions = function(options)
                     turns.setNumGreaterHealSlots(value)
                 end
             },
+            mercyFromPain = {
+                name = COLOURS.FEATS.MERCY_FROM_PAIN .. FEATS.MERCY_FROM_PAIN.name,
+                type = "select",
+                desc = FEATS.MERCY_FROM_PAIN.desc,
+                order = 1,
+                values = {
+                    [0] = "Inactive",
+                    [rules.offence.calculateMercyFromPainBonusHealing(false)] = "Single enemy damaged",
+                    [rules.offence.calculateMercyFromPainBonusHealing(true)] = "Multple enemies damaged",
+                },
+                hidden = function()
+                    return options.outOfCombat or not rules.offence.canProcMercyFromPain()
+                end,
+                get = function()
+                    return turns.getMercyFromPainBonusHealing()
+                end,
+                set = function(info, value)
+                    turns.setMercyFromPainBonusHealing(value)
+                end
+            },
             healing = {
                 type = "description",
                 desc = "How much you can heal for",
                 fontSize = "medium",
-                order = 1,
+                order = 2,
                 name = function()
                     local spirit = character.getPlayerSpirit()
-                    local healing = actions.getHealing(turns.getCurrentTurnValues().roll, spirit, turns.getNumGreaterHealSlots(), options.outOfCombat)
+                    local healing = actions.getHealing(turns.getCurrentTurnValues().roll, spirit, turns.getNumGreaterHealSlots(), turns.getMercyFromPainBonusHealing(), options.outOfCombat)
                     local msg = " |n"
 
                     if healing.amountHealed > 0 then
@@ -83,7 +103,7 @@ ui.modules.rolls.modules.healing.getOptions = function(options)
                     return msg
                 end,
                 hidden = not options.outOfCombat,
-                order = 2
+                order = 3
             }
         }
     }

@@ -8,6 +8,7 @@ local function getAttack(roll, threshold, offence, buff, numBloodHarvestSlots)
     local isCrit = rules.isCrit(roll)
     local critType = rules.getCritType()
     local hasAdrenalineProc = nil
+    local hasMercyFromPainProc = nil
     local hasEntropicEmbraceProc = nil
     local entropicEmbraceDmg = 0
 
@@ -34,12 +35,17 @@ local function getAttack(roll, threshold, offence, buff, numBloodHarvestSlots)
         entropicEmbraceDmg = rules.offence.applyCritModifier(entropicEmbraceDmg)
     end
 
+    if rules.offence.canProcMercyFromPain() then
+        hasMercyFromPainProc = rules.offence.hasMercyFromPainProc(dmg + entropicEmbraceDmg)
+    end
+
     return {
         attackValue = attackValue,
         dmg = dmg,
         isCrit = isCrit,
         critType = critType,
         hasAdrenalineProc = hasAdrenalineProc,
+        hasMercyFromPainProc = hasMercyFromPainProc,
         hasEntropicEmbraceProc = hasEntropicEmbraceProc,
         entropicEmbraceDmg = entropicEmbraceDmg
     }
@@ -102,7 +108,7 @@ local function getRangedSave(roll, threshold, dmgRisk, spirit)
     }
 end
 
-local function getHealing(roll, spirit, numGreaterHealSlots, outOfCombat)
+local function getHealing(roll, spirit, numGreaterHealSlots, mercyFromPainBonusHealing, outOfCombat)
     local healValue = rules.healing.calculateHealValue(roll, spirit)
     local amountHealed = rules.healing.calculateAmountHealed(healValue)
 
@@ -110,6 +116,8 @@ local function getHealing(roll, spirit, numGreaterHealSlots, outOfCombat)
 
     if outOfCombat then
         amountHealed = rules.healing.applyOutOfCombatBonus(amountHealed)
+    else
+        amountHealed = amountHealed + mercyFromPainBonusHealing
     end
 
     return {

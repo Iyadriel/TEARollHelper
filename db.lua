@@ -16,7 +16,7 @@ local defaults = {
             spirit = 0,
             stamina = 0
         },
-        featID = FEATS.NONE.id,
+        featID = FEATS.FEATLESS.id,
         racialTraitID = select(3, UnitRace("player"))
     },
     global = {

@@ -174,6 +174,20 @@ local function calculateBloodHarvestBonus(numBloodHarvestSlots)
     return numBloodHarvestSlots * 3
 end
 
+-- Feat: Mercy from Pain
+
+local function canProcMercyFromPain()
+    return character.hasFeat(FEATS.MERCY_FROM_PAIN)
+end
+
+local function hasMercyFromPainProc(dmgDealt)
+    return dmgDealt >= 5
+end
+
+local function calculateMercyFromPainBonusHealing(multipleEnemiesHit)
+    return multipleEnemiesHit and 4 or 2
+end
+
 -- Racial Trait: Entropic Embrace
 
 local function canProcEntropicEmbrace()
@@ -393,6 +407,10 @@ ns.rules.offence = {
     canUseBloodHarvest = canUseBloodHarvest,
     getMaxBloodHarvestSlots = getMaxBloodHarvestSlots,
     calculateBloodHarvestBonus = calculateBloodHarvestBonus,
+
+    canProcMercyFromPain = canProcMercyFromPain,
+    hasMercyFromPainProc = hasMercyFromPainProc,
+    calculateMercyFromPainBonusHealing = calculateMercyFromPainBonusHealing,
 
     canProcEntropicEmbrace = canProcEntropicEmbrace,
     hasEntropicEmbraceProc = hasEntropicEmbraceProc,

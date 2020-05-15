@@ -44,6 +44,7 @@ local currentTurnValues = {
     numBloodHarvestSlots = 0,
 
     numGreaterHealSlots = 0,
+    mercyFromPainBonusHealing = 0,
 
     defendThreshold = 10,
     damageRisk = 4,
@@ -108,6 +109,14 @@ end
 
 function setNumGreaterHealSlots(numGreaterHealSlots)
     currentTurnValues.numGreaterHealSlots = numGreaterHealSlots
+end
+
+local function getMercyFromPainBonusHealing()
+    return currentTurnValues.mercyFromPainBonusHealing
+end
+
+local function setMercyFromPainBonusHealing(mercyFromPainBonusHealing)
+    currentTurnValues.mercyFromPainBonusHealing = mercyFromPainBonusHealing
 end
 
 function setDefendValues(defendThreshold, damageRisk)
@@ -205,6 +214,8 @@ turns.setRacialTrait = setRacialTrait
 turns.setAttackValues = setAttackValues
 turns.getNumGreaterHealSlots = getNumGreaterHealSlots
 turns.setNumGreaterHealSlots = setNumGreaterHealSlots
+turns.getMercyFromPainBonusHealing = getMercyFromPainBonusHealing
+turns.setMercyFromPainBonusHealing = setMercyFromPainBonusHealing
 turns.getNumBloodHarvestSlots = getNumBloodHarvestSlots
 turns.setNumBloodHarvestSlots = setNumBloodHarvestSlots
 

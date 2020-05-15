@@ -4,9 +4,12 @@ local COLOURS = TEARollHelper.COLOURS
 
 local actions = ns.actions
 local character = ns.character
+local feats = ns.resources.feats
 local rules = ns.rules
 local turns = ns.turns
 local ui = ns.ui
+
+local FEATS = feats.FEATS
 
 --[[ local options = {
     order: Number
@@ -35,7 +38,7 @@ ui.modules.rolls.modules.attack.getOptions = function(options)
                 end
             },
             bloodHarvest = {
-                name = COLOURS.FEATS.BLOOD_HARVEST .. "Blood Harvest",
+                name = COLOURS.FEATS.BLOOD_HARVEST .. FEATS.BLOOD_HARVEST.name,
                 type = "select",
                 desc = "The amount of Blood Harvest slots to use.",
                 order = 1,
@@ -92,6 +95,12 @@ ui.modules.rolls.modules.attack.getOptions = function(options)
 
                         if attack.hasEntropicEmbraceProc then
                             msg = msg .. COLOURS.DAMAGE_TYPES.SHADOW .. "|nEntropic Embrace: You deal " .. attack.entropicEmbraceDmg .. " extra Shadow damage!"
+                        end
+
+                        if attack.hasMercyFromPainProc then
+                            local healingSingleTargetHit = rules.offence.calculateMercyFromPainBonusHealing(false)
+                            local healingMultipleEnemiesHit = rules.offence.calculateMercyFromPainBonusHealing(true)
+                            msg = msg .. COLOURS.FEATS.MERCY_FROM_PAIN .."|nMercy from Pain: +" .. healingSingleTargetHit .. " HP on your next heal roll (+" .. healingMultipleEnemiesHit .. "HP if AoE)"
                         end
                     else
                         msg = msg .. COLOURS.NOTE .. "You can't deal any damage with this roll."

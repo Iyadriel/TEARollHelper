@@ -1,11 +1,11 @@
 local _, ns = ...
 
 local feats = ns.resources.feats
-feats.FEAT_KEYS = {"NONE", "ADRENALINE", "BLOOD_HARVEST", "COUNTER_FORCE", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "MEDIC", "MENDER", "PHALANX", "PROFESSIONAL", "REAPER", "WARDER"}
+feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "COUNTER_FORCE", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "PHALANX", "PROFESSIONAL", "REAPER", "WARDER"}
 
 feats.FEATS = {
-    NONE = {
-        id = "NONE",
+    FEATLESS = {
+        id = "FEATLESS",
         name = "Featless / other"
     },
     ADRENALINE = {
@@ -55,6 +55,12 @@ feats.FEATS = {
         id = "MENDER",
         name = "Mender",
         desc = "Gain 1 additional Greater Heal Slot.",
+        supported = true
+    },
+    MERCY_FROM_PAIN = {
+        id = "MERCY_FROM_PAIN",
+        name = "Mercy from Pain",
+        desc = "Every time you deal 5 damage or more to a single enemy, your next healing roll is boosted by +2 HP, if you deal 5 damage or more to multiple enemies at once, your next healing roll is instead boosted by +4HP (does not stack). If you do not use this bonus on your next player turn, it fades.",
         supported = true
     },
     PHALANX = {
