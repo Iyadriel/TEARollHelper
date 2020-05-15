@@ -66,6 +66,12 @@ ui.modules.rolls.modules.healing.getOptions = function(options)
                     return msg
                 end
             },
+            outOfCombatNote = {
+                type = "description",
+                name = COLOURS.NOTE .. " |nOut of combat, you can perform 3 regular heals (refreshes after combat ends), or spend as many Greater Heal slots as you want (you can roll every time you spend slots).",
+                hidden = not options.outOfCombat,
+                order = 2
+            }
         }
     }
 end
