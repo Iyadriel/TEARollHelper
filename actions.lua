@@ -109,7 +109,7 @@ local function getHealing(roll, spirit, numGreaterHealSlots, outOfCombat)
     amountHealed = amountHealed + rules.healing.calculateGreaterHealBonus(numGreaterHealSlots)
 
     if outOfCombat then
-        amountHealed = amountHealed + rules.healing.calculateOutOfCombatBonus()
+        amountHealed = rules.healing.applyOutOfCombatBonus(amountHealed)
     end
 
     return {

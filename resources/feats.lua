@@ -1,8 +1,7 @@
 local _, ns = ...
 
 local feats = ns.resources.feats
-
-feats.FEAT_KEYS = {"NONE", "ADRENALINE", "BLOOD_HARVEST", "COUNTER_FORCE", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "MENDER", "PHALANX", "PROFESSIONAL", "REAPER", "WARDER"}
+feats.FEAT_KEYS = {"NONE", "ADRENALINE", "BLOOD_HARVEST", "COUNTER_FORCE", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "MEDIC", "MENDER", "PHALANX", "PROFESSIONAL", "REAPER", "WARDER"}
 
 feats.FEATS = {
     NONE = {
@@ -44,6 +43,12 @@ feats.FEATS = {
         name = "Leader",
         desc = "You can now buff with the Offence stat instead of the Spirit stat.",
         note = "The addon will automatically use the highest stat.",
+        supported = true
+    },
+    MEDIC = {
+        id = "MEDIC",
+        name = "Medic",
+        desc = "Your out of combat basic healing is doubled, and the amount of heals you can do out of combat is increased by 2.",
         supported = true
     },
     MENDER = {

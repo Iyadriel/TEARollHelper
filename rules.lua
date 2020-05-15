@@ -306,11 +306,25 @@ local function calculateGreaterHealBonus(numGreaterHealSlots)
     return numGreaterHealSlots * 3
 end
 
-local function calculateOutOfCombatBonus()
+local function calculateBaseOutOfCombatBonus()
     if character.getPlayerSpirit() >= NUM_SPIRIT_PER_GREATER_HEAL_SLOT then
         return 3
     end
     return 0
+end
+
+local function applyOutOfCombatBonus(amountHealed)
+    amountHealed = amountHealed + calculateBaseOutOfCombatBonus()
+
+    if character.hasFeat(FEATS.MEDIC) then
+        amountHealed = amountHealed * 2
+    end
+
+    return amountHealed
+end
+
+local function calculateNumHealsAllowedOutOfCombat()
+    return character.hasFeat(FEATS.MEDIC) and 5 or 3
 end
 
 -- [[ Buffing ]]
@@ -409,7 +423,8 @@ ns.rules.healing = {
     calculateAmountHealed = calculateAmountHealed,
     getMaxGreaterHealSlots = getMaxGreaterHealSlots,
     calculateGreaterHealBonus = calculateGreaterHealBonus,
-    calculateOutOfCombatBonus = calculateOutOfCombatBonus
+    applyOutOfCombatBonus = applyOutOfCombatBonus,
+    calculateNumHealsAllowedOutOfCombat = calculateNumHealsAllowedOutOfCombat
 }
 ns.rules.buffing = {
     usesInspiringPresence = usesInspiringPresence,

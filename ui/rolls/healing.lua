@@ -4,9 +4,12 @@ local COLOURS = TEARollHelper.COLOURS
 
 local actions = ns.actions
 local character = ns.character
+local feats = ns.resources.feats
 local rules = ns.rules
 local turns = ns.turns
 local ui = ns.ui
+
+local FEATS = feats.FEATS
 
 --[[ local options = {
     order: Number
@@ -42,7 +45,6 @@ ui.modules.rolls.modules.healing.getOptions = function(options)
                 end
             },
             healing = {
-                name = "Healing",
                 type = "description",
                 desc = "How much you can heal for",
                 fontSize = "medium",
@@ -68,7 +70,16 @@ ui.modules.rolls.modules.healing.getOptions = function(options)
             },
             outOfCombatNote = {
                 type = "description",
-                name = COLOURS.NOTE .. " |nOut of combat, you can perform 3 regular heals (refreshes after combat ends), or spend as many Greater Heal slots as you want (you can roll every time you spend slots).",
+                name = function()
+                    local msg = COLOURS.NOTE .. " |nOut of combat, you can perform "
+                    if character.hasFeat(FEATS.MEDIC) then
+                        msg = msg .. COLOURS.POSITIVE .. rules.healing.calculateNumHealsAllowedOutOfCombat() .. COLOURS.NOTE
+                    else
+                        msg = msg .. rules.healing.calculateNumHealsAllowedOutOfCombat()
+                    end
+                    msg = msg .. " regular heals (refreshes after combat ends), or spend as many Greater Heal slots as you want (you can roll every time you spend slots)."
+                    return msg
+                end,
                 hidden = not options.outOfCombat,
                 order = 2
             }
