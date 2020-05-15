@@ -52,7 +52,6 @@ ui.modules.rolls.modules.attack.getOptions = function(options)
                 disabled = function()
                     return rules.offence.getMaxBloodHarvestSlots() == 0
                 end,
-                order = 0,
                 get = function()
                     return turns.getNumBloodHarvestSlots()
                 end,
@@ -61,7 +60,6 @@ ui.modules.rolls.modules.attack.getOptions = function(options)
                 end
             },
             dmg = {
-                name = "Damage dealt",
                 type = "description",
                 desc = "How much damage you can deal to a target",
                 fontSize = "medium",

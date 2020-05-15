@@ -10,7 +10,6 @@ ui.modules = {
 ui.getOptions = function()
     local options = {
         name = "TEA Roll Helper",
-        handler = TeaRollHelper,
         type = 'group',
         args = {
             roll = {

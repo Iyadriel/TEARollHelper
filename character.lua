@@ -8,7 +8,7 @@ local turns = ns.turns
 local FEATS = feats.FEATS
 
 local getPlayerOffence, getPlayerDefence, getPlayerSpirit, getPlayerStamina
-local hasOffenceMastery
+local hasOffenceMastery, hasSpiritMastery
 local getPlayerFeat, hasFeat, hasFeatByID, setPlayerFeatByID, getPlayerRacialTrait, hasRacialTrait
 
 function getPlayerOffence()

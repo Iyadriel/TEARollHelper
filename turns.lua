@@ -94,11 +94,11 @@ function setAttackValues(attackThreshold)
     currentTurnValues.attackThreshold = attackThreshold
 end
 
-function getNumBloodHarvestSlots()
+local function getNumBloodHarvestSlots()
     return currentTurnValues.numBloodHarvestSlots
 end
 
-function setNumBloodHarvestSlots(numBloodHarvestSlots)
+local function setNumBloodHarvestSlots(numBloodHarvestSlots)
     currentTurnValues.numBloodHarvestSlots = numBloodHarvestSlots
 end
 
