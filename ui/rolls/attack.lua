@@ -26,7 +26,7 @@ ui.modules.rolls.modules.attack.getOptions = function(options)
                 softMax = 20,
                 max = 100,
                 step = 1,
-                order = 1,
+                order = 0,
                 get = function()
                     return turns.getCurrentTurnValues().attackThreshold
                 end,
@@ -34,18 +34,45 @@ ui.modules.rolls.modules.attack.getOptions = function(options)
                     turns.setAttackValues(value)
                 end
             },
+            bloodHarvest = {
+                name = "Blood Harvest",
+                type = "select",
+                desc = "The amount of Blood Harvest slots to use.",
+                order = 1,
+                values = function()
+                    local values = {}
+                    for i = 0, rules.offence.getMaxBloodHarvestSlots() do
+                        values[i] = tostring(i)
+                    end
+                    return values
+                end,
+                hidden = function()
+                    return not rules.offence.canUseBloodHarvest()
+                end,
+                disabled = function()
+                    return rules.offence.getMaxBloodHarvestSlots() == 0
+                end,
+                order = 0,
+                get = function()
+                    return turns.getNumBloodHarvestSlots()
+                end,
+                set = function(info, value)
+                    turns.setNumBloodHarvestSlots(value)
+                end
+            },
             dmg = {
                 name = "Damage dealt",
                 type = "description",
                 desc = "How much damage you can deal to a target",
                 fontSize = "medium",
-                order = 2,
+                order = 3,
                 name = function()
                     local offence = character.getPlayerOffence()
                     local buff = turns.getCurrentBuffs().offence
                     local values = turns.getCurrentTurnValues()
+                    local numBloodHarvestSlots = turns.getNumBloodHarvestSlots()
 
-                    local attack = actions.getAttack(values.roll, values.attackThreshold, offence, buff)
+                    local attack = actions.getAttack(values.roll, values.attackThreshold, offence, buff, numBloodHarvestSlots)
                     local msg = " |n"
                     local excited = false
 

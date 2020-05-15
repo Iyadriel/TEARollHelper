@@ -26,6 +26,7 @@ local STAT_POINT_COSTS = {
     [6] = 12
 }
 
+local NUM_OFFENCE_PER_BLOOD_HARVEST_SLOT = 2
 local NUM_SPIRIT_PER_GREATER_HEAL_SLOT = 2
 
 -- [[ Stat allocation ]]
@@ -138,6 +139,8 @@ local function applyCritModifier(dmg)
     return dmg * 2
 end
 
+-- Feat: Adrenaline
+
 local function canProcAdrenaline()
     return character.hasFeat(FEATS.ADRENALINE)
 end
@@ -153,6 +156,25 @@ end
 local function applyAdrenalineProcModifier(dmg, offence)
     return dmg + calculateAdrenalineProcDmg(offence)
 end
+
+-- Feat: Blood Harvest
+
+local function canUseBloodHarvest()
+    return character.hasFeat(FEATS.BLOOD_HARVEST)
+end
+
+local function getMaxBloodHarvestSlots()
+    local offence = character.getPlayerOffence()
+    local numSlots = max(0, floor(offence / NUM_OFFENCE_PER_BLOOD_HARVEST_SLOT))
+
+    return numSlots
+end
+
+local function calculateBloodHarvestBonus(numBloodHarvestSlots)
+    return numBloodHarvestSlots * 3
+end
+
+-- Racial Trait: Entropic Embrace
 
 local function canProcEntropicEmbrace()
     return character.hasRacialTrait(RACIAL_TRAITS.ENTROPIC_EMBRACE)
@@ -339,6 +361,10 @@ ns.rules.offence = {
     canProcAdrenaline = canProcAdrenaline,
     hasAdrenalineProc = hasAdrenalineProc,
     applyAdrenalineProcModifier = applyAdrenalineProcModifier,
+
+    canUseBloodHarvest = canUseBloodHarvest,
+    getMaxBloodHarvestSlots = getMaxBloodHarvestSlots,
+    calculateBloodHarvestBonus = calculateBloodHarvestBonus,
 
     canProcEntropicEmbrace = canProcEntropicEmbrace,
     hasEntropicEmbraceProc = hasEntropicEmbraceProc,

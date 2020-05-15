@@ -2,7 +2,7 @@ local _, ns = ...
 
 local rules = ns.rules
 
-local function getAttack(roll, threshold, offence, buff)
+local function getAttack(roll, threshold, offence, buff, numBloodHarvestSlots)
     local attackValue = rules.offence.calculateAttackValue(roll, offence, buff)
     local dmg = rules.offence.calculateAttackDmg(threshold, attackValue)
     local isCrit = rules.isCrit(roll)
@@ -16,6 +16,10 @@ local function getAttack(roll, threshold, offence, buff)
         if hasAdrenalineProc then
             dmg = rules.offence.applyAdrenalineProcModifier(dmg, offence)
         end
+    end
+
+    if rules.offence.canUseBloodHarvest() then
+        dmg = dmg + rules.offence.calculateBloodHarvestBonus(numBloodHarvestSlots)
     end
 
     if rules.offence.canProcEntropicEmbrace() then

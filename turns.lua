@@ -41,7 +41,10 @@ local currentTurnValues = {
     racialTrait = nil,
 
     attackThreshold = 12,
+    numBloodHarvestSlots = 0,
+
     numGreaterHealSlots = 0,
+
     defendThreshold = 10,
     damageRisk = 4,
 
@@ -89,6 +92,14 @@ end
 
 function setAttackValues(attackThreshold)
     currentTurnValues.attackThreshold = attackThreshold
+end
+
+function getNumBloodHarvestSlots()
+    return currentTurnValues.numBloodHarvestSlots
+end
+
+function setNumBloodHarvestSlots(numBloodHarvestSlots)
+    currentTurnValues.numBloodHarvestSlots = numBloodHarvestSlots
 end
 
 function getNumGreaterHealSlots()
@@ -194,6 +205,9 @@ turns.setRacialTrait = setRacialTrait
 turns.setAttackValues = setAttackValues
 turns.getNumGreaterHealSlots = getNumGreaterHealSlots
 turns.setNumGreaterHealSlots = setNumGreaterHealSlots
+turns.getNumBloodHarvestSlots = getNumBloodHarvestSlots
+turns.setNumBloodHarvestSlots = setNumBloodHarvestSlots
+
 turns.setDefendValues = setDefendValues
 
 turns.utility = {

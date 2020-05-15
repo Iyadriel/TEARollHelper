@@ -2,7 +2,7 @@ local _, ns = ...
 
 local feats = ns.resources.feats
 
-feats.FEAT_KEYS = {"NONE", "ADRENALINE", "COUNTER_FORCE", "KEEN_SENSE", "LEADER", "MENDER", "PHALANX", "PROFESSIONAL", "REAPER", "WARDER"}
+feats.FEAT_KEYS = {"NONE", "ADRENALINE", "BLOOD_HARVEST", "COUNTER_FORCE", "KEEN_SENSE", "LEADER", "MENDER", "PHALANX", "PROFESSIONAL", "REAPER", "WARDER"}
 
 feats.FEATS = {
     NONE = {
@@ -13,6 +13,12 @@ feats.FEATS = {
         id = "ADRENALINE",
         name = "Adrenaline",
         desc = "Beating the threshold by 4 or more with an offence attack roll yields bonus damage equal to half of your Offence stat rounded up.",
+        supported = true
+    },
+    BLOOD_HARVEST = {
+        id = "BLOOD_HARVEST",
+        name = "Blood Harvest",
+        desc = "For every 2 points you put into the Offence stat you gain a Harvest Slot. You can activate these Harvest Slots to spend them just like a Greater Heal Slot. Spending a Harvest slot increases the damage of your next Offence attack by +3. This damage is dealt even if you miss.",
         supported = true
     },
     COUNTER_FORCE = {
