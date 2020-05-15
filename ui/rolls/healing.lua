@@ -56,10 +56,12 @@ ui.modules.rolls.modules.healing.getOptions = function(options)
 
                     if healing.amountHealed > 0 then
                         local amount = tostring(healing.amountHealed)
+                        local healColour = (options.outOfCombat and character.hasFeat(FEATS.MEDIC)) and COLOURS.FEATS.GENERIC or COLOURS.HEALING
+
                         if healing.isCrit then
-                            msg = msg .. COLOURS.CRITICAL .. "MANY HEALS!|r " .. COLOURS.HEALING .. "You can heal everyone in line of sight for " .. amount .. " HP."
+                            msg = msg .. COLOURS.CRITICAL .. "MANY HEALS!|r " .. healColour .. "You can heal everyone in line of sight for " .. amount .. " HP."
                         else
-                            msg = msg .. COLOURS.HEALING .. "You can heal someone for " .. amount .. " HP."
+                            msg = msg .. healColour .. "You can heal someone for " .. amount .. " HP."
                         end
                     else
                         msg = msg .. COLOURS.NOTE .. "You can't heal anyone with this roll."
@@ -73,11 +75,11 @@ ui.modules.rolls.modules.healing.getOptions = function(options)
                 name = function()
                     local msg = COLOURS.NOTE .. " |nOut of combat, you can perform "
                     if character.hasFeat(FEATS.MEDIC) then
-                        msg = msg .. COLOURS.POSITIVE .. rules.healing.calculateNumHealsAllowedOutOfCombat() .. COLOURS.NOTE
+                        msg = msg .. COLOURS.FEATS.GENERIC .. rules.healing.calculateNumHealsAllowedOutOfCombat() .. " regular heals" .. COLOURS.NOTE
                     else
-                        msg = msg .. rules.healing.calculateNumHealsAllowedOutOfCombat()
+                        msg = msg .. rules.healing.calculateNumHealsAllowedOutOfCombat() .. " regular heals"
                     end
-                    msg = msg .. " regular heals (refreshes after combat ends), or spend as many Greater Heal slots as you want (you can roll every time you spend slots)."
+                    msg = msg .. " (refreshes after combat ends), or spend as many Greater Heal slots as you want (you can roll every time you spend slots)."
                     return msg
                 end,
                 hidden = not options.outOfCombat,

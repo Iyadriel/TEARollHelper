@@ -1,6 +1,5 @@
 TEARollHelper.COLOURS = {
     SUCCESS = '|cff00ff00',
-    POSITIVE = '|cff00ff00',
     ERROR = '|cffff0000',
 
     DAMAGE = '|cffff0000',
@@ -14,6 +13,8 @@ TEARollHelper.COLOURS = {
     NOTE = '|cffbbbbbb',
 
     FEATS = {
+        GENERIC = '|cffe6cc80',
+
         ADRENALINE = '|cffff6b6b',
         REAPER = '|cffc41f3b'
     },
