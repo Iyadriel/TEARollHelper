@@ -6,9 +6,12 @@ local COLOURS = TEARollHelper.COLOURS
 
 local actions = ns.actions
 local character = ns.character
+local feats = ns.resources.feats
 local rules = ns.rules
 local turns = ns.turns
 local ui = ns.ui
+
+local FEATS = feats.FEATS
 
 -- Update config UI, in case it is also open
 local function notifyChange()
@@ -238,7 +241,7 @@ ui.modules.rolls.getOptions = function()
                                     end
 
                                     if save.hasCounterForceProc then
-                                        msg = msg .. COLOURS.CRITICAL .. "\nCOUNTER-FORCE!|r You can deal "..save.counterForceDmg.." damage to your attacker!"
+                                        msg = msg .. COLOURS.FEATS.GENERIC .. "\nCOUNTER-FORCE!|r You can deal "..save.counterForceDmg.." damage to your attacker!"
                                     end
 
                                     return msg
@@ -259,11 +262,13 @@ ui.modules.rolls.getOptions = function()
                                     local spirit = character.getPlayerSpirit()
                                     local values = turns.getCurrentTurnValues()
                                     local save = actions.getRangedSave(values.roll, values.defendThreshold, values.damageRisk, spirit)
+                                    local hasWarder = character.hasFeat(FEATS.WARDER)
+                                    local dmgReductionColour = hasWarder and COLOURS.FEATS.GENERIC or COLOURS.DEFAULT
 
                                     if save.thresholdMet then
                                         return COLOURS.SAVE .. "You can fully protect your ally."
                                     elseif save.damageReduction > 0 then
-                                        return "You can reduce the damage your ally takes by " .. save.damageReduction .. ".|n" .. COLOURS.NOTE .. "However, you cannot act during the next player turn."
+                                        return dmgReductionColour .. "You can reduce the damage your ally takes by " .. save.damageReduction .. ".|n" .. COLOURS.NOTE .. "However, you cannot act during the next player turn."
                                     else
                                         return COLOURS.NOTE .. "You can't reduce the damage your ally takes with this roll."
                                     end

@@ -1,4 +1,5 @@
 TEARollHelper.COLOURS = {
+    DEFAULT = '|cffffffff',
     SUCCESS = '|cff00ff00',
     ERROR = '|cffff0000',
 
@@ -16,6 +17,7 @@ TEARollHelper.COLOURS = {
         GENERIC = '|cffe6cc80',
 
         ADRENALINE = '|cffff6b6b',
+        BLOOD_HARVEST = '|cffff6b6b',
         REAPER = '|cffc41f3b'
     },
 

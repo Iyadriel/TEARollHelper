@@ -35,7 +35,7 @@ ui.modules.rolls.modules.attack.getOptions = function(options)
                 end
             },
             bloodHarvest = {
-                name = "Blood Harvest",
+                name = COLOURS.FEATS.BLOOD_HARVEST .. "Blood Harvest",
                 type = "select",
                 desc = "The amount of Blood Harvest slots to use.",
                 order = 1,
