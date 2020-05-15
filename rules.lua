@@ -315,14 +315,28 @@ end
 
 -- [[ Buffing ]]
 
+local function usesInspiringPresence()
+    return character.hasFeat(FEATS.INSPIRING_PRESENCE)
+end
+
+local function calculateSpiritToAddToRoll(spirit)
+    if usesInspiringPresence() then
+        return ceil(spirit / 2)
+    end
+    return spirit
+end
+
 local function calculateBuffValue(roll, spirit, offence, offenceBuff)
     local stat
+    spirit = calculateSpiritToAddToRoll(spirit)
+
     if character.hasFeat(FEATS.LEADER) then
         local offenceStat = calculateOffenceStat(offence, offenceBuff)
         stat = max(spirit, offenceStat)
     else
         stat = spirit
     end
+
     return roll + stat
 end
 
@@ -398,6 +412,7 @@ ns.rules.healing = {
     calculateOutOfCombatBonus = calculateOutOfCombatBonus
 }
 ns.rules.buffing = {
+    usesInspiringPresence = usesInspiringPresence,
     calculateBuffValue = calculateBuffValue,
     calculateBuffAmount = calculateBuffAmount
 }

@@ -118,16 +118,24 @@ ui.modules.rolls.getOptions = function()
                                     local offenceBuff = turns.getCurrentBuffs().offence
                                     local buff = actions.getBuff(turns.getCurrentTurnValues().roll, spirit, offence, offenceBuff)
 
+                                    local msg
+
                                     if buff.amountBuffed > 0 then
                                         local amount = tostring(buff.amountBuffed)
                                         if buff.isCrit then
-                                            return COLOURS.CRITICAL .. "BIG BUFF!|r " .. COLOURS.BUFF .. "You can buff everyone in line of sight for " .. amount .. "."
+                                            msg = COLOURS.CRITICAL .. "BIG BUFF!|r " .. COLOURS.BUFF .. "You can buff everyone in line of sight for " .. amount .. "."
                                         else
-                                            return COLOURS.BUFF .. "You can buff someone for " .. amount .. "."
+                                            msg = COLOURS.BUFF .. "You can buff someone for " .. amount .. "."
+                                        end
+
+                                        if buff.usesInspiringPresence then
+                                            msg = msg .. COLOURS.NOTE .. "|nYour buff is active in both the current player turn and the next enemy turn."
                                         end
                                     else
-                                        return COLOURS.NOTE .. "You can't buff anyone with this roll."
+                                        msg = COLOURS.NOTE .. "You can't buff anyone with this roll."
                                     end
+
+                                    return msg
                                 end
                             }
                         }

@@ -2,7 +2,7 @@ local _, ns = ...
 
 local feats = ns.resources.feats
 
-feats.FEAT_KEYS = {"NONE", "ADRENALINE", "BLOOD_HARVEST", "COUNTER_FORCE", "KEEN_SENSE", "LEADER", "MENDER", "PHALANX", "PROFESSIONAL", "REAPER", "WARDER"}
+feats.FEAT_KEYS = {"NONE", "ADRENALINE", "BLOOD_HARVEST", "COUNTER_FORCE", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "MENDER", "PHALANX", "PROFESSIONAL", "REAPER", "WARDER"}
 
 feats.FEATS = {
     NONE = {
@@ -25,6 +25,12 @@ feats.FEATS = {
         id = "COUNTER_FORCE",
         name = "Counter-Force",
         desc = "Your melee save rolls no longer benefit from your Defence stat, but if you manage the roll you deal damage back to the attacker by an amount equal to your Defence stat.",
+        supported = true
+    },
+    INSPIRING_PRESENCE = {
+        id = "INSPIRING_PRESENCE",
+        name = "Inspiring Presence",
+        desc = "You now buff someone for both their current player turn and the next enemy turn, but you only apply half of your spirit stat to the roll, rounded up.",
         supported = true
     },
     KEEN_SENSE = {

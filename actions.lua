@@ -124,7 +124,8 @@ local function getBuff(roll, spirit, offence, offenceBuff)
 
     return {
         amountBuffed = amountBuffed,
-        isCrit = rules.isCrit(roll)
+        isCrit = rules.isCrit(roll),
+        usesInspiringPresence = rules.buffing.usesInspiringPresence()
     }
 end
 
