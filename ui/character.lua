@@ -115,14 +115,14 @@ ui.modules.character = {
                 availablePoints = {
                     type = "description",
                     name = function()
-                        local availablePoints = rules.getAvailableStatPoints()
-                        local availableNegativePoints = rules.getAvailableNegativePoints()
+                        local availablePoints = rules.stats.getAvailableStatPoints()
+                        local availableNegativePoints = rules.stats.getAvailableNegativePoints()
                         local msg = " |n"
 
                         if availablePoints > 0 then
                             msg = msg .. "Available points: " .. availablePoints
                         elseif availablePoints == 0 then
-                            local negativePointsTooMany = rules.getNegativePointsAssigned() - rules.getNegativePointsUsed()
+                            local negativePointsTooMany = rules.stats.getNegativePointsAssigned() - rules.stats.getNegativePointsUsed()
                             if negativePointsTooMany > 0 then
                                 msg = msg .. "You have " .. negativePointsTooMany .. " more negative point(s) than you can use. This is allowed, but it will not benefit you."
                             else

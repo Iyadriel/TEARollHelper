@@ -388,13 +388,16 @@ end
 ns.rules.MAX_ROLL = MAX_ROLL
 ns.rules.CRIT_TYPES = CRIT_TYPES
 
-ns.rules.getNegativePointsAssigned = getNegativePointsAssigned
-ns.rules.getNegativePointsUsed = getNegativePointsUsed
-ns.rules.getAvailableNegativePoints = getAvailableNegativePoints
-ns.rules.getAvailableStatPoints = getAvailableStatPoints
+ns.rules.stats = {
+    getNegativePointsAssigned = getNegativePointsAssigned,
+    getNegativePointsUsed = getNegativePointsUsed,
+    getAvailableNegativePoints = getAvailableNegativePoints,
+    getAvailableStatPoints = getAvailableStatPoints,
+}
 
 ns.rules.isCrit = isCrit
 ns.rules.getCritType = getCritType
+
 ns.rules.offence = {
     calculateAttackValue = calculateAttackValue,
     calculateAttackDmg = calculateAttackDmg,
