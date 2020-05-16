@@ -11,6 +11,9 @@ local rules = ns.rules
 local turns = ns.turns
 local ui = ns.ui
 
+local STAT_MIN_VALUE = rules.stats.STAT_MIN_VALUE
+local STAT_MAX_VALUE = rules.stats.STAT_MAX_VALUE
+
 local RACIAL_TRAIT_LIST = {}
 for key, trait in pairs(racialTraits.RACIAL_TRAITS) do
     RACIAL_TRAIT_LIST[trait.id] = racialTraits.RACE_NAMES[trait.id] .. " (" .. trait.name .. ")"
@@ -46,10 +49,12 @@ ui.modules.character = {
                 notifyChange()
             end,
             validate = function(info, input)
+                local stat = info[#info]
                 if input == nil then
-                    local stat = info[#info]
-                    local statName = info.option.name
-                    return statName .. " stat must be a number! |cFFBBBBBBExample: /tea " .. stat .. " 4"
+                    return stat .. " stat must be a number! |cFFBBBBBBExample: /tea " .. stat .. " 4"
+                end
+                if input < STAT_MIN_VALUE or input > STAT_MAX_VALUE then
+                    return stat .. " must be between " .. STAT_MIN_VALUE .. " and " .. STAT_MAX_VALUE .. "."
                 end
                 return true
             end,
@@ -64,10 +69,8 @@ ui.modules.character = {
                         return label
                     end,
                     desc = "Mastery bonus: +2 base damage",
-                    min = -100,
-                    max = 100,
-                    softMin = -4,
-                    softMax = 6,
+                    min = STAT_MIN_VALUE,
+                    max = STAT_MAX_VALUE,
                     step = 1,
                     order = 0
                 },
@@ -75,10 +78,8 @@ ui.modules.character = {
                     type = "range",
                     name = "Defence",
                     desc = "Your character's defence stat",
-                    min = -100,
-                    max = 100,
-                    softMin = -4,
-                    softMax = 6,
+                    min = STAT_MIN_VALUE,
+                    max = STAT_MAX_VALUE,
                     step = 1,
                     order = 1
                 },
@@ -92,10 +93,8 @@ ui.modules.character = {
                         return label
                     end,
                     desc = "Mastery bonus: +1 Greater Heal slot",
-                    min = -100,
-                    max = 100,
-                    softMin = -4,
-                    softMax = 6,
+                    min = STAT_MIN_VALUE,
+                    max = STAT_MAX_VALUE,
                     step = 1,
                     order = 2
                 },
@@ -105,10 +104,8 @@ ui.modules.character = {
                         return "Stamina (max HP: " .. rules.stamina.calculateMaxHP(character.getPlayerStamina()) .. ")"
                     end,
                     desc = "Affects your character's maximum HP.",
-                    min = -100,
-                    max = 100,
-                    softMin = -4,
-                    softMax = 6,
+                    min = STAT_MIN_VALUE,
+                    max = STAT_MAX_VALUE,
                     step = 1,
                     order = 3
                 },

@@ -17,6 +17,8 @@ local BASE_STAMINA = 25
 local BASE_STAT_POINTS = 12
 local MAX_STAT_POINTS = 16
 local NEGATIVE_POINTS_BUDGET = MAX_STAT_POINTS - BASE_STAT_POINTS
+local STAT_MIN_VALUE = -4
+local STAT_MAX_VALUE = 6
 local STAT_POINT_COSTS = {
     [1] = 1,
     [2] = 2,
@@ -389,6 +391,8 @@ ns.rules.MAX_ROLL = MAX_ROLL
 ns.rules.CRIT_TYPES = CRIT_TYPES
 
 ns.rules.stats = {
+    STAT_MIN_VALUE = STAT_MIN_VALUE,
+    STAT_MAX_VALUE = STAT_MAX_VALUE,
     getNegativePointsAssigned = getNegativePointsAssigned,
     getNegativePointsUsed = getNegativePointsUsed,
     getAvailableNegativePoints = getAvailableNegativePoints,
