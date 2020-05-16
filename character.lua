@@ -3,7 +3,6 @@ local _, ns = ...
 local character = ns.character
 local feats = ns.resources.feats
 local racialTraits = ns.resources.racialTraits
-local turns = ns.turns
 
 local FEATS = feats.FEATS
 
@@ -58,29 +57,6 @@ end
 function hasRacialTrait(racialTrait)
     return TEARollHelper.db.profile.racialTraitID == racialTrait.id
 end
-
---[[ function characterSheetToString()
-    local offence = getPlayerOffence()
-    local defence = getPlayerDefence()
-
-    local msg = "Your character: < Offence: |cFF15A8D8"..offence.."|r "
-
-    local currentBuffs = turns.getCurrentBuffs()
-
-    if currentBuffs.offence > 0 then
-        msg = msg .. "|cFF00FF00+ "..currentBuffs.offence.."|r "
-    end
-
-    msg = msg .. "- Defence: |cFF15A8D8"..defence.."|r "
-
-    if currentBuffs.defence > 0 then
-        msg = msg .. "|cFF00FF00+ "..currentBuffs.defence.."|r "
-    end
-
-    msg = msg .. ">|n"
-
-    return msg
-end ]]
 
 character.getPlayerOffence = getPlayerOffence
 character.getPlayerDefence = getPlayerDefence

@@ -2,7 +2,6 @@ local _, ns = ...
 
 local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
 
-local actions = ns.actions
 local events = ns.events
 local rules = ns.rules
 local turns = ns.turns
