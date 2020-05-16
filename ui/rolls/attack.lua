@@ -78,7 +78,7 @@ ui.modules.rolls.modules.attack.getOptions = function(options)
                     local excited = false
 
                     if attack.dmg > 0 then
-                        if attack.isCrit and attack.critType == rules.CRIT_TYPES.DAMAGE then
+                        if attack.isCrit and attack.critType == rules.offence.CRIT_TYPES.DAMAGE then
                             excited = true
                             msg = msg .. COLOURS.CRITICAL .. "CRITICAL HIT!|r "
                         end
@@ -87,7 +87,7 @@ ui.modules.rolls.modules.attack.getOptions = function(options)
                             msg = msg .. COLOURS.FEATS.ADRENALINE .. "ADRENALINE!|r "
                         end
 
-                        if attack.isCrit and attack.critType == rules.CRIT_TYPES.REAPER then
+                        if attack.isCrit and attack.critType == rules.offence.CRIT_TYPES.REAPER then
                             msg = msg .. COLOURS.FEATS.REAPER .. "TIME TO REAP!|r You can deal " .. tostring(attack.dmg) .. " damage to all enemies in melee range of you or your target!"
                         else
                             msg = msg .. "You can deal " .. tostring(attack.dmg) .. " damage" .. (excited and "!" or ".")

@@ -18,6 +18,14 @@ db.lua
 events.lua
 launchers.lua
 rules.lua
+rules/stats.lua
+rules/offence.lua
+rules/defence.lua
+rules/healing.lua
+rules/buffing.lua
+rules/meleeSave.lua
+rules/rangedSave.lua
+rules/utility.lua
 turns.lua
 
 ui.lua

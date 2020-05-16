@@ -101,7 +101,7 @@ ui.modules.character = {
                 stamina = {
                     type = "range",
                     name = function()
-                        return "Stamina (max HP: " .. rules.stamina.calculateMaxHP(character.getPlayerStamina()) .. ")"
+                        return "Stamina (max HP: " .. rules.stats.calculateMaxHP(character.getPlayerStamina()) .. ")"
                     end,
                     desc = "Affects your character's maximum HP.",
                     min = STAT_MIN_VALUE,

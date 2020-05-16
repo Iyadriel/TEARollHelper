@@ -46,7 +46,7 @@ ui.modules.rolls.getOptions = function()
                     return turns.isRolling() and "Rolling..." or "Roll"
                 end,
                 type = "execute",
-                desc = "Do a /roll " .. rules.MAX_ROLL .. ".",
+                desc = "Do a /roll " .. rules.core.MAX_ROLL .. ".",
                 disabled = function()
                     return turns.isRolling()
                 end,
@@ -58,8 +58,8 @@ ui.modules.rolls.getOptions = function()
                 type = "range",
                 desc = "The number you rolled",
                 min = 1,
-                softMax = rules.MAX_ROLL,
-                max = rules.MAX_ROLL * 2, -- "support" prepping by letting people add rolls together
+                softMax = rules.core.MAX_ROLL,
+                max = rules.core.MAX_ROLL * 2, -- "support" prepping by letting people add rolls together
                 step = 1,
                 order = 2,
                 get = function()

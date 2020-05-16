@@ -141,7 +141,7 @@ end
 
 local function sendRoll()
     events.listenForRolls()
-    RandomRoll(1, rules.MAX_ROLL)
+    RandomRoll(1, rules.core.MAX_ROLL)
 end
 
 function roll()

@@ -5,8 +5,8 @@ local rules = ns.rules
 local function getAttack(roll, threshold, offence, buff, numBloodHarvestSlots)
     local attackValue = rules.offence.calculateAttackValue(roll, offence, buff)
     local dmg = rules.offence.calculateAttackDmg(threshold, attackValue)
-    local isCrit = rules.isCrit(roll)
-    local critType = rules.getCritType()
+    local isCrit = rules.core.isCrit(roll)
+    local critType = rules.offence.getCritType()
     local hasAdrenalineProc = nil
     local hasMercyFromPainProc = nil
     local hasEntropicEmbraceProc = nil
@@ -30,7 +30,7 @@ local function getAttack(roll, threshold, offence, buff, numBloodHarvestSlots)
         end
     end
 
-    if isCrit and critType == rules.CRIT_TYPES.DAMAGE then
+    if isCrit and critType == rules.offence.CRIT_TYPES.DAMAGE then
         dmg = rules.offence.applyCritModifier(dmg)
         entropicEmbraceDmg = rules.offence.applyCritModifier(entropicEmbraceDmg)
     end
@@ -54,7 +54,7 @@ end
 local function getDefence(roll, threshold, dmgRisk, defence, buff, racialTrait)
     local defendValue = rules.defence.calculateDefendValue(roll, defence, buff, racialTrait)
     local damageTaken = rules.defence.calculateDamageTaken(threshold, defendValue, dmgRisk)
-    local isCrit = rules.isCrit(roll)
+    local isCrit = rules.core.isCrit(roll)
     local retaliateDmg = 0
 
     if isCrit then
@@ -122,7 +122,7 @@ local function getHealing(roll, spirit, buff, numGreaterHealSlots, mercyFromPain
 
     return {
         amountHealed = amountHealed,
-        isCrit = rules.isCrit(roll)
+        isCrit = rules.core.isCrit(roll)
     }
 end
 
@@ -132,7 +132,7 @@ local function getBuff(roll, spirit, spiritBuff, offence, offenceBuff)
 
     return {
         amountBuffed = amountBuffed,
-        isCrit = rules.isCrit(roll),
+        isCrit = rules.core.isCrit(roll),
         usesInspiringPresence = rules.buffing.usesInspiringPresence()
     }
 end
