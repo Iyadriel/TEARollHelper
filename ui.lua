@@ -11,5 +11,8 @@ ui.modules = {
     },
     rolls = {
         name = "TEARollHelperRolls"
+    },
+    turn = {
+        name = "TEARollHelperTurn"
     }
 }

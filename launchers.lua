@@ -9,22 +9,24 @@ local icon = LibStub("LibDBIcon-1.0")
 
 local LDB_NAME = ui.constants.FRIENDLY_NAME
 
+local function toggleDialog(name)
+    if AceConfigDialog.OpenFrames[name] then
+        AceConfigDialog:Close(name)
+    else
+        AceConfigDialog:Open(name)
+    end
+end
+
 local dataObject = ldb:NewDataObject(LDB_NAME, {
     type = "launcher",
     icon = "Interface\\Icons\\inv_misc_dice_02",
     OnClick = function(_, button)
         if button == "LeftButton" then
-            if AceConfigDialog.OpenFrames.TEARollHelperRolls then
-                AceConfigDialog:Close(ui.modules.rolls.name)
-            else
-                AceConfigDialog:Open(ui.modules.rolls.name)
-            end
+            toggleDialog(ui.modules.rolls.name)
         elseif button == "RightButton" then
-            if AceConfigDialog.OpenFrames.TEARollHelper then
-                AceConfigDialog:Close(ui.modules.config.name)
-            else
-                AceConfigDialog:Open(ui.modules.config.name)
-            end
+            toggleDialog(ui.modules.config.name)
+        elseif button == "MiddleButton" then
+            toggleDialog(ui.modules.turn.name)
         end
     end
 })
@@ -37,6 +39,7 @@ function dataObject:OnEnter()
 	GameTooltip:AddLine("")
 	GameTooltip:AddLine("Left click: Show roll window")
 	GameTooltip:AddLine("Right click: Show config UI")
+	GameTooltip:AddLine("Middle click: Show turn window")
 	GameTooltip:Show()
 end
 
