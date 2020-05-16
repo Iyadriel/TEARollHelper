@@ -96,8 +96,8 @@ local function getMeleeSave(roll, threshold, dmgRisk, defence, buff, racialTrait
     }
 end
 
-local function getRangedSave(roll, threshold, dmgRisk, spirit)
-    local saveValue = rules.rangedSave.calculateRangedSaveValue(roll, spirit)
+local function getRangedSave(roll, threshold, dmgRisk, spirit, buff)
+    local saveValue = rules.rangedSave.calculateRangedSaveValue(roll, spirit, buff)
     local damageReduction = rules.rangedSave.calculateDamageReduction(threshold, dmgRisk, saveValue, spirit)
     local thresholdMet = saveValue >= threshold
 
@@ -108,8 +108,8 @@ local function getRangedSave(roll, threshold, dmgRisk, spirit)
     }
 end
 
-local function getHealing(roll, spirit, numGreaterHealSlots, mercyFromPainBonusHealing, outOfCombat)
-    local healValue = rules.healing.calculateHealValue(roll, spirit)
+local function getHealing(roll, spirit, buff, numGreaterHealSlots, mercyFromPainBonusHealing, outOfCombat)
+    local healValue = rules.healing.calculateHealValue(roll, spirit, buff)
     local amountHealed = rules.healing.calculateAmountHealed(healValue)
 
     amountHealed = amountHealed + rules.healing.calculateGreaterHealBonus(numGreaterHealSlots)
@@ -126,8 +126,8 @@ local function getHealing(roll, spirit, numGreaterHealSlots, mercyFromPainBonusH
     }
 end
 
-local function getBuff(roll, spirit, offence, offenceBuff)
-    local buffValue = rules.buffing.calculateBuffValue(roll, spirit, offence, offenceBuff)
+local function getBuff(roll, spirit, spiritBuff, offence, offenceBuff)
+    local buffValue = rules.buffing.calculateBuffValue(roll, spirit, spiritBuff, offence, offenceBuff)
     local amountBuffed = rules.buffing.calculateBuffAmount(buffValue)
 
     return {

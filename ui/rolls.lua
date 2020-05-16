@@ -118,7 +118,8 @@ ui.modules.rolls.getOptions = function()
                                     local spirit = character.getPlayerSpirit()
                                     local offence = character.getPlayerOffence()
                                     local offenceBuff = turns.getCurrentBuffs().offence
-                                    local buff = actions.getBuff(turns.getCurrentTurnValues().roll, spirit, offence, offenceBuff)
+                                    local spiritBuff = turns.getCurrentBuffs().spirit
+                                    local buff = actions.getBuff(turns.getCurrentTurnValues().roll, spirit, spiritBuff, offence, offenceBuff)
 
                                     local msg
 
@@ -261,7 +262,8 @@ ui.modules.rolls.getOptions = function()
                                 name = function()
                                     local spirit = character.getPlayerSpirit()
                                     local values = turns.getCurrentTurnValues()
-                                    local save = actions.getRangedSave(values.roll, values.defendThreshold, values.damageRisk, spirit)
+                                    local buff = turns.getCurrentBuffs().spirit
+                                    local save = actions.getRangedSave(values.roll, values.defendThreshold, values.damageRisk, spirit, buff)
                                     local hasWarder = character.hasFeat(FEATS.WARDER)
                                     local dmgReductionColour = hasWarder and COLOURS.FEATS.GENERIC or COLOURS.DEFAULT
 

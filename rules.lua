@@ -115,14 +115,20 @@ local function getCritType()
     return CRIT_TYPES.DAMAGE
 end
 
+-- [[ Stat calculations ]]
+
+local function calculateOffenceStat(offence, buff)
+    return offence + buff
+end
+
+local function calculateSpiritStat(spirit, buff)
+    return spirit + buff
+end
+
 -- [[ Offence ]]
 
 local function getBaseDamage()
     return character.hasOffenceMastery() and 3 or 1
-end
-
-local function calculateOffenceStat(offence, buff)
-    return offence + buff
 end
 
 local function calculateAttackValue(roll, offence, buff)
@@ -269,8 +275,8 @@ end
 
 -- [[ Ranged save ]]
 
-local function calculateRangedSaveValue(roll, spirit)
-    return roll + spirit
+local function calculateRangedSaveValue(roll, spirit, buff)
+    return roll + calculateSpiritStat(spirit, buff)
 end
 
 local function calculateDamageReduction(threshold, dmgRisk, saveValue, spirit)
@@ -283,8 +289,8 @@ end
 
 -- [[ Healing ]]
 
-local function calculateHealValue(roll, spirit)
-    return roll + spirit
+local function calculateHealValue(roll, spirit, buff)
+    return roll + calculateSpiritStat(spirit, buff)
 end
 
 local function calculateAmountHealed(healValue)
@@ -356,8 +362,9 @@ local function calculateSpiritToAddToRoll(spirit)
     return spirit
 end
 
-local function calculateBuffValue(roll, spirit, offence, offenceBuff)
+local function calculateBuffValue(roll, spirit, spiritBuff, offence, offenceBuff)
     local stat
+    spirit = calculateSpiritStat(spirit, spiritBuff)
     spirit = calculateSpiritToAddToRoll(spirit)
 
     if character.hasFeat(FEATS.LEADER) then

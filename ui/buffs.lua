@@ -38,14 +38,21 @@ ui.modules.buffs.getOptions = function()
             offence = {
                 type = "input",
                 name = "Offence",
-                desc = "Buff your character's offence stat",
+                desc = "Buff your character's Offence stat",
                 width = "half",
                 order = 0
             },
             defence = {
                 type = "input",
                 name = "Defence",
-                desc = "Buff your character's defence stat",
+                desc = "Buff your character's Defence stat",
+                width = "half",
+                order = 1
+            },
+            spirit = {
+                type = "input",
+                name = "Spirit",
+                desc = "Buff your character's Spirit stat",
                 width = "half",
                 order = 1
             },

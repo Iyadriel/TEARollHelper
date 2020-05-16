@@ -21,7 +21,8 @@ local ROLL_MODE_LABELS = {
 
 local BUFF_TYPES = {
     OFFENCE = "offence",
-    DEFENCE = "defence"
+    DEFENCE = "defence",
+    SPIRIT = "spirit"
 }
 
 local isRolling, setCurrentRoll, getCurrentTurnValues, handleRollResult
@@ -56,7 +57,8 @@ local currentTurnValues = {
 
 local currentBuffs = {
     [BUFF_TYPES.OFFENCE] = 0,
-    [BUFF_TYPES.DEFENCE] = 0
+    [BUFF_TYPES.DEFENCE] = 0,
+    [BUFF_TYPES.SPIRIT] = 0
 }
 
 local function notifyChange()
@@ -183,7 +185,8 @@ end
 function getCurrentBuffs()
     return {
         [BUFF_TYPES.OFFENCE] = currentBuffs[BUFF_TYPES.OFFENCE],
-        [BUFF_TYPES.DEFENCE] = currentBuffs[BUFF_TYPES.DEFENCE]
+        [BUFF_TYPES.DEFENCE] = currentBuffs[BUFF_TYPES.DEFENCE],
+        [BUFF_TYPES.SPIRIT] = currentBuffs[BUFF_TYPES.SPIRIT],
     }
 end
 
@@ -195,6 +198,7 @@ end
 function clearCurrentBuffs()
     setCurrentBuff(BUFF_TYPES.OFFENCE, 0)
     setCurrentBuff(BUFF_TYPES.DEFENCE, 0)
+    setCurrentBuff(BUFF_TYPES.SPIRIT, 0)
     notifyChange()
 end
 

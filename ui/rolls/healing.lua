@@ -71,7 +71,8 @@ ui.modules.rolls.modules.healing.getOptions = function(options)
                 order = 2,
                 name = function()
                     local spirit = character.getPlayerSpirit()
-                    local healing = actions.getHealing(turns.getCurrentTurnValues().roll, spirit, turns.getNumGreaterHealSlots(), turns.getMercyFromPainBonusHealing(), options.outOfCombat)
+                    local buff = turns.getCurrentBuffs().spirit
+                    local healing = actions.getHealing(turns.getCurrentTurnValues().roll, spirit, buff, turns.getNumGreaterHealSlots(), turns.getMercyFromPainBonusHealing(), options.outOfCombat)
                     local msg = " |n"
 
                     if healing.amountHealed > 0 then
