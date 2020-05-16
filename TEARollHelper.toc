@@ -26,5 +26,10 @@ ui/buffs.lua
 ui/character.lua
 ui/rolls.lua
 ui/rolls/attack.lua
+ui/rolls/buff.lua
+ui/rolls/defend.lua
 ui/rolls/healing.lua
+ui/rolls/meleeSave.lua
+ui/rolls/rangedSave.lua
+ui/rolls/utility.lua
 ui/settings.lua

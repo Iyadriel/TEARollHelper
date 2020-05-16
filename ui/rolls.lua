@@ -2,16 +2,10 @@ local _, ns = ...
 
 local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
 
-local COLOURS = TEARollHelper.COLOURS
-
-local actions = ns.actions
 local character = ns.character
-local feats = ns.resources.feats
 local rules = ns.rules
 local turns = ns.turns
 local ui = ns.ui
-
-local FEATS = feats.FEATS
 
 -- Update config UI, in case it is also open
 local function notifyChange()
@@ -20,7 +14,12 @@ end
 
 ui.modules.rolls.modules = {
     attack = {},
-    healing = {}
+    healing = {},
+    buff = {},
+    defend = {},
+    meleeSave = {},
+    rangedSave = {},
+    utility = {}
 }
 
 ui.modules.rolls.getOptions = function()
@@ -103,46 +102,7 @@ ui.modules.rolls.getOptions = function()
                         order = 1,
                         outOfCombat = false
                     }),
-                    buff = {
-                        name = "Buff",
-                        type = "group",
-                        inline = true,
-                        order = 2,
-                        args = {
-                            buff = {
-                                type = "description",
-                                desc = "How much you can buff for",
-                                fontSize = "medium",
-                                order = 4,
-                                name = function()
-                                    local spirit = character.getPlayerSpirit()
-                                    local offence = character.getPlayerOffence()
-                                    local offenceBuff = turns.getCurrentBuffs().offence
-                                    local spiritBuff = turns.getCurrentBuffs().spirit
-                                    local buff = actions.getBuff(turns.getCurrentTurnValues().roll, spirit, spiritBuff, offence, offenceBuff)
-
-                                    local msg
-
-                                    if buff.amountBuffed > 0 then
-                                        local amount = tostring(buff.amountBuffed)
-                                        if buff.isCrit then
-                                            msg = COLOURS.CRITICAL .. "BIG BUFF!|r " .. COLOURS.BUFF .. "You can buff everyone in line of sight for " .. amount .. "."
-                                        else
-                                            msg = COLOURS.BUFF .. "You can buff someone for " .. amount .. "."
-                                        end
-
-                                        if buff.usesInspiringPresence then
-                                            msg = msg .. COLOURS.NOTE .. "|nYour buff is active in both the current player turn and the next enemy turn."
-                                        end
-                                    else
-                                        msg = COLOURS.NOTE .. "You can't buff anyone with this roll."
-                                    end
-
-                                    return msg
-                                end
-                            }
-                        }
-                    }
+                    buff = ui.modules.rolls.modules.buff.getOptions({ order = 2 })
                 }
             },
             enemyTurn = {
@@ -182,102 +142,9 @@ ui.modules.rolls.getOptions = function()
                             turns.setDefendValues(nil, value)
                         end
                     },
-                    defend = {
-                        name = "Defend",
-                        type = "group",
-                        inline = true,
-                        order = 2,
-                        args = {
-                            damageTaken = {
-                                type = "description",
-                                desc = "How much damage you take this turn",
-                                fontSize = "medium",
-                                order = 0,
-                                name = function()
-                                    local defence = character.getPlayerDefence()
-                                    local buff = turns.getCurrentBuffs().defence
-                                    local values = turns.getCurrentTurnValues()
-                                    local racialTrait = turns.getRacialTrait()
-                                    local defend = actions.getDefence(values.roll, values.defendThreshold, values.damageRisk, defence, buff, racialTrait)
-
-                                    if defend.damageTaken > 0 then
-                                        return COLOURS.DAMAGE .. "You take " .. tostring(defend.damageTaken) .. " damage."
-                                    else
-                                        local msg = "Safe! You don't take damage this turn."
-                                        if defend.canRetaliate then
-                                            msg = msg .. COLOURS.CRITICAL .. "\nRETALIATE!|r You can deal "..defend.retaliateDmg.." damage to your attacker!"
-                                        end
-                                        return msg
-                                    end
-                                end
-                            },
-                        },
-                    },
-                    meleeSave = {
-                        name = "Melee save",
-                        type = "group",
-                        inline = true,
-                        order = 3,
-                        args = {
-                            saveDamageTaken = {
-                                type = "description",
-                                desc = "How much damage you take this turn",
-                                fontSize = "medium",
-                                name = function()
-                                    local defence = character.getPlayerDefence()
-                                    local buff = turns.getCurrentBuffs().defence
-                                    local values = turns.getCurrentTurnValues()
-                                    local racialTrait = turns.getRacialTrait()
-                                    local save = actions.getMeleeSave(values.roll, values.defendThreshold, values.damageRisk, defence, buff, racialTrait)
-
-                                    local msg = ""
-
-                                    if save.damageTaken > 0 then
-                                        if save.isBigFail then
-                                            msg = COLOURS.DAMAGE .. "Bad save! |r"
-                                        end
-                                        msg = msg .. "You can save your ally, |r" .. COLOURS.DAMAGE .. "but you will take " .. tostring(save.damageTaken) .. " damage."
-                                    else
-                                        msg = COLOURS.SAVE .. "You can save your ally without taking any damage yourself."
-                                    end
-
-                                    if save.hasCounterForceProc then
-                                        msg = msg .. COLOURS.FEATS.GENERIC .. "\nCOUNTER-FORCE!|r You can deal "..save.counterForceDmg.." damage to your attacker!"
-                                    end
-
-                                    return msg
-                                end
-                            },
-                        },
-                    },
-                    rangedSave = {
-                        name = "Ranged save",
-                        type = "group",
-                        inline = true,
-                        order = 4,
-                        args = {
-                            saveResult = {
-                                type = "description",
-                                fontSize = "medium",
-                                name = function()
-                                    local spirit = character.getPlayerSpirit()
-                                    local values = turns.getCurrentTurnValues()
-                                    local buff = turns.getCurrentBuffs().spirit
-                                    local save = actions.getRangedSave(values.roll, values.defendThreshold, values.damageRisk, spirit, buff)
-                                    local hasWarder = character.hasFeat(FEATS.WARDER)
-                                    local dmgReductionColour = hasWarder and COLOURS.FEATS.GENERIC or COLOURS.DEFAULT
-
-                                    if save.thresholdMet then
-                                        return COLOURS.SAVE .. "You can fully protect your ally."
-                                    elseif save.damageReduction > 0 then
-                                        return dmgReductionColour .. "You can reduce the damage your ally takes by " .. save.damageReduction .. ".|n" .. COLOURS.NOTE .. "However, you cannot act during the next player turn."
-                                    else
-                                        return COLOURS.NOTE .. "You can't reduce the damage your ally takes with this roll."
-                                    end
-                                end
-                            },
-                        },
-                    },
+                    defend = ui.modules.rolls.modules.defend.getOptions({ order = 2 }),
+                    meleeSave = ui.modules.rolls.modules.meleeSave.getOptions({ order = 3 }),
+                    rangedSave = ui.modules.rolls.modules.rangedSave.getOptions({ order = 4 }),
                 }
             },
             ooc = {
@@ -289,36 +156,7 @@ ui.modules.rolls.getOptions = function()
                         order = 0,
                         outOfCombat = true
                     }),
-                    utility = {
-                        type = "group",
-                        name = "Utility",
-                        inline = true,
-                        order = 1,
-                        args = {
-                            useUtilityTrait = {
-                                type = "toggle",
-                                name = "Use utility trait",
-                                desc = "Enable if you have a utility trait that fits what you are rolling for.",
-                                order = 0,
-                                get = turns.utility.getUseUtilityTrait,
-                                set = function(info, value)
-                                    turns.utility.setUseUtilityTrait(value)
-                                end
-                            },
-                            utility = {
-                                type = "description",
-                                desc = "The result of your utility roll",
-                                fontSize = "medium",
-                                order = 1,
-                                name = function()
-                                    local roll = turns.getCurrentTurnValues().roll
-                                    local useUtilityTrait = turns.utility.getUseUtilityTrait()
-
-                                    return " |nYour total utility roll: " .. actions.getUtility(roll, useUtilityTrait)
-                                end
-                            }
-                        }
-                    }
+                    utility = ui.modules.rolls.modules.utility.getOptions({ order = 1 }),
                 }
             }
         }
