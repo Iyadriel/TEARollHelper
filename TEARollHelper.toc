@@ -8,6 +8,7 @@
 embeds.xml
 
 main.lua
+ui.lua
 
 resources/feats.lua
 resources/racialTraits.lua
@@ -28,10 +29,13 @@ rules/rangedSave.lua
 rules/utility.lua
 turns.lua
 
-ui.lua
 ui/colours.lua
 ui/buffs.lua
-ui/character.lua
+
+ui/config.lua
+ui/config/character.lua
+ui/config/settings.lua
+
 ui/rolls.lua
 ui/rolls/attack.lua
 ui/rolls/buff.lua
@@ -40,4 +44,3 @@ ui/rolls/healing.lua
 ui/rolls/meleeSave.lua
 ui/rolls/rangedSave.lua
 ui/rolls/utility.lua
-ui/settings.lua

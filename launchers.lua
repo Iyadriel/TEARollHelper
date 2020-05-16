@@ -1,12 +1,13 @@
 local _, ns = ...
 
 local launchers = ns.launchers
+local ui = ns.ui
 
 local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 local ldb = LibStub:GetLibrary("LibDataBroker-1.1")
 local icon = LibStub("LibDBIcon-1.0")
 
-local LDB_NAME = "TEA Roll Helper"
+local LDB_NAME = ui.constants.FRIENDLY_NAME
 
 local dataObject = ldb:NewDataObject(LDB_NAME, {
     type = "launcher",
@@ -14,15 +15,15 @@ local dataObject = ldb:NewDataObject(LDB_NAME, {
     OnClick = function(_, button)
         if button == "LeftButton" then
             if AceConfigDialog.OpenFrames.TEARollHelperRolls then
-                AceConfigDialog:Close("TEARollHelperRolls")
+                AceConfigDialog:Close(ui.modules.rolls.name)
             else
-                AceConfigDialog:Open("TEARollHelperRolls")
+                AceConfigDialog:Open(ui.modules.rolls.name)
             end
         elseif button == "RightButton" then
             if AceConfigDialog.OpenFrames.TEARollHelper then
-                AceConfigDialog:Close("TEARollHelper")
+                AceConfigDialog:Close(ui.modules.config.name)
             else
-                AceConfigDialog:Open("TEARollHelper")
+                AceConfigDialog:Open(ui.modules.config.name)
             end
         end
     end

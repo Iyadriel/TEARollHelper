@@ -9,7 +9,7 @@ local ui = ns.ui
 
 -- Update config UI, in case it is also open
 local function notifyChange()
-    AceConfigRegistry:NotifyChange("TEARollHelper")
+    AceConfigRegistry:NotifyChange(ui.modules.config.name)
 end
 
 ui.modules.rolls.modules = {
