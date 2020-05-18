@@ -7,6 +7,7 @@ local COLOURS = TEARollHelper.COLOURS
 local character = ns.character
 local feats = ns.resources.feats
 local racialTraits = ns.resources.racialTraits
+local rolls = ns.state.rolls
 local rules = ns.rules
 local turns = ns.turns
 local ui = ns.ui
@@ -184,7 +185,7 @@ ui.modules.config.modules.character.getOptions = function()
                 name = "Racial trait",
                 type = "select",
                 disabled = function()
-                    return turns.getRacialTrait() ~= nil
+                    return rolls.state.racialTrait ~= nil
                 end,
                 order = 4,
                 get = function()
@@ -220,7 +221,7 @@ ui.modules.config.modules.character.getOptions = function()
             racialTraitDisabledNote = {
                 type = "description",
                 name = function()
-                    if turns.getRacialTrait() ~= nil then
+                    if rolls.state.racialTraits ~= nil then
                         return COLOURS.NOTE .. "You must deactivate your racial trait before you can change it."
                     end
                     return ""

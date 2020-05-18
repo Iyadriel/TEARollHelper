@@ -26,20 +26,17 @@ local BUFF_TYPES = {
 
 local isRolling, setCurrentRoll, getCurrentTurnValues, handleRollResult
 local getRollMode, setRollMode
-local getRacialTrait, setRacialTrait
 local setAttackValues, getNumGreaterHealSlots, setNumGreaterHealSlots, setDefendValues
 local roll
 local getCurrentBuffs, setCurrentBuff, clearCurrentBuffs
 
--- TODO: clean this up and move to state/turn.lua module
+-- TODO: clean this up and move to state/rolls.lua module
 local currentTurnValues = {
     isRolling = false,
     roll = 1,
     rollMode = ROLL_MODES.NORMAL,
     totalRequiredRolls = 1,
     remainingRolls = 1,
-
-    racialTrait = nil,
 
     attackThreshold = 12,
     numBloodHarvestSlots = 0,
@@ -83,14 +80,6 @@ end
 
 function setRollMode(mode)
     currentTurnValues.rollMode = mode
-end
-
-function getRacialTrait()
-    return currentTurnValues.racialTrait
-end
-
-function setRacialTrait(trait)
-    currentTurnValues.racialTrait = trait
 end
 
 function setAttackValues(attackThreshold)
@@ -211,9 +200,6 @@ turns.isRolling = isRolling
 turns.setCurrentRoll = setCurrentRoll
 turns.getRollMode = getRollMode
 turns.setRollMode = setRollMode
-
-turns.getRacialTrait = getRacialTrait
-turns.setRacialTrait = setRacialTrait
 
 turns.setAttackValues = setAttackValues
 turns.getNumGreaterHealSlots = getNumGreaterHealSlots

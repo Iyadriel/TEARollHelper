@@ -3,9 +3,12 @@ local _, ns = ...
 local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
 
 local character = ns.character
+local rolls = ns.state.rolls
 local rules = ns.rules
 local turns = ns.turns
 local ui = ns.ui
+
+local state = rolls.state
 
 -- Update config UI, in case it is also open
 local function notifyChange()
@@ -85,11 +88,11 @@ ui.modules.rolls.getOptions = function()
                     return not (trait.supported and trait.manualActivation)
                 end,
                 get = function()
-                    return turns.getRacialTrait() ~= nil
+                    return state.racialTrait ~= nil
                 end,
                 set = function(info, value)
-                    turns.setRacialTrait(value and character.getPlayerRacialTrait() or nil)
-                    notifyChange() -- so we can disable/enable the trait selection
+                    state.racialTrait = (value and character.getPlayerRacialTrait() or nil)
+                    notifyChange() -- so we can disable/enable trait selection in character sheet
                 end
             },
             playerTurn = {

@@ -2,9 +2,7 @@ local _, ns = ...
 
 local COLOURS = TEARollHelper.COLOURS
 
-local actions = ns.actions
-local character = ns.character
-local turns = ns.turns
+local rolls = ns.state.rolls
 local ui = ns.ui
 
 --[[ local options = {
@@ -22,11 +20,7 @@ ui.modules.rolls.modules.meleeSave.getOptions = function(options)
                 desc = "How much damage you take this turn",
                 fontSize = "medium",
                 name = function()
-                    local defence = character.getPlayerDefence()
-                    local buff = turns.getCurrentBuffs().defence
-                    local values = turns.getCurrentTurnValues()
-                    local racialTrait = turns.getRacialTrait()
-                    local save = actions.getMeleeSave(values.roll, values.defendThreshold, values.damageRisk, defence, buff, racialTrait)
+                    local save = rolls.getMeleeSave()
 
                     local msg = ""
 
