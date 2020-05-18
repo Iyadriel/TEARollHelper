@@ -2,9 +2,7 @@ local _, ns = ...
 
 local COLOURS = TEARollHelper.COLOURS
 
-local actions = ns.actions
-local character = ns.character
-local turns = ns.turns
+local rolls = ns.state.rolls
 local ui = ns.ui
 
 --[[ local options = {
@@ -23,11 +21,7 @@ ui.modules.rolls.modules.buff.getOptions = function(options)
                 fontSize = "medium",
                 order = 4,
                 name = function()
-                    local spirit = character.getPlayerSpirit()
-                    local offence = character.getPlayerOffence()
-                    local offenceBuff = turns.getCurrentBuffs().offence
-                    local spiritBuff = turns.getCurrentBuffs().spirit
-                    local buff = actions.getBuff(turns.getCurrentTurnValues().roll, spirit, spiritBuff, offence, offenceBuff)
+                    local buff = rolls.getBuff()
 
                     local msg
 

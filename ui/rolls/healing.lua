@@ -2,14 +2,14 @@ local _, ns = ...
 
 local COLOURS = TEARollHelper.COLOURS
 
-local actions = ns.actions
 local character = ns.character
 local feats = ns.resources.feats
+local rolls = ns.state.rolls
 local rules = ns.rules
-local turns = ns.turns
 local ui = ns.ui
 
 local FEATS = feats.FEATS
+local state = rolls.state
 
 --[[ local options = {
     order: Number
@@ -38,10 +38,10 @@ ui.modules.rolls.modules.healing.getOptions = function(options)
                 end,
                 order = 0,
                 get = function()
-                    return turns.getNumGreaterHealSlots()
+                    return state.healing.numGreaterHealSlots
                 end,
                 set = function(info, value)
-                    turns.setNumGreaterHealSlots(value)
+                    state.healing.numGreaterHealSlots = value
                 end
             },
             mercyFromPain = {
@@ -58,10 +58,10 @@ ui.modules.rolls.modules.healing.getOptions = function(options)
                     return options.outOfCombat or not rules.offence.canProcMercyFromPain()
                 end,
                 get = function()
-                    return turns.getMercyFromPainBonusHealing()
+                    return state.healing.mercyFromPainBonusHealing
                 end,
                 set = function(info, value)
-                    turns.setMercyFromPainBonusHealing(value)
+                    state.healing.mercyFromPainBonusHealing = value
                 end
             },
             healing = {
@@ -70,9 +70,7 @@ ui.modules.rolls.modules.healing.getOptions = function(options)
                 fontSize = "medium",
                 order = 2,
                 name = function()
-                    local spirit = character.getPlayerSpirit()
-                    local buff = turns.getCurrentBuffs().spirit
-                    local healing = actions.getHealing(turns.getCurrentTurnValues().roll, spirit, buff, turns.getNumGreaterHealSlots(), turns.getMercyFromPainBonusHealing(), options.outOfCombat)
+                    local healing = rolls.getHealing(options.outOfCombat)
                     local msg = " |n"
 
                     if healing.amountHealed > 0 then

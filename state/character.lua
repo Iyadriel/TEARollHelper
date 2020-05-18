@@ -26,6 +26,12 @@ characterState.initState = function()
         featsAndTraits = {
             numBloodHarvestSlots = rules.offence.getMaxBloodHarvestSlots(),
         },
+
+        buffs = {
+            offence = 0,
+            defence = 0,
+            spirit = 0
+        }
     }
 end
 
@@ -68,6 +74,32 @@ characterState.state = {
             end,
             set = function (numBloodHarvestSlots)
                 state.featsAndTraits.numBloodHarvestSlots = numBloodHarvestSlots
+            end
+        }
+    },
+    buffs = {
+        offence = {
+            get = function()
+                return state.buffs.offence
+            end,
+            set = function(value)
+                state.buffs.offence = value
+            end
+        },
+        defence = {
+            get = function()
+                return state.buffs.defence
+            end,
+            set = function(value)
+                state.buffs.defence = value
+            end
+        },
+        spirit = {
+            get = function()
+                return state.buffs.spirit
+            end,
+            set = function(value)
+                state.buffs.spirit = value
             end
         }
     }

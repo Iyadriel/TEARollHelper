@@ -10,6 +10,8 @@ local ui = ns.ui
 
 local state = rolls.state
 
+local ROLL_MODES = turns.ROLL_MODES
+
 -- Update config UI, in case it is also open
 local function notifyChange()
     AceConfigRegistry:NotifyChange(ui.modules.config.name)
@@ -38,7 +40,11 @@ ui.modules.rolls.getOptions = function()
                 name = "Roll mode",
                 type = "select",
                 order = 0,
-                values = turns.ROLL_MODE_LABELS,
+                values = {
+                    [ROLL_MODES.DISADVANTAGE] = "Disadvantage",
+                    [ROLL_MODES.NORMAL] = "Normal",
+                    [ROLL_MODES.ADVANTAGE] = "Advantage"
+                },
                 get = turns.getRollMode,
                 set = function(info, value)
                     turns.setRollMode(value)
@@ -49,7 +55,7 @@ ui.modules.rolls.getOptions = function()
                     return turns.isRolling() and "Rolling..." or "Roll"
                 end,
                 type = "execute",
-                desc = "Do a /roll " .. rules.core.MAX_ROLL .. ".",
+                desc = "Do a /roll " .. rules.rolls.MAX_ROLL .. ".",
                 disabled = function()
                     return turns.isRolling()
                 end,
@@ -61,8 +67,8 @@ ui.modules.rolls.getOptions = function()
                 type = "range",
                 desc = "The number you rolled",
                 min = 1,
-                softMax = rules.core.MAX_ROLL,
-                max = rules.core.MAX_ROLL * 2, -- "support" prepping by letting people add rolls together
+                softMax = rules.rolls.MAX_ROLL,
+                max = rules.rolls.MAX_ROLL * 2, -- "support" prepping by letting people add rolls together
                 step = 1,
                 order = 2,
                 get = function()
@@ -123,10 +129,10 @@ ui.modules.rolls.getOptions = function()
                         step = 1,
                         order = 0,
                         get = function()
-                            return turns.getCurrentTurnValues().defendThreshold
+                            return state.defend.threshold
                         end,
                         set = function(info, value)
-                            turns.setDefendValues(value, nil)
+                            state.defend.threshold = value
                         end
                     },
                     damageRisk = {
@@ -139,10 +145,10 @@ ui.modules.rolls.getOptions = function()
                         step = 1,
                         order = 1,
                         get = function()
-                            return turns.getCurrentTurnValues().damageRisk
+                            return state.defend.damageRisk
                         end,
                         set = function(info, value)
-                            turns.setDefendValues(nil, value)
+                            state.defend.damageRisk = value
                         end
                     },
                     defend = ui.modules.rolls.modules.defend.getOptions({ order = 2 }),

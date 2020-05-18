@@ -1,8 +1,11 @@
 local _, ns = ...
 
 local actions = ns.actions
+local rolls = ns.state.rolls
 local turns = ns.turns
 local ui = ns.ui
+
+local state = rolls.state
 
 --[[ local options = {
     order: Number
@@ -19,9 +22,11 @@ ui.modules.rolls.modules.utility.getOptions = function(options)
                 name = "Use utility trait",
                 desc = "Enable if you have a utility trait that fits what you are rolling for.",
                 order = 0,
-                get = turns.utility.getUseUtilityTrait,
+                get = function()
+                    return state.utility.useUtilityTrait
+                end,
                 set = function(info, value)
-                    turns.utility.setUseUtilityTrait(value)
+                    state.utility.useUtilityTrait = value
                 end
             },
             utility = {
@@ -31,9 +36,7 @@ ui.modules.rolls.modules.utility.getOptions = function(options)
                 order = 1,
                 name = function()
                     local roll = turns.getCurrentTurnValues().roll
-                    local useUtilityTrait = turns.utility.getUseUtilityTrait()
-
-                    return " |nYour total utility roll: " .. actions.getUtility(roll, useUtilityTrait)
+                    return " |nYour total utility roll: " .. actions.getUtility(roll, state.utility.useUtilityTrait)
                 end
             }
         }

@@ -36,8 +36,7 @@ local function calculateSpiritStat(spirit, buff)
     return spirit + buff
 end
 
--- Core rules
-ns.rules.core = {
+ns.rules.rolls = {
     MAX_ROLL = MAX_ROLL,
     isCrit = isCrit,
 }

@@ -9,7 +9,6 @@ local feats = ns.resources.feats
 local racialTraits = ns.resources.racialTraits
 local rolls = ns.state.rolls
 local rules = ns.rules
-local turns = ns.turns
 local ui = ns.ui
 
 local STAT_MIN_VALUE = rules.stats.STAT_MIN_VALUE

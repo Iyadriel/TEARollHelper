@@ -2,14 +2,13 @@ local _, ns = ...
 
 local COLOURS = TEARollHelper.COLOURS
 
-local actions = ns.actions
-local character = ns.character
 local feats = ns.resources.feats
+local rolls = ns.state.rolls
 local rules = ns.rules
-local turns = ns.turns
 local ui = ns.ui
 
 local FEATS = feats.FEATS
+local state = rolls.state
 
 --[[ local options = {
     order: Number
@@ -31,10 +30,10 @@ ui.modules.rolls.modules.attack.getOptions = function(options)
                 step = 1,
                 order = 0,
                 get = function()
-                    return turns.getCurrentTurnValues().attackThreshold
+                    return state.attack.threshold
                 end,
                 set = function(info, value)
-                    turns.setAttackValues(value)
+                    state.attack.threshold = value
                 end
             },
             bloodHarvest = {
@@ -56,10 +55,10 @@ ui.modules.rolls.modules.attack.getOptions = function(options)
                     return rules.offence.getMaxBloodHarvestSlots() == 0
                 end,
                 get = function()
-                    return turns.getNumBloodHarvestSlots()
+                    return state.attack.numBloodHarvestSlots
                 end,
                 set = function(info, value)
-                    turns.setNumBloodHarvestSlots(value)
+                    state.attack.numBloodHarvestSlots = value
                 end
             },
             dmg = {
@@ -68,12 +67,7 @@ ui.modules.rolls.modules.attack.getOptions = function(options)
                 fontSize = "medium",
                 order = 3,
                 name = function()
-                    local offence = character.getPlayerOffence()
-                    local buff = turns.getCurrentBuffs().offence
-                    local values = turns.getCurrentTurnValues()
-                    local numBloodHarvestSlots = turns.getNumBloodHarvestSlots()
-
-                    local attack = actions.getAttack(values.roll, values.attackThreshold, offence, buff, numBloodHarvestSlots)
+                    local attack = rolls.getAttack()
                     local msg = " |n"
                     local excited = false
 

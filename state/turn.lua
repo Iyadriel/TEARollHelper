@@ -12,27 +12,26 @@ local state
 turnState.initState = function()
     state = {
         index = 1,
-        type = TURN_TYPES.PLAYER.id
+        type = TURN_TYPES.PLAYER.id,
+        inCombat = true,
+    }
+end
+
+local function basicGetSet(key)
+    return {
+        get = function ()
+            return state[key]
+        end,
+        set = function (value)
+            state[key] = value
+        end
     }
 end
 
 turnState.state = {
-    index = {
-        get = function ()
-            return state.index
-        end,
-        set = function (index)
-            state.index = index
-        end
-    },
-    type = {
-        get = function ()
-            return state.type
-        end,
-        set = function (type)
-            state.type = type
-        end
-    },
+    index = basicGetSet("index"),
+    type = basicGetSet("type"),
+    --inCombat = basicGetSet("inCombat"),
 }
 
 turnState.TURN_TYPES = TURN_TYPES
