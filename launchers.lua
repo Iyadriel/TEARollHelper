@@ -23,6 +23,7 @@ local dataObject = ldb:NewDataObject(LDB_NAME, {
     OnClick = function(_, button)
         if button == "LeftButton" then
             toggleDialog(ui.modules.rolls.name)
+            toggleDialog(ui.modules.turn.name)
         elseif button == "RightButton" then
             toggleDialog(ui.modules.config.name)
         elseif button == "MiddleButton" then

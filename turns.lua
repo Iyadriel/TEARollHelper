@@ -31,6 +31,7 @@ local setAttackValues, getNumGreaterHealSlots, setNumGreaterHealSlots, setDefend
 local roll
 local getCurrentBuffs, setCurrentBuff, clearCurrentBuffs
 
+-- TODO: clean this up and move to state/turn.lua module
 local currentTurnValues = {
     isRolling = false,
     roll = 1,

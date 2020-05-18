@@ -47,6 +47,10 @@ local function calculateGreaterHealBonus(numGreaterHealSlots)
     return numGreaterHealSlots * 3
 end
 
+local function getMaxExcess()
+    return 6
+end
+
 local function calculateBaseOutOfCombatBonus()
     if character.getPlayerSpirit() >= NUM_SPIRIT_PER_GREATER_HEAL_SLOT then
         return 3
@@ -73,6 +77,7 @@ rules.healing = {
     calculateAmountHealed = calculateAmountHealed,
     getMaxGreaterHealSlots = getMaxGreaterHealSlots,
     calculateGreaterHealBonus = calculateGreaterHealBonus,
+    getMaxExcess = getMaxExcess,
     applyOutOfCombatBonus = applyOutOfCombatBonus,
     calculateNumHealsAllowedOutOfCombat = calculateNumHealsAllowedOutOfCombat
 }

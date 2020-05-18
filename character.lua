@@ -3,10 +3,11 @@ local _, ns = ...
 local character = ns.character
 local feats = ns.resources.feats
 local racialTraits = ns.resources.racialTraits
+local rules = ns.rules
 
 local FEATS = feats.FEATS
 
-local getPlayerOffence, getPlayerDefence, getPlayerSpirit, getPlayerStamina
+local getPlayerOffence, getPlayerDefence, getPlayerSpirit, getPlayerStamina, getPlayerMaxHP
 local hasOffenceMastery, hasSpiritMastery
 local getPlayerFeat, hasFeat, hasFeatByID, setPlayerFeatByID, getPlayerRacialTrait, hasRacialTrait
 
@@ -24,6 +25,10 @@ end
 
 function getPlayerStamina()
     return tonumber(TEARollHelper.db.profile.stats.stamina)
+end
+
+function getPlayerMaxHP()
+    return rules.stats.calculateMaxHP(getPlayerStamina())
 end
 
 function hasOffenceMastery()
@@ -62,6 +67,7 @@ character.getPlayerOffence = getPlayerOffence
 character.getPlayerDefence = getPlayerDefence
 character.getPlayerSpirit = getPlayerSpirit
 character.getPlayerStamina = getPlayerStamina
+character.getPlayerMaxHP = getPlayerMaxHP
 character.hasOffenceMastery = hasOffenceMastery
 character.hasSpiritMastery = hasSpiritMastery
 character.getPlayerFeat = getPlayerFeat

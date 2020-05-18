@@ -2,10 +2,11 @@ local _, ns = ...
 
 local COLOURS = TEARollHelper.COLOURS
 
-local actions = ns.actions
-local character = ns.character
-local turns = ns.turns
+local rolls = ns.state.rolls
+local characterState = ns.state.character
 local ui = ns.ui
+
+local state = characterState.state
 
 --[[ local options = {
     order: Number
@@ -23,23 +24,28 @@ ui.modules.rolls.modules.defend.getOptions = function(options)
                 fontSize = "medium",
                 order = 0,
                 name = function()
-                    local defence = character.getPlayerDefence()
-                    local buff = turns.getCurrentBuffs().defence
-                    local values = turns.getCurrentTurnValues()
-                    local racialTrait = turns.getRacialTrait()
-                    local defend = actions.getDefence(values.roll, values.defendThreshold, values.damageRisk, defence, buff, racialTrait)
+                    local defence = rolls.getDefence()
 
-                    if defend.damageTaken > 0 then
-                        return COLOURS.DAMAGE .. "You take " .. tostring(defend.damageTaken) .. " damage."
+                    if defence.damageTaken > 0 then
+                        return COLOURS.DAMAGE .. "You take " .. tostring(defence.damageTaken) .. " damage."
                     else
                         local msg = "Safe! You don't take damage this turn."
-                        if defend.canRetaliate then
-                            msg = msg .. COLOURS.CRITICAL .. "\nRETALIATE!|r You can deal "..defend.retaliateDmg.." damage to your attacker!"
+                        if defence.canRetaliate then
+                            msg = msg .. COLOURS.CRITICAL .. "\nRETALIATE!|r You can deal "..defence.retaliateDmg.." damage to your attacker!"
                         end
                         return msg
                     end
                 end
             },
+            okay = {
+                type = "execute",
+                name = "Okay :(",
+                order = 1,
+                func = function()
+                    local defence = rolls.getDefence()
+                    state.health.subtract(defence.damageTaken, true)
+                end
+            }
         },
     }
 end

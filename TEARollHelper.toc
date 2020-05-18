@@ -27,8 +27,11 @@ rules/buffing.lua
 rules/meleeSave.lua
 rules/rangedSave.lua
 rules/utility.lua
+state.lua
+state/character.lua
+state/rolls.lua
+state/turn.lua
 turns.lua
-turnState.lua
 
 ui/colours.lua
 ui/buffs.lua
@@ -48,3 +51,4 @@ ui/rolls/utility.lua
 
 ui/turn.lua
 ui/turn/character.lua
+ui/turn/turn.lua

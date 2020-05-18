@@ -13,8 +13,8 @@ ns.resources = {
     racialTraits = {}
 }
 ns.rules = {}
+ns.state = {}
 ns.turns = {}
-ns.turnState = {}
 ns.ui = {}
 
 TEARollHelper = LibStub("AceAddon-3.0"):NewAddon("TEARollHelper", "AceConsole-3.0", "AceEvent-3.0")
@@ -27,6 +27,8 @@ function TEARollHelper:OnInitialize()
     local configOptions = config.getOptions()
     AceConfig:RegisterOptionsTable(config.name, configOptions, {"tea"})
     ns.db.initDb(configOptions)
+
+    self:InitState()
 
     AceConfig:RegisterOptionsTable(rolls.name, rolls.getOptions())
     AceConfigDialog:SetDefaultSize(rolls.name, 450, 640)

@@ -3,7 +3,8 @@ local _, ns = ...
 local ui = ns.ui
 
 ui.modules.turn.modules = {
-    character = {}
+    character = {},
+    turn = {}
 }
 
 ui.modules.turn.getOptions = function()
@@ -14,7 +15,8 @@ ui.modules.turn.getOptions = function()
         --cmdHidden = true,
         --childGroups = "tab",
         args = {
-            character = ui.modules.turn.modules.character.getOptions({ order = 0 })
+            turn = ui.modules.turn.modules.turn.getOptions({ order = 0 }),
+            character = ui.modules.turn.modules.character.getOptions({ order = 1 })
         }
     }
 end

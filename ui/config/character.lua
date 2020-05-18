@@ -19,9 +19,10 @@ for key, trait in pairs(racialTraits.RACIAL_TRAITS) do
     RACIAL_TRAIT_LIST[trait.id] = racialTraits.RACE_NAMES[trait.id] .. " (" .. trait.name .. ")"
 end
 
--- Update roll UI, in case it is also open
+-- Update roll/turn UI, in case it is also open
 local function notifyChange()
-    AceConfigRegistry:NotifyChange("TEARollHelperRolls")
+    AceConfigRegistry:NotifyChange(ns.ui.modules.rolls.name)
+    AceConfigRegistry:NotifyChange(ns.ui.modules.turn.name)
 end
 
 ui.modules.config.modules.character.getOptions = function()
