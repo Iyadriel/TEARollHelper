@@ -8,28 +8,56 @@ local AceGUI = LibStub("AceGUI-3.0")
 local type, version = "TEACustomSlider", 1
 local CALLBACKS = {}
 
-local function onSliderShow(slider)
-    local widget = slider.obj
+local function setSliderValues(widget)
+    if not widget.tea_optionKey then return end -- Ace will call SetSliderValues before SetParent, at which point we don't have the optionKey yet./
 
-    local table = widget:GetUserDataTable()
-    local optionKey = table.path[#table.path]
-    local option = widget:GetUserData("option")
-    local callbacks = CALLBACKS[optionKey]
+    local callbacks = CALLBACKS[widget.tea_optionKey]
+    local option = callbacks.option
 
     if callbacks.max then
         option.max = callbacks.max()
     end
 
+    callbacks.option = option
     widget:SetUserData("option", option)
 
     -- If the value exceeds the new max, adjust the value by calling the slider's set()
     callbacks.set(min(option.get(), option.max))
 end
 
+local function onSetParent(frame)
+    local widget = frame.obj
+
+    local table = widget:GetUserDataTable()
+    if table.path then
+        local optionKey = table.path[#table.path]
+        -- Store the option's key so we can use it in setSliderValues. Ace wipes the UserData when it's done with it, so we have to grab it while we can.
+        -- Why hook SetParent? Because it's the only way to actually access this data that worked reliably.
+        widget.tea_optionKey = optionKey
+
+        local callbacks = CALLBACKS[widget.tea_optionKey]
+        local option = widget:GetUserData("option")
+
+        callbacks.option = option -- Same story as for tea_optionKey, make sure we can reference this in setSliderValues.
+
+        -- Update the values. Ace calls SetParent after SetSliderValues, which means we'll have the wrong values on the slider's first show unless we do this.
+        local min, max, step = option.softMin or option.min or 0, option.softMax or option.max or 100, option.bigStep or option.step or 0
+        widget:SetSliderValues(min, max, step)
+        widget:SetValue(option.get())
+    end
+end
+
 local function Constructor()
     local slider = AceGUI:Create("Slider")
     slider.type = type
-    slider.slider:HookScript("OnShow", onSliderShow)
+
+    local oldSetSliderValues = slider.SetSliderValues
+    slider.SetSliderValues = function(self, ...)
+        setSliderValues(self)
+        oldSetSliderValues(self, ...)
+    end
+
+    hooksecurefunc(slider.frame, "SetParent", onSetParent)
 
     return AceGUI:RegisterAsWidget(slider)
 end

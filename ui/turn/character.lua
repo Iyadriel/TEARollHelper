@@ -74,7 +74,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                 name = "Feats and traits",
                 inline = true,
                 args = {
-                    numBloodHarvestSlots = {
+                    turn_character_numBloodHarvestSlots = {
                         order = 0,
                         type = "range",
                         name = COLOURS.FEATS.BLOOD_HARVEST .. "Blood Harvest slots",
@@ -92,7 +92,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                         disabled = function()
                             return rules.offence.getMaxBloodHarvestSlots() == 0
                         end,
-                        dialogControl = TEARollHelper:CreateCustomSlider("numBloodHarvestSlots", {
+                        dialogControl = TEARollHelper:CreateCustomSlider("turn_character_numBloodHarvestSlots", {
                             max = rules.offence.getMaxBloodHarvestSlots,
                             set = state.featsAndTraits.numBloodHarvestSlots.set
                         })
