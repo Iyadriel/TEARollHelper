@@ -54,3 +54,5 @@ ui/rolls/utility.lua
 ui/turn.lua
 ui/turn/character.lua
 ui/turn/turn.lua
+
+integrations/trp3.lua

@@ -3,6 +3,7 @@ local _, ns = ...
 local COLOURS = TEARollHelper.COLOURS
 
 local character = ns.character
+local integrations = ns.integrations
 local rules = ns.rules
 local characterState = ns.state.character
 local ui = ns.ui
@@ -107,26 +108,34 @@ ui.modules.turn.modules.character.getOptions = function(options)
                     },
                 }
             },
-            printOut = {
-                order = 3,
-                type = "description",
-                name = function()
+            updateTRP = {
+                type = "execute",
+                name = "Update TRP",
+                desc = "Update your TRP 'Currently' with your current/max HP",
+                hidden = function()
+                    return not integrations.TRP
+                end,
+                func = function()
                     local out = {
                         state.health.get(),
                         "/",
                         character.getPlayerMaxHP(),
                         " HP",
-                        "|n|n|nFeat: ",
+--[[                         "|n|n|nFeat: ",
                         character.getPlayerFeat().name,
                         "|n|n|nGreater Heal slots: ",
                         state.healing.numGreaterHealSlots.get(),
                         "/",
-                        rules.healing.getMaxGreaterHealSlots()
+                        rules.healing.getMaxGreaterHealSlots() ]]
                     }
 
-                    return ""
+                    local text = table.concat(out)
+
+                    integrations.TRP.setCurrently(text)
+
                     --return table.concat(out)
-                end
+                end,
+                order = 3,
             }
         }
     }

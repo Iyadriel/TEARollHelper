@@ -7,6 +7,7 @@ ns.actions = {}
 ns.character = {}
 ns.db = {}
 ns.events = {}
+ns.integrations = {}
 ns.launchers = {}
 ns.resources = {
     feats = {},
