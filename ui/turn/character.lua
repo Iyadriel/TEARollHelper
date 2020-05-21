@@ -20,7 +20,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
         inline = true,
         order = options.order,
         args = {
-            hp = {
+            turn_character_hp = {
                 order = 0,
                 type = "range",
                 name = "Health",
@@ -32,7 +32,11 @@ ui.modules.turn.modules.character.getOptions = function(options)
                 get = state.health.get,
                 set = function(info, value)
                     state.health.set(value)
-                end
+                end,
+                dialogControl = TEARollHelper:CreateCustomSlider("turn_character_hp", {
+                    max = character.getPlayerMaxHP,
+                    set = state.health.set
+                })
             },
             healing = {
                 order = 1 ,
