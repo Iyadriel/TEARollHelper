@@ -92,6 +92,10 @@ ui.modules.turn.modules.character.getOptions = function(options)
                         disabled = function()
                             return rules.offence.getMaxBloodHarvestSlots() == 0
                         end,
+                        dialogControl = TEARollHelper:CreateCustomSlider("numBloodHarvestSlots", {
+                            max = rules.offence.getMaxBloodHarvestSlots,
+                            set = state.featsAndTraits.numBloodHarvestSlots.set
+                        })
                     },
                 }
             },

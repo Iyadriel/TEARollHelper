@@ -33,6 +33,8 @@ state/rolls.lua
 state/turn.lua
 turns.lua
 
+ui/widgets/slider.lua
+
 ui/colours.lua
 ui/buffs.lua
 
