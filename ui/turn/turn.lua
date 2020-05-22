@@ -13,61 +13,69 @@ local state = turnState.state
 ui.modules.turn.modules.turn.getOptions = function(options)
     return {
         type = "group",
-        name = "Turn",
+        name = function()
+            if state.inCombat.get() then
+                return "Turn " .. state.index.get()
+            end
+            return "Out of combat"
+        end,
         inline = true,
         order = options.order,
         args = {
-            toggleCombat = {
-                type = "execute",
-                name = function()
-                    return state.inCombat.get() and "End combat" or "Start combat"
-                end,
-                width = "full",
+            turnType = {
+                type = "select",
+                name = "Turn type",
+                values = {
+                    [TURN_TYPES.PLAYER.id] = TURN_TYPES.PLAYER.name,
+                    [TURN_TYPES.ENEMY.id] = TURN_TYPES.ENEMY.name,
+                },
+                width = "half",
                 order = 0,
-                func = function()
-                    state.inCombat.set(not state.inCombat.get())
+                hidden = function()
+                    return not state.inCombat.get()
+                end,
+                get = state.type.get,
+                set = function(info, value)
+                    state.type.set(value)
                 end
             },
-            combat = {
-                type = "group",
-                name = "Combat",
-                inline = true,
+            nextTurn = {
+                type = "execute",
+                name = "Next turn",
+                --width = "full",
+                --width = "half",
                 order = 1,
                 hidden = function()
                     return not state.inCombat.get()
                 end,
-                args = {
-                    turnLabel = {
-                        type = "description",
-                        name = function()
-                            return "Turn " .. state.index.get()
-                        end,
-                        fontSize = "large",
-                        order = 0,
-                    },
-                    turnType = {
-                        type = "select",
-                        name = "Turn type",
-                        order = 1,
-                        values = {
-                            [TURN_TYPES.PLAYER.id] = TURN_TYPES.PLAYER.name,
-                            [TURN_TYPES.ENEMY.id] = TURN_TYPES.ENEMY.name,
-                        },
-                        get = state.type.get,
-                        set = function(info, value)
-                            state.type.set(value)
-                        end
-                    },
-                    nextTurn = {
-                        type = "execute",
-                        name = "Next turn",
-                        order = 2,
-                        func = function()
-                            state.index.set(state.index.get() + 1)
-                            state.type.set(abs(state.type.get() - 1)) -- switch type
-                        end
-                    }
-                }
+                func = function()
+                    state.index.set(state.index.get() + 1)
+                    state.type.set(abs(state.type.get() - 1)) -- switch type
+                end
+            },
+            startCombat = {
+                type = "execute",
+                name = "Start combat",
+                width = "full",
+                order = 2,
+                hidden = function()
+                    return state.inCombat.get()
+                end,
+                func = function()
+                    state.inCombat.set(true)
+                end
+            },
+            endCombat = {
+                type = "execute",
+                name = "End combat",
+                width = 0.75,
+                order = 2,
+                hidden = function()
+                    return not state.inCombat.get()
+                end,
+                func = function()
+                    state.inCombat.set(false)
+                end
             },
         }
     }
