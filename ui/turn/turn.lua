@@ -1,13 +1,10 @@
 local _, ns = ...
 
-local rules = ns.rules
-local turns = ns.turns
 local turnState = ns.state.turn
 local ui = ns.ui
 
 local TURN_TYPES = ns.state.turn.TURN_TYPES
 
-local ROLL_MODES = turns.ROLL_MODES
 local state = turnState.state
 
 --[[ local options = {
@@ -20,29 +17,22 @@ ui.modules.turn.modules.turn.getOptions = function(options)
         inline = true,
         order = options.order,
         args = {
-            outOfCombat = {
-                type = "group",
-                name = "Out of combat",
-                inline = true,
-                order = 0,
-                hidden = function()
-                    return state.inCombat.get()
+            toggleCombat = {
+                type = "execute",
+                name = function()
+                    return state.inCombat.get() and "End combat" or "Start combat"
                 end,
-                args = {
-                    startCombat = {
-                        type = "execute",
-                        name = "Start combat",
-                        func = function()
-                            state.inCombat.set(true)
-                        end
-                    }
-                }
+                width = "full",
+                order = 0,
+                func = function()
+                    state.inCombat.set(not state.inCombat.get())
+                end
             },
             combat = {
                 type = "group",
                 name = "Combat",
                 inline = true,
-                order = 0,
+                order = 1,
                 hidden = function()
                     return not state.inCombat.get()
                 end,
@@ -76,67 +66,9 @@ ui.modules.turn.modules.turn.getOptions = function(options)
                             state.index.set(state.index.get() + 1)
                             state.type.set(abs(state.type.get() - 1)) -- switch type
                         end
-                    },
-                    endCombat = {
-                        type = "execute",
-                        name = "End combat",
-                        order = 3,
-                        func = function()
-                            state.inCombat.set(false)
-                        end
                     }
                 }
             },
-            roll = {
-                type = "group",
-                name = "Roll",
-                inline = true,
-                order = 1,
-                args = {
-                    rollMode = {
-                        name = "Roll mode",
-                        type = "select",
-                        order = 0,
-                        values = {
-                            [ROLL_MODES.DISADVANTAGE] = "Disadvantage",
-                            [ROLL_MODES.NORMAL] = "Normal",
-                            [ROLL_MODES.ADVANTAGE] = "Advantage"
-                        },
-                        get = turns.getRollMode,
-                        set = function(info, value)
-                            turns.setRollMode(value)
-                        end
-                    },
-                    performRoll = {
-                        name = function()
-                            return turns.isRolling() and "Rolling..." or "Roll"
-                        end,
-                        type = "execute",
-                        desc = "Do a /roll " .. rules.rolls.MAX_ROLL .. ".",
-                        disabled = function()
-                            return turns.isRolling()
-                        end,
-                        order = 1,
-                        func = turns.roll
-                    },
-                    roll = {
-                        name = "Roll result",
-                        type = "range",
-                        desc = "The number you rolled",
-                        min = 1,
-                        softMax = rules.rolls.MAX_ROLL,
-                        max = rules.rolls.MAX_ROLL * 2, -- "support" prepping by letting people add rolls together
-                        step = 1,
-                        order = 2,
-                        get = function()
-                            return turns.getCurrentTurnValues().roll
-                        end,
-                        set = function(info, value)
-                            turns.setCurrentRoll(value)
-                        end
-                    },
-                }
-            }
         }
     }
 end
