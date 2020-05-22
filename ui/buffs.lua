@@ -77,7 +77,7 @@ ui.modules.buffs.getOptions = function(options)
                 order = 3,
                 func = function(info)
                     for buff in pairs(state.buffs) do
-                        state.buffs[buff] = 0
+                        state.buffs[buff].set(0)
                     end
                     -- if slash command, print feedback
                     if info[0] and info[0] ~= "" then
