@@ -1,8 +1,5 @@
 local _, ns = ...
 
-local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
-
-local character = ns.character
 local rules = ns.rules
 local turns = ns.turns
 local turnState = ns.state.turn
@@ -12,11 +9,6 @@ local TURN_TYPES = ns.state.turn.TURN_TYPES
 
 local ROLL_MODES = turns.ROLL_MODES
 local state = turnState.state
-
--- Update config UI, in case it is also open
-local function notifyChange()
-    AceConfigRegistry:NotifyChange(ui.modules.config.name)
-end
 
 --[[ local options = {
     order: Number
@@ -141,28 +133,6 @@ ui.modules.turn.modules.turn.getOptions = function(options)
                         end,
                         set = function(info, value)
                             turns.setCurrentRoll(value)
-                        end
-                    },
-                    racialTrait = {
-                        type = "toggle",
-                        name = function()
-                            return "Activate racial trait (" .. character.getPlayerRacialTrait().name .. ")"
-                        end,
-                        desc = function()
-                            return character.getPlayerRacialTrait().desc
-                        end,
-                        width = "full",
-                        order = 4,
-                        hidden = function()
-                            local trait = character.getPlayerRacialTrait()
-                            return not (trait.supported and trait.manualActivation)
-                        end,
-                        get = function()
-                            return state.racialTrait ~= nil
-                        end,
-                        set = function(info, value)
-                            state.racialTrait = (value and character.getPlayerRacialTrait() or nil)
-                            notifyChange() -- so we can disable/enable trait selection in character sheet
                         end
                     },
                 }

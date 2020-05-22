@@ -1,13 +1,21 @@
 local _, ns = ...
 
+local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
 local COLOURS = TEARollHelper.COLOURS
 
+local character = ns.character
 local characterState = ns.state.character
+local rollsState = ns.state.rolls
 local ui = ns.ui
 
 local state = characterState.state
 
 ui.modules.buffs = {}
+
+-- Update config UI, in case it is also open
+local function notifyChange()
+    AceConfigRegistry:NotifyChange(ui.modules.config.name)
+end
 
 --[[ local options = {
     order: Number
@@ -59,14 +67,14 @@ ui.modules.buffs.getOptions = function(options)
                 name = "Spirit",
                 desc = "Buff your character's Spirit stat",
                 width = "half",
-                order = 1
+                order = 2
             },
             clear = {
                 type = "execute",
                 name = "Clear",
                 desc = "Clear your current buffs",
                 width = "half",
-                order = 2,
+                order = 3,
                 func = function(info)
                     for buff in pairs(state.buffs) do
                         state.buffs[buff] = 0
@@ -76,7 +84,31 @@ ui.modules.buffs.getOptions = function(options)
                         TEARollHelper:Print("Temporary buffs have been cleared.")
                     end
                 end
-            }
+            },
+            racialTrait = {
+                type = "toggle",
+                name = function()
+                    return "Activate racial trait (" .. character.getPlayerRacialTrait().name .. ")"
+                end,
+                desc = function()
+                    return character.getPlayerRacialTrait().desc
+                end,
+                cmdHidden = true,
+                width = "full",
+                order = 4,
+                hidden = function()
+                    local trait = character.getPlayerRacialTrait()
+                    return not (trait.supported and trait.manualActivation)
+                end,
+                validate = function() return true end,
+                get = function()
+                    return rollsState.state.racialTrait ~= nil
+                end,
+                set = function(info, value)
+                    rollsState.state.racialTrait = (value and character.getPlayerRacialTrait() or nil)
+                    notifyChange() -- so we can disable/enable trait selection in character sheet
+                end
+            },
         }
     }
 end
