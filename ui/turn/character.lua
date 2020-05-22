@@ -123,6 +123,9 @@ ui.modules.turn.modules.character.getOptions = function(options)
                         set = function(info, value)
                             state.featsAndTraits.numSecondWindCharges.set(value)
                         end,
+                        hidden = function()
+                            return not rules.traits.canUseSecondWind()
+                        end,
                     }
                 }
             },
