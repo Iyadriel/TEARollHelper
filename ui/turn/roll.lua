@@ -19,6 +19,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
             rollMode = {
                 name = "Roll mode",
                 type = "select",
+                width = 0.65,
                 order = 0,
                 values = {
                     [ROLL_MODES.DISADVANTAGE] = "Disadvantage",
@@ -39,6 +40,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 disabled = function()
                     return turns.isRolling()
                 end,
+                width = 0.85,
                 order = 1,
                 func = turns.roll
             },
@@ -50,6 +52,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 softMax = rules.rolls.MAX_ROLL,
                 max = rules.rolls.MAX_ROLL * 2, -- "support" prepping by letting people add rolls together
                 step = 1,
+                width = 1.5,
                 order = 2,
                 get = function()
                     return turns.getCurrentTurnValues().roll
