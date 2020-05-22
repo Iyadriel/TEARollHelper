@@ -24,7 +24,18 @@ local function notifyChange()
     AceConfigRegistry:NotifyChange(ns.ui.modules.turn.name)
 end
 
+ui.modules.config.modules.character.modules = {
+    traits = {},
+}
+
 ui.modules.config.modules.character.getOptions = function()
+    local traitOptions = {}
+    local traitOrder = 4
+    for i = 1, rules.traits.MAX_NUM_TRAITS do
+        traitOptions[i] = ui.modules.config.modules.character.modules.traits.getOptions({ slotIndex = i, order = traitOrder })
+        traitOrder = traitOrder + 3
+    end
+
     return {
         name = "Character sheet",
         type = "group",
@@ -179,13 +190,39 @@ ui.modules.config.modules.character.getOptions = function()
                 end,
                 order = 3
             },
+            trait1 = traitOptions[1].trait,
+            trait1Desc = traitOptions[1].traitDesc,
+            trait1Note = traitOptions[1].traitNote,
+            trait2 = traitOptions[2].trait,
+            trait2Desc = traitOptions[2].traitDesc,
+            trait2Note = traitOptions[2].traitNote,
+            trait3 = traitOptions[3].trait,
+            trait3Desc = traitOptions[3].traitDesc,
+            trait3Note = traitOptions[3].traitNote,
+            numWeaknesses = {
+                type = "range",
+                name = "Weaknesses",
+                min = 0,
+                max = 2,
+                step = 1,
+                order = 13,
+                get = character.getNumWeaknesses,
+                set = function(info, value)
+                    character.setNumWeaknesses(value)
+                end,
+            },
+            weaknessNote = {
+                type = "description",
+                name = COLOURS.NOTE .. "Weaknesses are not yet supported, but the amount of weaknesses you have affects how many traits you can have.|n ",
+                order = 14,
+            },
             racialTrait = {
                 name = "Racial trait",
                 type = "select",
                 disabled = function()
                     return rolls.state.racialTrait ~= nil
                 end,
-                order = 4,
+                order = 15,
                 get = function()
                     return TEARollHelper.db.profile.racialTraitID
                 end,
@@ -214,7 +251,7 @@ ui.modules.config.modules.character.getOptions = function()
                     return msg
                 end,
                 fontSize = "medium",
-                order = 5
+                order = 16
             },
             racialTraitDisabledNote = {
                 type = "description",
@@ -224,7 +261,7 @@ ui.modules.config.modules.character.getOptions = function()
                     end
                     return ""
                 end,
-                order = 6
+                order = 17
             }
         }
     }

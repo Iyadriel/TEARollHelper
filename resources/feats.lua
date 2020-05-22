@@ -1,7 +1,7 @@
 local _, ns = ...
 
 local feats = ns.resources.feats
-feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "COUNTER_FORCE", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "PHALANX", "PROFESSIONAL", "REAPER", "WARDER"}
+feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "COUNTER_FORCE", "EXPANSIVE_ARSENAL", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "PHALANX", "PROFESSIONAL", "REAPER", "WARDER"}
 
 feats.FEATS = {
     FEATLESS = {
@@ -24,6 +24,12 @@ feats.FEATS = {
         id = "COUNTER_FORCE",
         name = "Counter-Force",
         desc = "Your melee save rolls no longer benefit from your Defence stat, but if you manage the roll you deal damage back to the attacker by an amount equal to your Defence stat.",
+        supported = true
+    },
+    EXPANSIVE_ARSENAL = {
+        id = "EXPANSIVE_ARSENAL",
+        name = "Expansive Arsenal",
+        desc = "If you pick a second Weakness, you may pick a third Trait.",
         supported = true
     },
     INSPIRING_PRESENCE = {

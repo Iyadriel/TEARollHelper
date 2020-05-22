@@ -12,6 +12,7 @@ ui.lua
 
 resources/feats.lua
 resources/racialTraits.lua
+resources/traits.lua
 
 actions.lua
 character.lua
@@ -26,6 +27,7 @@ rules/healing.lua
 rules/buffing.lua
 rules/meleeSave.lua
 rules/rangedSave.lua
+rules/traits.lua
 rules/utility.lua
 state.lua
 state/character.lua
@@ -50,6 +52,7 @@ ui/buffs.lua
 
 ui/config.lua
 ui/config/character.lua
+ui/config/character/traits.lua
 ui/config/settings.lua
 
 ui/turn.lua

@@ -11,7 +11,8 @@ ns.integrations = {}
 ns.launchers = {}
 ns.resources = {
     feats = {},
-    racialTraits = {}
+    racialTraits = {},
+    traits = {}
 }
 ns.rules = {}
 ns.state = {}
