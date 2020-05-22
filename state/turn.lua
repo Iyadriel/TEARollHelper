@@ -17,13 +17,14 @@ turnState.initState = function()
     }
 end
 
-local function basicGetSet(key)
+local function basicGetSet(key, callback)
     return {
         get = function ()
             return state[key]
         end,
         set = function (value)
             state[key] = value
+            if callback then callback(value) end
         end
     }
 end
@@ -31,7 +32,7 @@ end
 turnState.state = {
     index = basicGetSet("index"),
     type = basicGetSet("type"),
-    inCombat = basicGetSet("inCombat"),
+    inCombat = basicGetSet("inCombat", ns.state.character.onCombatStatusChange),
 }
 
 turnState.TURN_TYPES = TURN_TYPES

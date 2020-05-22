@@ -2,17 +2,11 @@ local _, ns = ...
 
 local character = ns.character
 local rules = ns.rules
+local traits = ns.resources.traits
 local characterState = ns.state.character
 
-local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
-
+local TRAITS = traits.TRAITS
 local state
-
-local function notifyChange(isExternal)
-    if isExternal then
-        AceConfigRegistry:NotifyChange(ns.ui.modules.turn.name)
-    end
-end
 
 characterState.initState = function()
     state = {
@@ -25,6 +19,7 @@ characterState.initState = function()
 
         featsAndTraits = {
             numBloodHarvestSlots = rules.offence.getMaxBloodHarvestSlots(),
+            numSecondWindCharges = TRAITS.SECOND_WIND.numCharges,
         },
 
         buffs = {
@@ -35,72 +30,55 @@ characterState.initState = function()
     }
 end
 
+local function basicGetSet(section, key)
+    return {
+        get = function ()
+            return state[section][key]
+        end,
+        set = function (value)
+            state[section][key] = value
+        end
+    }
+end
+
 characterState.state = {
     health = {
         get = function()
             return state.health
         end,
-        set = function(health, isExternal)
+        set = function(health)
             state.health = health
-            notifyChange(isExternal)
         end,
-        subtract = function(health, isExternal)
+        subtract = function(health)
             state.health = state.health - health
-            notifyChange(isExternal)
         end
     },
     healing = {
-        numGreaterHealSlots = {
-            get = function ()
-                return state.healing.numGreaterHealSlots
-            end,
-            set = function (numGreaterHealSlots)
-                state.healing.numGreaterHealSlots = numGreaterHealSlots
-            end
-        },
-        excess = {
-            get = function ()
-                return state.healing.excess
-            end,
-            set = function (excess)
-                state.healing.excess = excess
-            end
-        },
+        numGreaterHealSlots = basicGetSet("healing", "numGreaterHealSlots"),
+        excess = basicGetSet("healing", "excess"),
     },
     featsAndTraits = {
-        numBloodHarvestSlots = {
-            get = function ()
-                return state.featsAndTraits.numBloodHarvestSlots
-            end,
-            set = function (numBloodHarvestSlots)
-                state.featsAndTraits.numBloodHarvestSlots = numBloodHarvestSlots
-            end
-        }
+        numBloodHarvestSlots = basicGetSet("featsAndTraits", "numBloodHarvestSlots"),
+        numSecondWindCharges = basicGetSet("featsAndTraits", "numSecondWindCharges"),
     },
     buffs = {
-        offence = {
-            get = function()
-                return state.buffs.offence
-            end,
-            set = function(value)
-                state.buffs.offence = value
-            end
-        },
-        defence = {
-            get = function()
-                return state.buffs.defence
-            end,
-            set = function(value)
-                state.buffs.defence = value
-            end
-        },
-        spirit = {
-            get = function()
-                return state.buffs.spirit
-            end,
-            set = function(value)
-                state.buffs.spirit = value
-            end
-        }
+        offence = basicGetSet("buffs", "offence"),
+        defence = basicGetSet("buffs", "defence"),
+        spirit = basicGetSet("buffs", "spirit"),
     }
 }
+
+-- TODO: handle this better, this is more of a rule thing
+local function onCombatStatusChange(inCombat)
+    if not inCombat then
+        local getCharges = characterState.state.featsAndTraits.numSecondWindCharges.get
+
+        local oldNumCharges = getCharges()
+        characterState.state.featsAndTraits.numSecondWindCharges.set(TRAITS.SECOND_WIND.numCharges)
+        if getCharges() ~= oldNumCharges then
+            TEARollHelper:Print(TEARollHelper.COLOURS.TRAITS.GENERIC .. TRAITS.SECOND_WIND.name .. " charge restored.")
+        end
+    end
+end
+
+characterState.onCombatStatusChange = onCombatStatusChange

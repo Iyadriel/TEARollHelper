@@ -5,9 +5,11 @@ local COLOURS = TEARollHelper.COLOURS
 local character = ns.character
 local integrations = ns.integrations
 local rules = ns.rules
+local traits = ns.resources.traits
 local characterState = ns.state.character
 local ui = ns.ui
 
+local TRAITS = traits.TRAITS
 local state = characterState.state
 
 --[[ local options = {
@@ -106,6 +108,19 @@ ui.modules.turn.modules.character.getOptions = function(options)
                             set = state.featsAndTraits.numBloodHarvestSlots.set
                         })
                     },
+                    secondWind = {
+                        order = 1,
+                        type = "range",
+                        name = "Second Wind",
+                        desc = "How many Second Wind charges you have left",
+                        min = 0,
+                        max = TRAITS.SECOND_WIND.numCharges,
+                        step = 1,
+                        get = state.featsAndTraits.numSecondWindCharges.get,
+                        set = function(info, value)
+                            state.featsAndTraits.numSecondWindCharges.set(value)
+                        end,
+                    }
                 }
             },
             updateTRP = {

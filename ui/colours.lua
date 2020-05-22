@@ -22,6 +22,10 @@ TEARollHelper.COLOURS = {
         REAPER = '|cffc41f3b'
     },
 
+    TRAITS = {
+        GENERIC = '|cff00ccff',
+    },
+
     DAMAGE_TYPES = {
         SHADOW = '|cff7669b8'
     }
