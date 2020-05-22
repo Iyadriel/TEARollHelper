@@ -8,7 +8,7 @@ local ui = ns.ui
 --[[ local options = {
     order: Number
 } ]]
-ui.modules.rolls.modules.meleeSave.getOptions = function(options)
+ui.modules.actions.modules.meleeSave.getOptions = function(options)
     return {
         name = "Melee save",
         type = "group",

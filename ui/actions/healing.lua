@@ -15,7 +15,7 @@ local state = rolls.state
     order: Number
     outOfCombat: Boolean
 } ]]
-ui.modules.rolls.modules.healing.getOptions = function(options)
+ui.modules.actions.modules.healing.getOptions = function(options)
     return {
         name = "Heal",
         type = "group",

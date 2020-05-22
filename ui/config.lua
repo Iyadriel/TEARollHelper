@@ -13,12 +13,12 @@ ui.modules.config.getOptions = function()
         name = ui.constants.FRIENDLY_NAME,
         type = 'group',
         args = {
-            roll = {
-                name = "Show roll window",
+            turn = {
+                name = "Show turn window",
                 type = "execute",
                 order = 0,
                 func = function()
-                    AceConfigDialog:Open(ui.modules.rolls.name)
+                    AceConfigDialog:Open(ui.modules.turn.name)
                 end
             },
             character = {
@@ -29,7 +29,7 @@ ui.modules.config.getOptions = function()
                 childGroups = "tab",
                 order = 1,
                 args = {
-                    buff = ui.modules.buffs.getOptions(),
+                    buff = ui.modules.buffs.getOptions({ order = 0 }),
                     character = ui.modules.config.modules.character.getOptions(),
                 }
             },

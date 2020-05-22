@@ -6,11 +6,9 @@ ui.constants = {
 }
 
 ui.modules = {
+    actions = {},
     config = {
         name = "TEARollHelper"
-    },
-    rolls = {
-        name = "TEARollHelperRolls"
     },
     turn = {
         name = "TEARollHelperTurn"

@@ -11,7 +11,7 @@ local state = characterState.state
 --[[ local options = {
     order: Number
 } ]]
-ui.modules.rolls.modules.defend.getOptions = function(options)
+ui.modules.actions.modules.defend.getOptions = function(options)
     return {
         name = "Defend",
         type = "group",
@@ -41,6 +41,9 @@ ui.modules.rolls.modules.defend.getOptions = function(options)
                 type = "execute",
                 name = "Okay :(",
                 order = 1,
+                hidden = function()
+                    return rolls.getDefence().damageTaken == 0
+                end,
                 func = function()
                     local defence = rolls.getDefence()
                     state.health.subtract(defence.damageTaken, true)

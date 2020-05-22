@@ -10,7 +10,7 @@ local state = rolls.state
 --[[ local options = {
     order: Number
 } ]]
-ui.modules.rolls.modules.utility.getOptions = function(options)
+ui.modules.actions.modules.utility.getOptions = function(options)
     return {
         type = "group",
         name = "Utility",

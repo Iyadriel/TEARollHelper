@@ -36,20 +36,21 @@ turns.lua
 ui/widgets/slider.lua
 
 ui/colours.lua
+
+ui/actions.lua
+ui/actions/attack.lua
+ui/actions/buff.lua
+ui/actions/defend.lua
+ui/actions/healing.lua
+ui/actions/meleeSave.lua
+ui/actions/rangedSave.lua
+ui/actions/utility.lua
+
 ui/buffs.lua
 
 ui/config.lua
 ui/config/character.lua
 ui/config/settings.lua
-
-ui/rolls.lua
-ui/rolls/attack.lua
-ui/rolls/buff.lua
-ui/rolls/defend.lua
-ui/rolls/healing.lua
-ui/rolls/meleeSave.lua
-ui/rolls/rangedSave.lua
-ui/rolls/utility.lua
 
 ui/turn.lua
 ui/turn/character.lua

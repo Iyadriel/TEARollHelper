@@ -5,15 +5,18 @@ local COLOURS = TEARollHelper.COLOURS
 local feats = ns.resources.feats
 local rolls = ns.state.rolls
 local rules = ns.rules
+local traits = ns.resources.traits
 local ui = ns.ui
 
 local FEATS = feats.FEATS
+local TRAITS = traits.TRAITS
+
 local state = rolls.state
 
 --[[ local options = {
     order: Number
 } ]]
-ui.modules.rolls.modules.attack.getOptions = function(options)
+ui.modules.actions.modules.attack.getOptions = function(options)
     return {
         name = "Attack",
         type = "group",
@@ -95,6 +98,10 @@ ui.modules.rolls.modules.attack.getOptions = function(options)
                             local healingSingleTargetHit = rules.offence.calculateMercyFromPainBonusHealing(false)
                             local healingMultipleEnemiesHit = rules.offence.calculateMercyFromPainBonusHealing(true)
                             msg = msg .. COLOURS.FEATS.MERCY_FROM_PAIN .."|nMercy from Pain: +" .. healingSingleTargetHit .. " HP on your next heal roll (+" .. healingMultipleEnemiesHit .. "HP if AoE)"
+                        end
+
+                        if attack.hasVindicationProc then
+                            msg = msg .. COLOURS.HEALING .. "|n" .. TRAITS.VINDICATION.name .. ": You can heal for " .. attack.vindicationHealing .. " HP!|r"
                         end
                     else
                         msg = msg .. COLOURS.NOTE .. "You can't deal any damage with this roll."

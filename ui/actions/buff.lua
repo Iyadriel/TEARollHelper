@@ -8,7 +8,7 @@ local ui = ns.ui
 --[[ local options = {
     order: Number
 } ]]
-ui.modules.rolls.modules.buff.getOptions = function(options)
+ui.modules.actions.modules.buff.getOptions = function(options)
     return {
         name = "Buff",
         type = "group",

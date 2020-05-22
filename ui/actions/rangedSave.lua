@@ -12,7 +12,7 @@ local FEATS = feats.FEATS
 --[[ local options = {
     order: Number
 } ]]
-ui.modules.rolls.modules.rangedSave.getOptions = function(options)
+ui.modules.actions.modules.rangedSave.getOptions = function(options)
     return {
         name = "Ranged save",
         type = "group",

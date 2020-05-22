@@ -22,7 +22,6 @@ local dataObject = ldb:NewDataObject(LDB_NAME, {
     icon = "Interface\\Icons\\inv_misc_dice_02",
     OnClick = function(_, button)
         if button == "LeftButton" then
-            toggleDialog(ui.modules.rolls.name)
             toggleDialog(ui.modules.turn.name)
         elseif button == "RightButton" then
             toggleDialog(ui.modules.config.name)
@@ -38,9 +37,8 @@ function dataObject:OnEnter()
 	GameTooltip:ClearLines()
 	GameTooltip:AddLine(LDB_NAME, 1, 1, 1)
 	GameTooltip:AddLine("")
-	GameTooltip:AddLine("Left click: Show roll window")
+	GameTooltip:AddLine("Left click: Show turn window")
 	GameTooltip:AddLine("Right click: Show config UI")
-	GameTooltip:AddLine("Middle click: Show turn window")
 	GameTooltip:Show()
 end
 

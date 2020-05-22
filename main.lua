@@ -22,7 +22,6 @@ TEARollHelper = LibStub("AceAddon-3.0"):NewAddon("TEARollHelper", "AceConsole-3.
 
 function TEARollHelper:OnInitialize()
     local config = ns.ui.modules.config
-    local rolls = ns.ui.modules.rolls
     local turn = ns.ui.modules.turn
 
     local configOptions = config.getOptions()
@@ -31,10 +30,8 @@ function TEARollHelper:OnInitialize()
 
     self:InitState()
 
-    AceConfig:RegisterOptionsTable(rolls.name, rolls.getOptions())
-    AceConfigDialog:SetDefaultSize(rolls.name, 450, 640)
-
     AceConfig:RegisterOptionsTable(turn.name, turn.getOptions())
+    AceConfigDialog:SetDefaultSize(turn.name, 450, 640)
 
     ns.launchers.initLaunchers()
 end

@@ -8,14 +8,17 @@ local ui = ns.ui
 local state = characterState.state
 
 ui.modules.buffs = {}
-ui.modules.buffs.getOptions = function()
+
+--[[ local options = {
+    order: Number
+} ]]
+ui.modules.buffs.getOptions = function(options)
     return {
         name = "Buffs",
         type = "group",
         desc = "Apply a temporary buff",
-
         guiInline = true,
-        order = 3,
+        order = options.order,
         validate = function(info, input)
             if not input then return true end
             local amount = TEARollHelper:GetArgs(input)

@@ -26,7 +26,7 @@ local totalRequiredRolls = 1
 local remainingRolls = 1
 
 local function notifyChange()
-    AceConfigRegistry:NotifyChange(ui.modules.rolls.name)
+    AceConfigRegistry:NotifyChange(ui.modules.turn.name)
 end
 
 function isRolling()

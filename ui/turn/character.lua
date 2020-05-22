@@ -18,11 +18,11 @@ ui.modules.turn.modules.character.getOptions = function(options)
         type = "group",
         name = "Character",
         desc = "The current state of your character",
-        inline = true,
         order = options.order,
         args = {
+            buffs = ui.modules.buffs.getOptions({ order = 0 }),
             turn_character_hp = {
-                order = 0,
+                order = 1,
                 type = "range",
                 name = "Health",
                 desc = "How much health your character has",
@@ -40,7 +40,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                 })
             },
             healing = {
-                order = 1 ,
+                order = 2,
                 type = "group",
                 name = "Healing",
                 inline = true,
@@ -78,7 +78,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                 }
             },
             featsAndTraits = {
-                order = 2,
+                order = 3,
                 type = "group",
                 name = "Feats and traits",
                 inline = true,
@@ -135,7 +135,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
 
                     --return table.concat(out)
                 end,
-                order = 3,
+                order = 4,
             }
         }
     }

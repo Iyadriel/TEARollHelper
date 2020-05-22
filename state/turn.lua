@@ -13,7 +13,7 @@ turnState.initState = function()
     state = {
         index = 1,
         type = TURN_TYPES.PLAYER.id,
-        inCombat = true,
+        inCombat = false,
     }
 end
 
@@ -31,7 +31,7 @@ end
 turnState.state = {
     index = basicGetSet("index"),
     type = basicGetSet("type"),
-    --inCombat = basicGetSet("inCombat"),
+    inCombat = basicGetSet("inCombat"),
 }
 
 turnState.TURN_TYPES = TURN_TYPES
