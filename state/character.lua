@@ -121,10 +121,17 @@ bus.addListener(EVENTS.CHARACTER_STAT_CHANGED, function(stat, value)
             TEARollHelper:Debug("Increased remaining " .. FEATS.BLOOD_HARVEST.name .. " charges because offence stat changed.")
         end
     elseif stat == "stamina" then
+        local hp = characterState.state.health.get()
         local maxHP = rules.stats.calculateMaxHP(value)
+
         bus.fire(EVENTS.CHARACTER_MAX_HEALTH, maxHP)
-        if characterState.state.health.get() > maxHP then
+
+        if hp > maxHP then
             characterState.state.health.set(maxHP)
+            TEARollHelper:Debug("Reduced remaining HP because stamina stat changed.")
+        elseif hp < maxHP and not turnState.state.inCombat.get() then
+            characterState.state.health.set(maxHP)
+            TEARollHelper:Debug("Increased remaining HP because stamina stat changed.")
         end
     end
 end)
