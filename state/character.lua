@@ -77,17 +77,12 @@ characterState.state = {
     }
 }
 
--- TODO: handle this better, this is more of a rule thing
-local function onCombatStatusChange(inCombat)
-    if not inCombat then
-        local getCharges = characterState.state.featsAndTraits.numSecondWindCharges.get
+bus.addListener(EVENTS.COMBAT_OVER, function()
+    local getCharges = characterState.state.featsAndTraits.numSecondWindCharges.get
 
-        local oldNumCharges = getCharges()
-        characterState.state.featsAndTraits.numSecondWindCharges.set(TRAITS.SECOND_WIND.numCharges)
-        if getCharges() ~= oldNumCharges then
-            TEARollHelper:Print(TEARollHelper.COLOURS.TRAITS.GENERIC .. TRAITS.SECOND_WIND.name .. " charge restored.")
-        end
+    local oldNumCharges = getCharges()
+    characterState.state.featsAndTraits.numSecondWindCharges.set(TRAITS.SECOND_WIND.numCharges)
+    if getCharges() ~= oldNumCharges then
+        TEARollHelper:Print(TEARollHelper.COLOURS.TRAITS.GENERIC .. TRAITS.SECOND_WIND.name .. " charge restored.")
     end
-end
-
-characterState.onCombatStatusChange = onCombatStatusChange
+end)
