@@ -2,6 +2,7 @@ local _, ns = ...
 
 local COLOURS = TEARollHelper.COLOURS
 
+local characterState = ns.state.character.state
 local feats = ns.resources.feats
 local rolls = ns.state.rolls
 local rules = ns.rules
@@ -39,18 +40,14 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                     state.attack.threshold = value
                 end
             },
-            bloodHarvest = {
-                name = COLOURS.FEATS.BLOOD_HARVEST .. FEATS.BLOOD_HARVEST.name,
-                type = "select",
-                desc = "The amount of Blood Harvest slots to use.",
+            actions_attack_bloodHarvest = {
                 order = 1,
-                values = function()
-                    local values = {}
-                    for i = 0, rules.offence.getMaxBloodHarvestSlots() do
-                        values[i] = tostring(i)
-                    end
-                    return values
-                end,
+                type = "range",
+                name = COLOURS.FEATS.BLOOD_HARVEST .. FEATS.BLOOD_HARVEST.name,
+                desc = "The amount of Blood Harvest slots to use.",
+                min = 0,
+                max = characterState.featsAndTraits.numBloodHarvestSlots.get(),
+                step = 1,
                 hidden = function()
                     return not rules.offence.canUseBloodHarvest()
                 end,
@@ -62,7 +59,13 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                 end,
                 set = function(info, value)
                     state.attack.numBloodHarvestSlots = value
-                end
+                end,
+                dialogControl = TEARollHelper:CreateCustomSlider("actions_attack_bloodHarvest", {
+                    max = characterState.featsAndTraits.numBloodHarvestSlots.get,
+                    set = function (value)
+                        state.attack.numBloodHarvestSlots = value
+                    end
+                })
             },
             dmg = {
                 type = "description",
