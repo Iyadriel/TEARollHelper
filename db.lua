@@ -29,6 +29,7 @@ local defaults = {
     },
     global = {
         settings = {
+            debug = false,
             minimapIcon = {},
             autoUpdateTRP = false,
         },

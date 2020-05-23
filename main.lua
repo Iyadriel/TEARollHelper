@@ -22,10 +22,8 @@ ns.ui = {}
 
 TEARollHelper = LibStub("AceAddon-3.0"):NewAddon("TEARollHelper", "AceConsole-3.0", "AceEvent-3.0")
 
-TEARollHelper.DEBUG = false
-
 function TEARollHelper:Debug(...)
-    if TEARollHelper.DEBUG then
+    if TEARollHelper.db.global.settings.debug then
         TEARollHelper:Print("[DEBUG]", ...)
     end
 end
