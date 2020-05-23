@@ -3,6 +3,7 @@ local _, ns = ...
 local bus = ns.bus
 
 local EVENTS = {
+    CHARACTER_HEALTH = "CHARACTER_HEALTH", -- newHealth
     COMBAT_STARTED = "COMBAT_STARTED",
     COMBAT_OVER = "COMBAT_OVER",
     FEAT_CHANGED = "FEAT_CHANGED", -- featID

@@ -149,33 +149,28 @@ ui.modules.turn.modules.character.getOptions = function(options)
                 }
             },
             updateTRP = {
+                order = 4,
                 type = "execute",
-                name = "Update TRP",
-                desc = "Update your TRP 'Currently' with your current/max HP",
+                name = "Update Total RP",
+                desc = "Update your Total RP 'Currently' with your current/max HP",
                 hidden = function()
-                    return not integrations.TRP
+                    return not integrations.TRP or TEARollHelper.db.global.settings.autoUpdateTRP
+                end,
+                disabled = function()
+                    return TEARollHelper.db.global.settings.autoUpdateTRP
                 end,
                 func = function()
-                    local out = {
-                        state.health.get(),
-                        "/",
-                        character.getPlayerMaxHP(),
-                        " HP",
---[[                         "|n|n|nFeat: ",
-                        character.getPlayerFeat().name,
-                        "|n|n|nGreater Heal slots: ",
-                        state.healing.numGreaterHealSlots.get(),
-                        "/",
-                        rules.healing.getMaxGreaterHealSlots() ]]
-                    }
-
-                    local text = table.concat(out)
-
-                    integrations.TRP.setCurrently(text)
-
-                    --return table.concat(out)
+                    integrations.TRP.updateCurrently()
+                    TEARollHelper:Print("Updated your Total RP profile.")
                 end,
-                order = 4,
+            },
+            autoUpdateTRPNote = {
+                order = 5,
+                type = "description",
+                name = COLOURS.NOTE .. " |nYour Total RP is set to update automatically when needed.",
+                hidden = function()
+                    return not (integrations.TRP and TEARollHelper.db.global.settings.autoUpdateTRP)
+                end,
             }
         }
     }

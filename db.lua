@@ -29,7 +29,8 @@ local defaults = {
     },
     global = {
         settings = {
-            minimapIcon = {}
+            minimapIcon = {},
+            autoUpdateTRP = false,
         }
     }
 }

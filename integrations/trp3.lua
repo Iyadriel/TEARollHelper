@@ -1,6 +1,9 @@
 local _, ns = ...
 
+local bus = ns.bus
 local integrations = ns.integrations
+
+local EVENTS = bus.EVENTS
 
 function integrations.InitTRPSync()
     local TRP3_API = _G.TRP3_API
@@ -20,12 +23,19 @@ function integrations.InitTRPSync()
     end ]]
 
     local function setCurrently(text)
+        TEARollHelper:Debug("Updating Total RP")
         local character = get("player/character");
         local old = character.CU;
         if old ~= text then
             character.CU = text
             incrementCharacterVernum()
         end
+    end
+
+    local function updateCurrently()
+        if not TEARollHelper.db.global.settings.autoUpdateTRP then return end
+        local text = ns.state.character.summariseState()
+        setCurrently(text)
     end
 
 --[[     TRP3_API.Events.registerCallback("REGISTER_DATA_UPDATED", function()
@@ -35,7 +45,9 @@ function integrations.InitTRPSync()
 
     --TEARollHelper.TRP_CONNECTED = true
 
+    bus.addListener(EVENTS.CHARACTER_HEALTH, updateCurrently)
+
     integrations.TRP = {
-        setCurrently = setCurrently
+        updateCurrently = updateCurrently
     }
 end

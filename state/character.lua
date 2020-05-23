@@ -48,6 +48,23 @@ local function basicGetSet(section, key, callback)
     }
 end
 
+local function summariseState()
+    local out = {
+        characterState.state.health.get(),
+        "/",
+        character.getPlayerMaxHP(),
+        " HP",
+--[[         "|n|n|nFeat: ",
+        character.getPlayerFeat().name,
+        "|n|n|nGreater Heal slots: ",
+        state.healing.numGreaterHealSlots.get(),
+        "/",
+        rules.healing.getMaxGreaterHealSlots() ]]
+    }
+
+    return table.concat(out)
+end
+
 characterState.state = {
     health = {
         get = function()
@@ -55,9 +72,11 @@ characterState.state = {
         end,
         set = function(health)
             state.health = health
+            bus.fire(EVENTS.CHARACTER_HEALTH, state.health)
         end,
         subtract = function(health)
             state.health = state.health - health
+            bus.fire(EVENTS.CHARACTER_HEALTH, state.health)
         end
     },
     healing = {
@@ -77,6 +96,8 @@ characterState.state = {
         spirit = basicGetSet("buffs", "spirit"),
     }
 }
+
+characterState.summariseState = summariseState
 
 bus.addListener(EVENTS.COMBAT_OVER, function()
     local getCharges = characterState.state.featsAndTraits.numSecondWindCharges.get
