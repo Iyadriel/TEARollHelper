@@ -51,7 +51,8 @@ ui.modules.turn.modules.character.getOptions = function(options)
                         order = 0,
                         type = "range",
                         name = "Greater Heal slots",
-                        desc = "How many Greater Heals you have left",
+                        desc = "How many Greater Heals you have left.|n"
+                                .. "Using a Greater Heal increases the amount of your next heal. Multiple Greater Heals can be used at the same time.",
                         min = 0,
                         max = rules.healing.getMaxGreaterHealSlots(),
                         step = 1,
@@ -71,7 +72,9 @@ ui.modules.turn.modules.character.getOptions = function(options)
                         order = 1,
                         type = "range",
                         name = "Excess",
-                        desc = "How much Excess you have gained",
+                        desc = "How much Excess you have gained.|n"
+                                .. "You can spend Excess to increase your own spirit or offense stat for a player turn (1 point per 1 Excess spent).|n"
+                                .. "Spending Excess does not grant you more Greater Heal Slots, but if you wish you can spend all 6 points of Excess without buffing yourself in order to restore 1 Greater Heal Slot.",
                         min = 0,
                         max = rules.healing.getMaxExcess(),
                         step = 1,
