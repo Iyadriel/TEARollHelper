@@ -46,7 +46,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                 end,
                 func = function()
                     local defence = rolls.getDefence()
-                    state.health.subtract(defence.damageTaken)
+                    state.health.damage(defence.damageTaken)
                 end
             }
         },

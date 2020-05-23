@@ -9,6 +9,9 @@ local EVENTS = {
     FEAT_CHANGED = "FEAT_CHANGED", -- featID
     FEAT_CHARGES_CHANGED = "FEAT_CHARGES_CHANGED", -- featID, numCharges
 
+    -- Character effects
+    DAMAGE_TAKEN = "DAMAGE_TAKEN", --dmgTaken
+
     -- Turn
     COMBAT_STARTED = "COMBAT_STARTED",
     COMBAT_OVER = "COMBAT_OVER",

@@ -74,9 +74,10 @@ characterState.state = {
             state.health = health
             bus.fire(EVENTS.CHARACTER_HEALTH, state.health)
         end,
-        subtract = function(health)
-            state.health = state.health - health
+        damage = function(dmgTaken)
+            state.health = state.health - dmgTaken
             bus.fire(EVENTS.CHARACTER_HEALTH, state.health)
+            bus.fire(EVENTS.DAMAGE_TAKEN, dmgTaken)
         end
     },
     healing = {

@@ -50,6 +50,7 @@ ui/actions/rangedSave.lua
 ui/actions/utility.lua
 
 ui/buffs.lua
+ui/chat.lua
 
 ui/config.lua
 ui/config/character.lua
