@@ -22,7 +22,7 @@ ns.ui = {}
 
 TEARollHelper = LibStub("AceAddon-3.0"):NewAddon("TEARollHelper", "AceConsole-3.0", "AceEvent-3.0")
 
-TEARollHelper.DEBUG = true
+TEARollHelper.DEBUG = false
 
 function TEARollHelper:Debug(...)
     if TEARollHelper.DEBUG then
