@@ -1,10 +1,14 @@
 local _, ns = ...
 
+local bus = ns.bus
 local character = ns.character
+local feats = ns.resources.feats
 local rules = ns.rules
 local traits = ns.resources.traits
 local characterState = ns.state.character
 
+local EVENTS = bus.EVENTS
+local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
 local state
 
@@ -31,13 +35,14 @@ characterState.initState = function()
     }
 end
 
-local function basicGetSet(section, key)
+local function basicGetSet(section, key, callback)
     return {
         get = function ()
             return state[section][key]
         end,
         set = function (value)
             state[section][key] = value
+            if callback then callback(value) end
         end
     }
 end
@@ -59,7 +64,9 @@ characterState.state = {
         excess = basicGetSet("healing", "excess"),
     },
     featsAndTraits = {
-        numBloodHarvestSlots = basicGetSet("featsAndTraits", "numBloodHarvestSlots"),
+        numBloodHarvestSlots = basicGetSet("featsAndTraits", "numBloodHarvestSlots", function(numCharges)
+            bus.fire(EVENTS.FEAT_CHARGES_CHANGED, FEATS.BLOOD_HARVEST.id, numCharges)
+        end),
         numSecondWindCharges = basicGetSet("featsAndTraits", "numSecondWindCharges"),
         numVindicationCharges = basicGetSet("featsAndTraits", "numVindicationCharges"),
     },

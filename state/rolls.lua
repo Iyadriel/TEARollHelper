@@ -1,10 +1,15 @@
 local _, ns = ...
 
 local actions = ns.actions
+local bus = ns.bus
 local character = ns.character
 local characterState = ns.state.character.state
+local feats = ns.resources.feats
 local rolls = ns.state.rolls
 local turns = ns.turns
+
+local EVENTS = bus.EVENTS
+local FEATS = feats.FEATS
 
 local state = {
     racialTrait = nil,
@@ -28,6 +33,12 @@ local state = {
         useUtilityTrait = false
     }
 }
+
+bus.addListener(EVENTS.FEAT_CHARGES_CHANGED, function(featID, numCharges)
+    if featID == FEATS.BLOOD_HARVEST.id and numCharges == 0 then
+        state.attack.numBloodHarvestSlots = 0
+    end
+end)
 
 local function getAttack()
     local offence = character.getPlayerOffence()
