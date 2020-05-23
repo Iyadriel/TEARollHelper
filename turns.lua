@@ -2,11 +2,13 @@ local _, ns = ...
 
 local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
 
+local bus = ns.bus
 local events = ns.events
 local rules = ns.rules
 local turns = ns.turns
 local ui = ns.ui
 
+local EVENTS = bus.EVENTS
 local ROLL_MODES = {
     DISADVANTAGE = -1,
     NORMAL = 0,
@@ -47,6 +49,10 @@ end
 
 function setRollMode(mode)
     currentTurnValues.rollMode = mode
+end
+
+local function resetRollMode()
+    setRollMode(ROLL_MODES.NORMAL)
 end
 
 local function sendRoll()
@@ -91,6 +97,8 @@ function handleRollResult(result)
         notifyChange()
     end
 end
+
+bus.addListener(EVENTS.TURN_CHANGED, resetRollMode)
 
 turns.ROLL_MODES = ROLL_MODES
 turns.getCurrentTurnValues = getCurrentTurnValues

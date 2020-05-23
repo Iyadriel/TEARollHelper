@@ -32,7 +32,9 @@ local function basicGetSet(key, callback)
 end
 
 turnState.state = {
-    index = basicGetSet("index"),
+    index = basicGetSet("index", function(index)
+        bus.fire(EVENTS.TURN_CHANGED, index)
+    end),
     type = basicGetSet("type"),
     inCombat = basicGetSet("inCombat", function(inCombat)
         if inCombat then
