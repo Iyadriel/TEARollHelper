@@ -22,7 +22,10 @@ local function setSliderValues(widget)
     widget:SetUserData("option", option)
 
     -- If the value exceeds the new max, adjust the value by calling the slider's set()
-    callbacks.set(min(option.get(), option.max))
+    local value = option.get()
+    if value > option.max then
+        callbacks.set(option.max)
+    end
 end
 
 local function onSetParent(frame)
