@@ -26,7 +26,7 @@ TEARollHelper.DEBUG = false
 
 function TEARollHelper:Debug(...)
     if TEARollHelper.DEBUG then
-        TEARollHelper:Print(...)
+        TEARollHelper:Print("[DEBUG]", ...)
     end
 end
 
