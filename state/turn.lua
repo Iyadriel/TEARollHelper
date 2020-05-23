@@ -38,11 +38,10 @@ turnState.state = {
     type = basicGetSet("type"),
     inCombat = basicGetSet("inCombat", function(inCombat)
         if inCombat then
-            bus.fire(EVENTS.COMBAT_STARTED)
             turnState.state.index.set(1)
+            bus.fire(EVENTS.COMBAT_STARTED)
         else
             bus.fire(EVENTS.COMBAT_OVER)
-            bus.fire(EVENTS.TURN_CHANGED, turnState.state.index.get())
         end
     end),
 }

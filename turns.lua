@@ -98,6 +98,7 @@ function handleRollResult(result)
     end
 end
 
+bus.addListener(EVENTS.COMBAT_OVER, resetRollMode)
 bus.addListener(EVENTS.TURN_CHANGED, resetRollMode)
 
 turns.ROLL_MODES = ROLL_MODES
