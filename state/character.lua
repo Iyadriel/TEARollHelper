@@ -120,6 +120,16 @@ bus.addListener(EVENTS.CHARACTER_STAT_CHANGED, function(stat, value)
             characterState.state.featsAndTraits.numBloodHarvestSlots.set(maxSlots)
             TEARollHelper:Debug("Increased remaining " .. FEATS.BLOOD_HARVEST.name .. " charges because offence stat changed.")
         end
+    elseif stat == "spirit" then
+        local remainingSlots = characterState.state.healing.numGreaterHealSlots.get()
+        local maxSlots = rules.healing.getMaxGreaterHealSlots()
+        if remainingSlots > maxSlots then
+            characterState.state.healing.numGreaterHealSlots.set(maxSlots)
+            TEARollHelper:Debug("Reduced remaining Greater Heal charges because spirit stat changed.")
+        elseif remainingSlots < maxSlots and not turnState.state.inCombat.get() then
+            characterState.state.healing.numGreaterHealSlots.set(maxSlots)
+            TEARollHelper:Debug("Increased remaining Greater Heal charges because spirit stat changed.")
+        end
     elseif stat == "stamina" then
         local hp = characterState.state.health.get()
         local maxHP = rules.stats.calculateMaxHP(value)
