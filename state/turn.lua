@@ -42,6 +42,7 @@ turnState.state = {
         else
             bus.fire(EVENTS.COMBAT_OVER)
         end
+        bus.fire(EVENTS.TURN_CHANGED, turnState.state.index.get())
     end),
 }
 
