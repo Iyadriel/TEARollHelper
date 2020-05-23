@@ -34,10 +34,14 @@ local state = {
     }
 }
 
-bus.addListener(EVENTS.FEAT_CHANGED, function()
+local function resetSlots()
     state.attack.numBloodHarvestSlots = 0
+    state.healing.numGreaterHealSlots = 0
     state.healing.mercyFromPainBonusHealing = 0
-end)
+end
+
+bus.addListener(EVENTS.CHARACTER_STAT_CHANGED, resetSlots)
+bus.addListener(EVENTS.FEAT_CHANGED, resetSlots)
 
 bus.addListener(EVENTS.FEAT_CHARGES_CHANGED, function(featID, numCharges)
     if featID == FEATS.BLOOD_HARVEST.id and numCharges < state.attack.numBloodHarvestSlots then
