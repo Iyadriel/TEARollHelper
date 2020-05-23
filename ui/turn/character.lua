@@ -156,9 +156,16 @@ ui.modules.turn.modules.character.getOptions = function(options)
                 disabled = function()
                     return TEARollHelper.db.global.settings.autoUpdateTRP
                 end,
+                confirm = function()
+                    if not TEARollHelper.db.global.warningsSeen.updateTRP then
+                        return "This will allow this addon to overwrite any content you have set in your 'Currently' field."
+                    end
+                    return false
+                end,
                 func = function()
                     integrations.TRP.updateCurrently()
                     TEARollHelper:Print("Updated your Total RP profile.")
+                    TEARollHelper.db.global.warningsSeen.updateTRP = true
                 end,
             },
             autoUpdateTRPNote = {
