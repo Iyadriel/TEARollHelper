@@ -4,6 +4,7 @@ local AceConfig = LibStub("AceConfig-3.0")
 local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 
 ns.actions = {}
+ns.bus = {}
 ns.character = {}
 ns.db = {}
 ns.events = {}

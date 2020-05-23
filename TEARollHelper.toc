@@ -8,6 +8,7 @@
 embeds.xml
 
 main.lua
+bus.lua
 ui.lua
 
 resources/feats.lua
