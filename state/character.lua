@@ -6,6 +6,7 @@ local feats = ns.resources.feats
 local rules = ns.rules
 local traits = ns.resources.traits
 local characterState = ns.state.character
+local turnState = ns.state.turn
 
 local EVENTS = bus.EVENTS
 local FEATS = feats.FEATS
@@ -89,9 +90,14 @@ end)
 
 bus.addListener(EVENTS.CHARACTER_STAT_CHANGED, function(stat, value)
     if stat == "offence" then
+        local remainingSlots = characterState.state.featsAndTraits.numBloodHarvestSlots.get()
         local maxSlots = rules.offence.getMaxBloodHarvestSlots()
-        if characterState.state.featsAndTraits.numBloodHarvestSlots.get() > maxSlots then
+        if remainingSlots > maxSlots then
             characterState.state.featsAndTraits.numBloodHarvestSlots.set(maxSlots)
+            TEARollHelper:Debug("Reduced remaining " .. FEATS.BLOOD_HARVEST.name .. " charges because offence stat changed.")
+        elseif remainingSlots < maxSlots and not turnState.state.inCombat.get() then
+            characterState.state.featsAndTraits.numBloodHarvestSlots.set(maxSlots)
+            TEARollHelper:Debug("Increased remaining " .. FEATS.BLOOD_HARVEST.name .. " charges because offence stat changed.")
         end
     end
 end)
