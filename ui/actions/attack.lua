@@ -61,10 +61,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                     state.attack.numBloodHarvestSlots = value
                 end,
                 dialogControl = TEARollHelper:CreateCustomSlider("actions_attack_bloodHarvest", {
-                    max = characterState.featsAndTraits.numBloodHarvestSlots.get,
-                    set = function (value)
-                        state.attack.numBloodHarvestSlots = value
-                    end
+                    max = characterState.featsAndTraits.numBloodHarvestSlots.get
                 })
             },
             dmg = {

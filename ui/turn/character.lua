@@ -37,8 +37,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                     state.health.set(value)
                 end,
                 dialogControl = TEARollHelper:CreateCustomSlider("turn_character_hp", {
-                    max = character.getPlayerMaxHP,
-                    set = state.health.set
+                    max = character.getPlayerMaxHP
                 })
             },
             healing = {
@@ -64,8 +63,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                             return rules.healing.getMaxGreaterHealSlots() == 0
                         end,
                         dialogControl = TEARollHelper:CreateCustomSlider("turn_character_numGreaterHealSlots", {
-                            max = rules.healing.getMaxGreaterHealSlots,
-                            set = state.healing.numGreaterHealSlots.set
+                            max = rules.healing.getMaxGreaterHealSlots
                         })
                     },
                     excess = {
@@ -110,8 +108,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                             return rules.offence.getMaxBloodHarvestSlots() == 0
                         end,
                         dialogControl = TEARollHelper:CreateCustomSlider("turn_character_numBloodHarvestSlots", {
-                            max = rules.offence.getMaxBloodHarvestSlots,
-                            set = state.featsAndTraits.numBloodHarvestSlots.set
+                            max = rules.offence.getMaxBloodHarvestSlots
                         })
                     },
                     secondWind = {
