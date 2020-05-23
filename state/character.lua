@@ -86,3 +86,12 @@ bus.addListener(EVENTS.COMBAT_OVER, function()
         TEARollHelper:Print(TEARollHelper.COLOURS.TRAITS.GENERIC .. TRAITS.SECOND_WIND.name .. " charge restored.")
     end
 end)
+
+bus.addListener(EVENTS.CHARACTER_STAT_CHANGED, function(stat, value)
+    if stat == "offence" then
+        local maxSlots = rules.offence.getMaxBloodHarvestSlots()
+        if characterState.state.featsAndTraits.numBloodHarvestSlots.get() > maxSlots then
+            characterState.state.featsAndTraits.numBloodHarvestSlots.set(maxSlots)
+        end
+    end
+end)

@@ -4,6 +4,7 @@ local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
 
 local COLOURS = TEARollHelper.COLOURS
 
+local bus = ns.bus
 local character = ns.character
 local feats = ns.resources.feats
 local racialTraits = ns.resources.racialTraits
@@ -11,6 +12,7 @@ local rolls = ns.state.rolls
 local rules = ns.rules
 local ui = ns.ui
 
+local EVENTS = bus.EVENTS
 local STAT_MIN_VALUE = rules.stats.STAT_MIN_VALUE
 local STAT_MAX_VALUE = rules.stats.STAT_MAX_VALUE
 
@@ -59,6 +61,7 @@ ui.modules.config.modules.character.getOptions = function()
                         TEARollHelper:Print("Your character's " .. stat .. " has been set to "..value..".")
                     end
                     notifyChange()
+                    bus.fire(EVENTS.CHARACTER_STAT_CHANGED, stat, value)
                 end,
                 validate = function(info, input)
                     local stat = info[#info]

@@ -7,6 +7,7 @@ local EVENTS = {
     COMBAT_OVER = "COMBAT_OVER",
     FEAT_CHARGES_CHANGED = "FEAT_CHARGES_CHANGED", -- featID, numCharges
     --TRAIT_CHARGES_CHANGED = "TRAIT_CHARGES_CHANGED", -- traitID, numCharges
+    CHARACTER_STAT_CHANGED = "CHARACTER_STAT_CHANGED" -- stat, value
 }
 
 local listeners = {}

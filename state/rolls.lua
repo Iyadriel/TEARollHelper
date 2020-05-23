@@ -35,8 +35,8 @@ local state = {
 }
 
 bus.addListener(EVENTS.FEAT_CHARGES_CHANGED, function(featID, numCharges)
-    if featID == FEATS.BLOOD_HARVEST.id and numCharges == 0 then
-        state.attack.numBloodHarvestSlots = 0
+    if featID == FEATS.BLOOD_HARVEST.id and numCharges < state.attack.numBloodHarvestSlots then
+        state.attack.numBloodHarvestSlots = numCharges
     end
 end)
 
