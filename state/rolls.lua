@@ -34,6 +34,11 @@ local state = {
     }
 }
 
+bus.addListener(EVENTS.FEAT_CHANGED, function()
+    state.attack.numBloodHarvestSlots = 0
+    state.healing.mercyFromPainBonusHealing = 0
+end)
+
 bus.addListener(EVENTS.FEAT_CHARGES_CHANGED, function(featID, numCharges)
     if featID == FEATS.BLOOD_HARVEST.id and numCharges < state.attack.numBloodHarvestSlots then
         state.attack.numBloodHarvestSlots = numCharges

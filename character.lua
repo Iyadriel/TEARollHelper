@@ -1,11 +1,13 @@
 local _, ns = ...
 
+local bus = ns.bus
 local character = ns.character
 local feats = ns.resources.feats
 local racialTraits = ns.resources.racialTraits
 local rules = ns.rules
 local traits = ns.resources.traits
 
+local EVENTS = bus.EVENTS
 local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
 
@@ -57,6 +59,7 @@ end
 function setPlayerFeatByID(featID)
     TEARollHelper.db.profile.featID = featID
     clearExcessTraits()
+    bus.fire(EVENTS.FEAT_CHANGED, featID)
 end
 
 local function hasTraitByID(traitID)
