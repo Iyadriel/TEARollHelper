@@ -24,9 +24,7 @@ local function addListener(event, callback)
 end
 
 local function fire(event, ...)
-    if TEARollHelper.DEBUG then
-        TEARollHelper:Print("Fired", event, ...)
-    end
+    TEARollHelper:Debug("Fired", event, ...)
     if not listeners[event] then return end
     for _, callback in ipairs(listeners[event]) do
         callback(...)

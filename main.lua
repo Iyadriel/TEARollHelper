@@ -22,6 +22,14 @@ ns.ui = {}
 
 TEARollHelper = LibStub("AceAddon-3.0"):NewAddon("TEARollHelper", "AceConsole-3.0", "AceEvent-3.0")
 
+TEARollHelper.DEBUG = true
+
+function TEARollHelper:Debug(...)
+    if TEARollHelper.DEBUG then
+        TEARollHelper:Print(...)
+    end
+end
+
 function TEARollHelper:OnInitialize()
     local config = ns.ui.modules.config
     local turn = ns.ui.modules.turn
