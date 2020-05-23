@@ -34,6 +34,16 @@ ui.modules.config.modules.settings.getOptions = function()
                 end,
                 set = function(info, value)
                     TEARollHelper.db.global.settings.autoUpdateTRP = value
+                    if value then
+                        TEARollHelper.db.global.warningsSeen.updateTRP = true
+                    end
+                end,
+                confirm = function()
+                    local global = TEARollHelper.db.global
+                    if not global.settings.autoUpdateTRP and not global.warningsSeen.updateTRP then
+                        return "This will allow this addon to overwrite any content you have set in your 'Currently' field."
+                    end
+                    return false
                 end
             }
         }

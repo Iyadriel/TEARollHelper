@@ -31,6 +31,9 @@ local defaults = {
         settings = {
             minimapIcon = {},
             autoUpdateTRP = false,
+        },
+        warningsSeen = {
+            updateTRP = false
         }
     }
 }
