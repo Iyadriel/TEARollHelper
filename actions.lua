@@ -2,10 +2,9 @@ local _, ns = ...
 
 local rules = ns.rules
 
-local function getAttack(roll, threshold, offence, buff, numBloodHarvestSlots, numVindicationCharges)
+local function getAttack(roll, isCrit, threshold, offence, buff, numBloodHarvestSlots, numVindicationCharges)
     local attackValue = rules.offence.calculateAttackValue(roll, offence, buff)
     local dmg = rules.offence.calculateAttackDmg(threshold, attackValue)
-    local isCrit = rules.rolls.isCrit(roll)
     local critType = rules.offence.getCritType()
     local hasAdrenalineProc = nil
     local hasMercyFromPainProc = nil
@@ -62,10 +61,9 @@ local function getAttack(roll, threshold, offence, buff, numBloodHarvestSlots, n
     }
 end
 
-local function getDefence(roll, threshold, dmgRisk, defence, buff, racialTrait)
+local function getDefence(roll, isCrit, threshold, dmgRisk, defence, buff, racialTrait)
     local defendValue = rules.defence.calculateDefendValue(roll, defence, buff, racialTrait)
     local damageTaken = rules.defence.calculateDamageTaken(threshold, defendValue, dmgRisk)
-    local isCrit = rules.rolls.isCrit(roll)
     local retaliateDmg = 0
 
     if isCrit then
@@ -119,7 +117,7 @@ local function getRangedSave(roll, threshold, dmgRisk, spirit, buff)
     }
 end
 
-local function getHealing(roll, spirit, buff, numGreaterHealSlots, mercyFromPainBonusHealing, outOfCombat)
+local function getHealing(roll, isCrit, spirit, buff, numGreaterHealSlots, mercyFromPainBonusHealing, outOfCombat)
     local healValue = rules.healing.calculateHealValue(roll, spirit, buff)
     local amountHealed = rules.healing.calculateAmountHealed(healValue)
 
@@ -133,17 +131,17 @@ local function getHealing(roll, spirit, buff, numGreaterHealSlots, mercyFromPain
 
     return {
         amountHealed = amountHealed,
-        isCrit = rules.rolls.isCrit(roll)
+        isCrit = isCrit
     }
 end
 
-local function getBuff(roll, spirit, spiritBuff, offence, offenceBuff)
+local function getBuff(roll, isCrit, spirit, spiritBuff, offence, offenceBuff)
     local buffValue = rules.buffing.calculateBuffValue(roll, spirit, spiritBuff, offence, offenceBuff)
     local amountBuffed = rules.buffing.calculateBuffAmount(buffValue)
 
     return {
         amountBuffed = amountBuffed,
-        isCrit = rules.rolls.isCrit(roll),
+        isCrit = isCrit,
         usesInspiringPresence = rules.buffing.usesInspiringPresence()
     }
 end

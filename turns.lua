@@ -27,6 +27,8 @@ local currentTurnValues = {
     isPrepRolling = false,
     preppedRoll = nil,
     prepMode = false,
+
+    rollIsCrit = false
 }
 local totalRequiredRolls = 1
 local remainingRolls = 1
@@ -124,12 +126,20 @@ function handleRollResult(result)
 
         sendRoll()
     else
+        local isCrit = rules.rolls.isCrit(currentTurnValues.roll)
+
         if currentTurnValues.prepMode then
             setCurrentRoll(currentTurnValues.roll + currentTurnValues.preppedRoll)
             currentTurnValues.prepMode = false
+
+            if not isCrit then
+                isCrit = rules.rolls.isCrit(currentTurnValues.preppedRoll)
+            end
         end
 
+        currentTurnValues.rollIsCrit = isCrit
         currentTurnValues.isRolling = false
+
         notifyChange()
     end
 end

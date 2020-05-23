@@ -57,14 +57,15 @@ local function getAttack()
     local numBloodHarvestSlots = state.attack.numBloodHarvestSlots
     local numVindicationCharges = characterState.featsAndTraits.numVindicationCharges.get()
 
-    return actions.getAttack(values.roll, threshold, offence, buff, numBloodHarvestSlots, numVindicationCharges)
+    return actions.getAttack(values.roll, values.rollIsCrit, threshold, offence, buff, numBloodHarvestSlots, numVindicationCharges)
 end
 
 local function getHealing(outOfCombat)
     local spirit = character.getPlayerSpirit()
     local buff = characterState.buffs.spirit.get()
+    local values = turns.getCurrentTurnValues()
 
-    return actions.getHealing(turns.getCurrentTurnValues().roll, spirit, buff, state.healing.numGreaterHealSlots, state.healing.mercyFromPainBonusHealing, outOfCombat)
+    return actions.getHealing(values.roll, values.rollIsCrit, spirit, buff, state.healing.numGreaterHealSlots, state.healing.mercyFromPainBonusHealing, outOfCombat)
 end
 
 local function getBuff()
@@ -72,8 +73,9 @@ local function getBuff()
     local offence = character.getPlayerOffence()
     local offenceBuff = characterState.buffs.offence.get()
     local spiritBuff = characterState.buffs.spirit.get()
+    local values = turns.getCurrentTurnValues()
 
-    return actions.getBuff(turns.getCurrentTurnValues().roll, spirit, spiritBuff, offence, offenceBuff)
+    return actions.getBuff(values.roll, values.rollIsCrit, spirit, spiritBuff, offence, offenceBuff)
 end
 
 local function getDefence()
@@ -82,7 +84,7 @@ local function getDefence()
     local values = turns.getCurrentTurnValues()
     local racialTrait = state.racialTrait
 
-    return actions.getDefence(values.roll, state.defend.threshold, state.defend.damageRisk, defence, buff, racialTrait)
+    return actions.getDefence(values.roll, values.rollIsCrit, state.defend.threshold, state.defend.damageRisk, defence, buff, racialTrait)
 end
 
 local function getMeleeSave()
