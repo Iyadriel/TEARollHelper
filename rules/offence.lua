@@ -4,8 +4,10 @@ local character = ns.character
 local feats = ns.resources.feats
 local racialTraits = ns.resources.racialTraits
 local rules = ns.rules
+local traits = ns.resources.traits
 
 local FEATS = feats.FEATS
+local TRAITS = traits.TRAITS
 local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
 
 local NUM_OFFENCE_PER_BLOOD_HARVEST_SLOT = 2
@@ -95,6 +97,20 @@ local function calculateMercyFromPainBonusHealing(multipleEnemiesHit)
     return multipleEnemiesHit and 4 or 2
 end
 
+-- Trait: Vindication
+
+local function canProcVindication()
+    return character.hasTrait(TRAITS.VINDICATION)
+end
+
+local function hasVindicationProc(dmgDealt)
+    return dmgDealt > 0
+end
+
+local function calculateVindicationHealing(dmgDealt)
+    return ceil(dmgDealt / 2)
+end
+
 -- Racial Trait: Entropic Embrace
 
 local function canProcEntropicEmbrace()
@@ -128,6 +144,10 @@ rules.offence = {
     canProcMercyFromPain = canProcMercyFromPain,
     hasMercyFromPainProc = hasMercyFromPainProc,
     calculateMercyFromPainBonusHealing = calculateMercyFromPainBonusHealing,
+
+    canProcVindication = canProcVindication,
+    hasVindicationProc = hasVindicationProc,
+    calculateVindicationHealing = calculateVindicationHealing,
 
     canProcEntropicEmbrace = canProcEntropicEmbrace,
     hasEntropicEmbraceProc = hasEntropicEmbraceProc,

@@ -35,8 +35,9 @@ local function getAttack()
     local values = turns.getCurrentTurnValues()
     local threshold = state.attack.threshold
     local numBloodHarvestSlots = state.attack.numBloodHarvestSlots
+    local numVindicationCharges = characterState.featsAndTraits.numVindicationCharges.get()
 
-    return actions.getAttack(values.roll, threshold, offence, buff, numBloodHarvestSlots)
+    return actions.getAttack(values.roll, threshold, offence, buff, numBloodHarvestSlots, numVindicationCharges)
 end
 
 local function getHealing(outOfCombat)

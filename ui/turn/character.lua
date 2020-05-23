@@ -129,7 +129,23 @@ ui.modules.turn.modules.character.getOptions = function(options)
                         hidden = function()
                             return not rules.traits.canUseSecondWind()
                         end,
-                    }
+                    },
+                    vindication = {
+                        order = 2,
+                        type = "range",
+                        name = TRAITS.VINDICATION.name .. " charges",
+                        desc = TRAITS.VINDICATION.desc,
+                        min = 0,
+                        max = TRAITS.VINDICATION.numCharges,
+                        step = 1,
+                        get = state.featsAndTraits.numVindicationCharges.get,
+                        set = function(info, value)
+                            state.featsAndTraits.numVindicationCharges.set(value)
+                        end,
+                        hidden = function()
+                            return not rules.offence.canProcVindication()
+                        end,
+                    },
                 }
             },
             updateTRP = {

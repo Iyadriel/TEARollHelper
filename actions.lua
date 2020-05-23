@@ -2,7 +2,7 @@ local _, ns = ...
 
 local rules = ns.rules
 
-local function getAttack(roll, threshold, offence, buff, numBloodHarvestSlots)
+local function getAttack(roll, threshold, offence, buff, numBloodHarvestSlots, numVindicationCharges)
     local attackValue = rules.offence.calculateAttackValue(roll, offence, buff)
     local dmg = rules.offence.calculateAttackDmg(threshold, attackValue)
     local isCrit = rules.rolls.isCrit(roll)
@@ -11,6 +11,8 @@ local function getAttack(roll, threshold, offence, buff, numBloodHarvestSlots)
     local hasMercyFromPainProc = nil
     local hasEntropicEmbraceProc = nil
     local entropicEmbraceDmg = 0
+    local hasVindicationProc = nil
+    local vindicationHealing = 0
 
     if rules.offence.canProcAdrenaline() then
         hasAdrenalineProc = rules.offence.hasAdrenalineProc(threshold, attackValue)
@@ -39,6 +41,13 @@ local function getAttack(roll, threshold, offence, buff, numBloodHarvestSlots)
         hasMercyFromPainProc = rules.offence.hasMercyFromPainProc(dmg + entropicEmbraceDmg)
     end
 
+    if rules.offence.canProcVindication() and numVindicationCharges > 0 then
+        hasVindicationProc = rules.offence.hasVindicationProc(dmg)
+        if hasVindicationProc then
+            vindicationHealing = rules.offence.calculateVindicationHealing(dmg)
+        end
+    end
+
     return {
         attackValue = attackValue,
         dmg = dmg,
@@ -47,7 +56,9 @@ local function getAttack(roll, threshold, offence, buff, numBloodHarvestSlots)
         hasAdrenalineProc = hasAdrenalineProc,
         hasMercyFromPainProc = hasMercyFromPainProc,
         hasEntropicEmbraceProc = hasEntropicEmbraceProc,
-        entropicEmbraceDmg = entropicEmbraceDmg
+        entropicEmbraceDmg = entropicEmbraceDmg,
+        hasVindicationProc = hasVindicationProc,
+        vindicationHealing = vindicationHealing,
     }
 end
 

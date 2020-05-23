@@ -20,6 +20,7 @@ characterState.initState = function()
         featsAndTraits = {
             numBloodHarvestSlots = rules.offence.getMaxBloodHarvestSlots(),
             numSecondWindCharges = TRAITS.SECOND_WIND.numCharges,
+            numVindicationCharges = TRAITS.VINDICATION.numCharges,
         },
 
         buffs = {
@@ -60,6 +61,7 @@ characterState.state = {
     featsAndTraits = {
         numBloodHarvestSlots = basicGetSet("featsAndTraits", "numBloodHarvestSlots"),
         numSecondWindCharges = basicGetSet("featsAndTraits", "numSecondWindCharges"),
+        numVindicationCharges = basicGetSet("featsAndTraits", "numVindicationCharges"),
     },
     buffs = {
         offence = basicGetSet("buffs", "offence"),
