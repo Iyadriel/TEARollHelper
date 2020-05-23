@@ -17,10 +17,10 @@ ui.modules.turn.modules.roll.getOptions = function(options)
         order = options.order,
         args = {
             rollMode = {
+                order = 0,
                 name = "Roll mode",
                 type = "select",
                 width = 0.65,
-                order = 0,
                 values = {
                     [ROLL_MODES.DISADVANTAGE] = "Disadvantage",
                     [ROLL_MODES.NORMAL] = "Normal",
@@ -31,7 +31,37 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                     turns.setRollMode(value)
                 end
             },
+            prep = {
+                order = 1,
+                type = "toggle",
+                name = "Include prep",
+                desc = "Activate if you prepared during the last player turn. Rolls twice and adds up the results before applying bonuses.",
+                width = 0.55,
+                get = function()
+                    return turns.getCurrentTurnValues().prepMode
+                end,
+                set = function(info, value)
+                    turns.getCurrentTurnValues().prepMode = value
+                end,
+            },
+            roll = {
+                order = 2,
+                name = "Roll result",
+                type = "range",
+                desc = "The number you rolled",
+                min = 1,
+                max = rules.rolls.MAX_ROLL,
+                step = 1,
+                width = 1.1,
+                get = function()
+                    return turns.getCurrentTurnValues().roll
+                end,
+                set = function(info, value)
+                    turns.setCurrentRoll(value)
+                end
+            },
             performRoll = {
+                order = 3,
                 name = function()
                     return turns.isRolling() and "Rolling..." or "Roll"
                 end,
@@ -40,26 +70,8 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 disabled = function()
                     return turns.isRolling()
                 end,
-                width = 0.85,
-                order = 1,
+                width = "full",
                 func = turns.roll
-            },
-            roll = {
-                name = "Roll result",
-                type = "range",
-                desc = "The number you rolled",
-                min = 1,
-                softMax = rules.rolls.MAX_ROLL,
-                max = rules.rolls.MAX_ROLL * 2, -- "support" prepping by letting people add rolls together
-                step = 1,
-                width = 1.5,
-                order = 2,
-                get = function()
-                    return turns.getCurrentTurnValues().roll
-                end,
-                set = function(info, value)
-                    turns.setCurrentRoll(value)
-                end
             },
         }
     }

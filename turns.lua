@@ -15,7 +15,7 @@ local ROLL_MODES = {
     ADVANTAGE = 1
 }
 
-local isRolling, setCurrentRoll, getCurrentTurnValues, handleRollResult
+local isRolling, setCurrentRoll, setPreppedRoll, getCurrentTurnValues, handleRollResult
 local getRollMode, setRollMode
 local roll
 
@@ -23,6 +23,10 @@ local currentTurnValues = {
     isRolling = false,
     roll = 1,
     rollMode = ROLL_MODES.NORMAL,
+
+    isPrepRolling = false,
+    preppedRoll = nil,
+    prepMode = false,
 }
 local totalRequiredRolls = 1
 local remainingRolls = 1
@@ -37,6 +41,10 @@ end
 
 function setCurrentRoll(roll)
     currentTurnValues.roll = roll
+end
+
+function setPreppedRoll(roll)
+    currentTurnValues.preppedRoll = roll
 end
 
 function getCurrentTurnValues()
@@ -60,10 +68,7 @@ local function sendRoll()
     RandomRoll(1, rules.rolls.MAX_ROLL)
 end
 
-function roll()
-    currentTurnValues.isRolling = true
-    notifyChange() -- so we can update the button state
-
+local function getRequiredRollsForTurn()
     local numRolls
 
     if getRollMode() == ROLL_MODES.NORMAL then
@@ -72,6 +77,18 @@ function roll()
         numRolls = 2
     end
 
+    return numRolls
+end
+
+function roll()
+    currentTurnValues.isRolling = true
+    if currentTurnValues.prepMode then
+        currentTurnValues.isPrepRolling = true
+    end
+
+    notifyChange() -- so we can update the button state
+
+    local numRolls = getRequiredRollsForTurn()
     totalRequiredRolls = numRolls
     remainingRolls = numRolls
 
@@ -85,14 +102,32 @@ function handleRollResult(result)
         (remainingRolls == totalRequiredRolls) or
         (rollMode == ROLL_MODES.ADVANTAGE and result > currentTurnValues.roll) or
         (rollMode == ROLL_MODES.DISADVANTAGE and result < currentTurnValues.roll) then
-        setCurrentRoll(result)
+        if currentTurnValues.isPrepRolling then
+            setPreppedRoll(result)
+        else
+            setCurrentRoll(result)
+        end
     end
 
     remainingRolls = remainingRolls - 1
 
     if remainingRolls > 0 then
         sendRoll()
+    elseif currentTurnValues.isPrepRolling then
+        local numRolls = getRequiredRollsForTurn()
+
+        totalRequiredRolls = numRolls
+        remainingRolls = numRolls
+
+        currentTurnValues.isPrepRolling = false
+
+        sendRoll()
     else
+        if currentTurnValues.prepMode then
+            setCurrentRoll(currentTurnValues.roll + currentTurnValues.preppedRoll)
+            currentTurnValues.prepMode = false
+        end
+
         currentTurnValues.isRolling = false
         notifyChange()
     end
