@@ -120,5 +120,11 @@ bus.addListener(EVENTS.CHARACTER_STAT_CHANGED, function(stat, value)
             characterState.state.featsAndTraits.numBloodHarvestSlots.set(maxSlots)
             TEARollHelper:Debug("Increased remaining " .. FEATS.BLOOD_HARVEST.name .. " charges because offence stat changed.")
         end
+    elseif stat == "stamina" then
+        local maxHP = rules.stats.calculateMaxHP(value)
+        bus.fire(EVENTS.CHARACTER_MAX_HEALTH, maxHP)
+        if characterState.state.health.get() > maxHP then
+            characterState.state.health.set(maxHP)
+        end
     end
 end)

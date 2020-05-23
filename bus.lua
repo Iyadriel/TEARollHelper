@@ -4,6 +4,7 @@ local bus = ns.bus
 
 local EVENTS = {
     CHARACTER_HEALTH = "CHARACTER_HEALTH", -- newHealth
+    CHARACTER_MAX_HEALTH = "CHARACTER_MAX_HEALTH", -- newHealth
     COMBAT_STARTED = "COMBAT_STARTED",
     COMBAT_OVER = "COMBAT_OVER",
     FEAT_CHANGED = "FEAT_CHANGED", -- featID

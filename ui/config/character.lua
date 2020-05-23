@@ -55,13 +55,13 @@ ui.modules.config.modules.character.getOptions = function()
                 end,
                 set = function(info, value)
                     local stat = info[#info]
-                    TEARollHelper.db.profile.stats[stat] = value
+                    character.setStat(stat, value)
+                    bus.fire(EVENTS.CHARACTER_STAT_CHANGED, stat, value)
                     -- if slash command, print feedback
                     if info[0] and info[0] ~= "" then
                         TEARollHelper:Print("Your character's " .. stat .. " has been set to "..value..".")
                     end
                     notifyChange()
-                    bus.fire(EVENTS.CHARACTER_STAT_CHANGED, stat, value)
                 end,
                 validate = function(info, input)
                     local stat = info[#info]

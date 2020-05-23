@@ -46,6 +46,7 @@ function integrations.InitTRPSync()
     --TEARollHelper.TRP_CONNECTED = true
 
     bus.addListener(EVENTS.CHARACTER_HEALTH, updateCurrently)
+    bus.addListener(EVENTS.CHARACTER_MAX_HEALTH, updateCurrently)
 
     integrations.TRP = {
         updateCurrently = updateCurrently

@@ -36,6 +36,10 @@ function getPlayerMaxHP()
     return rules.stats.calculateMaxHP(getPlayerStamina())
 end
 
+local function setStat(stat, value)
+    TEARollHelper.db.profile.stats[stat] = value
+end
+
 function hasOffenceMastery()
     return getPlayerOffence() >= 6
 end
@@ -121,6 +125,7 @@ character.getPlayerDefence = getPlayerDefence
 character.getPlayerSpirit = getPlayerSpirit
 character.getPlayerStamina = getPlayerStamina
 character.getPlayerMaxHP = getPlayerMaxHP
+character.setStat = setStat
 
 character.hasOffenceMastery = hasOffenceMastery
 character.hasSpiritMastery = hasSpiritMastery
