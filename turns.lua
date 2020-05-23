@@ -97,11 +97,12 @@ end
 
 function handleRollResult(result)
     local rollMode = getRollMode()
+    local roll = currentTurnValues.isPrepRolling and currentTurnValues.preppedRoll or currentTurnValues.roll
 
     if
         (remainingRolls == totalRequiredRolls) or
-        (rollMode == ROLL_MODES.ADVANTAGE and result > currentTurnValues.roll) or
-        (rollMode == ROLL_MODES.DISADVANTAGE and result < currentTurnValues.roll) then
+        (rollMode == ROLL_MODES.ADVANTAGE and result > roll) or
+        (rollMode == ROLL_MODES.DISADVANTAGE and result < roll) then
         if currentTurnValues.isPrepRolling then
             setPreppedRoll(result)
         else
