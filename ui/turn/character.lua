@@ -60,7 +60,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                             state.healing.numGreaterHealSlots.set(value)
                         end,
                         disabled = function()
-                            return state.healing.numGreaterHealSlots.get() == 0
+                            return rules.healing.getMaxGreaterHealSlots() == 0
                         end,
                         dialogControl = TEARollHelper:CreateCustomSlider("turn_character_numGreaterHealSlots", {
                             max = rules.healing.getMaxGreaterHealSlots,
