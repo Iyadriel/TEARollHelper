@@ -52,7 +52,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                     return not rules.offence.canUseBloodHarvest()
                 end,
                 disabled = function()
-                    return rules.offence.getMaxBloodHarvestSlots() == 0
+                    return rules.offence.getMaxBloodHarvestSlots() == 0 or characterState.featsAndTraits.numBloodHarvestSlots.get() == 0
                 end,
                 get = function()
                     return state.attack.numBloodHarvestSlots
