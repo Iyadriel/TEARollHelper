@@ -1,7 +1,7 @@
 local _, ns = ...
 
 local feats = ns.resources.feats
-feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "COUNTER_FORCE", "EXPANSIVE_ARSENAL", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "PHALANX", "PROFESSIONAL", "REAPER", "WARDER"}
+feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "COUNTER_FORCE", "EXPANSIVE_ARSENAL", "FOREIGN_DISCIPLE", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "PHALANX", "PROFESSIONAL", "REAPER", "WARDER"}
 
 feats.FEATS = {
     FEATLESS = {
@@ -30,6 +30,12 @@ feats.FEATS = {
         id = "EXPANSIVE_ARSENAL",
         name = "Expansive Arsenal",
         desc = "If you pick a second Weakness, you may pick a third Trait.",
+        supported = true
+    },
+    FOREIGN_DISCIPLE = {
+        id = "FOREIGN_DISCIPLE",
+        name = "Foreign Disciple",
+        desc = "You can change your Racial Trait to that of another race.",
         supported = true
     },
     INSPIRING_PRESENCE = {
