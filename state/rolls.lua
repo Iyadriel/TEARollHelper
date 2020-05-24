@@ -48,6 +48,11 @@ bus.addListener(EVENTS.FEAT_CHARGES_CHANGED, function(featID, numCharges)
         state.attack.numBloodHarvestSlots = numCharges
     end
 end)
+bus.addListener(EVENTS.GREATER_HEAL_CHARGES_CHANGED, function(numCharges)
+    if numCharges < state.healing.numGreaterHealSlots then
+        state.healing.numGreaterHealSlots = numCharges
+    end
+end)
 
 local function getAttack()
     local offence = character.getPlayerOffence()

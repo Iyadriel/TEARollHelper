@@ -7,7 +7,10 @@ local EVENTS = {
     CHARACTER_MAX_HEALTH = "CHARACTER_MAX_HEALTH", -- newHealth
     CHARACTER_STAT_CHANGED = "CHARACTER_STAT_CHANGED", -- stat, value
     FEAT_CHANGED = "FEAT_CHANGED", -- featID
+
+    -- Resources
     FEAT_CHARGES_CHANGED = "FEAT_CHARGES_CHANGED", -- featID, numCharges
+    GREATER_HEAL_CHARGES_CHANGED = "GREATER_HEAL_CHARGES_CHANGED", -- numCharges
 
     -- Character effects
     DAMAGE_TAKEN = "DAMAGE_TAKEN", --dmgTaken

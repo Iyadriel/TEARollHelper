@@ -81,7 +81,9 @@ characterState.state = {
         end
     },
     healing = {
-        numGreaterHealSlots = basicGetSet("healing", "numGreaterHealSlots"),
+        numGreaterHealSlots = basicGetSet("healing", "numGreaterHealSlots", function(numCharges)
+            bus.fire(EVENTS.GREATER_HEAL_CHARGES_CHANGED, numCharges)
+        end),
         excess = basicGetSet("healing", "excess"),
     },
     featsAndTraits = {

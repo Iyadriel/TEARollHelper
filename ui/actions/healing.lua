@@ -3,6 +3,7 @@ local _, ns = ...
 local COLOURS = TEARollHelper.COLOURS
 
 local character = ns.character
+local characterState = ns.state.character.state
 local feats = ns.resources.feats
 local rolls = ns.state.rolls
 local rules = ns.rules
@@ -22,27 +23,29 @@ ui.modules.actions.modules.healing.getOptions = function(options)
         inline = true,
         order = options.order,
         args = {
-            greaterHeals = {
+            actions_healing_greaterHeals = {
+                order = 0,
+                type = "range",
                 name = "Greater Heals",
-                type = "select",
                 desc = "The amount of Greater Heals to use.",
-                values = function()
-                    local values = {}
-                    for i = 0, rules.healing.getMaxGreaterHealSlots() do
-                        values[i] = tostring(i)
-                    end
-                    return values
-                end,
-                disabled = function()
+                min = 0,
+                max = characterState.healing.numGreaterHealSlots.get(),
+                step = 1,
+                hidden = function()
                     return rules.healing.getMaxGreaterHealSlots() == 0
                 end,
-                order = 0,
+                disabled = function()
+                    return characterState.healing.numGreaterHealSlots.get() == 0
+                end,
                 get = function()
                     return state.healing.numGreaterHealSlots
                 end,
                 set = function(info, value)
                     state.healing.numGreaterHealSlots = value
-                end
+                end,
+                dialogControl = TEARollHelper:CreateCustomSlider("actions_healing_greaterHeals", {
+                    max = characterState.healing.numGreaterHealSlots.get
+                })
             },
             mercyFromPain = {
                 name = COLOURS.FEATS.MERCY_FROM_PAIN .. FEATS.MERCY_FROM_PAIN.name,
@@ -71,7 +74,7 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                 order = 2,
                 name = function()
                     local healing = rolls.getHealing(options.outOfCombat)
-                    local msg = " |n"
+                    local msg = rules.healing.getMaxGreaterHealSlots() > 0 and " |n" or "" -- Only show spacing if greater heals are shown. Dirty hack
 
                     if healing.amountHealed > 0 then
                         local amount = tostring(healing.amountHealed)
