@@ -15,7 +15,7 @@ local ROLL_MODES = {
     ADVANTAGE = 1
 }
 
-local isRolling, setCurrentRoll, setPreppedRoll, getCurrentTurnValues, handleRollResult
+local isRolling, setCurrentRoll, setPreppedRoll, getRollValues, handleRollResult
 local getRollMode, setRollMode
 local roll
 
@@ -49,7 +49,7 @@ function setPreppedRoll(roll)
     currentTurnValues.preppedRoll = roll
 end
 
-function getCurrentTurnValues()
+function getRollValues()
     return currentTurnValues
 end
 
@@ -148,7 +148,7 @@ bus.addListener(EVENTS.COMBAT_OVER, resetRollMode)
 bus.addListener(EVENTS.TURN_CHANGED, resetRollMode)
 
 turns.ROLL_MODES = ROLL_MODES
-turns.getCurrentTurnValues = getCurrentTurnValues
+turns.getRollValues = getRollValues
 turns.isRolling = isRolling
 turns.setCurrentRoll = setCurrentRoll
 turns.getRollMode = getRollMode

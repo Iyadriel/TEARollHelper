@@ -38,10 +38,10 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 desc = "Activate if you prepared during the last player turn. Rolls twice and adds up the results before applying bonuses.",
                 width = 0.55,
                 get = function()
-                    return turns.getCurrentTurnValues().prepMode
+                    return turns.getRollValues().prepMode
                 end,
                 set = function(info, value)
-                    turns.getCurrentTurnValues().prepMode = value
+                    turns.getRollValues().prepMode = value
                 end,
             },
             roll = {
@@ -54,7 +54,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 step = 1,
                 width = 1.1,
                 get = function()
-                    return turns.getCurrentTurnValues().roll
+                    return turns.getRollValues().roll
                 end,
                 set = function(info, value)
                     turns.setCurrentRoll(value)

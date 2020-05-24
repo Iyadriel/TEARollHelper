@@ -57,7 +57,7 @@ end)
 local function getAttack()
     local offence = character.getPlayerOffence()
     local buff = characterState.buffs.offence.get()
-    local values = turns.getCurrentTurnValues()
+    local values = turns.getRollValues()
     local threshold = state.attack.threshold
     local numBloodHarvestSlots = state.attack.numBloodHarvestSlots
     local numVindicationCharges = characterState.featsAndTraits.numVindicationCharges.get()
@@ -68,7 +68,7 @@ end
 local function getHealing(outOfCombat)
     local spirit = character.getPlayerSpirit()
     local buff = characterState.buffs.spirit.get()
-    local values = turns.getCurrentTurnValues()
+    local values = turns.getRollValues()
 
     return actions.getHealing(values.roll, values.rollIsCrit, spirit, buff, state.healing.numGreaterHealSlots, state.healing.mercyFromPainBonusHealing, outOfCombat)
 end
@@ -78,7 +78,7 @@ local function getBuff()
     local offence = character.getPlayerOffence()
     local offenceBuff = characterState.buffs.offence.get()
     local spiritBuff = characterState.buffs.spirit.get()
-    local values = turns.getCurrentTurnValues()
+    local values = turns.getRollValues()
 
     return actions.getBuff(values.roll, values.rollIsCrit, spirit, spiritBuff, offence, offenceBuff)
 end
@@ -86,7 +86,7 @@ end
 local function getDefence()
     local defence = character.getPlayerDefence()
     local buff = characterState.buffs.defence.get()
-    local values = turns.getCurrentTurnValues()
+    local values = turns.getRollValues()
     local racialTrait = state.racialTrait
 
     return actions.getDefence(values.roll, values.rollIsCrit, state.defend.threshold, state.defend.damageRisk, defence, buff, racialTrait)
@@ -95,7 +95,7 @@ end
 local function getMeleeSave()
     local defence = character.getPlayerDefence()
     local buff = characterState.buffs.defence.get()
-    local values = turns.getCurrentTurnValues()
+    local values = turns.getRollValues()
     local racialTrait = state.racialTrait
 
     return actions.getMeleeSave(values.roll, state.defend.threshold, state.defend.damageRisk, defence, buff, racialTrait)
@@ -103,7 +103,7 @@ end
 
 local function getRangedSave()
     local spirit = character.getPlayerSpirit()
-    local values = turns.getCurrentTurnValues()
+    local values = turns.getRollValues()
     local buff = characterState.buffs.spirit.get()
 
     return actions.getRangedSave(values.roll, state.defend.threshold, state.defend.damageRisk, spirit, buff)

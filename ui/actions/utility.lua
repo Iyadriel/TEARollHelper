@@ -35,7 +35,7 @@ ui.modules.actions.modules.utility.getOptions = function(options)
                 fontSize = "medium",
                 order = 1,
                 name = function()
-                    local roll = turns.getCurrentTurnValues().roll
+                    local roll = turns.getRollValues().roll
                     return " |nYour total utility roll: " .. actions.getUtility(roll, state.utility.useUtilityTrait)
                 end
             }
