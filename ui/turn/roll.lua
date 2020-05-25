@@ -37,6 +37,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 name = "Include prep",
                 desc = "Activate if you prepared during the last player turn. Rolls twice and adds up the results before applying bonuses.",
                 width = 0.55,
+                disabled = true, -- hotfix for new prep system
                 get = function()
                     return turns.getRollValues().prepMode
                 end,
