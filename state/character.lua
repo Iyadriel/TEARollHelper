@@ -28,6 +28,7 @@ characterState.initState = function()
             numBloodHarvestSlots = rules.offence.getMaxBloodHarvestSlots(),
             numSecondWindCharges = TRAITS.SECOND_WIND.numCharges,
             numVindicationCharges = TRAITS.VINDICATION.numCharges,
+            racialTrait = nil, -- manually activated racial traits
         },
 
         numFatePoints = rules.rolls.getMaxFatePoints(),
@@ -96,6 +97,7 @@ characterState.state = {
         end),
         numSecondWindCharges = basicGetSet("featsAndTraits", "numSecondWindCharges"),
         numVindicationCharges = basicGetSet("featsAndTraits", "numVindicationCharges"),
+        racialTrait = basicGetSet("featsAndTraits", "racialTrait"),
     },
     numFatePoints ={
         get = function ()

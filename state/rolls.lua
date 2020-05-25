@@ -12,8 +12,6 @@ local EVENTS = bus.EVENTS
 local FEATS = feats.FEATS
 
 local state = {
-    racialTrait = nil,
-
     attack = {
         threshold = 12,
         numBloodHarvestSlots = 0,
@@ -87,7 +85,7 @@ local function getDefence()
     local defence = character.getPlayerDefence()
     local buff = characterState.buffs.defence.get()
     local values = turns.getRollValues()
-    local racialTrait = state.racialTrait
+    local racialTrait = characterState.featsAndTraits.racialTrait.get()
 
     return actions.getDefence(values.roll, values.rollIsCrit, state.defend.threshold, state.defend.damageRisk, defence, buff, racialTrait)
 end
@@ -96,7 +94,7 @@ local function getMeleeSave()
     local defence = character.getPlayerDefence()
     local buff = characterState.buffs.defence.get()
     local values = turns.getRollValues()
-    local racialTrait = state.racialTrait
+    local racialTrait = characterState.featsAndTraits.racialTrait.get()
 
     return actions.getMeleeSave(values.roll, state.defend.threshold, state.defend.damageRisk, defence, buff, racialTrait)
 end

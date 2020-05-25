@@ -4,7 +4,6 @@ local COLOURS = TEARollHelper.COLOURS
 
 local character = ns.character
 local characterState = ns.state.character
-local rollsState = ns.state.rolls
 local ui = ns.ui
 
 local state = characterState.state
@@ -96,10 +95,10 @@ ui.modules.buffs.getOptions = function(options)
                 end,
                 validate = function() return true end,
                 get = function()
-                    return rollsState.state.racialTrait ~= nil
+                    return state.featsAndTraits.racialTrait.get() ~= nil
                 end,
                 set = function(info, value)
-                    rollsState.state.racialTrait = (value and character.getPlayerRacialTrait() or nil)
+                    state.featsAndTraits.racialTrait.set(value and character.getPlayerRacialTrait() or nil)
                 end
             },
         }
