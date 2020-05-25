@@ -1,12 +1,20 @@
 local _, ns = ...
 
+local character = ns.character
+local characterState = ns.state.character
+local consequences = ns.consequences
 local rolls = ns.state.rolls
+local traits = ns.resources.traits
 local turn = ns.state.turn
 local ui = ns.ui
 
+local COLOURS = TEARollHelper.COLOURS
+local TRAITS = traits.TRAITS
 local TURN_TYPES = turn.TURN_TYPES
 local rollState = rolls.state
 local turnState = turn.state
+local state = characterState.state
+
 
 ui.modules.actions.modules = {
     attack = {},
@@ -93,11 +101,24 @@ ui.modules.actions.getOptions = function(options)
                 return turnState.inCombat.get()
             end,
             args = {
-                heal = ui.modules.actions.modules.healing.getOptions({
+                secondWind = {
                     order = 0,
+                    type = "execute",
+                    name = COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.SECOND_WIND.name,
+                    desc = TRAITS.SECOND_WIND.desc,
+                    hidden = function()
+                        return not character.hasTrait(TRAITS.SECOND_WIND)
+                    end,
+                    disabled = function()
+                        return state.featsAndTraits.numSecondWindCharges.get() == 0
+                    end,
+                    func = consequences.useSecondWind
+                },
+                heal = ui.modules.actions.modules.healing.getOptions({
+                    order = 1,
                     outOfCombat = true
                 }),
-                utility = ui.modules.actions.modules.utility.getOptions({ order = 1 }),
+                utility = ui.modules.actions.modules.utility.getOptions({ order = 2 }),
             }
         }
     }

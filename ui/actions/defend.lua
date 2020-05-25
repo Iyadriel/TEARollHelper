@@ -4,6 +4,7 @@ local COLOURS = TEARollHelper.COLOURS
 
 local character = ns.character
 local characterState = ns.state.character
+local consequences = ns.consequences
 local rolls = ns.state.rolls
 local traits = ns.resources.traits
 local ui = ns.ui
@@ -67,8 +68,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                     return rolls.getDefence().damageTaken == 0
                 end,
                 func = function()
-                    local defence = rolls.getDefence()
-                    state.health.damage(defence.damageTaken)
+                    consequences.confirmDefenceAction(rolls.getDefence())
                 end
             }
         },

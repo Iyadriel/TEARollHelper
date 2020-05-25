@@ -6,9 +6,9 @@ local rules = ns.rules
 local traits = ns.resources.traits
 
 local FEATS = feats.FEATS
-local TRAITS = traits.TRAITS
 
 local MAX_NUM_TRAITS = 3
+local SECOND_WIND_HEAL_AMOUNT = 15
 
 local function calculateMaxTraits()
     local maxTraits = 1
@@ -27,5 +27,6 @@ end
 
 rules.traits = {
     MAX_NUM_TRAITS = MAX_NUM_TRAITS,
+    SECOND_WIND_HEAL_AMOUNT = SECOND_WIND_HEAL_AMOUNT,
     calculateMaxTraits = calculateMaxTraits,
 }

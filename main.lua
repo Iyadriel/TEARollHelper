@@ -6,6 +6,7 @@ local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 ns.actions = {}
 ns.bus = {}
 ns.character = {}
+ns.consequences = {}
 ns.db = {}
 ns.events = {}
 ns.integrations = {}

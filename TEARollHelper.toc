@@ -35,6 +35,7 @@ state.lua
 state/character.lua
 state/rolls.lua
 state/turn.lua
+consequences.lua
 turns.lua
 
 ui/widgets/slider.lua
