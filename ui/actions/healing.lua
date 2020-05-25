@@ -83,7 +83,12 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                         if healing.isCrit then
                             msg = msg .. COLOURS.CRITICAL .. "MANY HEALS!|r " .. healColour .. "You can heal everyone in line of sight for " .. amount .. " HP."
                         else
-                            msg = msg .. healColour .. "You can heal someone for " .. amount .. " HP."
+                            if healing.usesParagon then
+                                local targets = healing.playersHealableWithParagon > 1 and " allies" or " ally"
+                                msg = msg .. healColour .. "You can heal " .. healing.playersHealableWithParagon .. targets .. " for " .. amount .. " HP."
+                            else
+                                msg = msg .. healColour .. "You can heal for " .. amount .. " HP."
+                            end
                         end
                     else
                         msg = msg .. COLOURS.NOTE .. "You can't heal anyone with this roll."

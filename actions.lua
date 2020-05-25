@@ -120,6 +120,8 @@ end
 local function getHealing(roll, isCrit, spirit, buff, numGreaterHealSlots, mercyFromPainBonusHealing, outOfCombat)
     local healValue = rules.healing.calculateHealValue(roll, spirit, buff)
     local amountHealed = rules.healing.calculateAmountHealed(healValue)
+    local usesParagon = rules.healing.usesParagon()
+    local playersHealableWithParagon = nil
 
     amountHealed = amountHealed + rules.healing.calculateGreaterHealBonus(numGreaterHealSlots)
 
@@ -129,9 +131,16 @@ local function getHealing(roll, isCrit, spirit, buff, numGreaterHealSlots, mercy
         amountHealed = amountHealed + mercyFromPainBonusHealing
     end
 
+
+    if usesParagon then
+        playersHealableWithParagon = rules.healing.calculateNumPlayersHealableWithParagon()
+    end
+
     return {
         amountHealed = amountHealed,
-        isCrit = isCrit
+        isCrit = isCrit,
+        usesParagon = usesParagon,
+        playersHealableWithParagon = playersHealableWithParagon,
     }
 end
 

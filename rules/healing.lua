@@ -76,6 +76,15 @@ local function calculateNumHealsAllowedOutOfCombat()
     return character.hasFeat(FEATS.MEDIC) and 5 or 3
 end
 
+local function usesParagon()
+    return character.hasFeat(FEATS.PARAGON)
+end
+
+local function calculateNumPlayersHealableWithParagon()
+    local spirit = character.getPlayerSpirit()
+    return 1 + floor(spirit / 3)
+end
+
 rules.healing = {
     calculateHealValue = calculateHealValue,
     calculateAmountHealed = calculateAmountHealed,
@@ -83,5 +92,7 @@ rules.healing = {
     calculateGreaterHealBonus = calculateGreaterHealBonus,
     getMaxExcess = getMaxExcess,
     applyOutOfCombatBonus = applyOutOfCombatBonus,
-    calculateNumHealsAllowedOutOfCombat = calculateNumHealsAllowedOutOfCombat
+    calculateNumHealsAllowedOutOfCombat = calculateNumHealsAllowedOutOfCombat,
+    usesParagon = usesParagon,
+    calculateNumPlayersHealableWithParagon = calculateNumPlayersHealableWithParagon
 }
