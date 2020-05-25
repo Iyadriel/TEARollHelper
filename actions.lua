@@ -61,10 +61,17 @@ local function getAttack(roll, isCrit, threshold, offence, buff, numBloodHarvest
     }
 end
 
-local function getDefence(roll, isCrit, threshold, dmgRisk, defence, buff, racialTrait)
-    local defendValue = rules.defence.calculateDefendValue(roll, defence, buff, racialTrait)
-    local damageTaken = rules.defence.calculateDamageTaken(threshold, defendValue, dmgRisk)
+local function getDefence(roll, isCrit, threshold, dmgRisk, defence, buff, useBulwark, racialTrait)
+    local defendValue, damageTaken
     local retaliateDmg = 0
+
+    defendValue = rules.defence.calculateDefendValue(roll, defence, buff, racialTrait)
+
+    if useBulwark then
+        defendValue = rules.defence.applyBulwarkBonus(defendValue)
+    end
+
+    damageTaken = rules.defence.calculateDamageTaken(threshold, defendValue, dmgRisk)
 
     if isCrit then
         retaliateDmg = rules.defence.calculateRetaliationDamage(defence)

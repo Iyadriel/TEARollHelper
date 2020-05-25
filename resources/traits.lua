@@ -1,13 +1,20 @@
 local _, ns = ...
 
 local traits = ns.resources.traits
-traits.TRAIT_KEYS = {"OTHER", "SECOND_WIND", "VINDICATION"}
+traits.TRAIT_KEYS = {"OTHER", "BULWARK", "SECOND_WIND", "VINDICATION"}
 
 traits.TRAITS = {
     OTHER = {
         id = "OTHER",
         name = "Other",
         supported = true
+    },
+    BULWARK = {
+        id = "BULWARK",
+        name = "Bulwark",
+        desc = "Activate to gain +3 to defense as well as advantage on all defense rolls for the current or next enemy turn. Can be used twice per event. Activate and then roll.",
+        supported = true,
+        numCharges = 2,
     },
     SECOND_WIND = {
         id = "SECOND_WIND",

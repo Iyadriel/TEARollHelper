@@ -25,15 +25,7 @@ local function calculateMaxTraits()
     return maxTraits
 end
 
--- Second Wind
-
-local function canUseSecondWind()
-    return character.hasTrait(TRAITS.SECOND_WIND)
-end
-
 rules.traits = {
     MAX_NUM_TRAITS = MAX_NUM_TRAITS,
     calculateMaxTraits = calculateMaxTraits,
-
-    canUseSecondWind = canUseSecondWind,
 }

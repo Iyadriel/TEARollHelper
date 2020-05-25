@@ -12,6 +12,25 @@ local ui = ns.ui
 local TRAITS = traits.TRAITS
 local state = characterState.state
 
+local function traitChargesSlider(order, trait, stateKey)
+    return {
+        order = order,
+        type = "range",
+        name = COLOURS.TRAITS.GENERIC .. trait.name .. " charges",
+        desc = trait.desc,
+        min = 0,
+        max = trait.numCharges,
+        step = 1,
+        get = state.featsAndTraits[stateKey].get,
+        set = function(info, value)
+            state.featsAndTraits[stateKey].set(value)
+        end,
+        hidden = function()
+            return not character.hasTrait(trait)
+        end,
+    }
+end
+
 --[[ local options = {
     order: Number
 } ]]
@@ -111,38 +130,9 @@ ui.modules.turn.modules.character.getOptions = function(options)
                             max = rules.offence.getMaxBloodHarvestSlots
                         })
                     },
-                    secondWind = {
-                        order = 1,
-                        type = "range",
-                        name = TRAITS.SECOND_WIND.name .. " charges",
-                        desc = TRAITS.SECOND_WIND.desc,
-                        min = 0,
-                        max = TRAITS.SECOND_WIND.numCharges,
-                        step = 1,
-                        get = state.featsAndTraits.numSecondWindCharges.get,
-                        set = function(info, value)
-                            state.featsAndTraits.numSecondWindCharges.set(value)
-                        end,
-                        hidden = function()
-                            return not rules.traits.canUseSecondWind()
-                        end,
-                    },
-                    vindication = {
-                        order = 2,
-                        type = "range",
-                        name = TRAITS.VINDICATION.name .. " charges",
-                        desc = TRAITS.VINDICATION.desc,
-                        min = 0,
-                        max = TRAITS.VINDICATION.numCharges,
-                        step = 1,
-                        get = state.featsAndTraits.numVindicationCharges.get,
-                        set = function(info, value)
-                            state.featsAndTraits.numVindicationCharges.set(value)
-                        end,
-                        hidden = function()
-                            return not rules.offence.canProcVindication()
-                        end,
-                    },
+                    bulwark = traitChargesSlider(1, TRAITS.BULWARK, "numBulwarkCharges"),
+                    secondWind = traitChargesSlider(2, TRAITS.SECOND_WIND, "numSecondWindCharges"),
+                    vindication = traitChargesSlider(3, TRAITS.VINDICATION, "numVindicationCharges"),
                 }
             },
             turn_character_fatePoints = {

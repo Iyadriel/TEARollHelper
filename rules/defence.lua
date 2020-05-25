@@ -10,6 +10,10 @@ local function calculateDefendValue(roll, defence, buff, racialTrait)
     return roll + rules.common.calculateDefenceStat(defence, buff, racialTrait)
 end
 
+local function applyBulwarkBonus(defendValue)
+    return defendValue + 3
+end
+
 local function calculateDamageTaken(threshold, defendValue, dmgRisk)
     local safetyMargin = defendValue - threshold
     if safetyMargin >= 0 then
@@ -30,6 +34,7 @@ end
 
 rules.defence = {
     calculateDefendValue = calculateDefendValue,
+    applyBulwarkBonus = applyBulwarkBonus,
     calculateDamageTaken = calculateDamageTaken,
     calculateRetaliationDamage = calculateRetaliationDamage
 }

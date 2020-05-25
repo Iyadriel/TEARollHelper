@@ -6,10 +6,12 @@ local character = ns.character
 local characterState = ns.state.character.state
 local feats = ns.resources.feats
 local rolls = ns.state.rolls
+local traits = ns.resources.traits
 local turns = ns.turns
 
 local EVENTS = bus.EVENTS
 local FEATS = feats.FEATS
+local TRAITS = traits.TRAITS
 
 local state = {
     attack = {
@@ -25,6 +27,7 @@ local state = {
     defend = {
         threshold = 10,
         damageRisk = 4,
+        useBulwark = false,
     },
 
     utility = {
@@ -36,6 +39,7 @@ local function resetSlots()
     state.attack.numBloodHarvestSlots = 0
     state.healing.numGreaterHealSlots = 0
     state.healing.mercyFromPainBonusHealing = 0
+    state.defend.useBulwark = false
 end
 
 bus.addListener(EVENTS.CHARACTER_STAT_CHANGED, resetSlots)
@@ -51,6 +55,12 @@ end)
 bus.addListener(EVENTS.GREATER_HEAL_CHARGES_CHANGED, function(numCharges)
     if numCharges < state.healing.numGreaterHealSlots then
         state.healing.numGreaterHealSlots = numCharges
+    end
+end)
+
+bus.addListener(EVENTS.TRAIT_CHARGES_CHANGED, function(traitID, numCharges)
+    if traitID == TRAITS.BULWARK.id and numCharges == 0 then
+        state.defend.useBulwark = false
     end
 end)
 
@@ -87,9 +97,10 @@ local function getDefence()
     local defence = character.getPlayerDefence()
     local buff = characterState.buffs.defence.get()
     local values = turns.getRollValues()
+    local useBulwark = state.defend.useBulwark
     local racialTrait = characterState.featsAndTraits.racialTrait.get()
 
-    return actions.getDefence(values.roll, values.rollIsCrit, state.defend.threshold, state.defend.damageRisk, defence, buff, racialTrait)
+    return actions.getDefence(values.roll, values.rollIsCrit, state.defend.threshold, state.defend.damageRisk, defence, buff, useBulwark, racialTrait)
 end
 
 local function getMeleeSave()

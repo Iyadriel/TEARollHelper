@@ -103,6 +103,7 @@ end
 
 local function setPlayerTraitByID(index, traitID)
     TEARollHelper.db.profile.traits[index] = traitID
+    bus.fire(EVENTS.TRAITS_CHANGED)
 end
 
 local function clearPlayerTrait(index)
