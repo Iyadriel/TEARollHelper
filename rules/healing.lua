@@ -29,6 +29,10 @@ local function calculateAmountHealed(healValue)
 end
 
 local function getMaxGreaterHealSlots()
+    if character.hasFeat(FEATS.PARAGON) then
+        return 0
+    end
+
     local spirit = character.getPlayerSpirit()
     local numSlots = max(0, floor(spirit / NUM_SPIRIT_PER_GREATER_HEAL_SLOT))
 
