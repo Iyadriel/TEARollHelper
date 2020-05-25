@@ -28,6 +28,7 @@ end
 
 ui.modules.config.modules.character.modules = {
     traits = {},
+    weaknesses = {}
 }
 
 ui.modules.config.modules.character.getOptions = function()
@@ -202,13 +203,14 @@ ui.modules.config.modules.character.getOptions = function()
             trait3 = traitOptions[3].trait,
             trait3Desc = traitOptions[3].traitDesc,
             trait3Note = traitOptions[3].traitNote,
+            weaknesses = ui.modules.config.modules.character.modules.weaknesses.getOptions({ order = 13 }),
             numWeaknesses = {
                 type = "range",
                 name = "Weaknesses",
                 min = 0,
                 max = 2,
                 step = 1,
-                order = 13,
+                order = 14,
                 get = character.getNumWeaknesses,
                 set = function(info, value)
                     character.setNumWeaknesses(value)
@@ -216,8 +218,8 @@ ui.modules.config.modules.character.getOptions = function()
             },
             weaknessNote = {
                 type = "description",
-                name = COLOURS.NOTE .. "Weaknesses are not yet supported, but the amount of weaknesses you have affects how many traits you can have.|n ",
-                order = 14,
+                name = COLOURS.NOTE .. "Not all wweaknesses are currently supported, but the amount of weaknesses you have affects how many traits you can have.|n ",
+                order = 15,
             },
             racialTrait = {
                 name = "Racial trait",
@@ -225,7 +227,7 @@ ui.modules.config.modules.character.getOptions = function()
                 disabled = function()
                     return rolls.state.racialTrait ~= nil
                 end,
-                order = 15,
+                order = 16,
                 get = function()
                     return TEARollHelper.db.profile.racialTraitID
                 end,
@@ -254,7 +256,7 @@ ui.modules.config.modules.character.getOptions = function()
                     return msg
                 end,
                 fontSize = "medium",
-                order = 16
+                order = 17
             },
             racialTraitDisabledNote = {
                 type = "description",
@@ -264,7 +266,7 @@ ui.modules.config.modules.character.getOptions = function()
                     end
                     return ""
                 end,
-                order = 17
+                order = 18
             }
         }
     }

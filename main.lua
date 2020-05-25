@@ -13,7 +13,8 @@ ns.launchers = {}
 ns.resources = {
     feats = {},
     racialTraits = {},
-    traits = {}
+    traits = {},
+    weaknesses = {}
 }
 ns.rules = {}
 ns.state = {}

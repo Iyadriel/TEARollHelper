@@ -113,6 +113,21 @@ local function setNumWeaknesses(numWeaknesses)
     clearExcessTraits()
 end
 
+local function hasWeaknessByID(weaknessID)
+    return TEARollHelper.db.profile.weaknesses[weaknessID]
+end
+
+local function hasWeakness(weakness)
+    return hasWeaknessByID(weakness.id)
+end
+
+local function togglePlayerWeaknessByID(weaknessID, value)
+    if not value then value = nil end
+    TEARollHelper.db.profile.weaknesses[weaknessID] = value
+    local event = value and EVENTS.WEAKNESS_ADDED or EVENTS.WEAKNESS_REMOVED
+    bus.fire(event, weaknessID)
+end
+
 function clearExcessTraits()
     local maxTraits = rules.traits.calculateMaxTraits()
     for i = maxTraits + 1, #TEARollHelper.db.profile.traits do
@@ -145,3 +160,7 @@ character.hasRacialTrait = hasRacialTrait
 
 character.getNumWeaknesses = getNumWeaknesses
 character.setNumWeaknesses = setNumWeaknesses
+
+character.hasWeaknessByID = hasWeaknessByID
+character.hasWeakness = hasWeakness
+character.togglePlayerWeaknessByID = togglePlayerWeaknessByID

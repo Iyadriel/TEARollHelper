@@ -25,6 +25,7 @@ local defaults = {
             [3] = TRAITS.OTHER.id
         },
         numWeaknesses = 0,
+        weaknesses = {},
         racialTraitID = select(3, UnitRace("player"))
     },
     global = {

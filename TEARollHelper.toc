@@ -14,6 +14,7 @@ ui.lua
 resources/feats.lua
 resources/racialTraits.lua
 resources/traits.lua
+resources/weaknesses.lua
 
 actions.lua
 character.lua
@@ -55,6 +56,7 @@ ui/chat.lua
 ui/config.lua
 ui/config/character.lua
 ui/config/character/traits.lua
+ui/config/character/weaknesses.lua
 ui/config/settings.lua
 
 ui/turn.lua
