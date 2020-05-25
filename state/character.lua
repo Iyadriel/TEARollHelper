@@ -164,6 +164,13 @@ bus.addListener(EVENTS.CHARACTER_STAT_CHANGED, function(stat, value)
     end
 end)
 
+bus.addListener(EVENTS.RACIAL_TRAIT_CHANGED, function()
+    if characterState.state.featsAndTraits.racialTrait.get() then
+        characterState.state.featsAndTraits.racialTrait.set(nil)
+        TEARollHelper:Debug("Deactivated racial trait because racial trait in character sheet changed.")
+    end
+end)
+
 bus.addListener(EVENTS.WEAKNESS_ADDED, function(weaknessID)
     if weaknessID == WEAKNESSES.FRAGILE.id then
         bus.fire(EVENTS.CHARACTER_MAX_HEALTH, character.getPlayerMaxHP())

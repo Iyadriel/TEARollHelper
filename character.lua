@@ -124,6 +124,7 @@ end
 
 local function setPlayerRacialTraitByID(racialTraitID)
     TEARollHelper.db.profile.racialTraitID = racialTraitID
+    bus.fire(EVENTS.RACIAL_TRAIT_CHANGED, racialTraitID)
 end
 
 local function setPlayerRacialTrait(racialTrait)

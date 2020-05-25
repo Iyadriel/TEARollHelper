@@ -9,6 +9,7 @@ local EVENTS = {
     FEAT_CHANGED = "FEAT_CHANGED", -- featID
     WEAKNESS_ADDED = "WEAKNESS_ADDED", -- weaknessID
     WEAKNESS_REMOVED = "WEAKNESS_REMOVED", -- weaknessID
+    RACIAL_TRAIT_CHANGED = "RACIAL_TRAIT_CHANGED", -- racialTraitID
 
     -- Resources
     FEAT_CHARGES_CHANGED = "FEAT_CHARGES_CHANGED", -- featID, numCharges
