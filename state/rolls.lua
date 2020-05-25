@@ -40,6 +40,8 @@ end
 
 bus.addListener(EVENTS.CHARACTER_STAT_CHANGED, resetSlots)
 bus.addListener(EVENTS.FEAT_CHANGED, resetSlots)
+bus.addListener(EVENTS.TRAITS_CHANGED, resetSlots)
+bus.addListener(EVENTS.TURN_CHANGED, resetSlots)
 
 bus.addListener(EVENTS.FEAT_CHARGES_CHANGED, function(featID, numCharges)
     if featID == FEATS.BLOOD_HARVEST.id and numCharges < state.attack.numBloodHarvestSlots then
