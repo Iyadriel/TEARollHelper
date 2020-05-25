@@ -69,6 +69,14 @@ local function resetRollMode()
     setRollMode(ROLL_MODES.NORMAL)
 end
 
+local function resetRollValues()
+    setCurrentRoll(1)
+    resetRollMode()
+    rollValues.preppedRoll = nil
+    rollValues.prepMode = false
+    rollValues.rollIsCrit = false
+end
+
 local function sendRoll()
     events.listenForRolls()
     RandomRoll(1, rules.rolls.MAX_ROLL)
@@ -151,6 +159,8 @@ function handleRollResult(result)
 end
 
 bus.addListener(EVENTS.COMBAT_OVER, resetRollMode)
+bus.addListener(EVENTS.FEAT_CHANGED, resetRollValues) -- in case of crit threshold change
+bus.addListener(EVENTS.RACIAL_TRAIT_CHANGED, resetRollValues) -- in case of crit threshold change
 bus.addListener(EVENTS.TURN_CHANGED, resetRollMode)
 
 turns.ROLL_MODES = ROLL_MODES
