@@ -30,19 +30,19 @@ ui.modules.config.modules.character.modules.weaknesses.getOptions = function(opt
             notifyChange()
         end,
         args = (function()
-            local options = {}
+            local weaknessOptions = {}
             for i = 1, #weaknesses.WEAKNESS_KEYS do
                 local key = weaknesses.WEAKNESS_KEYS[i]
                 local weakness = weaknesses.WEAKNESSES[key]
 
-                options[key] = {
+                weaknessOptions[key] = {
                     order = i,
                     type = "toggle",
                     name = weakness.name,
                     desc = weakness.desc,
                 }
             end
-            return options
+            return weaknessOptions
         end)(),
     }
 end

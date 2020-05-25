@@ -218,7 +218,7 @@ ui.modules.config.modules.character.getOptions = function()
             },
             weaknessNote = {
                 type = "description",
-                name = COLOURS.NOTE .. "Not all wweaknesses are currently supported, but the amount of weaknesses you have affects how many traits you can have.|n ",
+                name = COLOURS.NOTE .. "Not all weaknesses are currently supported, but the amount of weaknesses you have affects how many traits you can have.|n ",
                 order = 15,
             },
             racialTrait = {
