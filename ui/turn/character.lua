@@ -145,8 +145,27 @@ ui.modules.turn.modules.character.getOptions = function(options)
                     },
                 }
             },
-            updateTRP = {
+            turn_character_fatePoints = {
                 order = 4,
+                type = "range",
+                name = "Fate Points",
+                desc = "How many Fate Points you have left",
+                min = 0,
+                max = rules.rolls.getMaxFatePoints(),
+                step = 1,
+                hidden = function()
+                    return rules.rolls.getMaxFatePoints() == 0
+                end,
+                get = state.numFatePoints.get,
+                set = function(info, value)
+                    state.numFatePoints.set(value)
+                end,
+                dialogControl = TEARollHelper:CreateCustomSlider("turn_character_fatePoints", {
+                    max = rules.rolls.getMaxFatePoints
+                })
+            },
+            updateTRP = {
+                order = 5,
                 type = "execute",
                 name = "Update Total RP",
                 desc = "Update your Total RP 'Currently' with your current/max HP",
@@ -169,7 +188,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                 end,
             },
             autoUpdateTRPNote = {
-                order = 5,
+                order = 6,
                 type = "description",
                 name = COLOURS.NOTE .. " |nYour Total RP is set to update automatically when needed.",
                 hidden = function()

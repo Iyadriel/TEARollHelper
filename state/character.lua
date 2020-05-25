@@ -7,10 +7,12 @@ local rules = ns.rules
 local traits = ns.resources.traits
 local characterState = ns.state.character
 local turnState = ns.state.turn
+local weaknesses = ns.resources.weaknesses
 
 local EVENTS = bus.EVENTS
 local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
+local WEAKNESSES = weaknesses.WEAKNESSES
 local state
 
 characterState.initState = function()
@@ -27,6 +29,8 @@ characterState.initState = function()
             numSecondWindCharges = TRAITS.SECOND_WIND.numCharges,
             numVindicationCharges = TRAITS.VINDICATION.numCharges,
         },
+
+        numFatePoints = rules.rolls.getMaxFatePoints(),
 
         buffs = {
             offence = 0,
@@ -93,6 +97,14 @@ characterState.state = {
         numSecondWindCharges = basicGetSet("featsAndTraits", "numSecondWindCharges"),
         numVindicationCharges = basicGetSet("featsAndTraits", "numVindicationCharges"),
     },
+    numFatePoints ={
+        get = function ()
+            return state.numFatePoints
+        end,
+        set = function (value)
+            state.numFatePoints = value
+        end
+    },
     buffs = {
         offence = basicGetSet("buffs", "offence"),
         defence = basicGetSet("buffs", "defence"),
@@ -145,6 +157,28 @@ bus.addListener(EVENTS.CHARACTER_STAT_CHANGED, function(stat, value)
         elseif hp < maxHP and not turnState.state.inCombat.get() then
             characterState.state.health.set(maxHP)
             TEARollHelper:Debug("Increased remaining HP because stamina stat changed.")
+        end
+    end
+end)
+
+bus.addListener(EVENTS.WEAKNESS_ADDED, function(weaknessID)
+    if weaknessID == WEAKNESSES.FATELESS.id then
+        local numFatePoints = characterState.state.numFatePoints.get()
+        local maxFatePoints = rules.rolls.getMaxFatePoints()
+        if numFatePoints > maxFatePoints then
+            characterState.state.numFatePoints.set(maxFatePoints)
+            TEARollHelper:Debug("Reduced remaining fate points because player now has Fateless weakness.")
+        end
+    end
+end)
+
+bus.addListener(EVENTS.WEAKNESS_REMOVED, function(weaknessID)
+    if weaknessID == WEAKNESSES.FATELESS.id then
+        local numFatePoints = characterState.state.numFatePoints.get()
+        local maxFatePoints = rules.rolls.getMaxFatePoints()
+        if numFatePoints < maxFatePoints and not turnState.state.inCombat.get() then
+            characterState.state.numFatePoints.set(maxFatePoints)
+            TEARollHelper:Debug("Increased remaining fate points because player no longer has Fateless weakness.")
         end
     end
 end)

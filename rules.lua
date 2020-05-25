@@ -3,9 +3,11 @@ local _, ns = ...
 local character = ns.character
 local feats = ns.resources.feats
 local racialTraits = ns.resources.racialTraits
+local weaknesses = ns.resources.weaknesses
 
 local FEATS = feats.FEATS
 local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
+local WEAKNESSES = weaknesses.WEAKNESSES
 
 local MAX_ROLL = 20
 
@@ -18,6 +20,10 @@ local function isCrit(roll)
         critReq = critReq - 1
     end
     return roll >= critReq
+end
+
+local function getMaxFatePoints()
+    return character.hasWeakness(WEAKNESSES.FATELESS) and 0 or 1
 end
 
 local function calculateOffenceStat(offence, buff)
@@ -39,6 +45,7 @@ end
 ns.rules.rolls = {
     MAX_ROLL = MAX_ROLL,
     isCrit = isCrit,
+    getMaxFatePoints = getMaxFatePoints,
 }
 
 -- For use by other rule modules
