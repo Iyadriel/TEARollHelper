@@ -114,7 +114,17 @@ characterState.state = {
     }
 }
 
-characterState.summariseState = summariseState
+local function updateGreaterHealSlots(reason)
+    local remainingSlots = characterState.state.healing.numGreaterHealSlots.get()
+    local maxSlots = rules.healing.getMaxGreaterHealSlots()
+    if remainingSlots > maxSlots then
+        characterState.state.healing.numGreaterHealSlots.set(maxSlots)
+        TEARollHelper:Debug("Reduced remaining Greater Heal charges because " .. reason)
+    elseif remainingSlots < maxSlots and not turnState.state.inCombat.get() then
+        characterState.state.healing.numGreaterHealSlots.set(maxSlots)
+        TEARollHelper:Debug("Increased remaining Greater Heal charges because " .. reason)
+    end
+end
 
 bus.addListener(EVENTS.COMBAT_OVER, function()
     local getCharges = characterState.state.featsAndTraits.numSecondWindCharges.get
@@ -150,18 +160,14 @@ bus.addListener(EVENTS.CHARACTER_STAT_CHANGED, function(stat, value)
             TEARollHelper:Debug("Increased remaining " .. FEATS.BLOOD_HARVEST.name .. " charges because offence stat changed.")
         end
     elseif stat == "spirit" then
-        local remainingSlots = characterState.state.healing.numGreaterHealSlots.get()
-        local maxSlots = rules.healing.getMaxGreaterHealSlots()
-        if remainingSlots > maxSlots then
-            characterState.state.healing.numGreaterHealSlots.set(maxSlots)
-            TEARollHelper:Debug("Reduced remaining Greater Heal charges because spirit stat changed.")
-        elseif remainingSlots < maxSlots and not turnState.state.inCombat.get() then
-            characterState.state.healing.numGreaterHealSlots.set(maxSlots)
-            TEARollHelper:Debug("Increased remaining Greater Heal charges because spirit stat changed.")
-        end
+        updateGreaterHealSlots("spirit stat changed")
     elseif stat == "stamina" then
         bus.fire(EVENTS.CHARACTER_MAX_HEALTH, character.getPlayerMaxHP())
     end
+end)
+
+bus.addListener(EVENTS.FEAT_CHANGED, function()
+    updateGreaterHealSlots("feat changed")
 end)
 
 bus.addListener(EVENTS.RACIAL_TRAIT_CHANGED, function()
@@ -196,3 +202,5 @@ bus.addListener(EVENTS.WEAKNESS_REMOVED, function(weaknessID)
         end
     end
 end)
+
+characterState.summariseState = summariseState
