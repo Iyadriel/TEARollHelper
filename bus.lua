@@ -19,6 +19,7 @@ local EVENTS = {
 
     -- Character effects
     DAMAGE_TAKEN = "DAMAGE_TAKEN", --dmgTaken
+    HEALED = "HEALED", -- amountHealed, netAmountHealed, overHealing
 
     -- Turn
     COMBAT_STARTED = "COMBAT_STARTED",

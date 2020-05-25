@@ -78,14 +78,23 @@ characterState.state = {
         end,
         set = function(health)
             if health ~= state.health then
-            state.health = health
-            bus.fire(EVENTS.CHARACTER_HEALTH, state.health)
+                state.health = health
+                bus.fire(EVENTS.CHARACTER_HEALTH, state.health)
             end
         end,
         damage = function(dmgTaken)
             state.health = state.health - dmgTaken
             bus.fire(EVENTS.CHARACTER_HEALTH, state.health)
             bus.fire(EVENTS.DAMAGE_TAKEN, dmgTaken)
+        end,
+        heal = function(amountHealed)
+            local maxHP = character.getPlayerMaxHP()
+            local overhealing = max(0, state.health + amountHealed - maxHP)
+            local netAmountHealed = amountHealed - overhealing
+
+            characterState.state.health.set(state.health + netAmountHealed)
+
+            bus.fire(EVENTS.HEALED, amountHealed, netAmountHealed, overhealing)
         end
     },
     healing = {
