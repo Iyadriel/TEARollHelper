@@ -2,6 +2,9 @@ local _, ns = ...
 
 local character = ns.character
 local rules = ns.rules
+local weaknesses = ns.resources.weaknesses
+
+local WEAKNESSES = weaknesses.WEAKNESSES
 
 local BASE_STAMINA = 25
 
@@ -84,7 +87,13 @@ local function getAvailableStatPoints()
 end
 
 local function calculateMaxHP(stamina)
-    return BASE_STAMINA + (stamina * 2)
+    local maxHP = BASE_STAMINA + (stamina * 2)
+
+    if character.hasWeakness(WEAKNESSES.FRAGILE) then
+        maxHP = maxHP - 8
+    end
+
+    return maxHP
 end
 
 rules.stats = {

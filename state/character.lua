@@ -124,6 +124,18 @@ bus.addListener(EVENTS.COMBAT_OVER, function()
     end
 end)
 
+bus.addListener(EVENTS.CHARACTER_MAX_HEALTH, function(maxHP)
+    local hp = characterState.state.health.get()
+
+    if hp > maxHP then
+        characterState.state.health.set(maxHP)
+        TEARollHelper:Debug("Reduced remaining HP because max HP changed.")
+    elseif hp < maxHP and not turnState.state.inCombat.get() then
+        characterState.state.health.set(maxHP)
+        TEARollHelper:Debug("Increased remaining HP because max HP changed.")
+    end
+end)
+
 bus.addListener(EVENTS.CHARACTER_STAT_CHANGED, function(stat, value)
     if stat == "offence" then
         local remainingSlots = characterState.state.featsAndTraits.numBloodHarvestSlots.get()
@@ -146,23 +158,14 @@ bus.addListener(EVENTS.CHARACTER_STAT_CHANGED, function(stat, value)
             TEARollHelper:Debug("Increased remaining Greater Heal charges because spirit stat changed.")
         end
     elseif stat == "stamina" then
-        local hp = characterState.state.health.get()
-        local maxHP = rules.stats.calculateMaxHP(value)
-
-        bus.fire(EVENTS.CHARACTER_MAX_HEALTH, maxHP)
-
-        if hp > maxHP then
-            characterState.state.health.set(maxHP)
-            TEARollHelper:Debug("Reduced remaining HP because stamina stat changed.")
-        elseif hp < maxHP and not turnState.state.inCombat.get() then
-            characterState.state.health.set(maxHP)
-            TEARollHelper:Debug("Increased remaining HP because stamina stat changed.")
-        end
+        bus.fire(EVENTS.CHARACTER_MAX_HEALTH, character.getPlayerMaxHP())
     end
 end)
 
 bus.addListener(EVENTS.WEAKNESS_ADDED, function(weaknessID)
-    if weaknessID == WEAKNESSES.FATELESS.id then
+    if weaknessID == WEAKNESSES.FRAGILE.id then
+        bus.fire(EVENTS.CHARACTER_MAX_HEALTH, character.getPlayerMaxHP())
+    elseif weaknessID == WEAKNESSES.FATELESS.id then
         local numFatePoints = characterState.state.numFatePoints.get()
         local maxFatePoints = rules.rolls.getMaxFatePoints()
         if numFatePoints > maxFatePoints then
@@ -173,7 +176,9 @@ bus.addListener(EVENTS.WEAKNESS_ADDED, function(weaknessID)
 end)
 
 bus.addListener(EVENTS.WEAKNESS_REMOVED, function(weaknessID)
-    if weaknessID == WEAKNESSES.FATELESS.id then
+    if weaknessID == WEAKNESSES.FRAGILE.id then
+        bus.fire(EVENTS.CHARACTER_MAX_HEALTH, character.getPlayerMaxHP())
+    elseif weaknessID == WEAKNESSES.FATELESS.id then
         local numFatePoints = characterState.state.numFatePoints.get()
         local maxFatePoints = rules.rolls.getMaxFatePoints()
         if numFatePoints < maxFatePoints and not turnState.state.inCombat.get() then
