@@ -6,15 +6,20 @@ local feats = ns.resources.feats
 local racialTraits = ns.resources.racialTraits
 local rules = ns.rules
 local traits = ns.resources.traits
+local weaknesses = ns.resources.weaknesses
 
 local EVENTS = bus.EVENTS
 local FEATS = feats.FEATS
+local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
 local TRAITS = traits.TRAITS
+local WEAKNESSES = weaknesses.WEAKNESSES
 
 local getPlayerOffence, getPlayerDefence, getPlayerSpirit, getPlayerStamina, getPlayerMaxHP
 local hasOffenceMastery, hasSpiritMastery
 local getPlayerFeat, hasFeat, hasFeatByID, setPlayerFeatByID, getPlayerRacialTrait, hasRacialTrait
 local clearExcessTraits
+
+-- [[ Stats ]]
 
 function getPlayerOffence()
     return tonumber(TEARollHelper.db.profile.stats.offence)
@@ -48,6 +53,8 @@ function hasSpiritMastery()
     return getPlayerSpirit() >= 6
 end
 
+-- [[ Feats ]]
+
 function getPlayerFeat()
     return FEATS[TEARollHelper.db.profile.featID]
 end
@@ -65,6 +72,8 @@ function setPlayerFeatByID(featID)
     clearExcessTraits()
     bus.fire(EVENTS.FEAT_CHANGED, featID)
 end
+
+-- [[ Traits ]]
 
 local function hasTraitByID(traitID)
     for slot, id in pairs(TEARollHelper.db.profile.traits) do
@@ -96,6 +105,15 @@ local function clearPlayerTrait(index)
     TEARollHelper.db.profile.traits[index] = TRAITS.OTHER.id
 end
 
+function clearExcessTraits()
+    local maxTraits = rules.traits.calculateMaxTraits()
+    for i = maxTraits + 1, #TEARollHelper.db.profile.traits do
+        clearPlayerTrait(i)
+    end
+end
+
+-- [[ Racial traits ]]
+
 function getPlayerRacialTrait()
     return racialTraits.getRacialTrait(TEARollHelper.db.profile.racialTraitID)
 end
@@ -103,6 +121,16 @@ end
 function hasRacialTrait(racialTrait)
     return TEARollHelper.db.profile.racialTraitID == racialTrait.id
 end
+
+local function setPlayerRacialTraitByID(racialTraitID)
+    TEARollHelper.db.profile.racialTraitID = racialTraitID
+end
+
+local function setPlayerRacialTrait(racialTrait)
+    setPlayerRacialTraitByID(racialTrait.id)
+end
+
+-- [[ Weaknesses ]]
 
 local function getNumWeaknesses()
     return TEARollHelper.db.profile.numWeaknesses
@@ -128,12 +156,11 @@ local function togglePlayerWeaknessByID(weaknessID, value)
     bus.fire(event, weaknessID)
 end
 
-function clearExcessTraits()
-    local maxTraits = rules.traits.calculateMaxTraits()
-    for i = maxTraits + 1, #TEARollHelper.db.profile.traits do
-        clearPlayerTrait(i)
+bus.addListener(EVENTS.WEAKNESS_ADDED, function(weaknessID)
+    if weaknessID == WEAKNESSES.OUTCAST.id then
+        setPlayerRacialTrait(RACIAL_TRAITS.OUTCAST)
     end
-end
+end)
 
 character.getPlayerOffence = getPlayerOffence
 character.getPlayerDefence = getPlayerDefence
@@ -157,6 +184,7 @@ character.setPlayerTraitByID = setPlayerTraitByID
 
 character.getPlayerRacialTrait = getPlayerRacialTrait
 character.hasRacialTrait = hasRacialTrait
+character.setPlayerRacialTraitByID = setPlayerRacialTraitByID
 
 character.getNumWeaknesses = getNumWeaknesses
 character.setNumWeaknesses = setNumWeaknesses

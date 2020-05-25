@@ -1,6 +1,5 @@
 local _, ns = ...
 
-local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
 local COLOURS = TEARollHelper.COLOURS
 
 local character = ns.character
@@ -11,11 +10,6 @@ local ui = ns.ui
 local state = characterState.state
 
 ui.modules.buffs = {}
-
--- Update config UI, in case it is also open
-local function notifyChange()
-    AceConfigRegistry:NotifyChange(ui.modules.config.name)
-end
 
 --[[ local options = {
     order: Number
@@ -106,7 +100,6 @@ ui.modules.buffs.getOptions = function(options)
                 end,
                 set = function(info, value)
                     rollsState.state.racialTrait = (value and character.getPlayerRacialTrait() or nil)
-                    notifyChange() -- so we can disable/enable trait selection in character sheet
                 end
             },
         }

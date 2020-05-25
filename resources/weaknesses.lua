@@ -1,7 +1,7 @@
 local _, ns = ...
 
 local weaknesses = ns.resources.weaknesses
-weaknesses.WEAKNESS_KEYS = {"FATELESS", "FRAGILE"}
+weaknesses.WEAKNESS_KEYS = {"FATELESS", "FRAGILE", "OUTCAST"}
 
 weaknesses.WEAKNESSES = {
 --[[     BRUTE = {
@@ -20,6 +20,12 @@ weaknesses.WEAKNESSES = {
         id = "FRAGILE",
         name = "Fragile",
         desc = "Reduce your max HP by 8.",
+        supported = true,
+    },
+    OUTCAST = {
+        id = "OUTCAST",
+        name = "Outcast",
+        desc = "You no longer benefit from your Racial Trait.",
         supported = true,
     },
 }

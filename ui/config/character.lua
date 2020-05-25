@@ -8,13 +8,14 @@ local bus = ns.bus
 local character = ns.character
 local feats = ns.resources.feats
 local racialTraits = ns.resources.racialTraits
-local rolls = ns.state.rolls
 local rules = ns.rules
 local ui = ns.ui
+local weaknesses = ns.resources.weaknesses
 
 local EVENTS = bus.EVENTS
 local STAT_MIN_VALUE = rules.stats.STAT_MIN_VALUE
 local STAT_MAX_VALUE = rules.stats.STAT_MAX_VALUE
+local WEAKNESSES = weaknesses.WEAKNESSES
 
 local RACIAL_TRAIT_LIST = {}
 for key, trait in pairs(racialTraits.RACIAL_TRAITS) do
@@ -225,14 +226,14 @@ ui.modules.config.modules.character.getOptions = function()
                 name = "Racial trait",
                 type = "select",
                 disabled = function()
-                    return rolls.state.racialTrait ~= nil
+                    return character.hasWeakness(WEAKNESSES.OUTCAST)
                 end,
                 order = 16,
                 get = function()
                     return TEARollHelper.db.profile.racialTraitID
                 end,
                 set = function(info, value)
-                    TEARollHelper.db.profile.racialTraitID = tonumber(value)
+                    character.setPlayerRacialTraitByID(value)
                     notifyChange()
                 end,
                 values = RACIAL_TRAIT_LIST
@@ -257,16 +258,6 @@ ui.modules.config.modules.character.getOptions = function()
                 end,
                 fontSize = "medium",
                 order = 17
-            },
-            racialTraitDisabledNote = {
-                type = "description",
-                name = function()
-                    if rolls.state.racialTraits ~= nil then
-                        return COLOURS.NOTE .. "You must deactivate your racial trait before you can change it."
-                    end
-                    return ""
-                end,
-                order = 18
             }
         }
     }
