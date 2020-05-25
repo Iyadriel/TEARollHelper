@@ -42,7 +42,11 @@ function getPlayerMaxHP()
 end
 
 local function setStat(stat, value)
+    local oldValue = TEARollHelper.db.profile.stats[stat]
     TEARollHelper.db.profile.stats[stat] = value
+    if oldValue ~= value then
+        bus.fire(EVENTS.CHARACTER_STAT_CHANGED, stat, value)
+    end
 end
 
 function hasOffenceMastery()

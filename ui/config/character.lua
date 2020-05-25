@@ -4,7 +4,6 @@ local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
 
 local COLOURS = TEARollHelper.COLOURS
 
-local bus = ns.bus
 local character = ns.character
 local feats = ns.resources.feats
 local racialTraits = ns.resources.racialTraits
@@ -12,7 +11,6 @@ local rules = ns.rules
 local ui = ns.ui
 local weaknesses = ns.resources.weaknesses
 
-local EVENTS = bus.EVENTS
 local STAT_MIN_VALUE = rules.stats.STAT_MIN_VALUE
 local STAT_MAX_VALUE = rules.stats.STAT_MAX_VALUE
 local WEAKNESSES = weaknesses.WEAKNESSES
@@ -58,7 +56,6 @@ ui.modules.config.modules.character.getOptions = function()
                 set = function(info, value)
                     local stat = info[#info]
                     character.setStat(stat, value)
-                    bus.fire(EVENTS.CHARACTER_STAT_CHANGED, stat, value)
                     -- if slash command, print feedback
                     if info[0] and info[0] ~= "" then
                         TEARollHelper:Print("Your character's " .. stat .. " has been set to "..value..".")
