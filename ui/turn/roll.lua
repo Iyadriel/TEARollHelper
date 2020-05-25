@@ -53,11 +53,17 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 max = rules.rolls.MAX_ROLL,
                 step = 1,
                 width = 1.1,
+                disabled = function()
+                    -- messing with roll result manually when it is the result of a prep will break crit detection
+                    -- eventually we should get rid of manually changing the roll result
+                    return turns.getRollValues().preppedRoll ~= nil
+                end,
                 get = function()
                     return turns.getRollValues().roll
                 end,
                 set = function(info, value)
                     turns.setCurrentRoll(value)
+                    turns.updateIsCrit()
                 end
             },
             performRoll = {

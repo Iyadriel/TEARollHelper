@@ -57,6 +57,10 @@ function getRollMode()
     return rollValues.rollMode
 end
 
+local function updateIsCrit()
+    rollValues.rollIsCrit = rules.rolls.isCrit(rollValues.roll)
+end
+
 function setRollMode(mode)
     rollValues.rollMode = mode
 end
@@ -86,6 +90,8 @@ function doRoll()
     rollValues.isRolling = true
     if rollValues.prepMode then
         rollValues.isPrepRolling = true
+    else
+        rollValues.preppedRoll = nil
     end
 
     notifyChange() -- so we can update the button state
@@ -153,5 +159,6 @@ turns.isRolling = isRolling
 turns.setCurrentRoll = setCurrentRoll
 turns.getRollMode = getRollMode
 turns.setRollMode = setRollMode
+turns.updateIsCrit = updateIsCrit
 turns.roll = doRoll
 turns.handleRollResult = handleRollResult
