@@ -45,7 +45,13 @@ local function calculateAttackDmg(threshold, attackValue)
 end
 
 local function applyCritModifier(dmg)
-    return dmg * 2
+    dmg = dmg * 2
+
+    if character.hasRacialTrait(RACIAL_TRAITS.MIGHT_OF_THE_MOUNTAIN) then
+        dmg = dmg + 4
+    end
+
+    return dmg
 end
 
 -- Feat: Adrenaline

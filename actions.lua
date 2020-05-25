@@ -136,6 +136,10 @@ local function getHealing(roll, isCrit, spirit, buff, numGreaterHealSlots, mercy
         playersHealableWithParagon = rules.healing.calculateNumPlayersHealableWithParagon()
     end
 
+    if isCrit then
+        amountHealed = rules.healing.applyCritModifier(amountHealed)
+    end
+
     return {
         amountHealed = amountHealed,
         isCrit = isCrit,

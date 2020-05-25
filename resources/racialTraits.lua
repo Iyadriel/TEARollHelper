@@ -83,7 +83,8 @@ local RACIAL_TRAITS = {
         desc = DESCRIPTIONS.MIGHT_OF_THE_MOUNTAIN,
         name = "Might of the Mountain",
         icon = "Interface\\Icons\\inv_hammer_05",
-        supported = false,
+        note = "This is compatible with effects that reduce the critical hit threshold.",
+        supported = true,
         manualActivation = false
     },
     QUICKNESS = {

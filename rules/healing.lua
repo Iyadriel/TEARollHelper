@@ -2,9 +2,11 @@ local _, ns = ...
 
 local character = ns.character
 local feats = ns.resources.feats
+local racialTraits = ns.resources.racialTraits
 local rules = ns.rules
 
 local FEATS = feats.FEATS
+local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
 
 local NUM_SPIRIT_PER_GREATER_HEAL_SLOT = 2
 
@@ -26,6 +28,14 @@ local function calculateAmountHealed(healValue)
     end
 
     return 0
+end
+
+local function applyCritModifier(amountHealed)
+    if character.hasRacialTrait(RACIAL_TRAITS.MIGHT_OF_THE_MOUNTAIN) then
+        amountHealed = amountHealed + 2
+    end
+
+    return amountHealed
 end
 
 local function getMaxGreaterHealSlots()
@@ -88,6 +98,7 @@ end
 rules.healing = {
     calculateHealValue = calculateHealValue,
     calculateAmountHealed = calculateAmountHealed,
+    applyCritModifier = applyCritModifier,
     getMaxGreaterHealSlots = getMaxGreaterHealSlots,
     calculateGreaterHealBonus = calculateGreaterHealBonus,
     getMaxExcess = getMaxExcess,

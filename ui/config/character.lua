@@ -227,7 +227,7 @@ ui.modules.config.modules.character.getOptions = function()
                 end,
                 order = 16,
                 get = function()
-                    return TEARollHelper.db.profile.racialTraitID
+                    return character.getPlayerRacialTrait().id
                 end,
                 set = function(info, value)
                     character.setPlayerRacialTraitByID(value)
@@ -238,13 +238,13 @@ ui.modules.config.modules.character.getOptions = function()
             racialTraitDesc = {
                 type = "description",
                 image = function()
-                    local trait = racialTraits.getRacialTrait(TEARollHelper.db.profile.racialTraitID)
+                    local trait = character.getPlayerRacialTrait()
                     return trait and trait.icon
                 end,
                 imageCoords = {.08, .92, .08, .92},
                 name = function()
                     local msg = ""
-                    local trait = racialTraits.getRacialTrait(TEARollHelper.db.profile.racialTraitID)
+                    local trait = character.getPlayerRacialTrait()
                     if trait and trait.desc then
                         if not trait.supported then
                             msg = COLOURS.NOTE .. "(Not implemented)|r "
@@ -255,7 +255,15 @@ ui.modules.config.modules.character.getOptions = function()
                 end,
                 fontSize = "medium",
                 order = 17
-            }
+            },
+            racialTraitNote = {
+                order = 18,
+                type = "description",
+                name = function()
+                    local trait = character.getPlayerRacialTrait()
+                    return COLOURS.NOTE .. (trait and (trait.note and trait.note .. "|n ") or "")
+                end,
+            },
         }
     }
 end
