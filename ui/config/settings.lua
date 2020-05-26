@@ -24,7 +24,7 @@ ui.modules.config.modules.settings.getOptions = function()
                 end
             },
             autoUpdateTRP = {
-                order = 0,
+                order = 1,
                 type = "toggle",
                 name = "Auto update Total RP profile",
                 desc = "When your character's state changes (e.g. when you lose HP), update your Total RP automatically.",
@@ -45,6 +45,19 @@ ui.modules.config.modules.settings.getOptions = function()
                     end
                     return false
                 end
+            },
+            debugMode = {
+                order = 2,
+                type = "toggle",
+                name = "Debug mode",
+                desc = "Don't touch this! I said don't.",
+                width = "full",
+                get = function()
+                    return TEARollHelper.db.global.settings.debug
+                end,
+                set = function(info, value)
+                    TEARollHelper.db.global.settings.debug = value
+                end,
             }
         }
     }
