@@ -1,7 +1,7 @@
 local _, ns = ...
 
 local weaknesses = ns.resources.weaknesses
-weaknesses.WEAKNESS_KEYS = {"CORRUPTED", "FATELESS", "FRAGILE", "OUTCAST"}
+weaknesses.WEAKNESS_KEYS = {"FATELESS", "FRAGILE", "OUTCAST"}
 
 weaknesses.WEAKNESSES = {
 --[[     BRUTE = {
