@@ -1,7 +1,7 @@
 local _, ns = ...
 
 local feats = ns.resources.feats
-feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "COUNTER_FORCE", "EXPANSIVE_ARSENAL", "FOREIGN_DISCIPLE", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "PARAGON", "PHALANX", "PROFESSIONAL", "REAPER", "WARDER"}
+feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "COUNTER_FORCE", "EXPANSIVE_ARSENAL", "FOREIGN_DISCIPLE", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "MONSTER_HUNTER", "PARAGON", "PHALANX", "PROFESSIONAL", "REAPER", "WARDER"}
 
 feats.FEATS = {
     FEATLESS = {
@@ -73,6 +73,13 @@ feats.FEATS = {
         id = "MERCY_FROM_PAIN",
         name = "Mercy from Pain",
         desc = "Every time you deal 5 damage or more to a single enemy, your next healing roll is boosted by +2 HP, if you deal 5 damage or more to multiple enemies at once, your next healing roll is instead boosted by +4HP (does not stack). If you do not use this bonus on your next player turn, it fades.",
+        supported = true
+    },
+    MONSTER_HUNTER = {
+        id = "MONSTER_HUNTER",
+        name = "Monster Hunter",
+        desc = "You have advantage on offense attack rolls against creatures of the following types - Undead, Demon, Void, Eldritch.",
+        note = "Advantage must be enabled manually when rolling.",
         supported = true
     },
     PARAGON = {
