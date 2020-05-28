@@ -22,6 +22,12 @@ local function calculateDamageTaken(threshold, defendValue, dmgRisk)
     return dmgRisk
 end
 
+local function isCrit(roll)
+    local critReq = rules.rolls.getCritReq(roll)
+
+    return roll >= critReq
+end
+
 local function calculateRetaliationDamage(defence)
     local dmg = 1 + defence
 
@@ -36,5 +42,6 @@ rules.defence = {
     calculateDefendValue = calculateDefendValue,
     applyBulwarkBonus = applyBulwarkBonus,
     calculateDamageTaken = calculateDamageTaken,
+    isCrit = isCrit,
     calculateRetaliationDamage = calculateRetaliationDamage
 }

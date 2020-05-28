@@ -2,24 +2,19 @@ local _, ns = ...
 
 local character = ns.character
 local feats = ns.resources.feats
-local racialTraits = ns.resources.racialTraits
 local weaknesses = ns.resources.weaknesses
 
 local FEATS = feats.FEATS
-local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
 local WEAKNESSES = weaknesses.WEAKNESSES
 
 local MAX_ROLL = 20
 
-local function isCrit(roll)
+local function getCritReq()
     local critReq = MAX_ROLL
     if character.hasFeat(FEATS.KEEN_SENSE) then
         critReq = critReq - 1
     end
-    if character.hasRacialTrait(RACIAL_TRAITS.VICIOUSNESS) then
-        critReq = critReq - 1
-    end
-    return roll >= critReq
+    return critReq
 end
 
 local function getMaxFatePoints()
@@ -40,7 +35,7 @@ end
 
 ns.rules.rolls = {
     MAX_ROLL = MAX_ROLL,
-    isCrit = isCrit,
+    getCritReq = getCritReq,
     getMaxFatePoints = getMaxFatePoints,
 }
 

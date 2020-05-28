@@ -36,8 +36,15 @@ local function calculateBuffAmount(buffValue)
     return ceil(buffValue / 2)
 end
 
+local function isCrit(roll)
+    local critReq = rules.rolls.getCritReq(roll)
+
+    return roll >= critReq
+end
+
 rules.buffing = {
     usesInspiringPresence = usesInspiringPresence,
     calculateBuffValue = calculateBuffValue,
-    calculateBuffAmount = calculateBuffAmount
+    calculateBuffAmount = calculateBuffAmount,
+    isCrit = isCrit,
 }

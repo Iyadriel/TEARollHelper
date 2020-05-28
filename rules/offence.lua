@@ -19,6 +19,16 @@ local CRIT_TYPES = {
 
 -- Crits
 
+local function isCrit(roll)
+    local critReq = rules.rolls.getCritReq(roll)
+
+    if character.hasRacialTrait(RACIAL_TRAITS.VICIOUSNESS) then
+        critReq = critReq - 1
+    end
+
+    return roll >= critReq
+end
+
 local function getCritType()
     if character.hasFeat(FEATS.REAPER) then
         return CRIT_TYPES.REAPER
@@ -132,6 +142,7 @@ local function getEntropicEmbraceDmg()
 end
 
 rules.offence = {
+    isCrit = isCrit,
     CRIT_TYPES = CRIT_TYPES,
     getCritType = getCritType,
 

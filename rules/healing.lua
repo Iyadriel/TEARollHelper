@@ -30,6 +30,12 @@ local function calculateAmountHealed(healValue)
     return 0
 end
 
+local function isCrit(roll)
+    local critReq = rules.rolls.getCritReq(roll)
+
+    return roll >= critReq
+end
+
 local function applyCritModifier(amountHealed)
     if character.hasRacialTrait(RACIAL_TRAITS.MIGHT_OF_THE_MOUNTAIN) then
         amountHealed = amountHealed + 2
@@ -98,6 +104,7 @@ end
 rules.healing = {
     calculateHealValue = calculateHealValue,
     calculateAmountHealed = calculateAmountHealed,
+    isCrit = isCrit,
     applyCritModifier = applyCritModifier,
     getMaxGreaterHealSlots = getMaxGreaterHealSlots,
     calculateGreaterHealBonus = calculateGreaterHealBonus,
