@@ -46,7 +46,7 @@ characterState.initState = function()
         newPlayerBuff = {
             stat = "offence",
             amount = 1,
-            label = "Buff",
+            label = "",
         },
     }
 end
@@ -158,7 +158,7 @@ characterState.state = {
                 local statBuff = characterState.state.buffs[buff.stat]
                 statBuff.set(statBuff.get() + buff.amount)
             end
-            characterState.state.newPlayerBuff.label.set("Buff")
+            characterState.state.newPlayerBuff.label.set("")
         end,
         remove = function (buff)
             local buffID = buff.id

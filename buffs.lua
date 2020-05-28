@@ -52,6 +52,10 @@ local function addStatBuff(stat, amount, label)
         removeBuff(existingBuff)
     end
 
+    if label:trim() == "" then
+        label = STAT_LABELS[stat]
+    end
+
     addBuff({
         type = BUFF_TYPES.STAT,
         label = label,
