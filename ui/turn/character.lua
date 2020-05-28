@@ -41,9 +41,38 @@ ui.modules.turn.modules.character.getOptions = function(options)
         desc = "The current state of your character",
         order = options.order,
         args = {
-            buffs = ui.modules.buffs.getOptions({ order = 0 }),
+            debugView = {
+                order = 0,
+                type = "group",
+                name = "Debug",
+                inline = true,
+                hidden = function()
+                    return not TEARollHelper.db.global.settings.debug
+                end,
+                args = {
+                    statBuffs = {
+                        order = 1,
+                        type = "description",
+                        name = function()
+                            local out = {
+                                "Offence buff: ",
+                                state.buffs.offence.get(),
+                                "|nDefence buff: ",
+                                state.buffs.defence.get(),
+                                "|nSpirit buff: ",
+                                state.buffs.spirit.get(),
+                                "|nStamina buff: ",
+                                state.buffs.stamina.get(),
+                            }
+
+                            return table.concat(out)
+                        end,
+                    }
+                }
+            },
+            buffs = ui.modules.buffs.getOptions({ order = 1 }),
             turn_character_hp = {
-                order = 1,
+                order = 2,
                 type = "range",
                 name = "Health",
                 desc = "How much health your character has",
@@ -60,7 +89,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                 })
             },
             healing = {
-                order = 2,
+                order = 3,
                 type = "group",
                 name = "Healing",
                 inline = true,
@@ -103,7 +132,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                 }
             },
             featsAndTraits = {
-                order = 3,
+                order = 4,
                 type = "group",
                 name = "Feats and traits",
                 inline = true,
@@ -136,7 +165,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                 }
             },
             turn_character_fatePoints = {
-                order = 4,
+                order = 5,
                 type = "range",
                 name = "Fate Points",
                 desc = "How many Fate Points you have left",
@@ -155,7 +184,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                 })
             },
             updateTRP = {
-                order = 5,
+                order = 6,
                 type = "execute",
                 name = "Update Total RP",
                 desc = "Update your Total RP 'Currently' with your current/max HP",
@@ -175,7 +204,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                 end,
             },
             autoUpdateTRPNote = {
-                order = 6,
+                order = 7,
                 type = "description",
                 name = COLOURS.NOTE .. " |nYour Total RP is set to update automatically when needed.",
                 hidden = function()
