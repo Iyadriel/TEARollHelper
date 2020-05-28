@@ -93,6 +93,8 @@ local function calculateMaxHP(stamina)
         maxHP = maxHP - 8
     end
 
+    maxHP = max(1, maxHP) -- sanity check
+
     return maxHP
 end
 
