@@ -162,9 +162,6 @@ ui.modules.turn.modules.character.getOptions = function(options)
                 hidden = function()
                     return not integrations.TRP or TEARollHelper.db.global.settings.autoUpdateTRP
                 end,
-                disabled = function()
-                    return TEARollHelper.db.global.settings.autoUpdateTRP
-                end,
                 confirm = function()
                     if not TEARollHelper.db.global.warningsSeen.updateTRP then
                         return "This will allow this addon to overwrite any content you have set in your 'Currently' field."

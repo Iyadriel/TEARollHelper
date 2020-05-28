@@ -33,9 +33,12 @@ function integrations.InitTRPSync()
     end
 
     local function updateCurrently()
-        if not TEARollHelper.db.global.settings.autoUpdateTRP then return end
         local text = ns.state.character.summariseState()
         setCurrently(text)
+    end
+    local function autoUpdateCurrently()
+        if not TEARollHelper.db.global.settings.autoUpdateTRP then return end
+        updateCurrently()
     end
 
 --[[     TRP3_API.Events.registerCallback("REGISTER_DATA_UPDATED", function()
@@ -45,8 +48,8 @@ function integrations.InitTRPSync()
 
     --TEARollHelper.TRP_CONNECTED = true
 
-    bus.addListener(EVENTS.CHARACTER_HEALTH, updateCurrently)
-    bus.addListener(EVENTS.CHARACTER_MAX_HEALTH, updateCurrently)
+    bus.addListener(EVENTS.CHARACTER_HEALTH, autoUpdateCurrently)
+    bus.addListener(EVENTS.CHARACTER_MAX_HEALTH, autoUpdateCurrently)
 
     integrations.TRP = {
         updateCurrently = updateCurrently
