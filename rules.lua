@@ -30,12 +30,8 @@ local function calculateOffenceStat(offence, buff)
     return offence + buff
 end
 
-local function calculateDefenceStat(defence, buff, racialTrait)
-    local stat = defence + buff
-    if racialTraits.equals(racialTrait, RACIAL_TRAITS.QUICKNESS) then
-        stat = stat + 2
-    end
-    return stat
+local function calculateDefenceStat(defence, buff)
+    return defence + buff
 end
 
 local function calculateSpiritStat(spirit, buff)

@@ -93,7 +93,11 @@ local RACIAL_TRAITS = {
         name = "Quickness",
         icon = "Interface\\Icons\\ability_racial_shadowmeld",
         supported = true,
-        manualActivation = true
+        manualActivation = "Forested area",
+        statBuff = {
+            stat = "defence",
+            amount = 2,
+        }
     },
     EXPANSIVE_MIND = {
         id = 7,

@@ -98,18 +98,16 @@ local function getDefence()
     local buff = characterState.buffs.defence.get()
     local values = turns.getRollValues()
     local useBulwark = state.defend.useBulwark
-    local racialTrait = characterState.featsAndTraits.racialTrait.get()
 
-    return actions.getDefence(values.roll, values.rollIsCrit, state.defend.threshold, state.defend.damageRisk, defence, buff, useBulwark, racialTrait)
+    return actions.getDefence(values.roll, values.rollIsCrit, state.defend.threshold, state.defend.damageRisk, defence, buff, useBulwark)
 end
 
 local function getMeleeSave()
     local defence = character.getPlayerDefence()
     local buff = characterState.buffs.defence.get()
     local values = turns.getRollValues()
-    local racialTrait = characterState.featsAndTraits.racialTrait.get()
 
-    return actions.getMeleeSave(values.roll, state.defend.threshold, state.defend.damageRisk, defence, buff, racialTrait)
+    return actions.getMeleeSave(values.roll, state.defend.threshold, state.defend.damageRisk, defence, buff)
 end
 
 local function getRangedSave()

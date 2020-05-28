@@ -2,6 +2,7 @@ local _, ns = ...
 
 local bus = ns.bus
 local characterState = ns.state.character
+local racialTraits = ns.resources.racialTraits
 
 local EVENTS = bus.EVENTS
 
@@ -10,7 +11,8 @@ local BUFF_TYPES = {
 }
 
 local BUFF_SOURCES = {
-    PLAYER = "Player"
+    PLAYER = "Player",
+    RACIAL_TRAIT = "Racial Trait",
 }
 
 -- TODO this doesn't belong here
@@ -28,21 +30,12 @@ local STAT_TYPE_ICONS = {
     stamina = "Interface\\Icons\\spell_holy_wordfortitude",
 }
 
-local buffID = 0
-
 local function addBuff(buff)
-    buff.id = buffID
     characterState.state.activeBuffs.add(buff)
-    buffID = buffID + 1
 end
 
 local function removeBuff(buff)
     characterState.state.activeBuffs.remove(buff)
-end
-
-local function findPlayerStatBuff(stat)
-    local buffs = characterState.state.activeBuffs.getPlayerStatBuffs()
-    return buffs[stat]
 end
 
 local function getRemainingTurns(expireAfterNextTurn)
@@ -51,7 +44,7 @@ local function getRemainingTurns(expireAfterNextTurn)
 end
 
 local function addStatBuff(stat, amount, label, expireAfterNextTurn)
-    local existingBuff = findPlayerStatBuff(stat)
+    local existingBuff = characterState.state.buffLookup.getPlayerStatBuff(stat)
 
     if existingBuff then
         removeBuff(existingBuff)
@@ -62,6 +55,7 @@ local function addStatBuff(stat, amount, label, expireAfterNextTurn)
     end
 
     addBuff({
+        id = "player_" .. stat,
         type = BUFF_TYPES.STAT,
         label = label,
         icon = STAT_TYPE_ICONS[stat],
@@ -77,7 +71,26 @@ local function addStatBuff(stat, amount, label, expireAfterNextTurn)
     bus.fire(EVENTS.STAT_BUFF_ADDED, stat, amount)
 end
 
+local function addRacialBuff(racialTrait)
+    local statBuff = racialTrait.statBuff
+    if statBuff then
+        addBuff({
+            id = "racial",
+            type = BUFF_TYPES.STAT,
+            label = racialTrait.name,
+            icon = racialTrait.icon,
+
+            stat = statBuff.stat,
+            amount = statBuff.amount,
+
+            source = BUFF_SOURCES.RACIAL_TRAIT,
+            racialTraitID = racialTrait.id
+        })
+    end
+end
+
 ns.buffs.BUFF_TYPES = BUFF_TYPES
 ns.buffs.BUFF_SOURCES = BUFF_SOURCES
 ns.buffs.STAT_LABELS = STAT_LABELS
 ns.buffs.addStatBuff = addStatBuff
+ns.buffs.addRacialBuff = addRacialBuff

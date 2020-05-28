@@ -165,7 +165,9 @@ ui.modules.buffs.getOptions = function(options)
                 order = 12,
                 type = "toggle",
                 name = function()
-                    return "Activate racial trait (" .. character.getPlayerRacialTrait().name .. ")"
+                    local trait = character.getPlayerRacialTrait()
+                    if not (trait.supported and trait.manualActivation) then return end
+                    return trait.manualActivation .. " (" .. trait.name .. ")"
                 end,
                 desc = function()
                     return character.getPlayerRacialTrait().desc
@@ -174,14 +176,16 @@ ui.modules.buffs.getOptions = function(options)
                 width = "full",
                 hidden = function()
                     local trait = character.getPlayerRacialTrait()
-                    return not (trait.supported and trait.manualActivation)
+                    return not (trait.supported and trait.manualActivation and state.buffLookup.getRacialBuff() == nil)
                 end,
                 validate = function() return true end,
                 get = function()
-                    return state.featsAndTraits.racialTrait.get() ~= nil
+                    return state.buffLookup.getRacialBuff() ~= nil
                 end,
                 set = function(info, value)
-                    state.featsAndTraits.racialTrait.set(value and character.getPlayerRacialTrait() or nil)
+                    if value then
+                        buffs.addRacialBuff(character.getPlayerRacialTrait())
+                    end
                 end
             }
 

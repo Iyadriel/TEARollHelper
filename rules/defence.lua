@@ -6,8 +6,8 @@ local rules = ns.rules
 
 local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
 
-local function calculateDefendValue(roll, defence, buff, racialTrait)
-    return roll + rules.common.calculateDefenceStat(defence, buff, racialTrait)
+local function calculateDefendValue(roll, defence, buff)
+    return roll + rules.common.calculateDefenceStat(defence, buff)
 end
 
 local function applyBulwarkBonus(defendValue)

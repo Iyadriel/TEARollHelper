@@ -6,10 +6,10 @@ local rules = ns.rules
 
 local FEATS = feats.FEATS
 
-local function calculateMeleeSaveValue(roll, defence, buff, racialTrait)
+local function calculateMeleeSaveValue(roll, defence, buff)
     local value = roll
     if not character.hasFeat(FEATS.COUNTER_FORCE) then
-        value = value + rules.common.calculateDefenceStat(defence, buff, racialTrait)
+        value = value + rules.common.calculateDefenceStat(defence, buff)
     end
     return value
 end

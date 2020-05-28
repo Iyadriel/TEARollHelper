@@ -30,7 +30,6 @@ characterState.initState = function()
             numBulwarkCharges = TRAITS.BULWARK.numCharges,
             numSecondWindCharges = TRAITS.SECOND_WIND.numCharges,
             numVindicationCharges = TRAITS.VINDICATION.numCharges,
-            racialTrait = nil, -- manually activated racial traits
         },
 
         numFatePoints = rules.rolls.getMaxFatePoints(),
@@ -43,6 +42,7 @@ characterState.initState = function()
         },
 
         activeBuffs = {},
+        buffLookup = {},
         newPlayerBuff = {
             stat = "offence",
             amount = 1,
@@ -122,9 +122,8 @@ characterState.state = {
         end),
         numSecondWindCharges = basicGetSet("featsAndTraits", "numSecondWindCharges"),
         numVindicationCharges = basicGetSet("featsAndTraits", "numVindicationCharges"),
-        racialTrait = basicGetSet("featsAndTraits", "racialTrait"),
     },
-    numFatePoints ={
+    numFatePoints = {
         get = function ()
             return state.numFatePoints
         end,
@@ -144,17 +143,10 @@ characterState.state = {
         get = function ()
             return state.activeBuffs
         end,
-        getPlayerStatBuffs = function()
-            local out = {}
-            for _, buff in ipairs(state.activeBuffs) do
-                if buff.source == buffs.BUFF_SOURCES.PLAYER and buff.type == buffs.BUFF_TYPES.STAT then
-                    out[buff.stat] = buff
-                end
-            end
-            return out
-        end,
         add = function(buff)
             table.insert(state.activeBuffs, buff)
+            characterState.state.buffLookup.add(buff)
+
             if buff.type == buffs.BUFF_TYPES.STAT then
                 local statBuff = characterState.state.buffs[buff.stat]
                 statBuff.set(statBuff.get() + buff.amount)
@@ -189,10 +181,30 @@ characterState.state = {
             end
 
             table.remove(state.activeBuffs, index)
+            characterState.state.buffLookup.remove(buff)
         end,
         cancel = function(index)
             -- cancel is for buffs manually removed by the player.
             characterState.state.activeBuffs.removeAtIndex(index)
+        end,
+    },
+    buffLookup = {
+        get = function(id)
+            return state.buffLookup[id]
+        end,
+        getPlayerStatBuff = function(stat)
+            return characterState.state.buffLookup.get("player_" .. stat)
+        end,
+        getRacialBuff = function()
+            return characterState.state.buffLookup.get("racial")
+        end,
+        add = function(buff)
+            state.buffLookup[buff.id] = buff
+            TEARollHelper:Debug("Added buff:", buff.id)
+        end,
+        remove = function(buff)
+            state.buffLookup[buff.id] = nil
+            TEARollHelper:Debug("Removed buff:", buff.id)
         end,
     },
     newPlayerBuff = {
@@ -277,9 +289,10 @@ bus.addListener(EVENTS.FEAT_CHANGED, function()
 end)
 
 bus.addListener(EVENTS.RACIAL_TRAIT_CHANGED, function()
-    if characterState.state.featsAndTraits.racialTrait.get() then
-        characterState.state.featsAndTraits.racialTrait.set(nil)
-        TEARollHelper:Debug("Deactivated racial trait because racial trait in character sheet changed.")
+    local racialBuff = characterState.state.buffLookup.getRacialBuff()
+    if racialBuff then
+        characterState.state.activeBuffs.remove(racialBuff)
+        TEARollHelper:Debug("Removed racial trait buff because racial trait in character sheet changed.")
     end
 end)
 

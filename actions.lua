@@ -61,11 +61,11 @@ local function getAttack(roll, isCrit, threshold, offence, buff, numBloodHarvest
     }
 end
 
-local function getDefence(roll, isCrit, threshold, dmgRisk, defence, buff, useBulwark, racialTrait)
+local function getDefence(roll, isCrit, threshold, dmgRisk, defence, buff, useBulwark)
     local defendValue, damageTaken
     local retaliateDmg = 0
 
-    defendValue = rules.defence.calculateDefendValue(roll, defence, buff, racialTrait)
+    defendValue = rules.defence.calculateDefendValue(roll, defence, buff)
 
     if useBulwark then
         defendValue = rules.defence.applyBulwarkBonus(defendValue)
@@ -85,8 +85,8 @@ local function getDefence(roll, isCrit, threshold, dmgRisk, defence, buff, useBu
     }
 end
 
-local function getMeleeSave(roll, threshold, dmgRisk, defence, buff, racialTrait)
-    local meleeSaveValue = rules.meleeSave.calculateMeleeSaveValue(roll, defence, buff, racialTrait)
+local function getMeleeSave(roll, threshold, dmgRisk, defence, buff)
+    local meleeSaveValue = rules.meleeSave.calculateMeleeSaveValue(roll, defence, buff)
     local damageTaken = rules.defence.calculateDamageTaken(threshold, meleeSaveValue, dmgRisk)
     local isBigFail = rules.meleeSave.isSaveBigFail(meleeSaveValue, threshold)
     local hasCounterForceProc = nil
