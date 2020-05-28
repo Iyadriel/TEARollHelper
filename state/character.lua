@@ -158,6 +158,9 @@ characterState.state = {
                 local statBuff = characterState.state.buffs[buff.stat]
                 statBuff.set(statBuff.get() + buff.amount)
             end
+
+            -- reset input
+            characterState.state.newPlayerBuff.amount.set(1)
             characterState.state.newPlayerBuff.label.set("")
         end,
         remove = function (buff)
