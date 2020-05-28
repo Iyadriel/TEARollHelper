@@ -54,13 +54,20 @@ ui.modules.buffs.getOptions = function(options)
                     desc = function()
                         local buff = state.activeBuffs.get()[i]
                         if not buff then return "" end
+
                         local msg = ""
                         if buff.type == BUFF_TYPES.STAT then
-                            msg = STAT_LABELS[buff.stat] .. " increased by " .. buff.amount .. "."
+                            if buff.amount > 0 then
+                                msg = STAT_LABELS[buff.stat] .. " increased by " .. buff.amount .. "."
+                            else
+                                msg = STAT_LABELS[buff.stat] .. " decreased by " .. abs(buff.amount) .. "."
+                            end
                         --elseif buff.type == "advantage" then
                         --    msg = "Your rolls have advantage."
                         end
+
                         msg = msg .. COLOURS.NOTE .. "|n|nSource: " .. buff.source
+
                         return msg
                     end,
                     dialogControl = "TEABuffButton"
