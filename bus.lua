@@ -19,7 +19,8 @@ local EVENTS = {
     TRAIT_CHARGES_CHANGED = "TRAIT_CHARGES_CHANGED", -- traitID, numCharges
 
     -- Character effects
-    DAMAGE_TAKEN = "DAMAGE_TAKEN", --dmgTaken
+    BUFF_EXPIRED = "BUFF_EXPIRED", -- label
+    DAMAGE_TAKEN = "DAMAGE_TAKEN", -- dmgTaken
     HEALED = "HEALED", -- amountHealed, netAmountHealed, overHealing
 
     -- Turn

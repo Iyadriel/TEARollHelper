@@ -31,3 +31,7 @@ end)
 bus.addListener(EVENTS.STAT_BUFF_ADDED, function(stat, amount)
     TEARollHelper:Print("Your " .. buffs.STAT_LABELS[stat] .. " stat has been buffed by " .. amount .. ".")
 end)
+
+bus.addListener(EVENTS.BUFF_EXPIRED, function(label)
+    TEARollHelper:Print("Buff expired:", label)
+end)

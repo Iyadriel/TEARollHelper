@@ -233,7 +233,7 @@ bus.addListener(EVENTS.TURN_INCREMENTED, function()
         if buff.remainingTurns then
             if buff.remainingTurns <= 0 then
                 characterState.state.activeBuffs.removeAtIndex(i)
-                TEARollHelper:Debug("Expired buff at index " .. i)
+                bus.fire(EVENTS.BUFF_EXPIRED, buff.label)
             else
                 buff.remainingTurns = buff.remainingTurns - 1
                 TEARollHelper:Debug("Decremented buff remaining turns at index " .. i)
