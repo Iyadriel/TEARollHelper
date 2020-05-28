@@ -101,7 +101,8 @@ ui.modules.buffs.getOptions = function(options)
                         order = 1,
                         type = "input",
                         name = "Amount",
-                        width = 0.3,
+                        desc = "How much to increase or decrease the stat by.",
+                        width = 0.4,
                         validate = function(info, value)
                             if tonumber(value) == nil then
                                 return "Buff amount must be a number"
@@ -119,6 +120,7 @@ ui.modules.buffs.getOptions = function(options)
                         order = 1,
                         type = "input",
                         name = "Label (optional)",
+                        desc = "This can be used as a reminder of where the buff came from. This is only visible to you.",
                         width = 0.5,
                         get = state.newPlayerBuff.label.get,
                         set = function(info, value)
