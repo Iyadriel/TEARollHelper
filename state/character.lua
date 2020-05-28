@@ -17,7 +17,7 @@ local state
 
 characterState.initState = function()
     state = {
-        health = character.getPlayerMaxHP(),
+        health = character.getPlayerMaxHPWithoutBuffs(),
 
         healing = {
             numGreaterHealSlots = rules.healing.getMaxGreaterHealSlots(),
@@ -37,7 +37,8 @@ characterState.initState = function()
         buffs = {
             offence = 0,
             defence = 0,
-            spirit = 0
+            spirit = 0,
+            stamina = 0,
         }
     }
 end
@@ -126,6 +127,9 @@ characterState.state = {
         offence = basicGetSet("buffs", "offence"),
         defence = basicGetSet("buffs", "defence"),
         spirit = basicGetSet("buffs", "spirit"),
+        stamina = basicGetSet("buffs", "stamina", function()
+            bus.fire(EVENTS.CHARACTER_MAX_HEALTH, character.getPlayerMaxHP())
+        end),
     }
 }
 

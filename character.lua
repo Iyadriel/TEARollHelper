@@ -2,6 +2,7 @@ local _, ns = ...
 
 local bus = ns.bus
 local character = ns.character
+local characterState = ns.state.character
 local feats = ns.resources.feats
 local racialTraits = ns.resources.racialTraits
 local rules = ns.rules
@@ -14,7 +15,7 @@ local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
 local TRAITS = traits.TRAITS
 local WEAKNESSES = weaknesses.WEAKNESSES
 
-local getPlayerOffence, getPlayerDefence, getPlayerSpirit, getPlayerStamina, getPlayerMaxHP
+local getPlayerOffence, getPlayerDefence, getPlayerSpirit, getPlayerStamina, getPlayerMaxHP, getPlayerMaxHPWithoutBuffs
 local hasOffenceMastery, hasSpiritMastery
 local getPlayerFeat, hasFeat, hasFeatByID, setPlayerFeatByID, getPlayerRacialTrait, hasRacialTrait
 local clearExcessTraits
@@ -38,7 +39,13 @@ function getPlayerStamina()
 end
 
 function getPlayerMaxHP()
-    return rules.stats.calculateMaxHP(getPlayerStamina())
+    local buff = characterState.state.buffs.stamina.get()
+    return rules.stats.calculateMaxHP(getPlayerStamina(), buff)
+end
+
+-- workaround for error when initialising character state (characterState.state is nil at this point)
+function getPlayerMaxHPWithoutBuffs()
+    return rules.stats.calculateMaxHP(getPlayerStamina(), 0)
 end
 
 local function setStat(stat, value)
@@ -173,6 +180,7 @@ character.getPlayerDefence = getPlayerDefence
 character.getPlayerSpirit = getPlayerSpirit
 character.getPlayerStamina = getPlayerStamina
 character.getPlayerMaxHP = getPlayerMaxHP
+character.getPlayerMaxHPWithoutBuffs = getPlayerMaxHPWithoutBuffs
 character.setStat = setStat
 
 character.hasOffenceMastery = hasOffenceMastery
