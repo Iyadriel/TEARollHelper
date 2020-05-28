@@ -4,6 +4,7 @@ local AceConfig = LibStub("AceConfig-3.0")
 local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 
 ns.actions = {}
+ns.buffs = {}
 ns.bus = {}
 ns.character = {}
 ns.consequences = {}
@@ -18,7 +19,11 @@ ns.resources = {
     weaknesses = {}
 }
 ns.rules = {}
-ns.state = {}
+ns.state = {
+    character = {},
+    rolls = {},
+    turn = {}
+}
 ns.turns = {}
 ns.ui = {}
 

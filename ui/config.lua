@@ -29,7 +29,6 @@ ui.modules.config.getOptions = function()
                 childGroups = "tab",
                 order = 1,
                 args = {
-                    buff = ui.modules.buffs.getOptions({ order = 0 }),
                     character = ui.modules.config.modules.character.getOptions(),
                 }
             },
@@ -56,9 +55,6 @@ ui.modules.config.getOptions = function()
             }
         }
     }
-
-    -- We want this in the cmd line and in the roll window, but not the config window, so disable it here.
-    options.args.character.args.buff.guiHidden = true
 
     return options
 end

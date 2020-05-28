@@ -1,5 +1,6 @@
 local _, ns = ...
 
+local buffs = ns.buffs
 local bus = ns.bus
 local character = ns.character
 local feats = ns.resources.feats
@@ -39,7 +40,14 @@ characterState.initState = function()
             defence = 0,
             spirit = 0,
             stamina = 0,
-        }
+        },
+
+        activeBuffs = {},
+        newPlayerBuff = {
+            stat = "offence",
+            amount = 1,
+            label = "Buff",
+        },
     }
 end
 
@@ -130,6 +138,62 @@ characterState.state = {
         stamina = basicGetSet("buffs", "stamina", function()
             bus.fire(EVENTS.CHARACTER_MAX_HEALTH, character.getPlayerMaxHP())
         end),
+    },
+    activeBuffs = {
+        get = function ()
+            return state.activeBuffs
+        end,
+        getPlayerStatBuffs = function()
+            local out = {}
+            for _, buff in ipairs(state.activeBuffs) do
+                if buff.source == buffs.BUFF_SOURCES.PLAYER and buff.type == buffs.BUFF_TYPES.STAT then
+                    out[buff.stat] = buff
+                end
+            end
+            return out
+        end,
+        add = function(buff)
+            table.insert(state.activeBuffs, buff)
+            if buff.type == buffs.BUFF_TYPES.STAT then
+                local statBuff = characterState.state.buffs[buff.stat]
+                statBuff.set(statBuff.get() + buff.amount)
+            end
+            characterState.state.newPlayerBuff.label.set("Buff")
+        end,
+        remove = function (buff)
+            local buffID = buff.id
+            local index
+            for i, b in ipairs(state.activeBuffs) do
+                if b.id == buffID then
+                    index = i
+                    break
+                end
+            end
+            if index then
+                characterState.state.activeBuffs.removeAtIndex(index)
+            else
+                TEARollHelper:Debug("Failed to remove buff with ID " .. buffID)
+            end
+        end,
+        removeAtIndex = function(index)
+            local buff = state.activeBuffs[index]
+
+            if buff.type == buffs.BUFF_TYPES.STAT then
+                local statBuff = characterState.state.buffs[buff.stat]
+                statBuff.set(statBuff.get() - buff.amount)
+            end
+
+            table.remove(state.activeBuffs, index)
+        end,
+        cancel = function(index)
+            -- cancel is for buffs manually removed by the player.
+            characterState.state.activeBuffs.removeAtIndex(index)
+        end,
+    },
+    newPlayerBuff = {
+        stat = basicGetSet("newPlayerBuff", "stat"),
+        amount = basicGetSet("newPlayerBuff", "amount"),
+        label = basicGetSet("newPlayerBuff", "label"),
     }
 }
 

@@ -86,7 +86,10 @@ local function getAvailableStatPoints()
     return points
 end
 
-local function calculateMaxHP(stamina)
+local function calculateMaxHP(stamina, buff)
+    buff = buff or 0
+    stamina = stamina + buff
+
     local maxHP = BASE_STAMINA + (stamina * 2)
 
     if character.hasWeakness(WEAKNESSES.FRAGILE) then

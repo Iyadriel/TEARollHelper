@@ -15,6 +15,7 @@ local EVENTS = {
     -- Resources
     FEAT_CHARGES_CHANGED = "FEAT_CHARGES_CHANGED", -- featID, numCharges
     GREATER_HEAL_CHARGES_CHANGED = "GREATER_HEAL_CHARGES_CHANGED", -- numCharges
+    STAT_BUFF_ADDED = "STAT_BUFF_ADDED", -- stat, amount
     TRAIT_CHARGES_CHANGED = "TRAIT_CHARGES_CHANGED", -- traitID, numCharges
 
     -- Character effects

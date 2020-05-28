@@ -1,5 +1,6 @@
 local _, ns = ...
 
+local buffs = ns.buffs
 local bus = ns.bus
 local characterState = ns.state.character.state
 
@@ -25,4 +26,8 @@ bus.addListener(EVENTS.HEALED, function(amountHealed, netAmountHealed, overheali
     end
     TEARollHelper:Print(msg)
     printCriticalHealth()
+end)
+
+bus.addListener(EVENTS.STAT_BUFF_ADDED, function(stat, amount)
+    TEARollHelper:Print("Your " .. buffs.STAT_LABELS[stat] .. " stat has been buffed by " .. amount .. ".")
 end)
