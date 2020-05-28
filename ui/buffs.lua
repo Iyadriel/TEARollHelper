@@ -79,11 +79,12 @@ ui.modules.buffs.getOptions = function(options)
                         name = "Stat",
                         width = 0.5,
                         values = {
-                            offence = "Offence",
-                            defence = "Defence",
-                            spirit = "Spirit",
-                            stamina = "Stamina",
+                            offence = STAT_LABELS.offence,
+                            defence = STAT_LABELS.defence,
+                            spirit = STAT_LABELS.spirit,
+                            stamina = STAT_LABELS.stamina,
                         },
+                        sorting = { "offence", "defence", "spirit", "stamina" },
                         get = state.newPlayerBuff.stat.get,
                         set = function(info, value)
                             state.newPlayerBuff.stat.set(value)
@@ -110,7 +111,7 @@ ui.modules.buffs.getOptions = function(options)
                     label = {
                         order = 1,
                         type = "input",
-                        name = "Label",
+                        name = "Label (optional)",
                         width = 0.5,
                         get = state.newPlayerBuff.label.get,
                         set = function(info, value)
