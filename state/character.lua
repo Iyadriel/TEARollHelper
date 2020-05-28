@@ -47,6 +47,7 @@ characterState.initState = function()
             stat = "offence",
             amount = 1,
             label = "",
+            expireAfterNextTurn = true,
         },
     }
 end
@@ -162,6 +163,7 @@ characterState.state = {
             -- reset input
             characterState.state.newPlayerBuff.amount.set(1)
             characterState.state.newPlayerBuff.label.set("")
+            characterState.state.newPlayerBuff.expireAfterNextTurn.set(true)
         end,
         remove = function (buff)
             local buffID = buff.id
@@ -197,6 +199,7 @@ characterState.state = {
         stat = basicGetSet("newPlayerBuff", "stat"),
         amount = basicGetSet("newPlayerBuff", "amount"),
         label = basicGetSet("newPlayerBuff", "label"),
+        expireAfterNextTurn = basicGetSet("newPlayerBuff", "expireAfterNextTurn"),
     }
 }
 
@@ -219,6 +222,23 @@ bus.addListener(EVENTS.COMBAT_OVER, function()
     characterState.state.featsAndTraits.numSecondWindCharges.set(TRAITS.SECOND_WIND.numCharges)
     if getCharges() ~= oldNumCharges then
         TEARollHelper:Print(TEARollHelper.COLOURS.TRAITS.GENERIC .. TRAITS.SECOND_WIND.name .. " charge restored.")
+    end
+end)
+
+bus.addListener(EVENTS.TURN_INCREMENTED, function()
+    local activeBuffs = characterState.state.activeBuffs.get()
+
+    for i = #activeBuffs, 1, -1 do
+        local buff = activeBuffs[i]
+        if buff.remainingTurns then
+            if buff.remainingTurns <= 0 then
+                characterState.state.activeBuffs.removeAtIndex(i)
+                TEARollHelper:Debug("Expired buff at index " .. i)
+            else
+                buff.remainingTurns = buff.remainingTurns - 1
+                TEARollHelper:Debug("Decremented buff remaining turns at index " .. i)
+            end
+        end
     end
 end)
 

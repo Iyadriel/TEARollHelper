@@ -45,7 +45,12 @@ local function findPlayerStatBuff(stat)
     return buffs[stat]
 end
 
-local function addStatBuff(stat, amount, label)
+local function getRemainingTurns(expireAfterNextTurn)
+    if not expireAfterNextTurn then return nil end
+    return 1
+end
+
+local function addStatBuff(stat, amount, label, expireAfterNextTurn)
     local existingBuff = findPlayerStatBuff(stat)
 
     if existingBuff then
@@ -66,9 +71,7 @@ local function addStatBuff(stat, amount, label)
 
         source = BUFF_SOURCES.PLAYER,
 
-        -- TODO
-        --expires = true,
-        --expiresAfterTurn = 2,
+        remainingTurns = getRemainingTurns(expireAfterNextTurn),
     })
 
     bus.fire(EVENTS.STAT_BUFF_ADDED, stat, amount)

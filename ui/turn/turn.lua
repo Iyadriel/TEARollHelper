@@ -49,8 +49,8 @@ ui.modules.turn.modules.turn.getOptions = function(options)
                     return not state.inCombat.get()
                 end,
                 func = function()
-                    state.index.set(state.index.get() + 1)
-                    state.type.set(abs(state.type.get() - 1)) -- switch type
+                    state.index.increment()
+                    state.type.switch()
                 end
             },
             startCombat = {

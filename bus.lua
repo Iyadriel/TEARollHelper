@@ -26,6 +26,7 @@ local EVENTS = {
     COMBAT_STARTED = "COMBAT_STARTED",
     COMBAT_OVER = "COMBAT_OVER",
     TURN_CHANGED = "TURN_CHANGED", -- index
+    TURN_INCREMENTED = "TURN_INCREMENTED",
 }
 
 local listeners = {}

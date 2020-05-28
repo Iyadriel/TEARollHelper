@@ -8,7 +8,7 @@ local characterState = ns.state.character
 local ui = ns.ui
 
 local BUFF_TYPES = buffs.BUFF_TYPES
-local MAX_BUFFS = 10
+local MAX_BUFFS = 8
 local STAT_LABELS = buffs.STAT_LABELS
 local state = characterState.state
 
@@ -42,10 +42,13 @@ ui.modules.buffs.getOptions = function(options)
                     name = function()
                         local buff = state.activeBuffs.get()[i]
                         if not buff then return "" end
+
                         local msg = (buff.colour or "|cffffffff") .. buff.label
+
                         if buff.stacks then
                             msg = msg .. " (" .. buff.stacks .. ")"
                         end
+
                         return msg
                     end,
                     func = function()
@@ -55,18 +58,22 @@ ui.modules.buffs.getOptions = function(options)
                         local buff = state.activeBuffs.get()[i]
                         if not buff then return "" end
 
-                        local msg = ""
+                        local msg = " |n"
                         if buff.type == BUFF_TYPES.STAT then
                             if buff.amount > 0 then
-                                msg = STAT_LABELS[buff.stat] .. " increased by " .. buff.amount .. "."
+                                msg = msg .. STAT_LABELS[buff.stat] .. " increased by " .. buff.amount .. "."
                             else
-                                msg = STAT_LABELS[buff.stat] .. " decreased by " .. abs(buff.amount) .. "."
+                                msg = msg .. STAT_LABELS[buff.stat] .. " decreased by " .. abs(buff.amount) .. "."
                             end
                         --elseif buff.type == "advantage" then
                         --    msg = "Your rolls have advantage."
                         end
 
-                        msg = msg .. COLOURS.NOTE .. "|n|nSource: " .. buff.source
+                        if buff.remainingTurns then
+                            msg = msg .. COLOURS.NOTE .. "|n|nRemaining turns: " .. buff.remainingTurns
+                        end
+
+                        --msg = msg .. COLOURS.NOTE .. "|n|nSource: " .. buff.source
 
                         return msg
                     end,
@@ -117,7 +124,7 @@ ui.modules.buffs.getOptions = function(options)
                         end
                     },
                     label = {
-                        order = 1,
+                        order = 2,
                         type = "input",
                         name = "Label (optional)",
                         desc = "This can be used as a reminder of where the buff came from. This is only visible to you.",
@@ -128,7 +135,7 @@ ui.modules.buffs.getOptions = function(options)
                         end
                     },
                     add = {
-                        order = 2,
+                        order = 3,
                         type = "execute",
                         name = "Add",
                         width = 0.5,
@@ -137,8 +144,19 @@ ui.modules.buffs.getOptions = function(options)
                             local stat = newBuff.stat.get()
                             local amount = newBuff.amount.get()
                             local label = newBuff.label.get()
-                            buffs.addStatBuff(stat, amount, label)
+                            local expireAfterNextTurn = newBuff.expireAfterNextTurn.get()
+                            buffs.addStatBuff(stat, amount, label, expireAfterNextTurn)
                         end
+                    },
+                    expireAfterNextTurn = {
+                        order = 4,
+                        type = "toggle",
+                        name = "Expire after next turn",
+                        desc = "This will remove the buff after the next turn. You can always clear buffs manually by right-clicking.",
+                        get = characterState.state.newPlayerBuff.expireAfterNextTurn.get,
+                        set = function(info, value)
+                            characterState.state.newPlayerBuff.expireAfterNextTurn.set(value)
+                        end,
                     }
                 }
             }
