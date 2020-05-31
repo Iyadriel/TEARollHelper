@@ -188,6 +188,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                 type = "execute",
                 name = "Update Total RP",
                 desc = "Update your Total RP 'Currently' with your current/max HP",
+                width = "full",
                 hidden = function()
                     return not integrations.TRP or TEARollHelper.db.global.settings.autoUpdateTRP
                 end,
