@@ -4,7 +4,6 @@ local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
 
 local bus = ns.bus
 local events = ns.events
-local rolls = ns.state.rolls
 local rules = ns.rules
 local turns = ns.turns
 local ui = ns.ui
@@ -56,10 +55,6 @@ function getRollMode()
     return rollValues.rollMode
 end
 
-local function updateIsCrit()
-    rolls.updateCritStates(rollValues.roll)
-end
-
 function setRollMode(mode)
     rollValues.rollMode = mode
 end
@@ -73,7 +68,6 @@ local function resetRollValues()
     resetRollMode()
     rollValues.preppedRoll = nil
     rollValues.prepMode = false
-    rolls.updateCritStates(rollValues.roll)
 end
 
 local function sendRoll()
@@ -140,11 +134,8 @@ function handleRollResult(result)
         sendRoll()
     else
         if rollValues.prepMode then
-            rolls.updateCritStates(rollValues.roll, rollValues.preppedRoll)
-            setCurrentRoll(rollValues.roll + rollValues.preppedRoll)
             rollValues.prepMode = false
         else
-            rolls.updateCritStates(rollValues.roll)
         end
 
         rollValues.isRolling = false
@@ -162,8 +153,8 @@ turns.ROLL_MODES = ROLL_MODES
 turns.getRollValues = getRollValues
 turns.isRolling = isRolling
 turns.setCurrentRoll = setCurrentRoll
+turns.setPreppedRoll = setPreppedRoll
 turns.getRollMode = getRollMode
 turns.setRollMode = setRollMode
-turns.updateIsCrit = updateIsCrit
 turns.roll = doRoll
 turns.handleRollResult = handleRollResult

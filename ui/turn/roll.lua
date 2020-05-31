@@ -37,7 +37,6 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 name = "Include prep",
                 desc = "Activate if you prepared during the last player turn. Rolls twice and adds up the results before applying bonuses.",
                 width = 0.55,
-                disabled = true, -- hotfix for new prep system
                 get = function()
                     return turns.getRollValues().prepMode
                 end,
@@ -54,21 +53,34 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 max = rules.rolls.MAX_ROLL,
                 step = 1,
                 width = 1.1,
-                disabled = function()
-                    -- messing with roll result manually when it is the result of a prep will break crit detection
-                    -- eventually we should get rid of manually changing the roll result
-                    return turns.getRollValues().preppedRoll ~= nil
-                end,
                 get = function()
                     return turns.getRollValues().roll
                 end,
                 set = function(info, value)
                     turns.setCurrentRoll(value)
-                    turns.updateIsCrit()
+                end
+            },
+            prepRoll = {
+                order = 3,
+                name = "Prep roll result",
+                type = "range",
+                desc = "The number you rolled",
+                min = 1,
+                max = rules.rolls.MAX_ROLL,
+                step = 1,
+                width = 1.1,
+                hidden = function()
+                    return not (turns.getRollValues().prepMode or turns.getRollValues().preppedRoll)
+                end,
+                get = function()
+                    return turns.getRollValues().preppedRoll
+                end,
+                set = function(info, value)
+                    turns.setPreppedRoll(value)
                 end
             },
             performRoll = {
-                order = 3,
+                order = 4,
                 name = function()
                     return turns.isRolling() and "Rolling..." or "Roll"
                 end,

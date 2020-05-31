@@ -2,16 +2,29 @@ local _, ns = ...
 
 local rules = ns.rules
 
-local function getAttack(roll, isCrit, threshold, offence, buff, numBloodHarvestSlots, numVindicationCharges)
-    local attackValue = rules.offence.calculateAttackValue(roll, offence, buff)
-    local dmg = rules.offence.calculateAttackDmg(threshold, attackValue)
+local function getAttack(roll, preppedRoll, threshold, offence, buff, numBloodHarvestSlots, numVindicationCharges)
+    local attackValue
+    local dmg
     local critType = rules.offence.getCritType()
+    local isCrit = rules.offence.isCrit(roll)
     local hasAdrenalineProc = nil
     local hasMercyFromPainProc = nil
     local hasEntropicEmbraceProc = nil
     local entropicEmbraceDmg = 0
     local hasVindicationProc = nil
     local vindicationHealing = 0
+
+    attackValue = rules.offence.calculateAttackValue(roll, offence, buff)
+
+    if preppedRoll then
+        attackValue = attackValue + rules.offence.calculateAttackValue(preppedRoll, offence, buff)
+    end
+
+    dmg = rules.offence.calculateAttackDmg(threshold, attackValue)
+
+    if not isCrit and preppedRoll then
+        isCrit = rules.offence.isCrit(preppedRoll)
+    end
 
     if rules.offence.canProcAdrenaline() then
         hasAdrenalineProc = rules.offence.hasAdrenalineProc(threshold, attackValue)
@@ -26,6 +39,9 @@ local function getAttack(roll, isCrit, threshold, offence, buff, numBloodHarvest
 
     if rules.offence.canProcEntropicEmbrace() then
         hasEntropicEmbraceProc = rules.offence.hasEntropicEmbraceProc(roll, threshold)
+        if not hasEntropicEmbraceProc and preppedRoll then
+            hasEntropicEmbraceProc = rules.offence.hasEntropicEmbraceProc(preppedRoll, threshold)
+        end
         if hasEntropicEmbraceProc then
             entropicEmbraceDmg = rules.offence.getEntropicEmbraceDmg()
         end
@@ -61,7 +77,8 @@ local function getAttack(roll, isCrit, threshold, offence, buff, numBloodHarvest
     }
 end
 
-local function getDefence(roll, isCrit, threshold, dmgRisk, defence, buff, useBulwark)
+local function getDefence(roll, threshold, dmgRisk, defence, buff, useBulwark)
+    local isCrit = rules.defence.isCrit(roll)
     local defendValue, damageTaken
     local retaliateDmg = 0
 
@@ -124,9 +141,10 @@ local function getRangedSave(roll, threshold, dmgRisk, spirit, buff)
     }
 end
 
-local function getHealing(roll, isCrit, spirit, buff, numGreaterHealSlots, mercyFromPainBonusHealing, outOfCombat)
+local function getHealing(roll, spirit, buff, numGreaterHealSlots, mercyFromPainBonusHealing, outOfCombat)
     local healValue = rules.healing.calculateHealValue(roll, spirit, buff)
     local amountHealed = rules.healing.calculateAmountHealed(healValue)
+    local isCrit = rules.healing.isCrit(roll)
     local usesParagon = rules.healing.usesParagon()
     local playersHealableWithParagon = nil
 
@@ -155,9 +173,10 @@ local function getHealing(roll, isCrit, spirit, buff, numGreaterHealSlots, mercy
     }
 end
 
-local function getBuff(roll, isCrit, spirit, spiritBuff, offence, offenceBuff)
+local function getBuff(roll, spirit, spiritBuff, offence, offenceBuff)
     local buffValue = rules.buffing.calculateBuffValue(roll, spirit, spiritBuff, offence, offenceBuff)
     local amountBuffed = rules.buffing.calculateBuffAmount(buffValue)
+    local isCrit = rules.buffing.isCrit(roll)
 
     return {
         amountBuffed = amountBuffed,
