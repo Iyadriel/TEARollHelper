@@ -9,13 +9,18 @@ local ui = ns.ui
     order: Number
 } ]]
 ui.modules.actions.modules.meleeSave.getOptions = function(options)
+    local sharedOptions = ui.modules.actions.modules.defend.getSharedOptions()
+
     return {
         name = "Melee save",
         type = "group",
-        inline = true,
         order = options.order,
         args = {
+            defendThreshold = sharedOptions.defendThreshold,
+            damageRisk = sharedOptions.damageRisk,
+            roll = ui.modules.turn.modules.roll.getOptions({ order = 2, action = "meleeSave" }),
             saveDamageTaken = {
+                order = 3,
                 type = "description",
                 desc = "How much damage you take this turn",
                 fontSize = "medium",

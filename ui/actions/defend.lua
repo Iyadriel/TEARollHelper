@@ -12,18 +12,56 @@ local ui = ns.ui
 local TRAITS = traits.TRAITS
 local state = characterState.state
 
+-- shared with melee and ranged save
+ui.modules.actions.modules.defend.getSharedOptions = function()
+    return {
+        defendThreshold = {
+            order = 0,
+            name = "Defend threshold",
+            type = "range",
+            desc = "The minimum required roll to not take any damage",
+            min = 1,
+            softMax = 20,
+            max = 100,
+            step = 1,
+            get = rolls.state.defend.threshold.get,
+            set = function(info, value)
+                rolls.state.defend.threshold.set(value)
+            end
+        },
+        damageRisk = {
+            order = 1,
+            name = "Damage risk",
+            type = "range",
+            desc = "How much damage you will take if you fail the roll",
+            min = 1,
+            softMax = 20,
+            max = 100,
+            step = 1,
+            get = rolls.state.defend.damageRisk.get,
+            set = function(info, value)
+                rolls.state.defend.damageRisk.set(value)
+            end
+        },
+    }
+end
+
 --[[ local options = {
     order: Number
 } ]]
 ui.modules.actions.modules.defend.getOptions = function(options)
+    local sharedOptions = ui.modules.actions.modules.defend.getSharedOptions()
+
     return {
         name = "Defend",
         type = "group",
-        inline = true,
         order = options.order,
         args = {
+            defendThreshold = sharedOptions.defendThreshold,
+            damageRisk = sharedOptions.damageRisk,
+            roll = ui.modules.turn.modules.roll.getOptions({ order = 2, action = "defend" }),
             useBulwark = {
-                order = 0,
+                order = 3,
                 type = "toggle",
                 name = COLOURS.TRAITS.GENERIC .. TRAITS.BULWARK.name,
                 desc = TRAITS.BULWARK.desc,
@@ -33,15 +71,13 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                 disabled = function()
                     return state.featsAndTraits.numBulwarkCharges.get() == 0
                 end,
-                get = function()
-                    return rolls.state.defend.useBulwark
-                end,
+                get = rolls.state.defend.useBulwark.get,
                 set = function (info, value)
-                    rolls.state.defend.useBulwark = value
+                    rolls.state.defend.useBulwark.set(value)
                 end
             },
             damageTaken = {
-                order = 1,
+                order = 4,
                 type = "description",
                 desc = "How much damage you take this turn",
                 fontSize = "medium",
@@ -60,7 +96,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                 end
             },
             okay = {
-                order = 2,
+                order = 5,
                 type = "execute",
                 name = "Okay :(",
                 desc = "Apply the stated damage to your character's HP",

@@ -1,13 +1,17 @@
 local _, ns = ...
 
+local rollState = ns.state.rolls
 local rules = ns.rules
 local turns = ns.turns
 local ui = ns.ui
 
 local ROLL_MODES = turns.ROLL_MODES
+local state = rollState.state
 
 --[[ local options = {
-    order: Number
+    order: Number,
+    action: String, -- attack, healing, buff, defend, utility
+    includePrep: Boolean,
 } ]]
 ui.modules.turn.modules.roll.getOptions = function(options)
     return {
@@ -26,9 +30,9 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                     [ROLL_MODES.NORMAL] = "Normal",
                     [ROLL_MODES.ADVANTAGE] = "Advantage"
                 },
-                get = turns.getRollMode,
+                get = state[options.action].rollMode.get,
                 set = function(info, value)
-                    turns.setRollMode(value)
+                    state[options.action].rollMode.set(value)
                 end
             },
             prep = {
@@ -37,6 +41,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 name = "Include prep",
                 desc = "Activate if you prepared during the last player turn. Rolls twice and adds up the results before applying bonuses.",
                 width = 0.55,
+                hidden = not options.includePrep,
                 get = function()
                     return turns.getRollValues().prepMode
                 end,
@@ -44,15 +49,30 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                     turns.getRollValues().prepMode = value
                 end,
             },
-            roll = {
+            performRoll = {
                 order = 2,
+                type = "execute",
+                name = function()
+                    return turns.isRolling() and "Rolling..." or "Roll"
+                end,
+                desc = "Do a /roll " .. rules.rolls.MAX_ROLL .. ".",
+                width = options.includePrep and 0.85 or 1.4,
+                disabled = function()
+                    return turns.isRolling()
+                end,
+                func = function()
+                    local rollMode = state[options.action].rollMode.get()
+                    turns.roll(rollMode)
+                end
+            },
+            roll = {
+                order = 3,
                 name = "Roll result",
                 type = "range",
                 desc = "The number you rolled",
                 min = 1,
                 max = rules.rolls.MAX_ROLL,
                 step = 1,
-                width = 1.1,
                 get = function()
                     return turns.getRollValues().roll
                 end,
@@ -61,15 +81,15 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 end
             },
             prepRoll = {
-                order = 3,
+                order = 4,
                 name = "Prep roll result",
                 type = "range",
                 desc = "The number you rolled",
                 min = 1,
                 max = rules.rolls.MAX_ROLL,
                 step = 1,
-                width = 1.1,
-                hidden = function()
+                --width = 1.1,
+                hidden = not options.includePrep or function()
                     return not (turns.getRollValues().prepMode or turns.getRollValues().preppedRoll)
                 end,
                 get = function()
@@ -78,19 +98,6 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 set = function(info, value)
                     turns.setPreppedRoll(value)
                 end
-            },
-            performRoll = {
-                order = 4,
-                name = function()
-                    return turns.isRolling() and "Rolling..." or "Roll"
-                end,
-                type = "execute",
-                desc = "Do a /roll " .. rules.rolls.MAX_ROLL .. ".",
-                disabled = function()
-                    return turns.isRolling()
-                end,
-                width = "full",
-                func = turns.roll
             },
         }
     }

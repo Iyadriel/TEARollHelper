@@ -12,14 +12,14 @@ ui.modules.actions.modules.buff.getOptions = function(options)
     return {
         name = "Buff",
         type = "group",
-        inline = true,
         order = options.order,
         args = {
+            roll = ui.modules.turn.modules.roll.getOptions({ order = 0, action = "buff" }),
             buff = {
                 type = "description",
                 desc = "How much you can buff for",
                 fontSize = "medium",
-                order = 4,
+                order = 1,
                 name = function()
                     local buff = rolls.getBuff()
 

@@ -13,13 +13,17 @@ local FEATS = feats.FEATS
     order: Number
 } ]]
 ui.modules.actions.modules.rangedSave.getOptions = function(options)
+    local sharedOptions = ui.modules.actions.modules.defend.getSharedOptions()
+
     return {
         name = "Ranged save",
         type = "group",
-        inline = true,
         order = options.order,
         args = {
+            defendThreshold = sharedOptions.defendThreshold,
+            roll = ui.modules.turn.modules.roll.getOptions({ order = 2, action = "rangedSave" }),
             saveResult = {
+                order = 3,
                 type = "description",
                 fontSize = "medium",
                 name = function()

@@ -21,10 +21,10 @@ ui.modules.actions.modules.attack.getOptions = function(options)
     return {
         name = "Attack",
         type = "group",
-        inline = true,
         order = options.order,
         args = {
             attackThreshold = {
+                order = 0,
                 name = "Attack threshold",
                 type = "range",
                 desc = "The minimum required roll to hit the target",
@@ -32,16 +32,18 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                 softMax = 20,
                 max = 100,
                 step = 1,
-                order = 0,
-                get = function()
-                    return state.attack.threshold
-                end,
+                get = state.attack.threshold.get,
                 set = function(info, value)
-                    state.attack.threshold = value
+                    state.attack.threshold.set(value)
                 end
             },
-            actions_attack_bloodHarvest = {
+            roll = ui.modules.turn.modules.roll.getOptions({
                 order = 1,
+                action = "attack",
+                includePrep = true,
+            }),
+            actions_attack_bloodHarvest = {
+                order = 2,
                 type = "range",
                 name = COLOURS.FEATS.BLOOD_HARVEST .. FEATS.BLOOD_HARVEST.name,
                 desc = "The amount of Blood Harvest slots to use.",
@@ -54,21 +56,19 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                 disabled = function()
                     return rules.offence.getMaxBloodHarvestSlots() == 0 or characterState.featsAndTraits.numBloodHarvestSlots.get() == 0
                 end,
-                get = function()
-                    return state.attack.numBloodHarvestSlots
-                end,
+                get = state.attack.numBloodHarvestSlots.get,
                 set = function(info, value)
-                    state.attack.numBloodHarvestSlots = value
+                    state.attack.numBloodHarvestSlots.set(value)
                 end,
                 dialogControl = TEARollHelper:CreateCustomSlider("actions_attack_bloodHarvest", {
                     max = characterState.featsAndTraits.numBloodHarvestSlots.get
                 })
             },
             dmg = {
+                order = 3,
                 type = "description",
                 desc = "How much damage you can deal to a target",
                 fontSize = "medium",
-                order = 3,
                 name = function()
                     local attack = rolls.getAttack()
                     local msg = " |n"

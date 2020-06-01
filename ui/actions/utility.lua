@@ -14,14 +14,14 @@ ui.modules.actions.modules.utility.getOptions = function(options)
     return {
         type = "group",
         name = "Utility",
-        inline = true,
         order = options.order,
         args = {
+            roll = ui.modules.turn.modules.roll.getOptions({ order = 0, action = "utility" }),
             useUtilityTrait = {
+                order = 1 ,
                 type = "toggle",
                 name = "Use utility trait",
                 desc = "Enable if you have a utility trait that fits what you are rolling for.",
-                order = 0,
                 get = function()
                     return state.utility.useUtilityTrait
                 end,
@@ -30,10 +30,10 @@ ui.modules.actions.modules.utility.getOptions = function(options)
                 end
             },
             utility = {
+                order = 2,
                 type = "description",
                 desc = "The result of your utility roll",
                 fontSize = "medium",
-                order = 1,
                 name = function()
                     local roll = turns.getRollValues().roll
                     return " |nYour total utility roll: " .. actions.getUtility(roll, state.utility.useUtilityTrait)

@@ -13,33 +13,103 @@ local EVENTS = bus.EVENTS
 local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
 
-local state = {
+local state
+
+rolls.initState = function()
+    state = {
+        attack = {
+            threshold = 12,
+            numBloodHarvestSlots = 0,
+            rollMode = turns.ROLL_MODES.NORMAL,
+        },
+
+        healing = {
+            numGreaterHealSlots = 0,
+            mercyFromPainBonusHealing = 0,
+            rollMode = turns.ROLL_MODES.NORMAL,
+        },
+
+        buff = {
+            rollMode = turns.ROLL_MODES.NORMAL,
+        },
+
+        defend = {
+            threshold = 10,
+            damageRisk = 4,
+            useBulwark = false,
+            rollMode = turns.ROLL_MODES.NORMAL,
+        },
+
+        meleeSave = {
+            rollMode = turns.ROLL_MODES.NORMAL,
+        },
+
+        rangedSave = {
+            rollMode = turns.ROLL_MODES.NORMAL,
+        },
+
+        utility = {
+            useUtilityTrait = false,
+            rollMode = turns.ROLL_MODES.NORMAL,
+        },
+    }
+end
+
+local function basicGetSet(section, key, callback)
+    return {
+        get = function ()
+            return state[section][key]
+        end,
+        set = function (value)
+            state[section][key] = value
+            if callback then callback(value) end
+        end
+    }
+end
+
+rolls.state = {
     attack = {
-        threshold = 12,
-        numBloodHarvestSlots = 0,
+        threshold = basicGetSet("attack", "threshold"),
+        numBloodHarvestSlots = basicGetSet("attack", "numBloodHarvestSlots"),
+        rollMode = basicGetSet("attack", "rollMode"),
     },
 
     healing = {
-        numGreaterHealSlots = 0,
-        mercyFromPainBonusHealing = 0,
+        numGreaterHealSlots = basicGetSet("healing", "numGreaterHealSlots"),
+        mercyFromPainBonusHealing = basicGetSet("healing", "mercyFromPainBonusHealing"),
+        rollMode = basicGetSet("healing", "rollMode"),
+    },
+
+    buff = {
+        rollMode = basicGetSet("buff", "rollMode"),
     },
 
     defend = {
-        threshold = 10,
-        damageRisk = 4,
-        useBulwark = false,
+        threshold = basicGetSet("defend", "threshold"),
+        damageRisk = basicGetSet("defend", "damageRisk"),
+        useBulwark = basicGetSet("defend", "useBulwark"),
+        rollMode = basicGetSet("defend", "rollMode"),
+    },
+
+    meleeSave = {
+        rollMode = basicGetSet("meleeSave", "rollMode"),
+    },
+
+    rangedSave = {
+        rollMode = basicGetSet("rangedSave", "rollMode"),
     },
 
     utility = {
-        useUtilityTrait = false
+        useUtilityTrait = basicGetSet("utility", "useUtilityTrait"),
+        rollMode = basicGetSet("utility", "rollMode"),
     },
 }
 
 local function resetSlots()
-    state.attack.numBloodHarvestSlots = 0
-    state.healing.numGreaterHealSlots = 0
-    state.healing.mercyFromPainBonusHealing = 0
-    state.defend.useBulwark = false
+    rolls.state.attack.numBloodHarvestSlots.set(0)
+    rolls.state.healing.numGreaterHealSlots.set(0)
+    rolls.state.healing.mercyFromPainBonusHealing.set(0)
+    rolls.state.defend.useBulwark.set(false)
 end
 
 bus.addListener(EVENTS.CHARACTER_STAT_CHANGED, resetSlots)
@@ -49,18 +119,18 @@ bus.addListener(EVENTS.TURN_CHANGED, resetSlots)
 
 bus.addListener(EVENTS.FEAT_CHARGES_CHANGED, function(featID, numCharges)
     if featID == FEATS.BLOOD_HARVEST.id and numCharges < state.attack.numBloodHarvestSlots then
-        state.attack.numBloodHarvestSlots = numCharges
+        rolls.state.attack.numBloodHarvestSlot.set(numCharges)
     end
 end)
 bus.addListener(EVENTS.GREATER_HEAL_CHARGES_CHANGED, function(numCharges)
     if numCharges < state.healing.numGreaterHealSlots then
-        state.healing.numGreaterHealSlots = numCharges
+        rolls.state.healing.numGreaterHealSlots.set(numCharges)
     end
 end)
 
 bus.addListener(EVENTS.TRAIT_CHARGES_CHANGED, function(traitID, numCharges)
     if traitID == TRAITS.BULWARK.id and numCharges == 0 then
-        state.defend.useBulwark = false
+        rolls.state.defend.useBulwark.set(false)
     end
 end)
 
@@ -118,7 +188,6 @@ local function getRangedSave()
     return actions.getRangedSave(values.roll, state.defend.threshold, state.defend.damageRisk, spirit, buff)
 end
 
-rolls.state = state
 rolls.getAttack = getAttack
 rolls.getHealing = getHealing
 rolls.getBuff = getBuff

@@ -18,7 +18,6 @@ ui.modules.turn.getOptions = function()
         childGroups = "tab",
         args = {
             turn = ui.modules.turn.modules.turn.getOptions({ order = 0 }),
-            roll = ui.modules.turn.modules.roll.getOptions({ order = 1 }),
             playerTurn = actionOptions.playerTurn,
             enemyTurn = actionOptions.enemyTurn,
             outOfCombat = actionOptions.outOfCombat,

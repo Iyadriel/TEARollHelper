@@ -22,7 +22,7 @@ local doRoll
 local rollValues = {
     isRolling = false,
     roll = 1,
-    rollMode = ROLL_MODES.NORMAL,
+    rollMode = nil,
 
     isPrepRolling = false,
     preppedRoll = nil,
@@ -60,7 +60,7 @@ function setRollMode(mode)
 end
 
 local function resetRollMode()
-    setRollMode(ROLL_MODES.NORMAL)
+    setRollMode(nil)
 end
 
 local function resetRollValues()
@@ -87,7 +87,8 @@ local function getRequiredRollsForTurn()
     return numRolls
 end
 
-function doRoll()
+function doRoll(rollMode)
+    rollValues.rollMode = rollMode
     rollValues.isRolling = true
     if rollValues.prepMode then
         rollValues.isPrepRolling = true
@@ -154,7 +155,5 @@ turns.getRollValues = getRollValues
 turns.isRolling = isRolling
 turns.setCurrentRoll = setCurrentRoll
 turns.setPreppedRoll = setPreppedRoll
-turns.getRollMode = getRollMode
-turns.setRollMode = setRollMode
 turns.roll = doRoll
 turns.handleRollResult = handleRollResult

@@ -20,11 +20,11 @@ ui.modules.actions.modules.healing.getOptions = function(options)
     return {
         name = "Heal",
         type = "group",
-        inline = true,
         order = options.order,
         args = {
+            roll = ui.modules.turn.modules.roll.getOptions({ order = 0, action = "healing" }),
             actions_healing_greaterHeals = {
-                order = 0,
+                order = 1,
                 type = "range",
                 name = "Greater Heals",
                 desc = "The amount of Greater Heals to use.",
@@ -37,11 +37,9 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                 disabled = function()
                     return characterState.healing.numGreaterHealSlots.get() == 0
                 end,
-                get = function()
-                    return state.healing.numGreaterHealSlots
-                end,
+                get = state.healing.numGreaterHealSlots.get,
                 set = function(info, value)
-                    state.healing.numGreaterHealSlots = value
+                    state.healing.numGreaterHealSlots.set(value)
                 end,
                 dialogControl = TEARollHelper:CreateCustomSlider("actions_healing_greaterHeals", {
                     max = characterState.healing.numGreaterHealSlots.get
@@ -51,7 +49,7 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                 name = COLOURS.FEATS.MERCY_FROM_PAIN .. FEATS.MERCY_FROM_PAIN.name,
                 type = "select",
                 desc = FEATS.MERCY_FROM_PAIN.desc,
-                order = 1,
+                order = 2,
                 values = {
                     [0] = "Inactive",
                     [rules.offence.calculateMercyFromPainBonusHealing(false)] = "Single enemy damaged",
@@ -60,18 +58,16 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                 hidden = function()
                     return options.outOfCombat or not rules.offence.canProcMercyFromPain()
                 end,
-                get = function()
-                    return state.healing.mercyFromPainBonusHealing
-                end,
+                get = state.healing.mercyFromPainBonusHealing.get,
                 set = function(info, value)
-                    state.healing.mercyFromPainBonusHealing = value
+                    state.healing.mercyFromPainBonusHealing.set(value)
                 end
             },
             healing = {
                 type = "description",
                 desc = "How much you can heal for",
                 fontSize = "medium",
-                order = 2,
+                order = 3,
                 name = function()
                     local healing = rolls.getHealing(options.outOfCombat)
                     local msg = rules.healing.getMaxGreaterHealSlots() > 0 and " |n" or "" -- Only show spacing if greater heals are shown. Dirty hack
@@ -98,6 +94,7 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                 end
             },
             outOfCombatNote = {
+                order = 4,
                 type = "description",
                 name = function()
                     local msg = COLOURS.NOTE .. " |nOut of combat, you can perform "
@@ -110,7 +107,6 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                     return msg
                 end,
                 hidden = not options.outOfCombat,
-                order = 3
             }
         }
     }
