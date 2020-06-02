@@ -326,6 +326,12 @@ bus.addListener(EVENTS.WEAKNESS_REMOVED, function(weaknessID)
             characterState.state.numFatePoints.set(maxFatePoints)
             TEARollHelper:Debug("Increased remaining fate points because player no longer has Fateless weakness.")
         end
+    elseif weaknessID == WEAKNESSES.TIMID.id then
+        local weaknessDebuff = characterState.state.buffLookup.getWeaknessDebuff(WEAKNESSES.TIMID)
+        if weaknessDebuff then
+            characterState.state.activeBuffs.remove(weaknessDebuff)
+            TEARollHelper:Debug("Removed weakness debuff because player no longer has Timid weakness.")
+        end
     end
 end)
 

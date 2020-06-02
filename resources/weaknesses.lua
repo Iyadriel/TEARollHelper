@@ -1,7 +1,7 @@
 local _, ns = ...
 
 local weaknesses = ns.resources.weaknesses
-weaknesses.WEAKNESS_KEYS = {"FATELESS", "FRAGILE", "OUTCAST"}
+weaknesses.WEAKNESS_KEYS = {"FATELESS", "FRAGILE", "OUTCAST", "TIMID"}
 
 weaknesses.WEAKNESSES = {
 --[[     BRUTE = {
@@ -33,5 +33,21 @@ weaknesses.WEAKNESSES = {
         name = "Outcast",
         desc = "You no longer benefit from your Racial Trait.",
         supported = true,
+    },
+    TIMID = {
+        id = "TIMID",
+        name = "Timid",
+        desc = "While in melee range of an enemy, your Offence, Defense, and Spirit stats are reduced by -3.",
+        icon = "Interface\\Icons\\spell_misc_emotionafraid",
+        note = "Toggle manually in the Character tab.",
+        supported = true,
+        manualActivation = "Melee range",
+        debuffs = {
+            stats = {
+                offence = -3,
+                defence = -3,
+                spirit = -3
+            }
+        }
     },
 }

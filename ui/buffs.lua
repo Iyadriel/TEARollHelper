@@ -6,11 +6,13 @@ local buffs = ns.buffs
 local character = ns.character
 local characterState = ns.state.character
 local ui = ns.ui
+local weaknesses = ns.resources.weaknesses
 
 local BUFF_TYPES = buffs.BUFF_TYPES
 local MAX_BUFFS = 8
 local STAT_LABELS = buffs.STAT_LABELS
 local state = characterState.state
+local WEAKNESSES = weaknesses.WEAKNESSES
 
 ui.modules.buffs = {}
 
@@ -63,9 +65,9 @@ ui.modules.buffs.getOptions = function(options)
                             for stat, amount in pairs(buff.stats) do
                                 if amount > 0 then
                                     msg = msg .. STAT_LABELS[stat] .. " increased by " .. amount .. ". "
-                            else
+                                else
                                     msg = msg .. STAT_LABELS[stat] .. " decreased by " .. abs(amount) .. ". "
-                            end
+                                end
                             end
                         --elseif buff.type == "advantage" then
                         --    msg = "Your rolls have advantage."
@@ -187,6 +189,27 @@ ui.modules.buffs.getOptions = function(options)
                 set = function(info, value)
                     if value then
                         buffs.addRacialBuff(character.getPlayerRacialTrait())
+                    end
+                end
+            }
+
+            rows.timid = {
+                order = 13,
+                type = "toggle",
+                name = WEAKNESSES.TIMID.manualActivation .. " (" .. WEAKNESSES.TIMID.name .. ")",
+                desc = WEAKNESSES.TIMID.desc,
+                cmdHidden = true,
+                width = "full",
+                hidden = function()
+                    return not character.hasWeakness(WEAKNESSES.TIMID) or state.buffLookup.getWeaknessDebuff(WEAKNESSES.TIMID) ~= nil
+                end,
+                validate = function() return true end,
+                get = function()
+                    return state.buffLookup.getWeaknessDebuff(WEAKNESSES.TIMID) ~= nil
+                end,
+                set = function(info, value)
+                    if value then
+                        buffs.addWeaknessDebuff(WEAKNESSES.TIMID)
                     end
                 end
             }
