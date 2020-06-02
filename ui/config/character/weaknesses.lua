@@ -6,6 +6,8 @@ local character = ns.character
 local weaknesses = ns.resources.weaknesses
 local ui = ns.ui
 
+local COLOURS = TEARollHelper.COLOURS
+
 -- Update turn UI, in case it is also open
 local function notifyChange()
     AceConfigRegistry:NotifyChange(ns.ui.modules.turn.name)
@@ -39,7 +41,13 @@ ui.modules.config.modules.character.modules.weaknesses.getOptions = function(opt
                     order = i,
                     type = "toggle",
                     name = weakness.name,
-                    desc = weakness.desc,
+                    desc = function()
+                        local msg = weakness.desc
+                        if weakness.note then
+                            msg = msg .. "|n|n" .. COLOURS.NOTE .. weakness.note
+                        end
+                        return msg
+                    end,
                 }
             end
             return weaknessOptions
