@@ -14,45 +14,34 @@ ui.modules.config.getOptions = function()
         type = 'group',
         args = {
             turn = {
+                order = 0,
                 name = "Show turn window",
                 type = "execute",
-                order = 0,
                 func = function()
                     AceConfigDialog:Open(ui.modules.turn.name)
                 end
             },
             character = {
+                order = 1,
                 name = "Character",
                 type = "group",
                 desc = "Character setup",
-                cmdInline = true,
+                cmdHidden = true,
                 childGroups = "tab",
-                order = 1,
                 args = {
                     character = ui.modules.config.modules.character.getOptions(),
                 }
             },
             settings = ui.modules.config.modules.settings.getOptions(),
-            -- this group just serves to have a nice header at the bottom of the cmd printout
             config = {
-                name = "config",
-                type = "group",
-                desc = "Configuration",
-                guiHidden = true,
-                cmdInline = true,
                 order = 3,
-                args = {
-                    config = {
-                        name = "Show config UI",
-                        type = "execute",
-                        guiHidden = true,
-                        order = 0,
-                        func = function()
-                            AceConfigDialog:Open("TEARollHelper")
-                        end
-                    },
-                }
-            }
+                name = "Show config UI",
+                type = "execute",
+                guiHidden = true,
+                func = function()
+                    AceConfigDialog:Open("TEARollHelper")
+                end
+            },
         }
     }
 

@@ -8,6 +8,7 @@ ui.modules.config.modules.settings.getOptions = function()
         name = "Settings",
         type = "group",
         order = 2,
+        cmdHidden = true,
         args = {
             minimapIcon = {
                 order = 0,

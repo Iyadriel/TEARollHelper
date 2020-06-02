@@ -176,7 +176,6 @@ ui.modules.buffs.getOptions = function(options)
                 desc = function()
                     return character.getPlayerRacialTrait().desc
                 end,
-                cmdHidden = true,
                 width = "full",
                 hidden = function()
                     local trait = character.getPlayerRacialTrait()
@@ -198,7 +197,6 @@ ui.modules.buffs.getOptions = function(options)
                 type = "toggle",
                 name = WEAKNESSES.TIMID.manualActivation .. " (" .. WEAKNESSES.TIMID.name .. ")",
                 desc = WEAKNESSES.TIMID.desc,
-                cmdHidden = true,
                 width = "full",
                 hidden = function()
                     return not character.hasWeakness(WEAKNESSES.TIMID) or state.buffLookup.getWeaknessDebuff(WEAKNESSES.TIMID) ~= nil
