@@ -39,8 +39,8 @@ rolls.initState = function()
         },
 
         defend = {
-            threshold = 10,
-            damageRisk = 4,
+            threshold = nil,
+            damageRisk = nil,
             useBulwark = false,
             rollMode = turns.ROLL_MODES.NORMAL,
             currentRoll = nil,
@@ -148,6 +148,8 @@ end
 
 local function resetThresholds()
     rolls.state.attack.threshold.set(nil)
+    rolls.state.defend.threshold.set(nil)
+    rolls.state.defend.damageRisk.set(nil)
 end
 
 bus.addListener(EVENTS.CHARACTER_STAT_CHANGED, resetSlots)

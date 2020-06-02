@@ -59,7 +59,13 @@ ui.modules.actions.modules.defend.getOptions = function(options)
         args = {
             defendThreshold = sharedOptions.defendThreshold,
             damageRisk = sharedOptions.damageRisk,
-            roll = ui.modules.turn.modules.roll.getOptions({ order = 2, action = "defend" }),
+            roll = ui.modules.turn.modules.roll.getOptions({
+                order = 2,
+                action = "defend",
+                hidden = function()
+                    return not (rolls.state.defend.threshold.get() and rolls.state.defend.damageRisk.get())
+                end,
+            }),
             defend = {
                 order = 3,
                 type = "group",

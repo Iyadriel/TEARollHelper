@@ -21,7 +21,13 @@ ui.modules.actions.modules.rangedSave.getOptions = function(options)
         order = options.order,
         args = {
             defendThreshold = sharedOptions.defendThreshold,
-            roll = ui.modules.turn.modules.roll.getOptions({ order = 2, action = "rangedSave" }),
+            roll = ui.modules.turn.modules.roll.getOptions({
+                order = 2,
+                action = "rangedSave",
+                hidden = function()
+                    return not (rolls.state.defend.threshold.get() and rolls.state.defend.damageRisk.get())
+                end,
+            }),
             rangedSave = {
                 order = 3,
                 type = "group",

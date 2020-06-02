@@ -18,7 +18,13 @@ ui.modules.actions.modules.meleeSave.getOptions = function(options)
         args = {
             defendThreshold = sharedOptions.defendThreshold,
             damageRisk = sharedOptions.damageRisk,
-            roll = ui.modules.turn.modules.roll.getOptions({ order = 2, action = "meleeSave" }),
+            roll = ui.modules.turn.modules.roll.getOptions({
+                order = 2,
+                action = "meleeSave",
+                hidden = function()
+                    return not (rolls.state.defend.threshold.get() and rolls.state.defend.damageRisk.get())
+                end,
+            }),
             meleeSave = {
                 order = 3,
                 type = "group",
