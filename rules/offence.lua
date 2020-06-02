@@ -49,6 +49,9 @@ end
 local function calculateAttackDmg(threshold, attackValue)
     local overkill = attackValue - threshold
     if overkill >= 0 then
+        if character.hasFeat(FEATS.ONSLAUGHT) then
+            return getBaseDamage() + ceil(character.getPlayerOffence() / 2)
+        end
         return getBaseDamage() + floor(overkill / 2)
     end
     return 0

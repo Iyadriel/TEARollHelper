@@ -1,7 +1,7 @@
 local _, ns = ...
 
 local feats = ns.resources.feats
-feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "COUNTER_FORCE", "EXPANSIVE_ARSENAL", "FOREIGN_DISCIPLE", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "MONSTER_HUNTER", "PARAGON", "PHALANX", "PROFESSIONAL", "REAPER", "WARDER"}
+feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "COUNTER_FORCE", "EXPANSIVE_ARSENAL", "FOREIGN_DISCIPLE", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "MONSTER_HUNTER", "ONSLAUGHT", "PARAGON", "PHALANX", "PROFESSIONAL", "REAPER", "WARDER"}
 
 feats.FEATS = {
     FEATLESS = {
@@ -80,6 +80,12 @@ feats.FEATS = {
         name = "Monster Hunter",
         desc = "You have advantage on offense attack rolls against creatures of the following types - Undead, Demon, Void, Eldritch.",
         note = "Advantage must be enabled manually when rolling.",
+        supported = true
+    },
+    ONSLAUGHT = {
+        id = "ONSLAUGHT",
+        name = "Onslaught",
+        desc = "When hitting with an Offence attack roll you always deal your base damage plus half of your Offence stat rounded up, regardless of how much you beat the threshold by.",
         supported = true
     },
     PARAGON = {
