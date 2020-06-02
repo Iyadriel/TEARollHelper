@@ -65,6 +65,7 @@ turnState.state = {
     inCombat = basicGetSet("inCombat", function(inCombat)
         if inCombat then
             turnState.state.index.set(1)
+            turnState.state.type.set(TURN_TYPES.PLAYER.id)
             bus.fire(EVENTS.COMBAT_STARTED)
         else
             turnState.state.index.reset()
