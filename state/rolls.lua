@@ -47,11 +47,14 @@ rolls.initState = function()
         },
 
         meleeSave = {
+            threshold = nil,
+            damageRisk = nil,
             rollMode = turns.ROLL_MODES.NORMAL,
             currentRoll = nil,
         },
 
         rangedSave = {
+            threshold = nil,
             rollMode = turns.ROLL_MODES.NORMAL,
             currentRoll = nil,
         },
@@ -111,11 +114,14 @@ rolls.state = {
     },
 
     meleeSave = {
+        threshold = basicGetSet("meleeSave", "threshold"),
+        damageRisk = basicGetSet("meleeSave", "damageRisk"),
         rollMode = basicGetSet("meleeSave", "rollMode"),
         currentRoll = basicGetSet("meleeSave", "currentRoll"),
     },
 
     rangedSave = {
+        threshold = basicGetSet("rangedSave", "threshold"),
         rollMode = basicGetSet("rangedSave", "rollMode"),
         currentRoll = basicGetSet("rangedSave", "currentRoll"),
     },
@@ -150,6 +156,9 @@ local function resetThresholds()
     rolls.state.attack.threshold.set(nil)
     rolls.state.defend.threshold.set(nil)
     rolls.state.defend.damageRisk.set(nil)
+    rolls.state.meleeSave.threshold.set(nil)
+    rolls.state.meleeSave.damageRisk.set(nil)
+    rolls.state.rangedSave.threshold.set(nil)
 end
 
 bus.addListener(EVENTS.CHARACTER_STAT_CHANGED, resetSlots)
@@ -228,14 +237,14 @@ local function getMeleeSave()
     local defence = character.getPlayerDefence()
     local buff = characterState.buffs.defence.get()
 
-    return actions.getMeleeSave(state.meleeSave.currentRoll, state.defend.threshold, state.defend.damageRisk, defence, buff)
+    return actions.getMeleeSave(state.meleeSave.currentRoll, state.meleeSave.threshold, state.meleeSave.damageRisk, defence, buff)
 end
 
 local function getRangedSave()
     local spirit = character.getPlayerSpirit()
     local buff = characterState.buffs.spirit.get()
 
-    return actions.getRangedSave(state.rangedSave.currentRoll, state.defend.threshold, state.defend.damageRisk, spirit, buff)
+    return actions.getRangedSave(state.rangedSave.currentRoll, state.rangedSave.threshold, spirit, buff)
 end
 
 rolls.getAttack = getAttack

@@ -13,7 +13,7 @@ local FEATS = feats.FEATS
     order: Number
 } ]]
 ui.modules.actions.modules.rangedSave.getOptions = function(options)
-    local sharedOptions = ui.modules.actions.modules.defend.getSharedOptions()
+    local sharedOptions = ui.modules.actions.modules.defend.getSharedOptions("rangedSave")
 
     return {
         name = "Ranged save",
@@ -25,7 +25,7 @@ ui.modules.actions.modules.rangedSave.getOptions = function(options)
                 order = 2,
                 action = "rangedSave",
                 hidden = function()
-                    return not (rolls.state.defend.threshold.get() and rolls.state.defend.damageRisk.get())
+                    return not rolls.state.rangedSave.threshold.get()
                 end,
             }),
             rangedSave = {
@@ -46,7 +46,7 @@ ui.modules.actions.modules.rangedSave.getOptions = function(options)
                             local hasWarder = character.hasFeat(FEATS.WARDER)
                             local dmgReductionColour = hasWarder and COLOURS.FEATS.GENERIC or COLOURS.DEFAULT
 
-                            if save.thresholdMet then
+                            if save.canFullyProtect then
                                 return COLOURS.SAVE .. "You can fully protect your ally."
                             elseif save.damageReduction > 0 then
                                 return dmgReductionColour .. "You can reduce the damage your ally takes by " .. save.damageReduction .. ".|n" .. COLOURS.NOTE .. "However, you cannot act during the next player turn."

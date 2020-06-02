@@ -9,7 +9,7 @@ local ui = ns.ui
     order: Number
 } ]]
 ui.modules.actions.modules.meleeSave.getOptions = function(options)
-    local sharedOptions = ui.modules.actions.modules.defend.getSharedOptions()
+    local sharedOptions = ui.modules.actions.modules.defend.getSharedOptions("meleeSave")
 
     return {
         name = "Melee save",
@@ -22,7 +22,7 @@ ui.modules.actions.modules.meleeSave.getOptions = function(options)
                 order = 2,
                 action = "meleeSave",
                 hidden = function()
-                    return not (rolls.state.defend.threshold.get() and rolls.state.defend.damageRisk.get())
+                    return not (rolls.state.meleeSave.threshold.get() and rolls.state.meleeSave.damageRisk.get())
                 end,
             }),
             meleeSave = {

@@ -13,7 +13,8 @@ local TRAITS = traits.TRAITS
 local state = characterState.state
 
 -- shared with melee and ranged save
-ui.modules.actions.modules.defend.getSharedOptions = function()
+-- action: String (defend, meleeSave, rangedSave)
+ui.modules.actions.modules.defend.getSharedOptions = function(action)
     return {
         defendThreshold = {
             order = 0,
@@ -24,23 +25,23 @@ ui.modules.actions.modules.defend.getSharedOptions = function()
             softMax = 20,
             max = 100,
             step = 1,
-            get = rolls.state.defend.threshold.get,
+            get = rolls.state[action].threshold.get,
             set = function(info, value)
-                rolls.state.defend.threshold.set(value)
+                rolls.state[action].threshold.set(value)
             end
         },
-        damageRisk = {
+        damageRisk = action ~= "rangedSave" and {
             order = 1,
             name = "Damage risk",
             type = "range",
-            desc = "How much damage you will take if you fail the roll",
+            desc = "How much damage is taken on a fail the roll",
             min = 1,
             softMax = 20,
             max = 100,
             step = 1,
-            get = rolls.state.defend.damageRisk.get,
+            get = rolls.state[action].damageRisk.get,
             set = function(info, value)
-                rolls.state.defend.damageRisk.set(value)
+                rolls.state[action].damageRisk.set(value)
             end
         },
     }
@@ -50,7 +51,7 @@ end
     order: Number
 } ]]
 ui.modules.actions.modules.defend.getOptions = function(options)
-    local sharedOptions = ui.modules.actions.modules.defend.getSharedOptions()
+    local sharedOptions = ui.modules.actions.modules.defend.getSharedOptions("defend")
 
     return {
         name = "Defend",
