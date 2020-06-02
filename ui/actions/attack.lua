@@ -80,7 +80,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                         fontSize = "medium",
                         name = function()
                             local attack = rolls.getAttack()
-                            local msg = " |n"
+                            local msg = ""
                             local excited = false
 
                             if attack.dmg > 0 then
