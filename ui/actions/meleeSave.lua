@@ -19,31 +19,42 @@ ui.modules.actions.modules.meleeSave.getOptions = function(options)
             defendThreshold = sharedOptions.defendThreshold,
             damageRisk = sharedOptions.damageRisk,
             roll = ui.modules.turn.modules.roll.getOptions({ order = 2, action = "meleeSave" }),
-            saveDamageTaken = {
+            meleeSave = {
                 order = 3,
-                type = "description",
-                desc = "How much damage you take this turn",
-                fontSize = "medium",
-                name = function()
-                    local save = rolls.getMeleeSave()
+                type = "group",
+                name = "Melee save",
+                inline = true,
+                hidden = function()
+                    return not rolls.state.meleeSave.currentRoll.get()
+                end,
+                args = {
+                    saveDamageTaken = {
+                        order = 3,
+                        type = "description",
+                        desc = "How much damage you take this turn",
+                        fontSize = "medium",
+                        name = function()
+                            local save = rolls.getMeleeSave()
 
-                    local msg = ""
+                            local msg = ""
 
-                    if save.damageTaken > 0 then
-                        if save.isBigFail then
-                            msg = COLOURS.DAMAGE .. "Bad save! |r"
+                            if save.damageTaken > 0 then
+                                if save.isBigFail then
+                                    msg = COLOURS.DAMAGE .. "Bad save! |r"
+                                end
+                                msg = msg .. "You can save your ally, |r" .. COLOURS.DAMAGE .. "but you will take " .. tostring(save.damageTaken) .. " damage."
+                            else
+                                msg = COLOURS.SAVE .. "You can save your ally without taking any damage yourself."
+                            end
+
+                            if save.hasCounterForceProc then
+                                msg = msg .. COLOURS.FEATS.GENERIC .. "\nCOUNTER-FORCE!|r You can deal "..save.counterForceDmg.." damage to your attacker!"
+                            end
+
+                            return msg
                         end
-                        msg = msg .. "You can save your ally, |r" .. COLOURS.DAMAGE .. "but you will take " .. tostring(save.damageTaken) .. " damage."
-                    else
-                        msg = COLOURS.SAVE .. "You can save your ally without taking any damage yourself."
-                    end
-
-                    if save.hasCounterForceProc then
-                        msg = msg .. COLOURS.FEATS.GENERIC .. "\nCOUNTER-FORCE!|r You can deal "..save.counterForceDmg.." damage to your attacker!"
-                    end
-
-                    return msg
-                end
+                    },
+                }
             },
         },
     }

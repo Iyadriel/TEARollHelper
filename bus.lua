@@ -23,6 +23,10 @@ local EVENTS = {
     DAMAGE_TAKEN = "DAMAGE_TAKEN", -- dmgTaken
     HEALED = "HEALED", -- amountHealed, netAmountHealed, overHealing
 
+    -- Rolling
+    ROLL_CHANGED = "ROLL_CHANGED", -- roll
+    PREPPED_ROLL_CHANGED = "PREPPED_ROLL_CHANGED", -- roll
+
     -- Turn
     COMBAT_STARTED = "COMBAT_STARTED",
     COMBAT_OVER = "COMBAT_OVER",

@@ -60,53 +60,64 @@ ui.modules.actions.modules.defend.getOptions = function(options)
             defendThreshold = sharedOptions.defendThreshold,
             damageRisk = sharedOptions.damageRisk,
             roll = ui.modules.turn.modules.roll.getOptions({ order = 2, action = "defend" }),
-            useBulwark = {
+            defend = {
                 order = 3,
-                type = "toggle",
-                name = COLOURS.TRAITS.GENERIC .. TRAITS.BULWARK.name,
-                desc = TRAITS.BULWARK.desc,
+                type = "group",
+                name = "Defend",
+                inline = true,
                 hidden = function()
-                    return not character.hasTrait(TRAITS.BULWARK)
+                    return not rolls.state.defend.currentRoll.get()
                 end,
-                disabled = function()
-                    return state.featsAndTraits.numBulwarkCharges.get() == 0
-                end,
-                get = rolls.state.defend.useBulwark.get,
-                set = function (info, value)
-                    rolls.state.defend.useBulwark.set(value)
-                end
-            },
-            damageTaken = {
-                order = 4,
-                type = "description",
-                desc = "How much damage you take this turn",
-                fontSize = "medium",
-                name = function()
-                    local defence = rolls.getDefence()
-
-                    if defence.damageTaken > 0 then
-                        return COLOURS.DAMAGE .. "You take " .. tostring(defence.damageTaken) .. " damage."
-                    else
-                        local msg = "Safe! You don't take damage this turn."
-                        if defence.canRetaliate then
-                            msg = msg .. COLOURS.CRITICAL .. "\nRETALIATE!|r You can deal "..defence.retaliateDmg.." damage to your attacker!"
+                args = {
+                    useBulwark = {
+                        order = 3,
+                        type = "toggle",
+                        name = COLOURS.TRAITS.GENERIC .. TRAITS.BULWARK.name,
+                        desc = TRAITS.BULWARK.desc,
+                        hidden = function()
+                            return not character.hasTrait(TRAITS.BULWARK)
+                        end,
+                        disabled = function()
+                            return state.featsAndTraits.numBulwarkCharges.get() == 0
+                        end,
+                        get = rolls.state.defend.useBulwark.get,
+                        set = function (info, value)
+                            rolls.state.defend.useBulwark.set(value)
                         end
-                        return msg
-                    end
-                end
+                    },
+                    damageTaken = {
+                        order = 4,
+                        type = "description",
+                        desc = "How much damage you take this turn",
+                        fontSize = "medium",
+                        name = function()
+                            local defence = rolls.getDefence()
+
+                            if defence.damageTaken > 0 then
+                                return COLOURS.DAMAGE .. "You take " .. tostring(defence.damageTaken) .. " damage."
+                            else
+                                local msg = "Safe! You don't take damage this turn."
+                                if defence.canRetaliate then
+                                    msg = msg .. COLOURS.CRITICAL .. "\nRETALIATE!|r You can deal "..defence.retaliateDmg.." damage to your attacker!"
+                                end
+                                return msg
+                            end
+                        end
+                    },
+                    okay = {
+                        order = 5,
+                        type = "execute",
+                        name = "Okay :(",
+                        desc = "Apply the stated damage to your character's HP",
+                        hidden = function()
+                            return rolls.getDefence().damageTaken == 0
+                        end,
+                        func = function()
+                            consequences.confirmDefenceAction(rolls.getDefence())
+                        end
+                    }
+                }
             },
-            okay = {
-                order = 5,
-                type = "execute",
-                name = "Okay :(",
-                desc = "Apply the stated damage to your character's HP",
-                hidden = function()
-                    return rolls.getDefence().damageTaken == 0
-                end,
-                func = function()
-                    consequences.confirmDefenceAction(rolls.getDefence())
-                end
-            }
         },
     }
 end

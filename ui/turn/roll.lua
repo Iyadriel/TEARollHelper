@@ -10,7 +10,7 @@ local state = rollState.state
 
 --[[ local options = {
     order: Number,
-    action: String, -- attack, healing, buff, defend, utility
+    action: String, -- attack, healing, buff, defend, meleeSave, rangedSave, utility
     includePrep: Boolean,
 } ]]
 ui.modules.turn.modules.roll.getOptions = function(options)
@@ -43,10 +43,11 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 width = 0.55,
                 hidden = not options.includePrep,
                 get = function()
-                    return turns.getRollValues().prepMode
+                    return state[options.action].prepMode.get()
                 end,
                 set = function(info, value)
-                    turns.getRollValues().prepMode = value
+                    turns.setAction(options.action)
+                    state[options.action].prepMode.set(value)
                 end,
             },
             performRoll = {
@@ -62,7 +63,9 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 end,
                 func = function()
                     local rollMode = state[options.action].rollMode.get()
-                    turns.roll(rollMode)
+                    local prepMode = options.includePrep and state[options.action].prepMode.get() or false
+                    turns.setAction(options.action)
+                    turns.roll(rollMode, prepMode)
                 end
             },
             roll = {
@@ -74,9 +77,10 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 max = rules.rolls.MAX_ROLL,
                 step = 1,
                 get = function()
-                    return turns.getRollValues().roll
+                    return state[options.action].currentRoll.get()
                 end,
                 set = function(info, value)
+                    turns.setAction(options.action)
                     turns.setCurrentRoll(value)
                 end
             },
@@ -88,14 +92,14 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 min = 1,
                 max = rules.rolls.MAX_ROLL,
                 step = 1,
-                --width = 1.1,
                 hidden = not options.includePrep or function()
-                    return not (turns.getRollValues().prepMode or turns.getRollValues().preppedRoll)
+                    return not state[options.action].prepMode.get()
                 end,
                 get = function()
-                    return turns.getRollValues().preppedRoll
+                    return state[options.action].currentPreppedRoll.get()
                 end,
                 set = function(info, value)
+                    turns.setAction(options.action)
                     turns.setPreppedRoll(value)
                 end
             },

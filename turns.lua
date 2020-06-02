@@ -15,18 +15,18 @@ local ROLL_MODES = {
     ADVANTAGE = 1
 }
 
-local isRolling, setCurrentRoll, setPreppedRoll, getRollValues, handleRollResult
-local getRollMode, setRollMode
+local isRolling, setCurrentRoll, setPreppedRoll, handleRollResult
 local doRoll
 
 local rollValues = {
     isRolling = false,
-    roll = 1,
-    rollMode = nil,
+    tempRoll = nil,
+    action = nil,
+    tempRollMode = nil,
 
     isPrepRolling = false,
-    preppedRoll = nil,
-    prepMode = false,
+    tempPreppedRoll = nil,
+    tempPrepMode = false,
 }
 local totalRequiredRolls = 1
 local remainingRolls = 1
@@ -40,34 +40,22 @@ function isRolling()
 end
 
 function setCurrentRoll(roll)
-    rollValues.roll = roll
+    bus.fire(EVENTS.ROLL_CHANGED, rollValues.action, roll)
 end
 
 function setPreppedRoll(roll)
-    rollValues.preppedRoll = roll
+    bus.fire(EVENTS.PREPPED_ROLL_CHANGED, rollValues.action, roll)
 end
 
-function getRollValues()
-    return rollValues
+local function setAction(action)
+    rollValues.action = action
 end
 
-function getRollMode()
-    return rollValues.rollMode
-end
-
-function setRollMode(mode)
-    rollValues.rollMode = mode
-end
-
-local function resetRollMode()
-    setRollMode(nil)
-end
-
-local function resetRollValues()
-    setCurrentRoll(1)
-    resetRollMode()
-    rollValues.preppedRoll = nil
-    rollValues.prepMode = false
+local function resetTempValues()
+    rollValues.tempRollMode = nil
+    rollValues.tempRoll = nil
+    rollValues.tempPreppedMode = nil
+    rollValues.tempPreppedRoll = nil
 end
 
 local function sendRoll()
@@ -78,7 +66,7 @@ end
 local function getRequiredRollsForTurn()
     local numRolls
 
-    if getRollMode() == ROLL_MODES.NORMAL then
+    if rollValues.tempRollMode == ROLL_MODES.NORMAL then
         numRolls = 1
     else
         numRolls = 2
@@ -87,14 +75,11 @@ local function getRequiredRollsForTurn()
     return numRolls
 end
 
-function doRoll(rollMode)
-    rollValues.rollMode = rollMode
+function doRoll(rollMode, prepMode)
+    rollValues.tempRollMode = rollMode
+    rollValues.tempPrepMode = prepMode
     rollValues.isRolling = true
-    if rollValues.prepMode then
-        rollValues.isPrepRolling = true
-    else
-        rollValues.preppedRoll = nil
-    end
+    rollValues.isPrepRolling = prepMode
 
     notifyChange() -- so we can update the button state
 
@@ -106,17 +91,18 @@ function doRoll(rollMode)
 end
 
 function handleRollResult(result)
-    local rollMode = getRollMode()
-    local roll = rollValues.isPrepRolling and rollValues.preppedRoll or rollValues.roll
+    local rollMode = rollValues.tempRollMode
+    print(rollMode)
+    local roll = rollValues.isPrepRolling and rollValues.tempPreppedRoll or rollValues.tempRoll
 
     if
         (remainingRolls == totalRequiredRolls) or
         (rollMode == ROLL_MODES.ADVANTAGE and result > roll) or
         (rollMode == ROLL_MODES.DISADVANTAGE and result < roll) then
         if rollValues.isPrepRolling then
-            setPreppedRoll(result)
+            rollValues.tempPreppedRoll = result
         else
-            setCurrentRoll(result)
+            rollValues.tempRoll = result
         end
     end
 
@@ -134,26 +120,24 @@ function handleRollResult(result)
 
         sendRoll()
     else
-        if rollValues.prepMode then
-            rollValues.prepMode = false
-        else
+        rollValues.isRolling = false
+
+        setCurrentRoll(rollValues.tempRoll)
+
+        if rollValues.tempPrepMode then
+            setPreppedRoll(rollValues.tempPreppedRoll)
         end
 
-        rollValues.isRolling = false
+        resetTempValues()
 
         notifyChange()
     end
 end
 
-bus.addListener(EVENTS.COMBAT_OVER, resetRollMode)
-bus.addListener(EVENTS.FEAT_CHANGED, resetRollValues) -- in case of crit threshold change
-bus.addListener(EVENTS.RACIAL_TRAIT_CHANGED, resetRollValues) -- in case of crit threshold change
-bus.addListener(EVENTS.TURN_CHANGED, resetRollMode)
-
 turns.ROLL_MODES = ROLL_MODES
-turns.getRollValues = getRollValues
 turns.isRolling = isRolling
 turns.setCurrentRoll = setCurrentRoll
 turns.setPreppedRoll = setPreppedRoll
+turns.setAction = setAction
 turns.roll = doRoll
 turns.handleRollResult = handleRollResult
