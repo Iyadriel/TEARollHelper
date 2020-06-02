@@ -12,6 +12,7 @@ local BUFF_TYPES = {
 
 local BUFF_SOURCES = {
     PLAYER = "Player",
+    WEAKNESS = "Weakness",
     RACIAL_TRAIT = "Racial Trait",
 }
 
@@ -72,6 +73,23 @@ local function addStatBuff(stat, amount, label, expireAfterNextTurn)
     bus.fire(EVENTS.STAT_BUFF_ADDED, stat, amount)
 end
 
+local function addWeaknessDebuff(weakness)
+    local debuffs = weakness.debuffs
+    if debuffs and debuffs.stats then
+        addBuff({
+            id = "weakness_" .. weakness.id,
+            type = BUFF_TYPES.STAT,
+            label = weakness.name,
+            icon = weakness.icon,
+
+            stats = debuffs.stats,
+
+            source = BUFF_SOURCES.WEAKNESS,
+            weaknessID = weakness.id
+        })
+    end
+end
+
 local function addRacialBuff(racialTrait)
     local buffs = racialTrait.buffs
     if buffs and buffs.stats then
@@ -93,4 +111,5 @@ ns.buffs.BUFF_TYPES = BUFF_TYPES
 ns.buffs.BUFF_SOURCES = BUFF_SOURCES
 ns.buffs.STAT_LABELS = STAT_LABELS
 ns.buffs.addStatBuff = addStatBuff
+ns.buffs.addWeaknessDebuff = addWeaknessDebuff
 ns.buffs.addRacialBuff = addRacialBuff

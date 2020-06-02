@@ -199,6 +199,9 @@ characterState.state = {
         getPlayerStatBuff = function(stat)
             return characterState.state.buffLookup.get("player_" .. stat)
         end,
+        getWeaknessDebuff = function(weakness)
+            return characterState.state.buffLookup.get("weakness_" .. weakness.id)
+        end,
         getRacialBuff = function()
             return characterState.state.buffLookup.get("racial")
         end,
