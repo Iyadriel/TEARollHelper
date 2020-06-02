@@ -60,10 +60,12 @@ ui.modules.buffs.getOptions = function(options)
 
                         local msg = " |n"
                         if buff.type == BUFF_TYPES.STAT then
-                            if buff.amount > 0 then
-                                msg = msg .. STAT_LABELS[buff.stat] .. " increased by " .. buff.amount .. "."
+                            for stat, amount in pairs(buff.stats) do
+                                if amount > 0 then
+                                    msg = msg .. STAT_LABELS[stat] .. " increased by " .. amount .. ". "
                             else
-                                msg = msg .. STAT_LABELS[buff.stat] .. " decreased by " .. abs(buff.amount) .. "."
+                                    msg = msg .. STAT_LABELS[stat] .. " decreased by " .. abs(amount) .. ". "
+                            end
                             end
                         --elseif buff.type == "advantage" then
                         --    msg = "Your rolls have advantage."

@@ -60,8 +60,9 @@ local function addStatBuff(stat, amount, label, expireAfterNextTurn)
         label = label,
         icon = STAT_TYPE_ICONS[stat],
 
-        stat = stat,
-        amount = amount,
+        stats = {
+            [stat] = amount
+        },
 
         source = BUFF_SOURCES.PLAYER,
 
@@ -72,16 +73,15 @@ local function addStatBuff(stat, amount, label, expireAfterNextTurn)
 end
 
 local function addRacialBuff(racialTrait)
-    local statBuff = racialTrait.statBuff
-    if statBuff then
+    local buffs = racialTrait.buffs
+    if buffs and buffs.stats then
         addBuff({
             id = "racial",
             type = BUFF_TYPES.STAT,
             label = racialTrait.name,
             icon = racialTrait.icon,
 
-            stat = statBuff.stat,
-            amount = statBuff.amount,
+            stats = buffs.stats,
 
             source = BUFF_SOURCES.RACIAL_TRAIT,
             racialTraitID = racialTrait.id

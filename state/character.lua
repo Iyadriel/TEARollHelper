@@ -148,8 +148,10 @@ characterState.state = {
             characterState.state.buffLookup.add(buff)
 
             if buff.type == buffs.BUFF_TYPES.STAT then
-                local statBuff = characterState.state.buffs[buff.stat]
-                statBuff.set(statBuff.get() + buff.amount)
+                for stat, amount in pairs(buff.stats) do
+                    local statBuff = characterState.state.buffs[stat]
+                    statBuff.set(statBuff.get() + amount)
+            end
             end
 
             -- reset input
@@ -176,8 +178,10 @@ characterState.state = {
             local buff = state.activeBuffs[index]
 
             if buff.type == buffs.BUFF_TYPES.STAT then
-                local statBuff = characterState.state.buffs[buff.stat]
-                statBuff.set(statBuff.get() - buff.amount)
+                for stat, amount in pairs(buff.stats) do
+                    local statBuff = characterState.state.buffs[stat]
+                    statBuff.set(statBuff.get() - amount)
+                end
             end
 
             table.remove(state.activeBuffs, index)
