@@ -12,6 +12,7 @@ local state = rollState.state
     order: Number,
     action: String, -- attack, healing, buff, defend, meleeSave, rangedSave, utility
     includePrep: Boolean,
+    hidden: Function,
 } ]]
 ui.modules.turn.modules.roll.getOptions = function(options)
     return {
@@ -19,6 +20,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
         name = "Roll",
         inline = true,
         order = options.order,
+        hidden = options.hidden or false,
         args = {
             rollMode = {
                 order = 0,

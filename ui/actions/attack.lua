@@ -41,6 +41,9 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                 order = 1,
                 action = "attack",
                 includePrep = true,
+                hidden = function()
+                    return not state.attack.threshold.get()
+                end,
             }),
             attack = {
                 order = 2,

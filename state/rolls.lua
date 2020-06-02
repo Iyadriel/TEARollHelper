@@ -18,7 +18,7 @@ local state
 rolls.initState = function()
     state = {
         attack = {
-            threshold = 12,
+            threshold = nil,
             numBloodHarvestSlots = 0,
             rollMode = turns.ROLL_MODES.NORMAL,
             currentRoll = nil,
@@ -146,6 +146,10 @@ local function resetRolls()
     rolls.state.utility.currentRoll.set(nil)
 end
 
+local function resetThresholds()
+    rolls.state.attack.threshold.set(nil)
+end
+
 bus.addListener(EVENTS.CHARACTER_STAT_CHANGED, resetSlots)
 bus.addListener(EVENTS.FEAT_CHANGED, function()
     resetSlots()
@@ -156,6 +160,7 @@ bus.addListener(EVENTS.RACIAL_TRAIT_CHANGED, resetRolls) -- in case of crit thre
 bus.addListener(EVENTS.TURN_CHANGED, function()
     resetSlots()
     resetRolls()
+    resetThresholds()
 end)
 
 bus.addListener(EVENTS.FEAT_CHARGES_CHANGED, function(featID, numCharges)
