@@ -65,7 +65,7 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                             [rules.offence.calculateMercyFromPainBonusHealing(true)] = "Multple enemies damaged",
                         },
                         hidden = function()
-                            return options.outOfCombat or not rules.offence.canProcMercyFromPain()
+                            return not rules.offence.canProcMercyFromPain()
                         end,
                         get = state.healing.mercyFromPainBonusHealing.get,
                         set = function(info, value)
