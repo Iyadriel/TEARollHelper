@@ -5,7 +5,6 @@ local constants = ns.constants
 local characterState = ns.state.character
 
 local EVENTS = bus.EVENTS
-local ROLL_MODES = constants.ROLL_MODES
 local STAT_LABELS = constants.STAT_LABELS
 
 local BUFF_TYPES = {
@@ -139,6 +138,11 @@ end
 local function addRacialBuff(racialTrait)
     local buffs = racialTrait.buffs
     if buffs and buffs.stats then
+        local existingBuff = characterState.state.buffLookup.getRacialBuff()
+        if existingBuff then
+            removeBuff(existingBuff)
+        end
+
         addBuff({
             id = "racial",
             type = BUFF_TYPES.STAT,
