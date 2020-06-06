@@ -3,12 +3,15 @@ local _, ns = ...
 local COLOURS = TEARollHelper.COLOURS
 
 local characterState = ns.state.character.state
+local constants = ns.constants
 local feats = ns.resources.feats
 local rolls = ns.state.rolls
 local rules = ns.rules
 local traits = ns.resources.traits
 local ui = ns.ui
 
+local ACTIONS = constants.ACTIONS
+local ACTION_LABELS = constants.ACTION_LABELS
 local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
 
@@ -19,7 +22,7 @@ local state = rolls.state
 } ]]
 ui.modules.actions.modules.attack.getOptions = function(options)
     return {
-        name = "Attack",
+        name = ACTION_LABELS.attack,
         type = "group",
         order = options.order,
         args = {
@@ -39,7 +42,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
             },
             roll = ui.modules.turn.modules.roll.getOptions({
                 order = 1,
-                action = "attack",
+                action = ACTIONS.attack,
                 includePrep = true,
                 hidden = function()
                     return not state.attack.threshold.get()
@@ -48,7 +51,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
             attack = {
                 order = 2,
                 type = "group",
-                name = "Attack",
+                name = ACTION_LABELS.attack,
                 inline = true,
                 hidden = function()
                     return not state.attack.currentRoll.get()

@@ -3,10 +3,13 @@ local _, ns = ...
 local COLOURS = TEARollHelper.COLOURS
 
 local character = ns.character
+local constants = ns.constants
 local feats = ns.resources.feats
 local rolls = ns.state.rolls
 local ui = ns.ui
 
+local ACTIONS = constants.ACTIONS
+local ACTION_LABELS = constants.ACTION_LABELS
 local FEATS = feats.FEATS
 
 --[[ local options = {
@@ -16,14 +19,14 @@ ui.modules.actions.modules.rangedSave.getOptions = function(options)
     local sharedOptions = ui.modules.actions.modules.defend.getSharedOptions("rangedSave")
 
     return {
-        name = "Ranged save",
+        name = ACTION_LABELS.rangedSave,
         type = "group",
         order = options.order,
         args = {
             defendThreshold = sharedOptions.defendThreshold,
             roll = ui.modules.turn.modules.roll.getOptions({
                 order = 2,
-                action = "rangedSave",
+                action = ACTIONS.rangedSave,
                 hidden = function()
                     return not rolls.state.rangedSave.threshold.get()
                 end,
@@ -31,7 +34,7 @@ ui.modules.actions.modules.rangedSave.getOptions = function(options)
             rangedSave = {
                 order = 3,
                 type = "group",
-                name = "Ranged save",
+                name = ACTION_LABELS.rangedSave,
                 inline = true,
                 hidden = function()
                     return not rolls.state.rangedSave.currentRoll.get()

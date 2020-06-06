@@ -1,9 +1,12 @@
 local _, ns = ...
 
 local actions = ns.actions
+local constants = ns.constants
 local rolls = ns.state.rolls
-local turns = ns.turns
 local ui = ns.ui
+
+local ACTIONS = constants.ACTIONS
+local ACTION_LABELS = constants.ACTION_LABELS
 
 local state = rolls.state
 
@@ -13,14 +16,14 @@ local state = rolls.state
 ui.modules.actions.modules.utility.getOptions = function(options)
     return {
         type = "group",
-        name = "Utility",
+        name = ACTION_LABELS.utility,
         order = options.order,
         args = {
-            roll = ui.modules.turn.modules.roll.getOptions({ order = 0, action = "utility" }),
+            roll = ui.modules.turn.modules.roll.getOptions({ order = 0, action = ACTIONS.utility }),
             utility = {
                 order = 1,
                 type = "group",
-                name = "Utility",
+                name = ACTION_LABELS.utility,
                 inline = true,
                 hidden = function()
                     return not state.utility.currentRoll.get()

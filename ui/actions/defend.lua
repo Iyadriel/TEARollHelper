@@ -5,11 +5,15 @@ local COLOURS = TEARollHelper.COLOURS
 local character = ns.character
 local characterState = ns.state.character
 local consequences = ns.consequences
+local constants = ns.constants
 local rolls = ns.state.rolls
 local traits = ns.resources.traits
 local ui = ns.ui
 
+local ACTIONS = constants.ACTIONS
+local ACTION_LABELS = constants.ACTION_LABELS
 local TRAITS = traits.TRAITS
+
 local state = characterState.state
 
 -- shared with melee and ranged save
@@ -54,7 +58,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
     local sharedOptions = ui.modules.actions.modules.defend.getSharedOptions("defend")
 
     return {
-        name = "Defend",
+        name = ACTION_LABELS.defend,
         type = "group",
         order = options.order,
         args = {
@@ -62,7 +66,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
             damageRisk = sharedOptions.damageRisk,
             roll = ui.modules.turn.modules.roll.getOptions({
                 order = 2,
-                action = "defend",
+                action = ACTIONS.defend,
                 hidden = function()
                     return not (rolls.state.defend.threshold.get() and rolls.state.defend.damageRisk.get())
                 end,
@@ -70,7 +74,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
             defend = {
                 order = 3,
                 type = "group",
-                name = "Defend",
+                name = ACTION_LABELS.defend,
                 inline = true,
                 hidden = function()
                     return not rolls.state.defend.currentRoll.get()

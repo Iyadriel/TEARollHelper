@@ -4,11 +4,14 @@ local COLOURS = TEARollHelper.COLOURS
 
 local character = ns.character
 local characterState = ns.state.character.state
+local constants = ns.constants
 local feats = ns.resources.feats
 local rolls = ns.state.rolls
 local rules = ns.rules
 local ui = ns.ui
 
+local ACTIONS = constants.ACTIONS
+local ACTION_LABELS = constants.ACTION_LABELS
 local FEATS = feats.FEATS
 local state = rolls.state
 
@@ -18,15 +21,15 @@ local state = rolls.state
 } ]]
 ui.modules.actions.modules.healing.getOptions = function(options)
     return {
-        name = "Heal",
+        name = ACTION_LABELS.healing,
         type = "group",
         order = options.order,
         args = {
-            roll = ui.modules.turn.modules.roll.getOptions({ order = 0, action = "healing" }),
+            roll = ui.modules.turn.modules.roll.getOptions({ order = 0, action = ACTIONS.healing }),
             heal = {
                 order = 1,
                 type = "group",
-                name = "Heal",
+                name = ACTION_LABELS.healing,
                 inline = true,
                 hidden = function()
                     return not state.healing.currentRoll.get()

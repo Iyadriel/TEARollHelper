@@ -2,23 +2,27 @@ local _, ns = ...
 
 local COLOURS = TEARollHelper.COLOURS
 
+local constants = ns.constants
 local rolls = ns.state.rolls
 local ui = ns.ui
+
+local ACTIONS = constants.ACTIONS
+local ACTION_LABELS = constants.ACTION_LABELS
 
 --[[ local options = {
     order: Number
 } ]]
 ui.modules.actions.modules.buff.getOptions = function(options)
     return {
-        name = "Buff",
+        name = ACTION_LABELS.buff,
         type = "group",
         order = options.order,
         args = {
-            roll = ui.modules.turn.modules.roll.getOptions({ order = 0, action = "buff" }),
+            roll = ui.modules.turn.modules.roll.getOptions({ order = 0, action = ACTIONS.buff }),
             buff = {
                 order = 1,
                 type = "group",
-                name = "Buff",
+                name = ACTION_LABELS.buff,
                 inline = true,
                 hidden = function()
                     return not rolls.state.buff.currentRoll.get()

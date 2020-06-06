@@ -2,8 +2,12 @@ local _, ns = ...
 
 local COLOURS = TEARollHelper.COLOURS
 
+local constants = ns.constants
 local rolls = ns.state.rolls
 local ui = ns.ui
+
+local ACTIONS = constants.ACTIONS
+local ACTION_LABELS = constants.ACTION_LABELS
 
 --[[ local options = {
     order: Number
@@ -12,7 +16,7 @@ ui.modules.actions.modules.meleeSave.getOptions = function(options)
     local sharedOptions = ui.modules.actions.modules.defend.getSharedOptions("meleeSave")
 
     return {
-        name = "Melee save",
+        name = ACTION_LABELS.meleeSave,
         type = "group",
         order = options.order,
         args = {
@@ -20,7 +24,7 @@ ui.modules.actions.modules.meleeSave.getOptions = function(options)
             damageRisk = sharedOptions.damageRisk,
             roll = ui.modules.turn.modules.roll.getOptions({
                 order = 2,
-                action = "meleeSave",
+                action = ACTIONS.meleeSave,
                 hidden = function()
                     return not (rolls.state.meleeSave.threshold.get() and rolls.state.meleeSave.damageRisk.get())
                 end,
@@ -28,7 +32,7 @@ ui.modules.actions.modules.meleeSave.getOptions = function(options)
             meleeSave = {
                 order = 3,
                 type = "group",
-                name = "Melee save",
+                name = ACTION_LABELS.meleeSave,
                 inline = true,
                 hidden = function()
                     return not rolls.state.meleeSave.currentRoll.get()
