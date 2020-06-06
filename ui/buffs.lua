@@ -105,11 +105,27 @@ ui.modules.buffs.getOptions = function(options)
                 name = "Add buff",
                 inline = true,
                 args = {
-                    stat = {
+                    type = {
                         order = 0,
                         type = "select",
+                        name = "Type",
+                        width = 0.55,
+                        values = {
+                            stat = "Stat",
+                            [ROLL_MODES.DISADVANTAGE] = "Disadvantage",
+                            [ROLL_MODES.ADVANTAGE] = "Advantage"
+                        },
+                        sorting = {"stat", ROLL_MODES.ADVANTAGE, ROLL_MODES.DISADVANTAGE},
+                        get = state.newPlayerBuff.type.get,
+                        set = function(info, value)
+                            state.newPlayerBuff.type.set(value)
+                        end,
+                    },
+                    stat = {
+                        order = 1,
+                        type = "select",
                         name = "Stat",
-                        width = 0.5,
+                        width = 0.55,
                         values = {
                             offence = STAT_LABELS.offence,
                             defence = STAT_LABELS.defence,
@@ -117,13 +133,16 @@ ui.modules.buffs.getOptions = function(options)
                             stamina = STAT_LABELS.stamina,
                         },
                         sorting = { "offence", "defence", "spirit", "stamina" },
+                        hidden = function()
+                            return state.newPlayerBuff.type.get() ~= "stat"
+                        end,
                         get = state.newPlayerBuff.stat.get,
                         set = function(info, value)
                             state.newPlayerBuff.stat.set(value)
                         end,
                     },
                     amount = {
-                        order = 1,
+                        order = 2,
                         type = "input",
                         name = "Amount",
                         desc = "How much to increase or decrease the stat by.",
@@ -134,6 +153,9 @@ ui.modules.buffs.getOptions = function(options)
                             end
                             return true
                         end,
+                        hidden = function()
+                            return state.newPlayerBuff.type.get() ~= "stat"
+                        end,
                         get = function()
                             return tostring(state.newPlayerBuff.amount.get())
                         end,
@@ -141,8 +163,22 @@ ui.modules.buffs.getOptions = function(options)
                             state.newPlayerBuff.amount.set(tonumber(value))
                         end
                     },
+                    action = {
+                        order = 3,
+                        type = "select",
+                        name = "Action",
+                        width = 0.95,
+                        values = ACTION_LABELS,
+                        hidden = function()
+                            return state.newPlayerBuff.type.get() == "stat"
+                        end,
+                        get = state.newPlayerBuff.action.get,
+                        set = function(info, value)
+                            state.newPlayerBuff.action.set(value)
+                        end,
+                    },
                     label = {
-                        order = 2,
+                        order = 4,
                         type = "input",
                         name = "Label (optional)",
                         desc = "This can be used as a reminder of where the buff came from. This is only visible to you.",
@@ -152,22 +188,8 @@ ui.modules.buffs.getOptions = function(options)
                             state.newPlayerBuff.label.set(value)
                         end
                     },
-                    add = {
-                        order = 3,
-                        type = "execute",
-                        name = "Add",
-                        width = 0.5,
-                        func = function()
-                            local newBuff = state.newPlayerBuff
-                            local stat = newBuff.stat.get()
-                            local amount = newBuff.amount.get()
-                            local label = newBuff.label.get()
-                            local expireAfterNextTurn = newBuff.expireAfterNextTurn.get()
-                            buffs.addStatBuff(stat, amount, label, expireAfterNextTurn)
-                        end
-                    },
                     expireAfterNextTurn = {
-                        order = 4,
+                        order = 5,
                         type = "toggle",
                         name = "Expire after next turn",
                         desc = "This will remove the buff after the next turn. You can always clear buffs manually by right-clicking.",
@@ -175,7 +197,29 @@ ui.modules.buffs.getOptions = function(options)
                         set = function(info, value)
                             characterState.state.newPlayerBuff.expireAfterNextTurn.set(value)
                         end,
-                    }
+                    },
+                    add = {
+                        order = 6,
+                        type = "execute",
+                        name = "Add",
+                        func = function()
+                            local newBuff = state.newPlayerBuff
+                            local buffType = newBuff.type.get()
+                            local label = newBuff.label.get()
+                            local expireAfterNextTurn = newBuff.expireAfterNextTurn.get()
+                            if buffType == "stat" then
+                                local stat = newBuff.stat.get()
+                                local amount = newBuff.amount.get()
+                                buffs.addStatBuff(stat, amount, label, expireAfterNextTurn)
+                            elseif buffType == ROLL_MODES.ADVANTAGE then
+                                local action = newBuff.action.get()
+                                buffs.addAdvantageBuff(action, label, expireAfterNextTurn)
+                            elseif buffType == ROLL_MODES.DISADVANTAGE then
+                                local action = newBuff.action.get()
+                                buffs.addDisadvantageDebuff(action, label, expireAfterNextTurn)
+                            end
+                        end
+                    },
                 }
             }
 

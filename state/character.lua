@@ -3,6 +3,7 @@ local _, ns = ...
 local buffs = ns.buffs
 local bus = ns.bus
 local character = ns.character
+local constants = ns.constants
 local feats = ns.resources.feats
 local rules = ns.rules
 local traits = ns.resources.traits
@@ -10,6 +11,7 @@ local characterState = ns.state.character
 local turnState = ns.state.turn
 local weaknesses = ns.resources.weaknesses
 
+local ACTIONS = constants.ACTIONS
 local EVENTS = bus.EVENTS
 local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
@@ -44,8 +46,10 @@ characterState.initState = function()
         activeBuffs = {},
         buffLookup = {},
         newPlayerBuff = {
+            type = "stat",
             stat = "offence",
             amount = 1,
+            action = ACTIONS.attack,
             label = "",
             expireAfterNextTurn = true,
         },
@@ -199,6 +203,12 @@ characterState.state = {
         getPlayerStatBuff = function(stat)
             return characterState.state.buffLookup.get("player_" .. stat)
         end,
+        getPlayerAdvantageBuff = function(action)
+            return characterState.state.buffLookup.get("player_advantage_" .. action)
+        end,
+        getPlayerDisadvantageDebuff = function(action)
+            return characterState.state.buffLookup.get("player_disadvantage_" .. action)
+        end,
         hasAdvantageBuff = function(action)
             local activeBuffs = characterState.state.activeBuffs.get()
             for _, buff in ipairs(activeBuffs) do
@@ -233,8 +243,10 @@ characterState.state = {
         end,
     },
     newPlayerBuff = {
+        type = basicGetSet("newPlayerBuff", "type"),
         stat = basicGetSet("newPlayerBuff", "stat"),
         amount = basicGetSet("newPlayerBuff", "amount"),
+        action = basicGetSet("newPlayerBuff", "action"),
         label = basicGetSet("newPlayerBuff", "label"),
         expireAfterNextTurn = basicGetSet("newPlayerBuff", "expireAfterNextTurn"),
     }

@@ -69,6 +69,56 @@ local function addStatBuff(stat, amount, label, expireAfterNextTurn)
     bus.fire(EVENTS.STAT_BUFF_ADDED, stat, amount)
 end
 
+local function addAdvantageBuff(action, label, expireAfterNextTurn)
+    local existingBuff = characterState.state.buffLookup.getPlayerAdvantageBuff(action)
+
+    if existingBuff then
+        removeBuff(existingBuff)
+    end
+
+    if label:trim() == "" then
+        label = "Advantage"
+    end
+
+    addBuff({
+        id = "player_advantage_" .. action,
+        type = BUFF_TYPES.ADVANTAGE,
+        label = label,
+        icon = "Interface\\Icons\\spell_holy_borrowedtime",
+
+        actions = { [action] = true },
+
+        source = BUFF_SOURCES.PLAYER,
+
+        remainingTurns = getRemainingTurns(expireAfterNextTurn),
+    })
+end
+
+local function addDisadvantageDebuff(action, label, expireAfterNextTurn)
+    local existingBuff = characterState.state.buffLookup.getPlayerDisadvantageDebuff(action)
+
+    if existingBuff then
+        removeBuff(existingBuff)
+    end
+
+    if label:trim() == "" then
+        label = "Disadvantage"
+    end
+
+    addBuff({
+        id = "player_disadvantage_" .. action,
+        type = BUFF_TYPES.DISADVANTAGE,
+        label = label,
+        icon = "Interface\\Icons\\achievement_bg_overcome500disadvantage",
+
+        actions = { [action] = true },
+
+        source = BUFF_SOURCES.PLAYER,
+
+        remainingTurns = getRemainingTurns(expireAfterNextTurn),
+    })
+end
+
 local function addWeaknessDebuff(weakness)
     local debuffs = weakness.debuffs
     if debuffs and debuffs.stats then
@@ -106,5 +156,7 @@ end
 ns.buffs.BUFF_TYPES = BUFF_TYPES
 ns.buffs.BUFF_SOURCES = BUFF_SOURCES
 ns.buffs.addStatBuff = addStatBuff
+ns.buffs.addAdvantageBuff = addAdvantageBuff
+ns.buffs.addDisadvantageDebuff = addDisadvantageDebuff
 ns.buffs.addWeaknessDebuff = addWeaknessDebuff
 ns.buffs.addRacialBuff = addRacialBuff

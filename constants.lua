@@ -2,13 +2,23 @@ local _, ns = ...
 
 local constants = ns.constants
 
+local ACTIONS = {
+    attack = "attack",
+    healing = "healing",
+    buff = "buff",
+    defend = "defend",
+    meleeSave = "meleeSave",
+    rangedSave = "rangedSave",
+    utility = "utility"
+}
+
 local ACTION_LABELS = {
-    attack = "Attacking",
-    healing = "Healing",
-    buff = "Buffing",
-    defend = "Defending",
-    meleeSave = "Melee saves",
-    rangedSave = "Ranged saves",
+    attack = "Attack",
+    healing = "Heal",
+    buff = "Buff",
+    defend = "Defend",
+    meleeSave = "Melee save",
+    rangedSave = "Ranged save",
     utility = "Utility",
 }
 
@@ -25,6 +35,7 @@ local STAT_LABELS = {
     stamina = "Stamina"
 }
 
+constants.ACTIONS = ACTIONS
 constants.ACTION_LABELS = ACTION_LABELS
 constants.ROLL_MODES = ROLL_MODES
 constants.STAT_LABELS = STAT_LABELS
