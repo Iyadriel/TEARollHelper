@@ -199,6 +199,24 @@ characterState.state = {
         getPlayerStatBuff = function(stat)
             return characterState.state.buffLookup.get("player_" .. stat)
         end,
+        hasAdvantageBuff = function(action)
+            local activeBuffs = characterState.state.activeBuffs.get()
+            for _, buff in ipairs(activeBuffs) do
+                if buff.type == buffs.BUFF_TYPES.ADVANTAGE and buff.actions[action] then
+                    return true
+                end
+            end
+            return false
+        end,
+        hasDisadvantageDebuff = function(action)
+            local activeBuffs = characterState.state.activeBuffs.get()
+            for _, buff in ipairs(activeBuffs) do
+                if buff.type == buffs.BUFF_TYPES.DISADVANTAGE and buff.actions[action] then
+                    return true
+                end
+            end
+            return false
+        end,
         getWeaknessDebuff = function(weakness)
             return characterState.state.buffLookup.get("weakness_" .. weakness.id)
         end,

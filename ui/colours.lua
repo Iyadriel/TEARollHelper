@@ -7,6 +7,7 @@ TEARollHelper.COLOURS = {
     HEALING = '|cff00ff00',
     SAVE = '|cff00ff00',
     BUFF = '|cff0070dd',
+    DEBUFF = '|cff996600',
     CRITICAL = '|cffa335ee',
 
     MASTERY = '|cffff8000',

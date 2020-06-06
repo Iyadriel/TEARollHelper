@@ -1,12 +1,32 @@
 local _, ns = ...
 
+local characterState = ns.state.character
 local rollState = ns.state.rolls
 local rules = ns.rules
 local turns = ns.turns
 local ui = ns.ui
 
+local COLOURS = TEARollHelper.COLOURS
 local ROLL_MODES = turns.ROLL_MODES
 local state = rollState.state
+
+local ROLL_MODE_VALUES_NORMAL = {
+    [ROLL_MODES.DISADVANTAGE] = "Disadvantage",
+    [ROLL_MODES.NORMAL] = "Normal",
+    [ROLL_MODES.ADVANTAGE] = "Advantage"
+}
+
+local ROLL_MODE_VALUES_ADVANTAGE = {
+    [ROLL_MODES.DISADVANTAGE] = "Disadvantage+",
+    [ROLL_MODES.NORMAL] = "Normal+",
+    [ROLL_MODES.ADVANTAGE] = "Advantage"
+}
+
+local ROLL_MODE_VALUES_DISADVANTAGE = {
+    [ROLL_MODES.DISADVANTAGE] = "Disadvantage",
+    [ROLL_MODES.NORMAL] = "Normal-",
+    [ROLL_MODES.ADVANTAGE] = "Advantage-"
+}
 
 --[[ local options = {
     order: Number,
@@ -15,6 +35,18 @@ local state = rollState.state
     hidden: Function,
 } ]]
 ui.modules.turn.modules.roll.getOptions = function(options)
+    local function getRollModeModifier()
+        local buffLookup = characterState.state.buffLookup
+        local hasAdvantageBuff = buffLookup.hasAdvantageBuff(options.action)
+        local hasDisadvantageDebuff = buffLookup.hasDisadvantageDebuff(options.action)
+        if hasAdvantageBuff and not hasDisadvantageDebuff then
+            return ROLL_MODES.ADVANTAGE
+        elseif not hasAdvantageBuff and hasDisadvantageDebuff then
+            return ROLL_MODES.DISADVANTAGE
+        end
+        return ROLL_MODES.NORMAL
+    end
+
     return {
         type = "group",
         name = "Roll",
@@ -24,14 +56,36 @@ ui.modules.turn.modules.roll.getOptions = function(options)
         args = {
             rollMode = {
                 order = 0,
-                name = "Roll mode",
+                name =  function()
+                    local rollModeMod = getRollModeModifier()
+                    if rollModeMod == ROLL_MODES.ADVANTAGE then
+                        return "Roll mode" .. COLOURS.BUFF .. " (Advantage)"
+                    elseif rollModeMod == ROLL_MODES.DISADVANTAGE then
+                        return "Roll mode" .. COLOURS.DEBUFF .. " (Disadvantage)"
+                    end
+                    return "Roll mode"
+                end,
+                desc =  function()
+                    local msg = "Select the roll mode requested by the DM."
+                    local rollModeMod = getRollModeModifier()
+                    if rollModeMod == ROLL_MODES.ADVANTAGE then
+                        msg = msg .. "|n|nYou have advantage! This is already taken into account. You do not need to change your roll mode here."
+                    elseif rollModeMod == ROLL_MODES.DISADVANTAGE then
+                        msg = msg .. "|n|nYou have disadvantage. This is already taken into account. You do not need to change your roll mode here."
+                    end
+                    return msg
+                end,
                 type = "select",
                 width = 0.65,
-                values = {
-                    [ROLL_MODES.DISADVANTAGE] = "Disadvantage",
-                    [ROLL_MODES.NORMAL] = "Normal",
-                    [ROLL_MODES.ADVANTAGE] = "Advantage"
-                },
+                values = function()
+                    local rollModeMod = getRollModeModifier()
+                    if rollModeMod == ROLL_MODES.ADVANTAGE then
+                        return ROLL_MODE_VALUES_ADVANTAGE
+                    elseif rollModeMod == ROLL_MODES.DISADVANTAGE then
+                        return ROLL_MODE_VALUES_DISADVANTAGE
+                    end
+                    return ROLL_MODE_VALUES_NORMAL
+                end,
                 get = state[options.action].rollMode.get,
                 set = function(info, value)
                     state[options.action].rollMode.set(value)
@@ -65,9 +119,11 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 end,
                 func = function()
                     local rollMode = state[options.action].rollMode.get()
+                    local rollModeMod = getRollModeModifier()
                     local prepMode = options.includePrep and state[options.action].prepMode.get() or false
+
                     turns.setAction(options.action)
-                    turns.roll(rollMode, prepMode)
+                    turns.roll(rollMode, rollModeMod, prepMode)
                 end
             },
             roll = {

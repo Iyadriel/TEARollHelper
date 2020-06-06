@@ -10,6 +10,7 @@ local weaknesses = ns.resources.weaknesses
 
 local BUFF_TYPES = buffs.BUFF_TYPES
 local MAX_BUFFS = 8
+local ACTION_LABELS = buffs.ACTION_LABELS
 local STAT_LABELS = buffs.STAT_LABELS
 local state = characterState.state
 local WEAKNESSES = weaknesses.WEAKNESSES
@@ -69,8 +70,18 @@ ui.modules.buffs.getOptions = function(options)
                                     msg = msg .. STAT_LABELS[stat] .. " decreased by " .. abs(amount) .. ". "
                                 end
                             end
-                        --elseif buff.type == "advantage" then
-                        --    msg = "Your rolls have advantage."
+                        elseif buff.type == BUFF_TYPES.ADVANTAGE then
+                            msg = msg .. "Your rolls have advantage.|nApplies to: "
+                            for action in pairs(buff.actions) do
+                                msg = msg ..  ACTION_LABELS[action] .. ", "
+                            end
+                            msg = string.sub(msg, 0, -3)
+                        elseif buff.type == BUFF_TYPES.DISADVANTAGE then
+                            msg = msg .. "Your rolls have disadvantage.|nApplies to: "
+                            for action in pairs(buff.actions) do
+                                msg = msg ..  ACTION_LABELS[action] .. ", "
+                            end
+                            msg = string.sub(msg, 0, -3)
                         end
 
                         if buff.remainingTurns then

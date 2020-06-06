@@ -75,7 +75,10 @@ local function getRequiredRollsForTurn()
     return numRolls
 end
 
-function doRoll(rollMode, prepMode)
+function doRoll(rollMode, rollModeModifier, prepMode)
+    rollMode = rollMode + rollModeModifier
+    rollMode = max(ROLL_MODES.DISADVANTAGE, min(ROLL_MODES.ADVANTAGE, rollMode))
+
     rollValues.tempRollMode = rollMode
     rollValues.tempPrepMode = prepMode
     rollValues.isRolling = true
@@ -92,7 +95,6 @@ end
 
 function handleRollResult(result)
     local rollMode = rollValues.tempRollMode
-    print(rollMode)
     local roll = rollValues.isPrepRolling and rollValues.tempPreppedRoll or rollValues.tempRoll
 
     if
