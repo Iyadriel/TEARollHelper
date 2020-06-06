@@ -3,17 +3,20 @@ local _, ns = ...
 local COLOURS = TEARollHelper.COLOURS
 
 local buffs = ns.buffs
+local constants = ns.constants
 local character = ns.character
 local characterState = ns.state.character
 local ui = ns.ui
 local weaknesses = ns.resources.weaknesses
 
+local ACTION_LABELS = constants.ACTION_LABELS
 local BUFF_TYPES = buffs.BUFF_TYPES
 local MAX_BUFFS = 8
-local ACTION_LABELS = buffs.ACTION_LABELS
-local STAT_LABELS = buffs.STAT_LABELS
-local state = characterState.state
+local ROLL_MODES = constants.ROLL_MODES
+local STAT_LABELS = constants.STAT_LABELS
 local WEAKNESSES = weaknesses.WEAKNESSES
+
+local state = characterState.state
 
 ui.modules.buffs = {}
 

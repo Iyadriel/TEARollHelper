@@ -1,7 +1,7 @@
 local _, ns = ...
 
-local buffs = ns.buffs
 local bus = ns.bus
+local constants = ns.constants
 local characterState = ns.state.character.state
 
 local COLOURS = TEARollHelper.COLOURS
@@ -29,7 +29,7 @@ bus.addListener(EVENTS.HEALED, function(amountHealed, netAmountHealed, overheali
 end)
 
 bus.addListener(EVENTS.STAT_BUFF_ADDED, function(stat, amount)
-    TEARollHelper:Print("Your " .. buffs.STAT_LABELS[stat] .. " stat has been buffed by " .. amount .. ".")
+    TEARollHelper:Print("Your " .. constants.STAT_LABELS[stat] .. " stat has been buffed by " .. amount .. ".")
 end)
 
 bus.addListener(EVENTS.BUFF_EXPIRED, function(label)

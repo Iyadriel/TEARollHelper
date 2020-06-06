@@ -1,13 +1,14 @@
 local _, ns = ...
 
 local characterState = ns.state.character
+local constants = ns.constants
 local rollState = ns.state.rolls
 local rules = ns.rules
 local turns = ns.turns
 local ui = ns.ui
 
 local COLOURS = TEARollHelper.COLOURS
-local ROLL_MODES = turns.ROLL_MODES
+local ROLL_MODES = constants.ROLL_MODES
 local state = rollState.state
 
 local ROLL_MODE_VALUES_NORMAL = {

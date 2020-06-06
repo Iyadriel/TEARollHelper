@@ -1,10 +1,12 @@
 local _, ns = ...
 
 local bus = ns.bus
+local constants = ns.constants
 local characterState = ns.state.character
-local racialTraits = ns.resources.racialTraits
 
 local EVENTS = bus.EVENTS
+local ROLL_MODES = constants.ROLL_MODES
+local STAT_LABELS = constants.STAT_LABELS
 
 local BUFF_TYPES = {
     STAT = 0,
@@ -16,25 +18,6 @@ local BUFF_SOURCES = {
     PLAYER = "Player",
     WEAKNESS = "Weakness",
     RACIAL_TRAIT = "Racial Trait",
-}
-
--- TODO this doesn't belong here
-local STAT_LABELS = {
-    offence = "Offence",
-    defence = "Defence",
-    spirit = "Spirit",
-    stamina = "Stamina"
-}
-
--- TODO neither does this
-local ACTION_LABELS = {
-    attack = "Attacking",
-    healing = "Healing",
-    buff = "Buffing",
-    defend = "Defending",
-    meleeSave = "Melee saves",
-    rangedSave = "Ranged saves",
-    utility = "Utility",
 }
 
 local STAT_TYPE_ICONS = {
@@ -122,8 +105,6 @@ end
 
 ns.buffs.BUFF_TYPES = BUFF_TYPES
 ns.buffs.BUFF_SOURCES = BUFF_SOURCES
-ns.buffs.STAT_LABELS = STAT_LABELS
-ns.buffs.ACTION_LABELS = ACTION_LABELS
 ns.buffs.addStatBuff = addStatBuff
 ns.buffs.addWeaknessDebuff = addWeaknessDebuff
 ns.buffs.addRacialBuff = addRacialBuff

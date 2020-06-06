@@ -4,13 +4,14 @@ local actions = ns.actions
 local bus = ns.bus
 local character = ns.character
 local characterState = ns.state.character.state
+local constants = ns.constants
 local feats = ns.resources.feats
 local rolls = ns.state.rolls
 local traits = ns.resources.traits
-local turns = ns.turns
 
 local EVENTS = bus.EVENTS
 local FEATS = feats.FEATS
+local ROLL_MODES = constants.ROLL_MODES
 local TRAITS = traits.TRAITS
 
 local state
@@ -20,7 +21,7 @@ rolls.initState = function()
         attack = {
             threshold = nil,
             numBloodHarvestSlots = 0,
-            rollMode = turns.ROLL_MODES.NORMAL,
+            rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
             prepMode = false,
             currentPreppedRoll = nil,
@@ -29,12 +30,12 @@ rolls.initState = function()
         healing = {
             numGreaterHealSlots = 0,
             mercyFromPainBonusHealing = 0,
-            rollMode = turns.ROLL_MODES.NORMAL,
+            rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
         },
 
         buff = {
-            rollMode = turns.ROLL_MODES.NORMAL,
+            rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
         },
 
@@ -42,26 +43,26 @@ rolls.initState = function()
             threshold = nil,
             damageRisk = nil,
             useBulwark = false,
-            rollMode = turns.ROLL_MODES.NORMAL,
+            rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
         },
 
         meleeSave = {
             threshold = nil,
             damageRisk = nil,
-            rollMode = turns.ROLL_MODES.NORMAL,
+            rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
         },
 
         rangedSave = {
             threshold = nil,
-            rollMode = turns.ROLL_MODES.NORMAL,
+            rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
         },
 
         utility = {
             useUtilityTrait = false,
-            rollMode = turns.ROLL_MODES.NORMAL,
+            rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
         },
     }

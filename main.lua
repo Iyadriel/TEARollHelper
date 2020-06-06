@@ -8,6 +8,7 @@ ns.buffs = {}
 ns.bus = {}
 ns.character = {}
 ns.consequences = {}
+ns.constants = {}
 ns.db = {}
 ns.events = {}
 ns.integrations = {}

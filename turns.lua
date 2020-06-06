@@ -3,17 +3,14 @@ local _, ns = ...
 local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
 
 local bus = ns.bus
+local constants = ns.constants
 local events = ns.events
 local rules = ns.rules
 local turns = ns.turns
 local ui = ns.ui
 
 local EVENTS = bus.EVENTS
-local ROLL_MODES = {
-    DISADVANTAGE = -1,
-    NORMAL = 0,
-    ADVANTAGE = 1
-}
+local ROLL_MODES = constants.ROLL_MODES
 
 local isRolling, setCurrentRoll, setPreppedRoll, handleRollResult
 local doRoll
@@ -136,7 +133,6 @@ function handleRollResult(result)
     end
 end
 
-turns.ROLL_MODES = ROLL_MODES
 turns.isRolling = isRolling
 turns.setCurrentRoll = setCurrentRoll
 turns.setPreppedRoll = setPreppedRoll
