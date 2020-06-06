@@ -37,15 +37,16 @@ local ROLL_MODE_VALUES_DISADVANTAGE = {
 } ]]
 ui.modules.turn.modules.roll.getOptions = function(options)
     local function getRollModeModifier()
+        local action = options.action
+
         local buffLookup = characterState.state.buffLookup
-        local hasAdvantageBuff = buffLookup.hasAdvantageBuff(options.action)
-        local hasDisadvantageDebuff = buffLookup.hasDisadvantageDebuff(options.action)
-        if hasAdvantageBuff and not hasDisadvantageDebuff then
-            return ROLL_MODES.ADVANTAGE
-        elseif not hasAdvantageBuff and hasDisadvantageDebuff then
-            return ROLL_MODES.DISADVANTAGE
-        end
-        return ROLL_MODES.NORMAL
+        local advantageBuff = buffLookup.getAdvantageBuff(action)
+        local disadvantageDebuff = buffLookup.getDisadvantageDebuff(action)
+        local enemyId = state.attack.enemyId.get()
+
+        local modifier = rules.rolls.getRollModeModifier(action, advantageBuff, disadvantageDebuff, enemyId)
+        modifier = max(ROLL_MODES.DISADVANTAGE, min(ROLL_MODES.ADVANTAGE, modifier))
+        return modifier
     end
 
     return {

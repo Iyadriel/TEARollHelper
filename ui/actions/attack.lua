@@ -4,6 +4,7 @@ local COLOURS = TEARollHelper.COLOURS
 
 local characterState = ns.state.character.state
 local constants = ns.constants
+local enemies = ns.resources.enemies
 local feats = ns.resources.feats
 local rolls = ns.state.rolls
 local rules = ns.rules
@@ -38,6 +39,28 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                 get = state.attack.threshold.get,
                 set = function(info, value)
                     state.attack.threshold.set(value)
+                end
+            },
+            enemy = {
+                order = 1,
+                name = "Enemy",
+                type = "select",
+                desc = "The enemy you are attacking",
+                hidden = function()
+                    return not rules.offence.shouldShowEnemySelect()
+                end,
+                values = (function()
+                    local enemyOptions = {}
+                    for i = 1, #enemies.ENEMY_KEYS do
+                        local key = enemies.ENEMY_KEYS[i]
+                        local enemy = enemies.ENEMIES[key]
+                        enemyOptions[key] = enemy.name
+                    end
+                    return enemyOptions
+                end)(),
+                get = state.attack.enemyId.get,
+                set = function(info, value)
+                    state.attack.enemyId.set(value)
                 end
             },
             roll = ui.modules.turn.modules.roll.getOptions({

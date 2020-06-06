@@ -13,6 +13,7 @@ bus.lua
 state.lua
 ui.lua
 
+resources/enemies.lua
 resources/feats.lua
 resources/racialTraits.lua
 resources/traits.lua

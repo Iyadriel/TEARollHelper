@@ -14,6 +14,7 @@ ns.events = {}
 ns.integrations = {}
 ns.launchers = {}
 ns.resources = {
+    enemies = {},
     feats = {},
     racialTraits = {},
     traits = {},

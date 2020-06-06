@@ -3,6 +3,7 @@ local _, ns = ...
 local bus = ns.bus
 
 local EVENTS = {
+    -- Character sheet
     CHARACTER_HEALTH = "CHARACTER_HEALTH", -- newHealth
     CHARACTER_MAX_HEALTH = "CHARACTER_MAX_HEALTH", -- newHealth
     CHARACTER_STAT_CHANGED = "CHARACTER_STAT_CHANGED", -- stat, value

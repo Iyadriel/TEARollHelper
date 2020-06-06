@@ -67,6 +67,31 @@ local function applyCritModifier(dmg)
     return dmg
 end
 
+-- Enemies
+
+local function shouldShowEnemySelect()
+    return character.getPlayerFeat().advantageAgainstEnemies
+end
+
+local function hasAdvantageAgainstEnemy(enemyId)
+    local hasAdvantage = false
+    local feat = character.getPlayerFeat()
+    if feat.advantageAgainstEnemies then
+        hasAdvantage = feat.advantageAgainstEnemies[enemyId]
+    end
+    return hasAdvantage
+end
+
+local function getRollModeModifier(enemyId)
+    local modifier = 0
+
+    if hasAdvantageAgainstEnemy(enemyId) then
+        modifier = modifier + 1
+    end
+
+    return modifier
+end
+
 -- Feat: Adrenaline
 
 local function canProcAdrenaline()
@@ -152,6 +177,9 @@ rules.offence = {
     calculateAttackValue = calculateAttackValue,
     calculateAttackDmg = calculateAttackDmg,
     applyCritModifier = applyCritModifier,
+
+    shouldShowEnemySelect = shouldShowEnemySelect,
+    getRollModeModifier = getRollModeModifier,
 
     canProcAdrenaline = canProcAdrenaline,
     hasAdrenalineProc = hasAdrenalineProc,
