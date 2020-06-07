@@ -58,7 +58,10 @@ ui.modules.buffs.getOptions = function(options)
                         return msg
                     end,
                     func = function()
-                        state.activeBuffs.cancel(i)
+                        local buff = state.activeBuffs.get()[i]
+                        if buff.canCancel then
+                            state.activeBuffs.cancel(i)
+                        end
                     end,
                     desc = function()
                         local buff = state.activeBuffs.get()[i]

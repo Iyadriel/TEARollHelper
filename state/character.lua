@@ -148,6 +148,10 @@ characterState.state = {
             return state.activeBuffs
         end,
         add = function(buff)
+            if buff.canCancel == nil then
+                buff.canCancel = true
+            end
+
             table.insert(state.activeBuffs, buff)
             characterState.state.buffLookup.add(buff)
 
@@ -155,7 +159,7 @@ characterState.state = {
                 for stat, amount in pairs(buff.stats) do
                     local statBuff = characterState.state.buffs[stat]
                     statBuff.set(statBuff.get() + amount)
-            end
+                end
             end
 
             -- reset input

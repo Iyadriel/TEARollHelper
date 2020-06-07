@@ -152,7 +152,9 @@ local function addRacialBuff(racialTrait)
             stats = buffs.stats,
 
             source = BUFF_SOURCES.RACIAL_TRAIT,
-            racialTraitID = racialTrait.id
+            racialTraitID = racialTrait.id,
+
+            canCancel = false
         })
     end
 end
