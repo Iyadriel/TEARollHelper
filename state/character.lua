@@ -1,6 +1,5 @@
 local _, ns = ...
 
-local buffs = ns.buffs
 local bus = ns.bus
 local character = ns.character
 local constants = ns.constants
@@ -12,6 +11,7 @@ local turnState = ns.state.turn
 local weaknesses = ns.resources.weaknesses
 
 local ACTIONS = constants.ACTIONS
+local BUFF_TYPES = constants.BUFF_TYPES
 local EVENTS = bus.EVENTS
 local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
@@ -155,7 +155,7 @@ characterState.state = {
             table.insert(state.activeBuffs, buff)
             characterState.state.buffLookup.add(buff)
 
-            if buff.type == buffs.BUFF_TYPES.STAT then
+            if buff.type == BUFF_TYPES.STAT then
                 for stat, amount in pairs(buff.stats) do
                     local statBuff = characterState.state.buffs[stat]
                     statBuff.set(statBuff.get() + amount)
@@ -185,7 +185,7 @@ characterState.state = {
         removeAtIndex = function(index)
             local buff = state.activeBuffs[index]
 
-            if buff.type == buffs.BUFF_TYPES.STAT then
+            if buff.type == BUFF_TYPES.STAT then
                 for stat, amount in pairs(buff.stats) do
                     local statBuff = characterState.state.buffs[stat]
                     statBuff.set(statBuff.get() - amount)

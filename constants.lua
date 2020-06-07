@@ -22,6 +22,13 @@ local ACTION_LABELS = {
     utility = "Utility",
 }
 
+local BUFF_TYPES = {
+    STAT = 0,
+    DISADVANTAGE = 1,
+    ADVANTAGE = 2,
+    HEALING_OVER_TIME = 3,
+}
+
 local ROLL_MODES = {
     DISADVANTAGE = -1,
     NORMAL = 0,
@@ -37,5 +44,6 @@ local STAT_LABELS = {
 
 constants.ACTIONS = ACTIONS
 constants.ACTION_LABELS = ACTION_LABELS
+constants.BUFF_TYPES = BUFF_TYPES
 constants.ROLL_MODES = ROLL_MODES
 constants.STAT_LABELS = STAT_LABELS

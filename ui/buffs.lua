@@ -8,7 +8,7 @@ local characterState = ns.state.character
 local ui = ns.ui
 
 local ACTION_LABELS = constants.ACTION_LABELS
-local BUFF_TYPES = buffs.BUFF_TYPES
+local BUFF_TYPES = constants.BUFF_TYPES
 local MAX_BUFFS = 8
 local ROLL_MODES = constants.ROLL_MODES
 local STAT_LABELS = constants.STAT_LABELS

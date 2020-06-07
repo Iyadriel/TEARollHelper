@@ -5,13 +5,8 @@ local constants = ns.constants
 local characterState = ns.state.character
 
 local EVENTS = bus.EVENTS
+local BUFF_TYPES = constants.BUFF_TYPES
 local STAT_LABELS = constants.STAT_LABELS
-
-local BUFF_TYPES = {
-    STAT = 0,
-    DISADVANTAGE = 1,
-    ADVANTAGE = 2,
-}
 
 local BUFF_SOURCES = {
     PLAYER = "Player",
@@ -161,7 +156,6 @@ local function addRacialBuff(racialTrait)
     end
 end
 
-ns.buffs.BUFF_TYPES = BUFF_TYPES
 ns.buffs.BUFF_SOURCES = BUFF_SOURCES
 ns.buffs.addStatBuff = addStatBuff
 ns.buffs.addAdvantageBuff = addAdvantageBuff
