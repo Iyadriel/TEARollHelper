@@ -2,6 +2,7 @@ local _, ns = ...
 
 local characterState = ns.state.character
 local constants = ns.constants
+local environment = ns.state.environment
 local rollState = ns.state.rolls
 local rules = ns.rules
 local turns = ns.turns
@@ -42,7 +43,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
         local buffLookup = characterState.state.buffLookup
         local advantageBuff = buffLookup.getAdvantageBuff(action)
         local disadvantageDebuff = buffLookup.getDisadvantageDebuff(action)
-        local enemyId = state.attack.enemyId.get()
+        local enemyId = environment.state.enemyId.get()
 
         local modifier = rules.rolls.getRollModeModifier(action, advantageBuff, disadvantageDebuff, enemyId)
         modifier = max(ROLL_MODES.DISADVANTAGE, min(ROLL_MODES.ADVANTAGE, modifier))

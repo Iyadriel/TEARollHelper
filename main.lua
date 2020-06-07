@@ -23,6 +23,7 @@ ns.resources = {
 ns.rules = {}
 ns.state = {
     character = {},
+    environment = {},
     rolls = {},
     turn = {}
 }

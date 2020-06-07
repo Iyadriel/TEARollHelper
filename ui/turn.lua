@@ -4,6 +4,7 @@ local ui = ns.ui
 
 ui.modules.turn.modules = {
     character = {},
+    environment = {},
     roll = {},
     turn = {},
 }
@@ -18,6 +19,7 @@ ui.modules.turn.getOptions = function()
         childGroups = "tab",
         args = {
             turn = ui.modules.turn.modules.turn.getOptions({ order = 0 }),
+            environment = ui.modules.turn.modules.environment.getOptions({ order = 1 }),
             playerTurn = actionOptions.playerTurn,
             enemyTurn = actionOptions.enemyTurn,
             outOfCombat = actionOptions.outOfCombat,

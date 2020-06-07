@@ -264,6 +264,21 @@ local function updateGreaterHealSlots(reason)
     end
 end
 
+bus.addListener(EVENTS.ENEMY_CHANGED, function(enemyId)
+    local racialTrait = character.getPlayerRacialTrait()
+    if racialTrait.buffAgainstEnemies then
+        local buff = characterState.state.buffLookup.getRacialBuff()
+
+        if racialTrait.buffAgainstEnemies[enemyId] then
+            if not buff then
+                buffs.addRacialBuff(racialTrait)
+            end
+        elseif buff then
+            characterState.state.activeBuffs.remove(buff)
+        end
+    end
+end)
+
 bus.addListener(EVENTS.COMBAT_OVER, function()
     local getCharges = characterState.state.featsAndTraits.numSecondWindCharges.get
 

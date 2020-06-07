@@ -146,8 +146,18 @@ local RACIAL_TRAITS = {
         desc = DESCRIPTIONS.DEMONBANE,
         name = "Demonbane",
         icon = "Interface\\Icons\\ability_racial_demonbane",
-        supported = false,
-        manualActivation = true
+        supported = true,
+        manualActivation = false,
+        buffAgainstEnemies = {
+            DEMON = true,
+            WARLOCK = true,
+        },
+        buffs = {
+            stats = {
+                offence = 2,
+                defence = 2,
+            }
+        },
     },
     BRUSH_IT_OFF = {
         id = 32,

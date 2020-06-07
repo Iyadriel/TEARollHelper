@@ -69,10 +69,6 @@ end
 
 -- Enemies
 
-local function shouldShowEnemySelect()
-    return character.getPlayerFeat().advantageAgainstEnemies
-end
-
 local function hasAdvantageAgainstEnemy(enemyId)
     local hasAdvantage = false
     local feat = character.getPlayerFeat()
@@ -178,7 +174,6 @@ rules.offence = {
     calculateAttackDmg = calculateAttackDmg,
     applyCritModifier = applyCritModifier,
 
-    shouldShowEnemySelect = shouldShowEnemySelect,
     getRollModeModifier = getRollModeModifier,
 
     canProcAdrenaline = canProcAdrenaline,

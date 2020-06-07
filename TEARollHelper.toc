@@ -27,6 +27,7 @@ events.lua
 launchers.lua
 rules.lua
 rules/stats.lua
+rules/environment.lua
 rules/offence.lua
 rules/defence.lua
 rules/healing.lua
@@ -36,6 +37,7 @@ rules/rangedSave.lua
 rules/traits.lua
 rules/utility.lua
 state/character.lua
+state/environment.lua
 state/rolls.lua
 state/turn.lua
 consequences.lua
@@ -66,6 +68,7 @@ ui/config/settings.lua
 
 ui/turn.lua
 ui/turn/character.lua
+ui/turn/environment.lua
 ui/turn/roll.lua
 ui/turn/turn.lua
 

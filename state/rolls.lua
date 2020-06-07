@@ -21,7 +21,6 @@ rolls.initState = function()
     state = {
         attack = {
             threshold = nil,
-            enemyId = enemies.ENEMIES.OTHER.id,
             numBloodHarvestSlots = 0,
             rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
@@ -85,7 +84,6 @@ end
 rolls.state = {
     attack = {
         threshold = basicGetSet("attack", "threshold"),
-        enemyId = basicGetSet("attack", "enemyId"),
         numBloodHarvestSlots = basicGetSet("attack", "numBloodHarvestSlots"),
         rollMode = basicGetSet("attack", "rollMode"),
         currentRoll = basicGetSet("attack", "currentRoll"),

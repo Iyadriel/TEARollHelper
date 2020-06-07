@@ -167,6 +167,7 @@ local function togglePlayerWeaknessByID(weaknessID, value)
     TEARollHelper.db.profile.weaknesses[weaknessID] = value
     local event = value and EVENTS.WEAKNESS_ADDED or EVENTS.WEAKNESS_REMOVED
     bus.fire(event, weaknessID)
+    bus.fire(EVENTS.WEAKNESSES_CHANGED)
 end
 
 bus.addListener(EVENTS.WEAKNESS_ADDED, function(weaknessID)
