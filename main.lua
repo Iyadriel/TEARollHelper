@@ -11,6 +11,7 @@ ns.consequences = {}
 ns.constants = {}
 ns.db = {}
 ns.events = {}
+ns.gameEvents = {}
 ns.integrations = {}
 ns.launchers = {}
 ns.resources = {

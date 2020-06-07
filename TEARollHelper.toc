@@ -25,6 +25,7 @@ buffs.lua
 character.lua
 db.lua
 events.lua
+game-events.lua
 launchers.lua
 rules.lua
 rules/stats.lua
