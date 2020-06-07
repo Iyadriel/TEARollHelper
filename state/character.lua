@@ -274,6 +274,14 @@ local function updateGreaterHealSlots(reason)
     end
 end
 
+local function removeWeaknessDebuff(weakness)
+    local weaknessDebuff = characterState.state.buffLookup.getWeaknessDebuff(weakness)
+    if weaknessDebuff then
+        characterState.state.activeBuffs.remove(weaknessDebuff)
+        TEARollHelper:Debug("Removed weakness debuff because player no longer has Weakness:", weakness.name)
+    end
+end
+
 bus.addListener(EVENTS.CHARACTER_MAX_HEALTH, function(maxHP)
     local hp = characterState.state.health.get()
 
@@ -339,12 +347,10 @@ bus.addListener(EVENTS.WEAKNESS_REMOVED, function(weaknessID)
             characterState.state.numFatePoints.set(maxFatePoints)
             TEARollHelper:Debug("Increased remaining fate points because player no longer has Fateless weakness.")
         end
+    elseif weaknessID == WEAKNESSES.TEMPO.id then
+        removeWeaknessDebuff(WEAKNESSES.TEMPO)
     elseif weaknessID == WEAKNESSES.TIMID.id then
-        local weaknessDebuff = characterState.state.buffLookup.getWeaknessDebuff(WEAKNESSES.TIMID)
-        if weaknessDebuff then
-            characterState.state.activeBuffs.remove(weaknessDebuff)
-            TEARollHelper:Debug("Removed weakness debuff because player no longer has Timid weakness.")
-        end
+        removeWeaknessDebuff(WEAKNESSES.TIMID)
     end
 end)
 
