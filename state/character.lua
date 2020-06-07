@@ -97,6 +97,8 @@ characterState.state = {
             end
         end,
         damage = function(dmgTaken)
+            if dmgTaken <= 0 then return end
+
             state.health = state.health - dmgTaken
             bus.fire(EVENTS.CHARACTER_HEALTH, state.health)
             bus.fire(EVENTS.DAMAGE_TAKEN, dmgTaken)
