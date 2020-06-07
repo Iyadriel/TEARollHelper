@@ -24,5 +24,10 @@ local function confirmDefenceAction(defence)
     state.health.damage(defence.damageTaken)
 end
 
+local function confirmMeleeSaveAction(meleeSave)
+    state.health.damage(meleeSave.damageTaken)
+end
+
 consequences.useSecondWind = useSecondWind
 consequences.confirmDefenceAction = confirmDefenceAction
+consequences.confirmMeleeSaveAction = confirmMeleeSaveAction

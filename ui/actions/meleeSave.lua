@@ -2,6 +2,7 @@ local _, ns = ...
 
 local COLOURS = TEARollHelper.COLOURS
 
+local consequences = ns.consequences
 local constants = ns.constants
 local rolls = ns.state.rolls
 local ui = ns.ui
@@ -39,7 +40,7 @@ ui.modules.actions.modules.meleeSave.getOptions = function(options)
                 end,
                 args = {
                     saveDamageTaken = {
-                        order = 3,
+                        order = 0,
                         type = "description",
                         desc = "How much damage you take this turn",
                         fontSize = "medium",
@@ -64,6 +65,18 @@ ui.modules.actions.modules.meleeSave.getOptions = function(options)
                             return msg
                         end
                     },
+                    confirm = {
+                        order = 1,
+                        type = "execute",
+                        name = "Confirm",
+                        desc = "Apply the stated damage to your character's HP",
+                        hidden = function()
+                            return rolls.getMeleeSave().damageTaken <= 0
+                        end,
+                        func = function()
+                            consequences.confirmMeleeSaveAction(rolls.getMeleeSave())
+                        end
+                    }
                 }
             },
         },
