@@ -1,7 +1,12 @@
 local _, ns = ...
 
+local constants = ns.constants
 local weaknesses = ns.resources.weaknesses
-weaknesses.WEAKNESS_KEYS = {"FATELESS", "FRAGILE", "OUTCAST", "TIMID"}
+
+local BUFF_TYPES = constants.BUFF_TYPES
+local TURN_TYPES = constants.TURN_TYPES
+
+weaknesses.WEAKNESS_KEYS = {"FATELESS", "FRAGILE", "OUTCAST", "TEMPO", "TIMID"}
 
 weaknesses.WEAKNESSES = {
 --[[     BRUTE = {
@@ -34,6 +39,18 @@ weaknesses.WEAKNESSES = {
         desc = "You no longer benefit from your Racial Trait.",
         supported = true,
     },
+    TEMPO = {
+        id = "TEMPO",
+        name = "Tempo",
+        desc = "If you take damage during an enemy turn, you have disadvantage on your next player turn.",
+        icon = "Interface\\Icons\\ability_mage_timewarp",
+        supported = true,
+        debuff = {
+            type = BUFF_TYPES.DISADVANTAGE,
+            turnTypeId = TURN_TYPES.PLAYER.id,
+            remainingTurns = 1,
+        }
+    },
     TIMID = {
         id = "TIMID",
         name = "Timid",
@@ -41,7 +58,8 @@ weaknesses.WEAKNESSES = {
         icon = "Interface\\Icons\\spell_misc_emotionafraid",
         supported = true,
         distanceFromEnemy = "melee",
-        debuffs = {
+        debuff = {
+            type = BUFF_TYPES.STAT,
             stats = {
                 offence = -3,
                 defence = -3,

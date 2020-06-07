@@ -12,6 +12,7 @@ local BUFF_TYPES = constants.BUFF_TYPES
 local MAX_BUFFS = 8
 local ROLL_MODES = constants.ROLL_MODES
 local STAT_LABELS = constants.STAT_LABELS
+local TURN_TYPES = constants.TURN_TYPES
 
 local state = characterState.state
 
@@ -75,12 +76,18 @@ ui.modules.buffs.getOptions = function(options)
                             end
                         elseif buff.type == BUFF_TYPES.ADVANTAGE then
                             msg = msg .. "Your rolls have advantage.|nApplies to: "
+                            if buff.turnTypeId then
+                                msg = msg .. TURN_TYPES[buff.turnTypeId].name .. " turn, "
+                            end
                             for action in pairs(buff.actions) do
                                 msg = msg ..  ACTION_LABELS[action] .. ", "
                             end
                             msg = string.sub(msg, 0, -3)
                         elseif buff.type == BUFF_TYPES.DISADVANTAGE then
                             msg = msg .. "Your rolls have disadvantage.|nApplies to: "
+                            if buff.turnTypeId then
+                                msg = msg .. TURN_TYPES[buff.turnTypeId].name .. " turn, "
+                            end
                             for action in pairs(buff.actions) do
                                 msg = msg ..  ACTION_LABELS[action] .. ", "
                             end

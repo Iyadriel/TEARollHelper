@@ -114,21 +114,40 @@ local function addDisadvantageDebuff(action, label, expireAfterNextTurn)
 end
 
 local function addWeaknessDebuff(weakness)
-    local debuffs = weakness.debuffs
-    if debuffs and debuffs.stats then
-        addBuff({
+    local debuff = weakness.debuff
+    if debuff then
+        local existingBuff = characterState.state.buffLookup.getWeaknessDebuff(weakness)
+
+        if existingBuff then
+            removeBuff(existingBuff)
+        end
+
+        local buff = {
             id = "weakness_" .. weakness.id,
-            type = BUFF_TYPES.STAT,
+            type = debuff.type,
             label = weakness.name,
             icon = weakness.icon,
-
-            stats = debuffs.stats,
 
             source = BUFF_SOURCES.WEAKNESS,
             weaknessID = weakness.id,
 
             canCancel = false
-        })
+        }
+
+        if debuff.type == BUFF_TYPES.STAT then
+            buff.stats = debuff.stats
+        elseif debuff.type == BUFF_TYPES.DISADVANTAGE then
+            buff.actions = debuff.actions or {}
+            if debuff.turnTypeId then
+                buff.turnTypeId = debuff.turnTypeId
+            end
+        end
+
+        if debuff.remainingTurns then
+            buff.remainingTurns = debuff.remainingTurns
+        end
+
+        addBuff(buff)
     end
 end
 

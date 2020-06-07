@@ -14,6 +14,18 @@ local TRAITS = traits.TRAITS
 local TURN_TYPES = constants.TURN_TYPES
 local WEAKNESSES = weaknesses.WEAKNESSES
 
+-- [[ Combat ]]
+
+bus.addListener(EVENTS.DAMAGE_TAKEN, function()
+    if character.hasWeakness(WEAKNESSES.TEMPO) then
+        local turnTypeId = turnState.state.type.get()
+        if turnTypeId == TURN_TYPES.ENEMY.id then
+            buffs.addWeaknessDebuff(WEAKNESSES.TEMPO)
+            TEARollHelper:Print("Added debuff:", WEAKNESSES.TEMPO.name)
+        end
+    end
+end)
+
 -- [[ Environment ]]
 
 bus.addListener(EVENTS.DISTANCE_FROM_ENEMY_CHANGED, function(distanceFromEnemy)

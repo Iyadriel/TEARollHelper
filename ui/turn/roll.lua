@@ -6,6 +6,7 @@ local environment = ns.state.environment
 local rollState = ns.state.rolls
 local rules = ns.rules
 local turns = ns.turns
+local turnState = ns.state.turn
 local ui = ns.ui
 
 local COLOURS = TEARollHelper.COLOURS
@@ -39,10 +40,11 @@ local ROLL_MODE_VALUES_DISADVANTAGE = {
 ui.modules.turn.modules.roll.getOptions = function(options)
     local function getRollModeModifier()
         local action = options.action
+        local turnTypeId = turnState.state.type.get()
 
         local buffLookup = characterState.state.buffLookup
-        local advantageBuff = buffLookup.getAdvantageBuff(action)
-        local disadvantageDebuff = buffLookup.getDisadvantageDebuff(action)
+        local advantageBuff = buffLookup.getAdvantageBuff(action, turnTypeId)
+        local disadvantageDebuff = buffLookup.getDisadvantageDebuff(action, turnTypeId)
         local enemyId = environment.state.enemyId.get()
 
         local modifier = rules.rolls.getRollModeModifier(action, advantageBuff, disadvantageDebuff, enemyId)

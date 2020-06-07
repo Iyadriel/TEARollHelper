@@ -215,20 +215,24 @@ characterState.state = {
         getPlayerDisadvantageDebuff = function(action)
             return characterState.state.buffLookup.get("player_disadvantage_" .. action)
         end,
-        getAdvantageBuff = function(action)
+        getAdvantageBuff = function(action, turnTypeId)
             local activeBuffs = characterState.state.activeBuffs.get()
             for _, buff in ipairs(activeBuffs) do
-                if buff.type == buffs.BUFF_TYPES.ADVANTAGE and buff.actions[action] then
-                    return buff
+                if buff.type == BUFF_TYPES.ADVANTAGE then
+                    if (action and buff.actions[action]) or (turnTypeId and buff.turnTypeId == turnTypeId) then
+                        return buff
+                    end
                 end
             end
             return nil
         end,
-        getDisadvantageDebuff = function(action)
+        getDisadvantageDebuff = function(action, turnTypeId)
             local activeBuffs = characterState.state.activeBuffs.get()
             for _, buff in ipairs(activeBuffs) do
-                if buff.type == buffs.BUFF_TYPES.DISADVANTAGE and buff.actions[action] then
-                    return buff
+                if buff.type == BUFF_TYPES.DISADVANTAGE then
+                    if (action and buff.actions[action]) or (turnTypeId and buff.turnTypeId == turnTypeId) then
+                        return buff
+                    end
                 end
             end
             return nil
