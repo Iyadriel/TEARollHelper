@@ -3,16 +3,16 @@ local _, ns = ...
 local character = ns.character
 local characterState = ns.state.character
 local consequences = ns.consequences
+local constants = ns.constants
 local traits = ns.resources.traits
 local turn = ns.state.turn
 local ui = ns.ui
 
 local COLOURS = TEARollHelper.COLOURS
 local TRAITS = traits.TRAITS
-local TURN_TYPES = turn.TURN_TYPES
+local TURN_TYPES = constants.TURN_TYPES
 local turnState = turn.state
 local state = characterState.state
-
 
 ui.modules.actions.modules = {
     attack = {},

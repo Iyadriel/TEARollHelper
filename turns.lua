@@ -4,7 +4,7 @@ local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
 
 local bus = ns.bus
 local constants = ns.constants
-local events = ns.events
+local gameEvents = ns.gameEvents
 local rules = ns.rules
 local turns = ns.turns
 local ui = ns.ui
@@ -56,7 +56,7 @@ local function resetTempValues()
 end
 
 local function sendRoll()
-    events.listenForRolls()
+    gameEvents.listenForRolls()
     RandomRoll(1, rules.rolls.MAX_ROLL)
 end
 

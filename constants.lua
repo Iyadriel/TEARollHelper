@@ -42,8 +42,14 @@ local STAT_LABELS = {
     stamina = "Stamina"
 }
 
+local TURN_TYPES = {
+    PLAYER = { id = "PLAYER", name = "Player" },
+    ENEMY = { id = "ENEMY", name = "Enemy" }
+}
+
 constants.ACTIONS = ACTIONS
 constants.ACTION_LABELS = ACTION_LABELS
 constants.BUFF_TYPES = BUFF_TYPES
 constants.ROLL_MODES = ROLL_MODES
 constants.STAT_LABELS = STAT_LABELS
+constants.TURN_TYPES = TURN_TYPES

@@ -1,9 +1,10 @@
 local _, ns = ...
 
+local constants = ns.constants
 local turnState = ns.state.turn
 local ui = ns.ui
 
-local TURN_TYPES = ns.state.turn.TURN_TYPES
+local TURN_TYPES = constants.TURN_TYPES
 
 local state = turnState.state
 

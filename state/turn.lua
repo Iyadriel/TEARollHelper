@@ -1,13 +1,11 @@
 local _, ns = ...
 
 local bus = ns.bus
+local constants = ns.constants
 local turnState = ns.state.turn
 
 local EVENTS = bus.EVENTS
-local TURN_TYPES = {
-    PLAYER = { id = 0, name = "Player" },
-    ENEMY = { id = 1, name = "Enemy" }
-}
+local TURN_TYPES = constants.TURN_TYPES
 
 local state
 
@@ -59,7 +57,12 @@ turnState.state = {
             state.type = type
         end,
         switch = function()
-            turnState.state.type.set(abs(turnState.state.type.get() - 1))
+            local currentType = turnState.state.type.get()
+            if currentType == TURN_TYPES.PLAYER.id then
+                turnState.state.type.set(TURN_TYPES.ENEMY.id)
+            else
+                turnState.state.type.set(TURN_TYPES.PLAYER.id)
+            end
         end
     },
     inCombat = basicGetSet("inCombat", function(inCombat)
@@ -73,5 +76,3 @@ turnState.state = {
         end
     end),
 }
-
-turnState.TURN_TYPES = TURN_TYPES
