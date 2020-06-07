@@ -4,17 +4,14 @@ local COLOURS = TEARollHelper.COLOURS
 
 local buffs = ns.buffs
 local constants = ns.constants
-local character = ns.character
 local characterState = ns.state.character
 local ui = ns.ui
-local weaknesses = ns.resources.weaknesses
 
 local ACTION_LABELS = constants.ACTION_LABELS
 local BUFF_TYPES = buffs.BUFF_TYPES
 local MAX_BUFFS = 8
 local ROLL_MODES = constants.ROLL_MODES
 local STAT_LABELS = constants.STAT_LABELS
-local WEAKNESSES = weaknesses.WEAKNESSES
 
 local state = characterState.state
 
@@ -224,26 +221,6 @@ ui.modules.buffs.getOptions = function(options)
                         end
                     },
                 }
-            }
-
-            rows.timid = {
-                order = 12,
-                type = "toggle",
-                name = WEAKNESSES.TIMID.manualActivation .. " (" .. WEAKNESSES.TIMID.name .. ")",
-                desc = WEAKNESSES.TIMID.desc,
-                width = "full",
-                hidden = function()
-                    return not character.hasWeakness(WEAKNESSES.TIMID) or state.buffLookup.getWeaknessDebuff(WEAKNESSES.TIMID) ~= nil
-                end,
-                validate = function() return true end,
-                get = function()
-                    return state.buffLookup.getWeaknessDebuff(WEAKNESSES.TIMID) ~= nil
-                end,
-                set = function(info, value)
-                    if value then
-                        buffs.addWeaknessDebuff(WEAKNESSES.TIMID)
-                    end
-                end
             }
 
             return rows

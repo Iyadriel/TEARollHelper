@@ -15,6 +15,7 @@ environment.initState = function()
     state = {
         enemyId = ENEMIES.OTHER.id,
         zoneId = ZONES.OTHER.id,
+        distanceFromEnemy = nil, -- so that user has to manually set their range
     }
 end
 
@@ -37,11 +38,15 @@ environment.state = {
     zoneId = basicGetSet("zoneId", function(zoneId)
         bus.fire(EVENTS.ZONE_CHANGED, zoneId)
     end),
+    distanceFromEnemy = basicGetSet("distanceFromEnemy", function(distanceFromEnemy)
+        bus.fire(EVENTS.DISTANCE_FROM_ENEMY_CHANGED, distanceFromEnemy)
+    end),
 }
 
 local function resetEnvironment()
     environment.state.enemyId.set(ENEMIES.OTHER.id)
     environment.state.zoneId.set(ZONES.OTHER.id)
+    environment.state.distanceFromEnemy.set(nil)
 end
 
 bus.addListener(EVENTS.FEAT_CHANGED, resetEnvironment)

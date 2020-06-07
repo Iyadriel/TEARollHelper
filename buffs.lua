@@ -130,7 +130,9 @@ local function addWeaknessDebuff(weakness)
             stats = debuffs.stats,
 
             source = BUFF_SOURCES.WEAKNESS,
-            weaknessID = weakness.id
+            weaknessID = weakness.id,
+
+            canCancel = false
         })
     end
 end

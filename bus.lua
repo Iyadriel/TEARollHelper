@@ -15,6 +15,7 @@ local EVENTS = {
     RACIAL_TRAIT_CHANGED = "RACIAL_TRAIT_CHANGED", -- racialTraitID
 
     -- Environment
+    DISTANCE_FROM_ENEMY_CHANGED = "DISTANCE_FROM_ENEMY_CHANGED", -- distanceFromEnemy
     ENEMY_CHANGED = "ENEMY_CHANGED", -- enemyId
     ZONE_CHANGED = "ZONE_CHANGED", -- zoneId
 

@@ -268,6 +268,24 @@ local function updateGreaterHealSlots(reason)
     end
 end
 
+bus.addListener(EVENTS.DISTANCE_FROM_ENEMY_CHANGED, function(distanceFromEnemy)
+    local playerWeaknesses = character.getPlayerWeaknesses()
+    for weaknessID in pairs(playerWeaknesses) do
+        local weakness = WEAKNESSES[weaknessID]
+
+        if weakness.distanceFromEnemy then
+            local debuff = characterState.state.buffLookup.getWeaknessDebuff(weakness)
+            if distanceFromEnemy == weakness.distanceFromEnemy then
+                if not debuff then
+                    buffs.addWeaknessDebuff(weakness)
+                end
+            elseif debuff then
+                characterState.state.activeBuffs.remove(debuff)
+            end
+        end
+    end
+end)
+
 bus.addListener(EVENTS.ENEMY_CHANGED, function(enemyId)
     local racialTrait = character.getPlayerRacialTrait()
     if racialTrait.buffAgainstEnemies then

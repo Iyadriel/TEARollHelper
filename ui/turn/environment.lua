@@ -65,6 +65,24 @@ ui.modules.turn.modules.environment.getOptions = function(options)
                     state.zoneId.set(value)
                 end
             },
+            distanceFromEnemy = {
+                order = 2,
+                type = "select",
+                name = "Distance from enemy",
+                hidden = function()
+                    return not rules.environment.shouldShowDistanceFromEnemy()
+                end,
+                values = {
+                    melee = "Melee range",
+                    ranged = "Ranged",
+                },
+                get = function()
+                    return state.distanceFromEnemy.get()
+                end,
+                set = function(info, value)
+                    state.distanceFromEnemy.set(value)
+                end
+            },
         }
     }
 end

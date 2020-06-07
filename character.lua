@@ -154,6 +154,10 @@ local function setNumWeaknesses(numWeaknesses)
     clearExcessTraits()
 end
 
+local function getPlayerWeaknesses()
+    return TEARollHelper.db.profile.weaknesses
+end
+
 local function hasWeaknessByID(weaknessID)
     return TEARollHelper.db.profile.weaknesses[weaknessID]
 end
@@ -204,6 +208,7 @@ character.setPlayerRacialTraitByID = setPlayerRacialTraitByID
 character.getNumWeaknesses = getNumWeaknesses
 character.setNumWeaknesses = setNumWeaknesses
 
+character.getPlayerWeaknesses = getPlayerWeaknesses
 character.hasWeaknessByID = hasWeaknessByID
 character.hasWeakness = hasWeakness
 character.togglePlayerWeaknessByID = togglePlayerWeaknessByID
