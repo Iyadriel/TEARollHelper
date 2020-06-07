@@ -18,7 +18,8 @@ ns.resources = {
     feats = {},
     racialTraits = {},
     traits = {},
-    weaknesses = {}
+    weaknesses = {},
+    zones = {},
 }
 ns.rules = {}
 ns.state = {

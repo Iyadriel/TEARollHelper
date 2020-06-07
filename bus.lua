@@ -14,8 +14,9 @@ local EVENTS = {
     WEAKNESS_REMOVED = "WEAKNESS_REMOVED", -- weaknessID
     RACIAL_TRAIT_CHANGED = "RACIAL_TRAIT_CHANGED", -- racialTraitID
 
-    -- Actions
+    -- Environment
     ENEMY_CHANGED = "ENEMY_CHANGED", -- enemyId
+    ZONE_CHANGED = "ZONE_CHANGED", -- zoneId
 
     -- Resources
     FEAT_CHARGES_CHANGED = "FEAT_CHARGES_CHANGED", -- featID, numCharges

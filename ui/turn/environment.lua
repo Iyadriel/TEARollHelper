@@ -4,6 +4,7 @@ local enemies = ns.resources.enemies
 local environment = ns.state.environment
 local rules = ns.rules
 local ui = ns.ui
+local zones = ns.resources.zones
 
 local state = environment.state
 
@@ -40,6 +41,28 @@ ui.modules.turn.modules.environment.getOptions = function(options)
                 get = state.enemyId.get,
                 set = function(info, value)
                     state.enemyId.set(value)
+                end
+            },
+            zone = {
+                order = 1,
+                name = "Environment",
+                type = "select",
+                desc = "The environment you are fighting in",
+                hidden = function()
+                    return not rules.environment.shouldShowZoneSelect()
+                end,
+                values = (function()
+                    local zoneOptions = {}
+                    for i = 1, #zones.ZONE_KEYS do
+                        local key = zones.ZONE_KEYS[i]
+                        local zone = zones.ZONES[key]
+                        zoneOptions[key] = zone.name
+                    end
+                    return zoneOptions
+                end)(),
+                get = state.zoneId.get,
+                set = function(info, value)
+                    state.zoneId.set(value)
                 end
             },
         }

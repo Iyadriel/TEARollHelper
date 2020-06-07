@@ -279,6 +279,21 @@ bus.addListener(EVENTS.ENEMY_CHANGED, function(enemyId)
     end
 end)
 
+bus.addListener(EVENTS.ZONE_CHANGED, function(zoneId)
+    local racialTrait = character.getPlayerRacialTrait()
+    if racialTrait.zones then
+        local buff = characterState.state.buffLookup.getRacialBuff()
+
+        if racialTrait.zones[zoneId] then
+            if not buff then
+                buffs.addRacialBuff(racialTrait)
+            end
+        elseif buff then
+            characterState.state.activeBuffs.remove(buff)
+        end
+    end
+end)
+
 bus.addListener(EVENTS.COMBAT_OVER, function()
     local getCharges = characterState.state.featsAndTraits.numSecondWindCharges.get
 

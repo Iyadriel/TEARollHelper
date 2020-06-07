@@ -223,35 +223,8 @@ ui.modules.buffs.getOptions = function(options)
                 }
             }
 
-            rows.racialTrait = {
-                order = 12,
-                type = "toggle",
-                name = function()
-                    local trait = character.getPlayerRacialTrait()
-                    if not (trait.supported and trait.manualActivation) then return end
-                    return trait.manualActivation .. " (" .. trait.name .. ")"
-                end,
-                desc = function()
-                    return character.getPlayerRacialTrait().desc
-                end,
-                width = "full",
-                hidden = function()
-                    local trait = character.getPlayerRacialTrait()
-                    return not (trait.supported and trait.manualActivation and state.buffLookup.getRacialBuff() == nil)
-                end,
-                validate = function() return true end,
-                get = function()
-                    return state.buffLookup.getRacialBuff() ~= nil
-                end,
-                set = function(info, value)
-                    if value then
-                        buffs.addRacialBuff(character.getPlayerRacialTrait())
-                    end
-                end
-            }
-
             rows.timid = {
-                order = 13,
+                order = 12,
                 type = "toggle",
                 name = WEAKNESSES.TIMID.manualActivation .. " (" .. WEAKNESSES.TIMID.name .. ")",
                 desc = WEAKNESSES.TIMID.desc,

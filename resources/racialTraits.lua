@@ -92,9 +92,11 @@ local RACIAL_TRAITS = {
         desc = DESCRIPTIONS.QUICKNESS,
         name = "Quickness",
         icon = "Interface\\Icons\\ability_racial_shadowmeld",
-        note = "Toggle manually in the Character tab.",
         supported = true,
-        manualActivation = "Forested area",
+        manualActivation = false,
+        zones = {
+            FOREST = true,
+        },
         buffs = {
             stats = {
                 defence = 2

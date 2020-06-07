@@ -18,6 +18,7 @@ resources/feats.lua
 resources/racialTraits.lua
 resources/traits.lua
 resources/weaknesses.lua
+resources/zones.lua
 
 actions.lua
 buffs.lua
