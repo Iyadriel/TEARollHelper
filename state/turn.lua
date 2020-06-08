@@ -12,7 +12,7 @@ local state
 turnState.initState = function()
     state = {
         index = 0,
-        type = TURN_TYPES.PLAYER.id,
+        type = TURN_TYPES.OUT_OF_COMBAT.id,
         inCombat = false,
     }
 end
@@ -72,6 +72,7 @@ turnState.state = {
             bus.fire(EVENTS.COMBAT_STARTED)
         else
             turnState.state.index.reset()
+            turnState.state.type.set(TURN_TYPES.OUT_OF_COMBAT.id)
             bus.fire(EVENTS.COMBAT_OVER)
         end
     end),
