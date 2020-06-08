@@ -44,7 +44,8 @@ local STAT_LABELS = {
 
 local TURN_TYPES = {
     PLAYER = { id = "PLAYER", name = "Player" },
-    ENEMY = { id = "ENEMY", name = "Enemy" }
+    ENEMY = { id = "ENEMY", name = "Enemy" },
+    OUT_OF_COMBAT = { id = "OUT_OF_COMBAT", name = "Out of combat" },
 }
 
 constants.ACTIONS = ACTIONS

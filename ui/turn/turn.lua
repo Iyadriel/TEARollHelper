@@ -18,7 +18,7 @@ ui.modules.turn.modules.turn.getOptions = function(options)
             if state.inCombat.get() then
                 return "Turn " .. state.index.get()
             end
-            return "Out of combat"
+            return TURN_TYPES.OUT_OF_COMBAT.name
         end,
         inline = true,
         order = options.order,
