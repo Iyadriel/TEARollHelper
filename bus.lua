@@ -3,6 +3,9 @@ local _, ns = ...
 local bus = ns.bus
 
 local EVENTS = {
+    -- System
+    STATE_READY = "STATE_READY",
+
     -- Character sheet
     CHARACTER_HEALTH = "CHARACTER_HEALTH", -- newHealth
     CHARACTER_MAX_HEALTH = "CHARACTER_MAX_HEALTH", -- newHealth

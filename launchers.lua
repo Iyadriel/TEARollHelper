@@ -1,12 +1,15 @@
 local _, ns = ...
 
-local launchers = ns.launchers
-local ui = ns.ui
-
 local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 local ldb = LibStub:GetLibrary("LibDataBroker-1.1")
 local icon = LibStub("LibDBIcon-1.0")
 
+local bus = ns.bus
+local characterState = ns.state.character
+local launchers = ns.launchers
+local ui = ns.ui
+
+local EVENTS = bus.EVENTS
 local LDB_NAME = ui.constants.FRIENDLY_NAME
 
 local function toggleDialog(name)
@@ -18,7 +21,7 @@ local function toggleDialog(name)
 end
 
 local dataObject = ldb:NewDataObject(LDB_NAME, {
-    type = "launcher",
+    type = "data source",
     icon = "Interface\\Icons\\inv_misc_dice_02",
     OnClick = function(_, button)
         if button == "LeftButton" then
@@ -57,3 +60,11 @@ launchers.setMinimapIconShown = function(shown)
         icon:Hide(LDB_NAME)
     end
 end
+
+local function updateDisplay()
+    dataObject.text = characterState.summariseHP()
+end
+
+bus.addListener(EVENTS.CHARACTER_HEALTH, updateDisplay)
+bus.addListener(EVENTS.CHARACTER_MAX_HEALTH, updateDisplay)
+bus.addListener(EVENTS.STATE_READY, updateDisplay)

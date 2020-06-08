@@ -68,21 +68,25 @@ local function basicGetSet(section, key, callback)
     }
 end
 
-local function summariseState()
+local function summariseHP()
     local out = {
         characterState.state.health.get(),
         "/",
         character.getPlayerMaxHP(),
         " HP",
---[[         "|n|n|nFeat: ",
-        character.getPlayerFeat().name,
-        "|n|n|nGreater Heal slots: ",
-        state.healing.numGreaterHealSlots.get(),
-        "/",
-        rules.healing.getMaxGreaterHealSlots() ]]
     }
 
     return table.concat(out)
+end
+
+local function summariseState()
+    --[[         "|n|n|nFeat: ",
+            character.getPlayerFeat().name,
+            "|n|n|nGreater Heal slots: ",
+            state.healing.numGreaterHealSlots.get(),
+            "/",
+            rules.healing.getMaxGreaterHealSlots() ]]
+    return summariseHP()
 end
 
 characterState.state = {
@@ -354,4 +358,5 @@ bus.addListener(EVENTS.WEAKNESS_REMOVED, function(weaknessID)
     end
 end)
 
+characterState.summariseHP = summariseHP
 characterState.summariseState = summariseState
