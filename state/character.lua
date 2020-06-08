@@ -323,8 +323,17 @@ bus.addListener(EVENTS.CHARACTER_STAT_CHANGED, function(stat, value)
     end
 end)
 
-bus.addListener(EVENTS.FEAT_CHANGED, function()
+bus.addListener(EVENTS.FEAT_CHANGED, function(featID)
     updateGreaterHealSlots("feat changed")
+
+    if featID == FEATS.BLOOD_HARVEST.id and not turnState.state.inCombat.get() then
+        local numBloodHarvestSlots = characterState.state.featsAndTraits.numBloodHarvestSlots
+        local maxSlots = rules.offence.getMaxBloodHarvestSlots()
+        if numBloodHarvestSlots.get() < maxSlots then
+            numBloodHarvestSlots.set(maxSlots)
+            TEARollHelper:Debug("Increased remaining " .. FEATS.BLOOD_HARVEST.name .. " charges because feat changed out of combat.")
+        end
+    end
 end)
 
 bus.addListener(EVENTS.TRAIT_REMOVED, function(traitID)
