@@ -6,7 +6,7 @@ local weaknesses = ns.resources.weaknesses
 local BUFF_TYPES = constants.BUFF_TYPES
 local TURN_TYPES = constants.TURN_TYPES
 
-weaknesses.WEAKNESS_KEYS = {"FATELESS", "FRAGILE", "OUTCAST", "TEMPO", "TIMID"}
+weaknesses.WEAKNESS_KEYS = {"FATELESS", "FRAGILE", "OUTCAST", "REBOUND", "TEMPO", "TIMID"}
 
 weaknesses.WEAKNESSES = {
 --[[     BRUTE = {
@@ -38,6 +38,18 @@ weaknesses.WEAKNESSES = {
         name = "Outcast",
         desc = "You no longer benefit from your Racial Trait.",
         supported = true,
+    },
+    REBOUND = {
+        id = "REBOUND",
+        name = "Rebound",
+        desc = "When rolling a nat 1 on any player turn roll, you take damage equal to your Offense or Spirit stat, whichever is highest, and you have disadvantage during the next enemy turn. Requires at least 4 out of 6 points in either Offense or Spirit to pick.",
+        icon = "Interface\\Icons\\ability_hunter_hatchettoss", -- TODO better icon
+        supported = true,
+        debuff = {
+            type = BUFF_TYPES.DISADVANTAGE,
+            turnTypeId = TURN_TYPES.ENEMY.id,
+            remainingTurns = 1,
+        }
     },
     TEMPO = {
         id = "TEMPO",

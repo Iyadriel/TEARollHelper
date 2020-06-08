@@ -124,6 +124,7 @@ ui.modules.config.modules.character.getOptions = function()
                         order = 3
                     },
                     availablePoints = {
+                        order = 4,
                         type = "description",
                         name = function()
                             local availablePoints = rules.stats.getAvailableStatPoints()
@@ -148,7 +149,14 @@ ui.modules.config.modules.character.getOptions = function()
 
                             return msg
                         end,
-                        order = 4
+                    },
+                    reboundWarning = {
+                        order = 5,
+                        type = "description",
+                        name = COLOURS.ERROR .. "These stats are not compatible with your " .. WEAKNESSES.REBOUND.name .. " weakness.",
+                        hidden = function()
+                            return not rules.rolls.canProcRebound() or rules.rolls.validateStatsForRebound()
+                        end,
                     }
                 }
             },

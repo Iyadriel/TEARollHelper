@@ -8,6 +8,7 @@ local weaknesses = ns.resources.weaknesses
 
 local ACTIONS = constants.ACTIONS
 local FEATS = feats.FEATS
+local TURN_TYPES = constants.TURN_TYPES
 local WEAKNESSES = weaknesses.WEAKNESSES
 
 local MIN_ROLL = 1
@@ -42,6 +43,22 @@ local function getRollModeModifier(action, advantageBuff, disadvantageDebuff, en
     return modifier
 end
 
+local function canProcRebound()
+    return character.hasWeakness(WEAKNESSES.REBOUND)
+end
+
+local function validateStatsForRebound()
+    return max(character.getPlayerOffence(), character.getPlayerSpirit()) >= 4
+end
+
+local function hasReboundProc(roll, turnTypeId)
+    return turnTypeId == TURN_TYPES.PLAYER.id and roll == MIN_ROLL
+end
+
+local function calculateReboundDamage()
+    return max(character.getPlayerOffence(), character.getPlayerSpirit())
+end
+
 local function calculateOffenceStat(offence, buff)
     return offence + buff
 end
@@ -60,6 +77,10 @@ rules.rolls = {
     getCritReq = getCritReq,
     getMaxFatePoints = getMaxFatePoints,
     getRollModeModifier = getRollModeModifier,
+    validateStatsForRebound = validateStatsForRebound,
+    canProcRebound = canProcRebound,
+    hasReboundProc = hasReboundProc,
+    calculateReboundDamage = calculateReboundDamage,
 }
 
 -- For use by other rule modules

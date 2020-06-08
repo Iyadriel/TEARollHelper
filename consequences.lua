@@ -1,8 +1,12 @@
 local _, ns = ...
 
+local buffs = ns.buffs
 local characterState = ns.state.character
 local consequences = ns.consequences
 local rules = ns.rules
+local weaknesses = ns.resources.weaknesses
+
+local WEAKNESSES = weaknesses.WEAKNESSES
 
 local state = characterState.state
 
@@ -17,6 +21,13 @@ local function useSecondWind()
     useTraitCharge(state.featsAndTraits.numSecondWindCharges)
 end
 
+-- [[ Rolls ]]
+
+local function confirmReboundRoll()
+    buffs.addWeaknessDebuff(WEAKNESSES.REBOUND)
+    characterState.state.health.damage(rules.rolls.calculateReboundDamage())
+end
+
 -- [[ Enemy turn ]]
 
 -- TODO: use bulwark charge in defence confirmation
@@ -29,5 +40,6 @@ local function confirmMeleeSaveAction(meleeSave)
 end
 
 consequences.useSecondWind = useSecondWind
+consequences.confirmReboundRoll = confirmReboundRoll
 consequences.confirmDefenceAction = confirmDefenceAction
 consequences.confirmMeleeSaveAction = confirmMeleeSaveAction

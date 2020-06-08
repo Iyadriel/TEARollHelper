@@ -1,6 +1,7 @@
 local _, ns = ...
 
 local characterState = ns.state.character
+local consequences = ns.consequences
 local constants = ns.constants
 local environment = ns.state.environment
 local rollState = ns.state.rolls
@@ -8,9 +9,12 @@ local rules = ns.rules
 local turns = ns.turns
 local turnState = ns.state.turn
 local ui = ns.ui
+local weaknesses = ns.resources.weaknesses
 
 local COLOURS = TEARollHelper.COLOURS
 local ROLL_MODES = constants.ROLL_MODES
+local WEAKNESSES = weaknesses.WEAKNESSES
+
 local state = rollState.state
 
 local ROLL_MODE_VALUES_NORMAL = {
@@ -165,6 +169,23 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                     turns.setAction(options.action)
                     turns.setPreppedRoll(value)
                 end
+            },
+            rebound = {
+                order = 5,
+                type = "execute",
+                name = COLOURS.DAMAGE .. "Confirm " .. WEAKNESSES.REBOUND.name,
+                desc = WEAKNESSES.REBOUND.desc,
+                width = "full",
+                hidden = function()
+                    if rules.rolls.canProcRebound() then
+                        local roll = state[options.action].currentRoll.get()
+                        local turnTypeId = turnState.state.type.get()
+
+                        return not rules.rolls.hasReboundProc(roll, turnTypeId)
+                    end
+                    return true
+                end,
+                func = consequences.confirmReboundRoll,
             },
         }
     }
