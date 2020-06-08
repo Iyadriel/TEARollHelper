@@ -37,11 +37,11 @@ function isRolling()
 end
 
 function setCurrentRoll(roll)
-    bus.fire(EVENTS.ROLL_CHANGED, rollValues.action, roll, rollValues.tempIsReroll)
+    bus.fire(EVENTS.ROLL_CHANGED, rollValues.action, roll)
 end
 
 function setPreppedRoll(roll)
-    bus.fire(EVENTS.PREPPED_ROLL_CHANGED, rollValues.action, roll, rollValues.tempIsReroll)
+    bus.fire(EVENTS.PREPPED_ROLL_CHANGED, rollValues.action, roll)
 end
 
 local function setAction(action)
@@ -76,6 +76,13 @@ end
 function doRoll(rollMode, rollModeModifier, prepMode, isReroll)
     rollMode = rollMode + rollModeModifier
     rollMode = max(ROLL_MODES.DISADVANTAGE, min(ROLL_MODES.ADVANTAGE, rollMode))
+
+    -- rerolling can only be done for one roll, either the normal or the prepped one.
+    -- when we reroll we roll as if it's normal but fire a different event for the result,
+    -- so we can compare the result against the current normal and prepped rolls and replace the lowest.
+    if isReroll then
+        prepMode = false
+    end
 
     rollValues.tempRollMode = rollMode
     rollValues.tempPrepMode = prepMode
@@ -123,10 +130,14 @@ function handleRollResult(result)
     else
         rollValues.isRolling = false
 
-        setCurrentRoll(rollValues.tempRoll)
+        if rollValues.tempIsReroll then
+            bus.fire(EVENTS.REROLLED, rollValues.action, rollValues.tempRoll)
+        else
+            setCurrentRoll(rollValues.tempRoll)
 
-        if rollValues.tempPrepMode then
-            setPreppedRoll(rollValues.tempPreppedRoll)
+            if rollValues.tempPrepMode then
+                setPreppedRoll(rollValues.tempPreppedRoll)
+            end
         end
 
         resetTempValues()

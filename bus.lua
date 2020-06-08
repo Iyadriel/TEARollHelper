@@ -40,8 +40,9 @@ local EVENTS = {
     WEAKNESS_DEBUFF_ADDED = "WEAKNESS_DEBUFF_ADDED", -- weaknessID
 
     -- Rolling
-    ROLL_CHANGED = "ROLL_CHANGED", -- roll
-    PREPPED_ROLL_CHANGED = "PREPPED_ROLL_CHANGED", -- roll
+    ROLL_CHANGED = "ROLL_CHANGED", -- action, roll
+    PREPPED_ROLL_CHANGED = "PREPPED_ROLL_CHANGED", -- action, roll
+    REROLLED = "REROLLED", -- action, roll
 
     -- Turn
     COMBAT_STARTED = "COMBAT_STARTED",

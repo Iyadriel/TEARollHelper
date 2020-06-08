@@ -184,26 +184,32 @@ bus.addListener(EVENTS.GREATER_HEAL_CHARGES_CHANGED, function(numCharges)
     end
 end)
 
-bus.addListener(EVENTS.ROLL_CHANGED, function(action, roll, isReroll)
-    local rollToSet
-    if isReroll then
-        local currentRoll = rolls.state[action].currentRoll.get()
-        rollToSet = max(currentRoll, roll)
-    else
-        rollToSet = roll
-    end
-    rolls.state[action].currentRoll.set(rollToSet)
+bus.addListener(EVENTS.ROLL_CHANGED, function(action, roll)
+    rolls.state[action].currentRoll.set(roll)
 end)
 
-bus.addListener(EVENTS.PREPPED_ROLL_CHANGED, function(action, roll, isReroll)
-    local rollToSet
-    if isReroll then
-        local currentPreppedRoll = rolls.state[action].currentPreppedRoll.get()
-        rollToSet = max(currentPreppedRoll, roll)
+bus.addListener(EVENTS.PREPPED_ROLL_CHANGED, function(action, roll)
+    rolls.state[action].currentPreppedRoll.set(roll)
+end)
+
+bus.addListener(EVENTS.REROLLED, function(action, roll)
+    local currentRoll = rolls.state[action].currentRoll.get()
+    local currentPreppedRoll = rolls.state[action].currentPreppedRoll.get()
+
+    if currentPreppedRoll then
+        -- when rerolling, we can replace either the current or the prepped roll, so check which is the lowest.
+        if roll > min(currentRoll, currentPreppedRoll) then
+            if currentRoll <= currentPreppedRoll then
+                rolls.state[action].currentRoll.set(roll)
+            else
+                rolls.state[action].currentPreppedRoll.set(roll)
+            end
+        end
     else
-        rollToSet = roll
+        if roll > currentRoll then
+            rolls.state[action].currentRoll.set(roll)
+        end
     end
-    rolls.state[action].currentPreppedRoll.set(rollToSet)
 end)
 
 local function getAttack()
