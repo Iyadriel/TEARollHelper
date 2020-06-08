@@ -25,8 +25,10 @@ local function basicGetSet(key, callback)
             return state[key]
         end,
         set = function (value)
-            state[key] = value
-            if callback then callback(value) end
+            if state[key] ~= value then
+                state[key] = value
+                if callback then callback(value) end
+            end
         end
     }
 end
