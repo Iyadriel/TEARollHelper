@@ -71,22 +71,30 @@ ui.modules.turn.modules.character.getOptions = function(options)
                 }
             },
             buffs = ui.modules.buffs.getOptions({ order = 1 }),
-            turn_character_hp = {
+            health = {
                 order = 2,
-                type = "range",
+                type = "group",
                 name = "Health",
-                desc = "How much health your character has",
-                softMin = 0,
-                min = -100,
-                max = character.getPlayerMaxHP(),
-                step = 1,
-                get = state.health.get,
-                set = function(info, value)
-                    state.health.set(value)
-                end,
-                dialogControl = TEARollHelper:CreateCustomSlider("turn_character_hp", {
-                    max = character.getPlayerMaxHP
-                })
+                inline = true,
+                args = {
+                    turn_character_hp = {
+                        order = 0,
+                        type = "range",
+                        name = "Health",
+                        desc = "How much health your character has",
+                        softMin = 0,
+                        min = -100,
+                        max = character.getPlayerMaxHP(),
+                        step = 1,
+                        get = state.health.get,
+                        set = function(info, value)
+                            state.health.set(value)
+                        end,
+                        dialogControl = TEARollHelper:CreateCustomSlider("turn_character_hp", {
+                            max = character.getPlayerMaxHP
+                        })
+                    },
+                }
             },
             healing = {
                 order = 3,
