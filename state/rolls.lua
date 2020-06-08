@@ -193,12 +193,26 @@ bus.addListener(EVENTS.TRAIT_CHARGES_CHANGED, function(traitID, numCharges)
     end
 end)
 
-bus.addListener(EVENTS.ROLL_CHANGED, function(action, roll)
-    rolls.state[action].currentRoll.set(roll)
+bus.addListener(EVENTS.ROLL_CHANGED, function(action, roll, isReroll)
+    local rollToSet
+    if isReroll then
+        local currentRoll = rolls.state[action].currentRoll.get()
+        rollToSet = max(currentRoll, roll)
+    else
+        rollToSet = roll
+    end
+    rolls.state[action].currentRoll.set(rollToSet)
 end)
 
-bus.addListener(EVENTS.PREPPED_ROLL_CHANGED, function(action, roll)
-    rolls.state[action].currentPreppedRoll.set(roll)
+bus.addListener(EVENTS.PREPPED_ROLL_CHANGED, function(action, roll, isReroll)
+    local rollToSet
+    if isReroll then
+        local currentPreppedRoll = rolls.state[action].currentPreppedRoll.get()
+        rollToSet = max(currentPreppedRoll, roll)
+    else
+        rollToSet = roll
+    end
+    rolls.state[action].currentPreppedRoll.set(rollToSet)
 end)
 
 local function getAttack()

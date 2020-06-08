@@ -28,6 +28,10 @@ local function confirmReboundRoll()
     characterState.state.health.damage(rules.rolls.calculateReboundDamage())
 end
 
+local function useFatePoint()
+    state.numFatePoints.set(state.numFatePoints.get() - 1)
+end
+
 -- [[ Enemy turn ]]
 
 -- TODO: use bulwark charge in defence confirmation
@@ -41,5 +45,6 @@ end
 
 consequences.useSecondWind = useSecondWind
 consequences.confirmReboundRoll = confirmReboundRoll
+consequences.useFatePoint = useFatePoint
 consequences.confirmDefenceAction = confirmDefenceAction
 consequences.confirmMeleeSaveAction = confirmMeleeSaveAction

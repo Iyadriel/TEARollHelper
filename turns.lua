@@ -24,6 +24,8 @@ local rollValues = {
     isPrepRolling = false,
     tempPreppedRoll = nil,
     tempPrepMode = false,
+
+    tempIsReroll = nil,
 }
 local totalRequiredRolls = 1
 local remainingRolls = 1
@@ -37,11 +39,11 @@ function isRolling()
 end
 
 function setCurrentRoll(roll)
-    bus.fire(EVENTS.ROLL_CHANGED, rollValues.action, roll)
+    bus.fire(EVENTS.ROLL_CHANGED, rollValues.action, roll, rollValues.tempIsReroll)
 end
 
 function setPreppedRoll(roll)
-    bus.fire(EVENTS.PREPPED_ROLL_CHANGED, rollValues.action, roll)
+    bus.fire(EVENTS.PREPPED_ROLL_CHANGED, rollValues.action, roll, rollValues.tempIsReroll)
 end
 
 local function setAction(action)
@@ -53,6 +55,7 @@ local function resetTempValues()
     rollValues.tempRoll = nil
     rollValues.tempPreppedMode = nil
     rollValues.tempPreppedRoll = nil
+    rollValues.tempIsReroll = nil
 end
 
 local function sendRoll()
@@ -72,7 +75,7 @@ local function getRequiredRollsForTurn()
     return numRolls
 end
 
-function doRoll(rollMode, rollModeModifier, prepMode)
+function doRoll(rollMode, rollModeModifier, prepMode, isReroll)
     rollMode = rollMode + rollModeModifier
     rollMode = max(ROLL_MODES.DISADVANTAGE, min(ROLL_MODES.ADVANTAGE, rollMode))
 
@@ -80,6 +83,7 @@ function doRoll(rollMode, rollModeModifier, prepMode)
     rollValues.tempPrepMode = prepMode
     rollValues.isRolling = true
     rollValues.isPrepRolling = prepMode
+    rollValues.tempIsReroll = isReroll
 
     notifyChange() -- so we can update the button state
 

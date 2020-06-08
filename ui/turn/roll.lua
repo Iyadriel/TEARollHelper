@@ -11,6 +11,7 @@ local turnState = ns.state.turn
 local ui = ns.ui
 local weaknesses = ns.resources.weaknesses
 
+local ACTIONS = constants.ACTIONS
 local COLOURS = TEARollHelper.COLOURS
 local ROLL_MODES = constants.ROLL_MODES
 local WEAKNESSES = weaknesses.WEAKNESSES
@@ -54,6 +55,15 @@ ui.modules.turn.modules.roll.getOptions = function(options)
         local modifier = rules.rolls.getRollModeModifier(action, advantageBuff, disadvantageDebuff, enemyId)
         modifier = max(ROLL_MODES.DISADVANTAGE, min(ROLL_MODES.ADVANTAGE, modifier))
         return modifier
+    end
+
+    local function performRoll(isReroll)
+        local rollMode = state[options.action].rollMode.get()
+        local rollModeMod = getRollModeModifier()
+        local prepMode = options.includePrep and state[options.action].prepMode.get() or false
+
+        turns.setAction(options.action)
+        turns.roll(rollMode, rollModeMod, prepMode, isReroll)
     end
 
     return {
@@ -127,13 +137,8 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                     return turns.isRolling()
                 end,
                 func = function()
-                    local rollMode = state[options.action].rollMode.get()
-                    local rollModeMod = getRollModeModifier()
-                    local prepMode = options.includePrep and state[options.action].prepMode.get() or false
-
-                    turns.setAction(options.action)
-                    turns.roll(rollMode, rollModeMod, prepMode)
-                end
+                    performRoll()
+                end,
             },
             roll = {
                 order = 3,
@@ -170,8 +175,45 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                     turns.setPreppedRoll(value)
                 end
             },
-            rebound = {
+            useFatePoint = {
                 order = 5,
+                type = "execute",
+                name = "Use Fate Point",
+                desc = "Uses a Fate Point and rolls again, picking the highest result.",
+                width = "full",
+                hidden = function()
+                    if characterState.state.numFatePoints.get() > 0 then
+                        local roll = state[options.action].currentRoll.get()
+
+                        if not roll then return true end
+
+                        local action = options.action
+                        local attack, healing, buff, defence, meleeSave, rangedSave
+
+                        if action == ACTIONS.attack then
+                            attack = rollState.getAttack()
+                        elseif action == ACTIONS.healing then
+                            healing = rollState.getHealing(not turnState.state.inCombat.get())
+                        elseif action == ACTIONS.buff then
+                            buff = rollState.getBuff()
+                        elseif action == ACTIONS.defend then
+                            defence = rollState.getDefence()
+                        elseif action == ACTIONS.meleeSave then
+                            meleeSave = rollState.getMeleeSave()
+                        elseif action == ACTIONS.rangedSave then
+                            rangedSave = rollState.getRangedSave()
+                        end
+                        return not rules.rolls.shouldSuggestFatePoint(roll, attack, healing, buff, defence, meleeSave, rangedSave)
+                    end
+                    return true
+                end,
+                func = function()
+                    performRoll(true)
+                    consequences.useFatePoint()
+                end,
+            },
+            rebound = {
+                order = 6,
                 type = "execute",
                 name = COLOURS.DAMAGE .. "Confirm " .. WEAKNESSES.REBOUND.name,
                 desc = WEAKNESSES.REBOUND.desc,

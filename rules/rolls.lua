@@ -26,6 +26,24 @@ local function getMaxFatePoints()
     return character.hasWeakness(WEAKNESSES.FATELESS) and 0 or 1
 end
 
+local function shouldSuggestFatePoint(roll, attack, healing, buff, defence, meleeSave, rangedSave)
+    if attack then
+        return attack.dmg <= 0
+    elseif healing then
+        return healing.amountHealed <= 0
+    elseif buff then
+        return buff.amountBuffed <= 0
+    elseif defence then
+        return defence.damageTaken > 0
+    elseif meleeSave then
+        return meleeSave.damageTaken > 0
+    elseif rangedSave then
+        return not rangedSave.canFullyProtect
+    else
+        return roll <= 5
+    end
+end
+
 local function getRollModeModifier(action, advantageBuff, disadvantageDebuff, enemyId)
     local modifier = 0
 
@@ -64,8 +82,12 @@ rules.rolls = {
     MAX_ROLL = MAX_ROLL,
 
     getCritReq = getCritReq,
+
     getMaxFatePoints = getMaxFatePoints,
+    shouldSuggestFatePoint = shouldSuggestFatePoint,
+
     getRollModeModifier = getRollModeModifier,
+
     validateStatsForRebound = validateStatsForRebound,
     canProcRebound = canProcRebound,
     hasReboundProc = hasReboundProc,
