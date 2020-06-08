@@ -41,6 +41,7 @@ end
 
 local function useFatePoint()
     state.numFatePoints.set(state.numFatePoints.get() - 1)
+    bus.fire(EVENTS.FATE_POINT_USED)
 end
 
 -- [[ Player turn ]]

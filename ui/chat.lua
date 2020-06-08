@@ -32,6 +32,10 @@ bus.addListener(EVENTS.HEALED, function(amountHealed, netAmountHealed, overheali
     printCriticalHealth()
 end)
 
+bus.addListener(EVENTS.FATE_POINT_USED, function()
+    TEARollHelper:Print("Using Fate Point.")
+end)
+
 bus.addListener(EVENTS.STAT_BUFF_ADDED, function(stat, amount)
     TEARollHelper:Print("Your " .. constants.STAT_LABELS[stat] .. " stat has been buffed by " .. amount .. ".")
 end)
