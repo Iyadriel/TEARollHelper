@@ -1,7 +1,5 @@
 local _, ns = ...
 
-local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
-
 local bus = ns.bus
 local constants = ns.constants
 local gameEvents = ns.gameEvents
@@ -30,8 +28,8 @@ local rollValues = {
 local totalRequiredRolls = 1
 local remainingRolls = 1
 
-local function notifyChange()
-    AceConfigRegistry:NotifyChange(ui.modules.turn.name)
+local function updateUI()
+    ui.update(ui.modules.turn.name)
 end
 
 function isRolling()
@@ -85,7 +83,7 @@ function doRoll(rollMode, rollModeModifier, prepMode, isReroll)
     rollValues.isPrepRolling = prepMode
     rollValues.tempIsReroll = isReroll
 
-    notifyChange() -- so we can update the button state
+    updateUI() -- so we can update the button state
 
     local numRolls = getRequiredRollsForTurn()
     totalRequiredRolls = numRolls
@@ -133,7 +131,7 @@ function handleRollResult(result)
 
         resetTempValues()
 
-        notifyChange()
+        updateUI()
     end
 end
 

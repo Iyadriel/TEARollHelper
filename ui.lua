@@ -1,11 +1,14 @@
 local _, ns = ...
+
+local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
+
 local ui = ns.ui
 
-ui.constants = {
+local constants = {
     FRIENDLY_NAME = "TEA Roll Helper"
 }
 
-ui.modules = {
+local modules = {
     actions = {},
     config = {
         name = "TEARollHelper"
@@ -14,3 +17,12 @@ ui.modules = {
         name = "TEARollHelperTurn"
     }
 }
+
+local function update(moduleName)
+    AceConfigRegistry:NotifyChange(moduleName)
+end
+
+ui.constants = constants
+ui.modules = modules
+
+ui.update = update

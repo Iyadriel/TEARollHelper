@@ -1,7 +1,5 @@
 local _, ns = ...
 
-local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
-
 local character = ns.character
 local weaknesses = ns.resources.weaknesses
 local ui = ns.ui
@@ -9,8 +7,8 @@ local ui = ns.ui
 local COLOURS = TEARollHelper.COLOURS
 
 -- Update turn UI, in case it is also open
-local function notifyChange()
-    AceConfigRegistry:NotifyChange(ns.ui.modules.turn.name)
+local function updateTurnUI()
+    ui.update(ui.modules.turn.name)
 end
 
 --[[ local options = {
@@ -29,7 +27,7 @@ ui.modules.config.modules.character.modules.weaknesses.getOptions = function(opt
         set = function(info, value)
             local weaknessID = info[#info]
             character.togglePlayerWeaknessByID(weaknessID, value)
-            notifyChange()
+            updateTurnUI()
         end,
         args = (function()
             local weaknessOptions = {}

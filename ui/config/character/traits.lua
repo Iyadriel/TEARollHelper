@@ -1,7 +1,5 @@
 local _, ns = ...
 
-local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
-
 local COLOURS = TEARollHelper.COLOURS
 
 local character = ns.character
@@ -10,8 +8,8 @@ local traits = ns.resources.traits
 local ui = ns.ui
 
 -- Update turn UI, in case it is also open
-local function notifyChange()
-    AceConfigRegistry:NotifyChange(ns.ui.modules.turn.name)
+local function updateTurnUI()
+    ui.update(ui.modules.turn.name)
 end
 
 --[[ local options = {
@@ -49,7 +47,7 @@ ui.modules.config.modules.character.modules.traits.getOptions = function(options
             end,
             set = function(info, traitID)
                 character.setPlayerTraitByID(slotIndex, traitID)
-                notifyChange()
+                updateTurnUI()
             end,
         },
         traitDesc = {

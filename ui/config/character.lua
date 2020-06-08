@@ -1,7 +1,5 @@
 local _, ns = ...
 
-local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
-
 local COLOURS = TEARollHelper.COLOURS
 
 local character = ns.character
@@ -21,8 +19,8 @@ for key, trait in pairs(racialTraits.RACIAL_TRAITS) do
 end
 
 -- Update turn UI, in case it is also open
-local function notifyChange()
-    AceConfigRegistry:NotifyChange(ns.ui.modules.turn.name)
+local function updateTurnUI()
+    ui.update(ui.modules.turn.name)
 end
 
 ui.modules.config.modules.character.modules = {
@@ -60,7 +58,7 @@ ui.modules.config.modules.character.getOptions = function()
                     if info[0] and info[0] ~= "" then
                         TEARollHelper:Print("Your character's " .. stat .. " has been set to "..value..".")
                     end
-                    notifyChange()
+                    updateTurnUI()
                 end,
                 validate = function(info, input)
                     local stat = info[#info]
@@ -180,7 +178,7 @@ ui.modules.config.modules.character.getOptions = function()
                 end,
                 set = function(info, value)
                     character.setPlayerFeatByID(value)
-                    notifyChange()
+                    updateTurnUI()
                 end
             },
             featDesc = {
@@ -239,7 +237,7 @@ ui.modules.config.modules.character.getOptions = function()
                 end,
                 set = function(info, value)
                     character.setPlayerRacialTraitByID(value)
-                    notifyChange()
+                    updateTurnUI()
                 end,
                 values = RACIAL_TRAIT_LIST
             },
