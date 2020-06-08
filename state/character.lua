@@ -327,11 +327,23 @@ bus.addListener(EVENTS.FEAT_CHANGED, function()
     updateGreaterHealSlots("feat changed")
 end)
 
-bus.addListener(EVENTS.RACIAL_TRAIT_CHANGED, function()
-    local racialBuff = characterState.state.buffLookup.getRacialBuff()
-    if racialBuff then
-        characterState.state.activeBuffs.remove(racialBuff)
-        TEARollHelper:Debug("Removed racial trait buff because racial trait in character sheet changed.")
+bus.addListener(EVENTS.TRAIT_REMOVED, function(traitID)
+    local buff = characterState.state.buffLookup.getTraitBuff(TRAITS[traitID])
+    if buff then
+        characterState.state.activeBuffs.remove(buff)
+    end
+
+    if not turnState.state.inCombat.get() then
+        -- TODO better system for charges
+        if traitID == TRAITS.BULWARK.id then
+            characterState.state.featsAndTraits.numBulwarkCharges.set(TRAITS.BULWARK.numCharges)
+        elseif traitID == TRAITS.FOCUS.id then
+            characterState.state.featsAndTraits.numFocusCharges.set(TRAITS.FOCUS.numCharges)
+        elseif traitID == TRAITS.SECOND_WIND.id then
+            characterState.state.featsAndTraits.numSecondWindCharges.set(TRAITS.SECOND_WIND.numCharges)
+        elseif traitID == TRAITS.VINDICATION.id then
+            characterState.state.featsAndTraits.numVindicationCharges.set(TRAITS.VINDICATION.numCharges)
+        end
     end
 end)
 
@@ -362,6 +374,14 @@ bus.addListener(EVENTS.WEAKNESS_REMOVED, function(weaknessID)
         removeWeaknessDebuff(WEAKNESSES.TEMPO)
     elseif weaknessID == WEAKNESSES.TIMID.id then
         removeWeaknessDebuff(WEAKNESSES.TIMID)
+    end
+end)
+
+bus.addListener(EVENTS.RACIAL_TRAIT_CHANGED, function()
+    local racialBuff = characterState.state.buffLookup.getRacialBuff()
+    if racialBuff then
+        characterState.state.activeBuffs.remove(racialBuff)
+        TEARollHelper:Debug("Removed racial trait buff because racial trait in character sheet changed.")
     end
 end)
 
