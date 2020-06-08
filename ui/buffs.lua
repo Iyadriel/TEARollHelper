@@ -132,7 +132,7 @@ ui.modules.buffs.getOptions = function(options)
                         order = 1,
                         type = "select",
                         name = "Stat",
-                        width = 0.55,
+                        width = 0.5,
                         values = {
                             offence = STAT_LABELS.offence,
                             defence = STAT_LABELS.defence,
@@ -174,7 +174,7 @@ ui.modules.buffs.getOptions = function(options)
                         order = 3,
                         type = "select",
                         name = "Action",
-                        width = 0.95,
+                        width = 0.9,
                         values = ACTION_LABELS,
                         hidden = function()
                             return state.newPlayerBuff.type.get() == "stat"
