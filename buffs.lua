@@ -148,6 +148,8 @@ local function addWeaknessDebuff(weakness)
         end
 
         addBuff(buff)
+
+        bus.fire(EVENTS.WEAKNESS_DEBUFF_ADDED, weakness.id)
     end
 end
 

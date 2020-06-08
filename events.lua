@@ -21,7 +21,6 @@ bus.addListener(EVENTS.DAMAGE_TAKEN, function()
         local turnTypeId = turnState.state.type.get()
         if turnTypeId == TURN_TYPES.ENEMY.id then
             buffs.addWeaknessDebuff(WEAKNESSES.TEMPO)
-            TEARollHelper:Print("Added debuff:", WEAKNESSES.TEMPO.name)
         end
     end
 end)

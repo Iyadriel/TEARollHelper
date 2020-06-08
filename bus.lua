@@ -31,6 +31,7 @@ local EVENTS = {
 
     -- Buffs
     STAT_BUFF_ADDED = "STAT_BUFF_ADDED", -- stat, amount
+    WEAKNESS_DEBUFF_ADDED = "WEAKNESS_DEBUFF_ADDED", -- weaknessID
 
     -- Rolling
     ROLL_CHANGED = "ROLL_CHANGED", -- roll

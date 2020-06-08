@@ -3,9 +3,11 @@ local _, ns = ...
 local bus = ns.bus
 local constants = ns.constants
 local characterState = ns.state.character.state
+local weaknesses = ns.resources.weaknesses
 
 local COLOURS = TEARollHelper.COLOURS
 local EVENTS = bus.EVENTS
+local WEAKNESSES = weaknesses.WEAKNESSES
 
 local function printCriticalHealth()
     local health = characterState.health.get()
@@ -30,6 +32,10 @@ end)
 
 bus.addListener(EVENTS.STAT_BUFF_ADDED, function(stat, amount)
     TEARollHelper:Print("Your " .. constants.STAT_LABELS[stat] .. " stat has been buffed by " .. amount .. ".")
+end)
+
+bus.addListener(EVENTS.WEAKNESS_DEBUFF_ADDED, function(weaknessID)
+    TEARollHelper:Print("Added debuff:", WEAKNESSES[weaknessID].name)
 end)
 
 bus.addListener(EVENTS.BUFF_EXPIRED, function(label)
