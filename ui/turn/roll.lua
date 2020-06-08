@@ -244,7 +244,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                         local roll = state[options.action].currentRoll.get()
                         local turnTypeId = turnState.state.type.get()
 
-                        return not rules.rolls.hasReboundProc(roll, turnTypeId)
+                        return not (rules.rolls.hasReboundProc(roll, turnTypeId) and not characterState.state.buffLookup.getWeaknessDebuff(WEAKNESSES.REBOUND))
                     end
                     return true
                 end,
