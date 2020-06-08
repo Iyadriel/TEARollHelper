@@ -20,10 +20,12 @@ resources/traits.lua
 resources/weaknesses.lua
 resources/zones.lua
 
+db.lua
+settings.lua
+
 actions.lua
 buffs.lua
 character.lua
-db.lua
 events.lua
 game-events.lua
 launchers.lua

@@ -1,6 +1,7 @@
 local _, ns = ...
 
 local launchers = ns.launchers
+local settings = ns.settings
 local ui = ns.ui
 
 ui.modules.config.modules.settings.getOptions = function()
@@ -30,18 +31,16 @@ ui.modules.config.modules.settings.getOptions = function()
                 name = "Auto update Total RP profile",
                 desc = "When your character's state changes (e.g. when you lose HP), update your Total RP automatically.",
                 width = "full",
-                get = function()
-                    return TEARollHelper.db.global.settings.autoUpdateTRP
-                end,
+                get = settings.autoUpdateTRP.get,
                 set = function(info, value)
-                    TEARollHelper.db.global.settings.autoUpdateTRP = value
+                    settings.autoUpdateTRP.set(value)
                     if value then
                         TEARollHelper.db.global.warningsSeen.updateTRP = true
                     end
                 end,
                 confirm = function()
                     local global = TEARollHelper.db.global
-                    if not global.settings.autoUpdateTRP and not global.warningsSeen.updateTRP then
+                    if not settings.autoUpdateTRP.get() and not global.warningsSeen.updateTRP then
                         return "This will allow this addon to overwrite any content you have set in your 'Currently' field."
                     end
                     return false
@@ -53,11 +52,9 @@ ui.modules.config.modules.settings.getOptions = function()
                 name = "Debug mode",
                 desc = "Don't touch this! I said don't.",
                 width = "full",
-                get = function()
-                    return TEARollHelper.db.global.settings.debug
-                end,
+                get = settings.debug.get,
                 set = function(info, value)
-                    TEARollHelper.db.global.settings.debug = value
+                    settings.debug.set(value)
                 end,
             }
         }

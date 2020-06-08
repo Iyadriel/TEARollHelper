@@ -23,6 +23,7 @@ ns.resources = {
     zones = {},
 }
 ns.rules = {}
+ns.settings = {}
 ns.state = {
     character = {},
     environment = {},
@@ -35,7 +36,7 @@ ns.ui = {}
 TEARollHelper = LibStub("AceAddon-3.0"):NewAddon("TEARollHelper", "AceConsole-3.0", "AceEvent-3.0")
 
 function TEARollHelper:Debug(...)
-    if TEARollHelper.db.global.settings.debug then
+    if ns.settings.debug.get() then
         TEARollHelper:Print("[DEBUG]", ...)
     end
 end

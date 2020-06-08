@@ -2,6 +2,7 @@ local _, ns = ...
 
 local bus = ns.bus
 local integrations = ns.integrations
+local settings = ns.settings
 
 local EVENTS = bus.EVENTS
 
@@ -36,9 +37,11 @@ function integrations.InitTRPSync()
         local text = ns.state.character.summariseState()
         setCurrently(text)
     end
+
     local function autoUpdateCurrently()
-        if not TEARollHelper.db.global.settings.autoUpdateTRP then return end
-        updateCurrently()
+        if settings.autoUpdateTRP.get() then
+            updateCurrently()
+        end
     end
 
 --[[     TRP3_API.Events.registerCallback("REGISTER_DATA_UPDATED", function()

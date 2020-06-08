@@ -7,6 +7,7 @@ local integrations = ns.integrations
 local rules = ns.rules
 local traits = ns.resources.traits
 local characterState = ns.state.character
+local settings = ns.settings
 local ui = ns.ui
 
 local TRAITS = traits.TRAITS
@@ -47,7 +48,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                 name = "Debug",
                 inline = true,
                 hidden = function()
-                    return not TEARollHelper.db.global.settings.debug
+                    return not settings.debug.get()
                 end,
                 args = {
                     statBuffs = {
@@ -198,7 +199,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                 desc = "Update your Total RP 'Currently' with your current/max HP",
                 width = "full",
                 hidden = function()
-                    return not integrations.TRP or TEARollHelper.db.global.settings.autoUpdateTRP
+                    return not integrations.TRP or settings.autoUpdateTRP.get()
                 end,
                 confirm = function()
                     if not TEARollHelper.db.global.warningsSeen.updateTRP then
@@ -217,7 +218,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                 type = "description",
                 name = COLOURS.NOTE .. " |nYour Total RP is set to update automatically when needed.",
                 hidden = function()
-                    return not (integrations.TRP and TEARollHelper.db.global.settings.autoUpdateTRP)
+                    return not (integrations.TRP and settings.autoUpdateTRP.get())
                 end,
             }
         }
