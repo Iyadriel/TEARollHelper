@@ -64,7 +64,8 @@ weaknesses.WEAKNESSES = {
                 offence = -3,
                 defence = -3,
                 spirit = -3
-            }
+            },
+            canCancel = false,
         }
     },
 }

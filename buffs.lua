@@ -131,7 +131,7 @@ local function addWeaknessDebuff(weakness)
             source = BUFF_SOURCES.WEAKNESS,
             weaknessID = weakness.id,
 
-            canCancel = false
+            canCancel = debuff.canCancel,
         }
 
         if debuff.type == BUFF_TYPES.STAT then
