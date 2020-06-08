@@ -28,6 +28,7 @@ events.lua
 game-events.lua
 launchers.lua
 rules.lua
+rules/rolls.lua
 rules/stats.lua
 rules/environment.lua
 rules/offence.lua
