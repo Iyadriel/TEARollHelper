@@ -3,8 +3,10 @@ local _, ns = ...
 local character = ns.character
 local feats = ns.resources.feats
 local rules = ns.rules
+local traits = ns.resources.traits
 
 local FEATS = feats.FEATS
+local TRAITS = traits.TRAITS
 
 local function usesInspiringPresence()
     return character.hasFeat(FEATS.INSPIRING_PRESENCE)
@@ -42,9 +44,15 @@ local function isCrit(roll)
     return roll >= critReq
 end
 
+local function shouldShowPreRollUI()
+    return character.hasTrait(TRAITS.FOCUS)
+end
+
 rules.buffing = {
     usesInspiringPresence = usesInspiringPresence,
     calculateBuffValue = calculateBuffValue,
     calculateBuffAmount = calculateBuffAmount,
     isCrit = isCrit,
+
+    shouldShowPreRollUI = shouldShowPreRollUI,
 }

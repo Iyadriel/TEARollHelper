@@ -22,6 +22,13 @@ local ACTION_LABELS = {
     utility = "Utility",
 }
 
+local BUFF_SOURCES = {
+    PLAYER = "Player",
+    TRAIT = "Trait",
+    WEAKNESS = "Weakness",
+    RACIAL_TRAIT = "Racial Trait",
+}
+
 local BUFF_TYPES = {
     STAT = 0,
     DISADVANTAGE = 1,
@@ -50,6 +57,7 @@ local TURN_TYPES = {
 
 constants.ACTIONS = ACTIONS
 constants.ACTION_LABELS = ACTION_LABELS
+constants.BUFF_SOURCES = BUFF_SOURCES
 constants.BUFF_TYPES = BUFF_TYPES
 constants.ROLL_MODES = ROLL_MODES
 constants.STAT_LABELS = STAT_LABELS

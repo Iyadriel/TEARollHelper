@@ -43,6 +43,15 @@ local function useFatePoint()
     state.numFatePoints.set(state.numFatePoints.get() - 1)
 end
 
+-- [[ Player turn ]]
+
+local function useFocus()
+    buffs.addTraitBuff(TRAITS.FOCUS)
+    useTraitCharge(state.featsAndTraits.numFocusCharges)
+    bus.fire(EVENTS.TRAIT_ACTIVATED, TRAITS.FOCUS.id)
+end
+
+
 -- [[ Enemy turn ]]
 
 local function confirmDefenceAction(defence)
@@ -60,6 +69,8 @@ consequences.useSecondWind = useSecondWind
 consequences.useBulwark = useBulwark
 consequences.confirmReboundRoll = confirmReboundRoll
 consequences.useFatePoint = useFatePoint
+
+consequences.useFocus = useFocus
 
 consequences.confirmDefenceAction = confirmDefenceAction
 consequences.confirmMeleeSaveAction = confirmMeleeSaveAction

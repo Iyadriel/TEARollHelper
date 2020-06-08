@@ -6,7 +6,7 @@ local traits = ns.resources.traits
 local BUFF_TYPES = constants.BUFF_TYPES
 local TURN_TYPES = constants.TURN_TYPES
 
-traits.TRAIT_KEYS = {"OTHER", "BULWARK", "SECOND_WIND", "VINDICATION"}
+traits.TRAIT_KEYS = {"OTHER", "BULWARK", "FOCUS", "SECOND_WIND", "VINDICATION"}
 
 traits.TRAITS = {
     OTHER = {
@@ -27,6 +27,19 @@ traits.TRAITS = {
             stats = {
                 defence = 3,
             },
+            remainingTurns = 0,
+        },
+    },
+    FOCUS = {
+        id = "FOCUS",
+        name = "Focus",
+        desc = "Activate to gain advantage to all of your rolls during the current player turn. Can be activated twice per event. Activate and then roll.",
+        icon = "Interface\\Icons\\spell_nature_focusedmind",
+        supported = true,
+        numCharges = 2,
+        buff = {
+            type = BUFF_TYPES.ADVANTAGE,
+            turnTypeId = TURN_TYPES.PLAYER.id,
             remainingTurns = 0,
         },
     },

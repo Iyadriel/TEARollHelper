@@ -5,15 +5,9 @@ local constants = ns.constants
 local characterState = ns.state.character
 
 local EVENTS = bus.EVENTS
+local BUFF_SOURCES = constants.BUFF_SOURCES
 local BUFF_TYPES = constants.BUFF_TYPES
 local STAT_LABELS = constants.STAT_LABELS
-
-local BUFF_SOURCES = {
-    PLAYER = "Player",
-    TRAIT = "Trait",
-    WEAKNESS = "Weakness",
-    RACIAL_TRAIT = "Racial Trait",
-}
 
 local STAT_TYPE_ICONS = {
     offence = "Interface\\Icons\\spell_holy_greaterblessingofkings",
@@ -244,7 +238,6 @@ local function addRacialBuff(racialTrait)
     end
 end
 
-ns.buffs.BUFF_SOURCES = BUFF_SOURCES
 ns.buffs.addStatBuff = addStatBuff
 ns.buffs.addAdvantageBuff = addAdvantageBuff
 ns.buffs.addDisadvantageDebuff = addDisadvantageDebuff

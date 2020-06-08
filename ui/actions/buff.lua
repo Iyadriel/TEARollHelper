@@ -4,6 +4,7 @@ local COLOURS = TEARollHelper.COLOURS
 
 local constants = ns.constants
 local rolls = ns.state.rolls
+local rules = ns.rules
 local ui = ns.ui
 
 local ACTIONS = constants.ACTIONS
@@ -13,14 +14,22 @@ local ACTION_LABELS = constants.ACTION_LABELS
     order: Number
 } ]]
 ui.modules.actions.modules.buff.getOptions = function(options)
+    local sharedOptions = ui.modules.actions.modules.playerTurn.getSharedOptions({
+        order = 0,
+        hidden = function()
+            return not rules.buffing.shouldShowPreRollUI()
+        end,
+    })
+
     return {
         name = ACTION_LABELS.buff,
         type = "group",
         order = options.order,
         args = {
-            roll = ui.modules.turn.modules.roll.getOptions({ order = 0, action = ACTIONS.buff }),
+            preRoll = sharedOptions.preRoll,
+            roll = ui.modules.turn.modules.roll.getOptions({ order = 1, action = ACTIONS.buff }),
             buff = {
-                order = 1,
+                order = 2,
                 type = "group",
                 name = ACTION_LABELS.buff,
                 inline = true,

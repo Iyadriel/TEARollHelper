@@ -30,6 +30,7 @@ characterState.initState = function()
         featsAndTraits = {
             numBloodHarvestSlots = rules.offence.getMaxBloodHarvestSlots(),
             numBulwarkCharges = TRAITS.BULWARK.numCharges,
+            numFocusCharges = TRAITS.FOCUS.numCharges,
             numSecondWindCharges = TRAITS.SECOND_WIND.numCharges,
             numVindicationCharges = TRAITS.VINDICATION.numCharges,
         },
@@ -128,6 +129,9 @@ characterState.state = {
             bus.fire(EVENTS.FEAT_CHARGES_CHANGED, FEATS.BLOOD_HARVEST.id, numCharges)
         end),
         numBulwarkCharges = basicGetSet("featsAndTraits", "numBulwarkCharges", function(numCharges)
+            bus.fire(EVENTS.TRAIT_CHARGES_CHANGED, TRAITS.BULWARK.id, numCharges)
+        end),
+        numFocusCharges = basicGetSet("featsAndTraits", "numFocusCharges", function(numCharges)
             bus.fire(EVENTS.TRAIT_CHARGES_CHANGED, TRAITS.BULWARK.id, numCharges)
         end),
         numSecondWindCharges = basicGetSet("featsAndTraits", "numSecondWindCharges"),

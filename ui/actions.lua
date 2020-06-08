@@ -15,6 +15,8 @@ local turnState = turn.state
 local state = characterState.state
 
 ui.modules.actions.modules = {
+    playerTurn = {},
+
     attack = {},
     healing = {},
     buff = {},
@@ -42,10 +44,11 @@ ui.modules.actions.getOptions = function(options)
                 attack = ui.modules.actions.modules.attack.getOptions({ order = 0 }),
                 heal = ui.modules.actions.modules.healing.getOptions({
                     order = 1,
-                    outOfCombat = false
+                    outOfCombat = false,
+                    turnTypeID = TURN_TYPES.PLAYER.id,
                 }),
                 buff = ui.modules.actions.modules.buff.getOptions({ order = 2 }),
-                utility = ui.modules.actions.modules.utility.getOptions({ order = 3 }),
+                utility = ui.modules.actions.modules.utility.getOptions({ order = 3, turnTypeID = TURN_TYPES.PLAYER.id }),
             }
         },
         enemyTurn = {
@@ -60,7 +63,7 @@ ui.modules.actions.getOptions = function(options)
                 defend = ui.modules.actions.modules.defend.getOptions({ order = 2 }),
                 meleeSave = ui.modules.actions.modules.meleeSave.getOptions({ order = 3 }),
                 rangedSave = ui.modules.actions.modules.rangedSave.getOptions({ order = 4 }),
-                utility = ui.modules.actions.modules.utility.getOptions({ order = 5 }),
+                utility = ui.modules.actions.modules.utility.getOptions({ order = 5, turnTypeID = TURN_TYPES.ENEMY.id }),
             }
         },
         outOfCombat = {
@@ -87,9 +90,10 @@ ui.modules.actions.getOptions = function(options)
                 },
                 heal = ui.modules.actions.modules.healing.getOptions({
                     order = 1,
-                    outOfCombat = true
+                    outOfCombat = true,
+                    turnTypeID = TURN_TYPES.OUT_OF_COMBAT.id,
                 }),
-                utility = ui.modules.actions.modules.utility.getOptions({ order = 2 }),
+                utility = ui.modules.actions.modules.utility.getOptions({ order = 2, turnTypeID = TURN_TYPES.OUT_OF_COMBAT.id }),
             }
         }
     }

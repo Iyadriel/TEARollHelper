@@ -54,6 +54,7 @@ ui/widgets/slider.lua
 ui/colours.lua
 
 ui/actions.lua
+ui/actions/playerTurn.lua
 ui/actions/attack.lua
 ui/actions/buff.lua
 ui/actions/defend.lua

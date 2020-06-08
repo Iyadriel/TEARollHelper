@@ -13,21 +13,37 @@ local ui = ns.ui
 local ACTIONS = constants.ACTIONS
 local ACTION_LABELS = constants.ACTION_LABELS
 local FEATS = feats.FEATS
+local TURN_TYPES = constants.TURN_TYPES
+
 local state = rolls.state
 
 --[[ local options = {
     order: Number
-    outOfCombat: Boolean
+    outOfCombat: Boolean,
+    turnTypeID: String,
 } ]]
 ui.modules.actions.modules.healing.getOptions = function(options)
+    local shouldShowPlayerTurnOptions = options.turnTypeID == TURN_TYPES.PLAYER.id
+    local sharedOptions
+
+    if shouldShowPlayerTurnOptions then
+        sharedOptions = ui.modules.actions.modules.playerTurn.getSharedOptions({
+            order = 0,
+            hidden = function()
+                return not rules.healing.shouldShowPreRollUI()
+            end,
+        })
+    end
+
     return {
         name = ACTION_LABELS.healing,
         type = "group",
         order = options.order,
         args = {
-            roll = ui.modules.turn.modules.roll.getOptions({ order = 0, action = ACTIONS.healing }),
+            preRoll = shouldShowPlayerTurnOptions and sharedOptions.preRoll or nil,
+            roll = ui.modules.turn.modules.roll.getOptions({ order = 1, action = ACTIONS.healing }),
             heal = {
-                order = 1,
+                order = 2,
                 type = "group",
                 name = ACTION_LABELS.healing,
                 inline = true,

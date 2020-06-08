@@ -4,9 +4,11 @@ local character = ns.character
 local feats = ns.resources.feats
 local racialTraits = ns.resources.racialTraits
 local rules = ns.rules
+local traits = ns.resources.traits
 
 local FEATS = feats.FEATS
 local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
+local TRAITS = traits.TRAITS
 
 local NUM_SPIRIT_PER_GREATER_HEAL_SLOT = 2
 
@@ -101,6 +103,10 @@ local function calculateNumPlayersHealableWithParagon()
     return 1 + floor(spirit / 3)
 end
 
+local function shouldShowPreRollUI()
+    return character.hasTrait(TRAITS.FOCUS)
+end
+
 rules.healing = {
     calculateHealValue = calculateHealValue,
     calculateAmountHealed = calculateAmountHealed,
@@ -112,5 +118,7 @@ rules.healing = {
     applyOutOfCombatBonus = applyOutOfCombatBonus,
     calculateNumHealsAllowedOutOfCombat = calculateNumHealsAllowedOutOfCombat,
     usesParagon = usesParagon,
-    calculateNumPlayersHealableWithParagon = calculateNumPlayersHealableWithParagon
+    calculateNumPlayersHealableWithParagon = calculateNumPlayersHealableWithParagon,
+
+    shouldShowPreRollUI = shouldShowPreRollUI,
 }

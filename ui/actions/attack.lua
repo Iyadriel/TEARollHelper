@@ -21,6 +21,17 @@ local state = rolls.state
     order: Number
 } ]]
 ui.modules.actions.modules.attack.getOptions = function(options)
+    local function shouldHideRoll()
+        return not state.attack.threshold.get()
+    end
+
+    local sharedOptions = ui.modules.actions.modules.playerTurn.getSharedOptions({
+        order = 1,
+        hidden = function()
+            return shouldHideRoll() or not rules.offence.shouldShowPreRollUI()
+        end,
+    })
+
     return {
         name = ACTION_LABELS.attack,
         type = "group",
@@ -40,16 +51,15 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                     state.attack.threshold.set(value)
                 end
             },
+            preRoll = sharedOptions.preRoll,
             roll = ui.modules.turn.modules.roll.getOptions({
-                order = 1,
+                order = 2,
                 action = ACTIONS.attack,
                 includePrep = true,
-                hidden = function()
-                    return not state.attack.threshold.get()
-                end,
+                hidden = shouldHideRoll,
             }),
             attack = {
-                order = 2,
+                order = 3,
                 type = "group",
                 name = ACTION_LABELS.attack,
                 inline = true,

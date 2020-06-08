@@ -169,8 +169,9 @@ ui.modules.turn.modules.character.getOptions = function(options)
                         })
                     },
                     bulwark = traitChargesSlider(1, TRAITS.BULWARK, "numBulwarkCharges"),
-                    secondWind = traitChargesSlider(2, TRAITS.SECOND_WIND, "numSecondWindCharges"),
-                    vindication = traitChargesSlider(3, TRAITS.VINDICATION, "numVindicationCharges"),
+                    focus = traitChargesSlider(2, TRAITS.FOCUS, "numFocusCharges"),
+                    secondWind = traitChargesSlider(3, TRAITS.SECOND_WIND, "numSecondWindCharges"),
+                    vindication = traitChargesSlider(4, TRAITS.VINDICATION, "numVindicationCharges"),
                 }
             },
             turn_character_fatePoints = {

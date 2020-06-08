@@ -165,6 +165,12 @@ local function getEntropicEmbraceDmg()
     return 3
 end
 
+-- Rolling
+
+local function shouldShowPreRollUI()
+    return character.hasTrait(TRAITS.FOCUS)
+end
+
 rules.offence = {
     isCrit = isCrit,
     CRIT_TYPES = CRIT_TYPES,
@@ -194,5 +200,7 @@ rules.offence = {
 
     canProcEntropicEmbrace = canProcEntropicEmbrace,
     hasEntropicEmbraceProc = hasEntropicEmbraceProc,
-    getEntropicEmbraceDmg = getEntropicEmbraceDmg
+    getEntropicEmbraceDmg = getEntropicEmbraceDmg,
+
+    shouldShowPreRollUI = shouldShowPreRollUI,
 }
