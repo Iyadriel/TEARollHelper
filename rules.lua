@@ -10,6 +10,7 @@ local ACTIONS = constants.ACTIONS
 local FEATS = feats.FEATS
 local WEAKNESSES = weaknesses.WEAKNESSES
 
+local MIN_ROLL = 1
 local MAX_ROLL = 20
 
 local function getCritReq()
@@ -54,6 +55,7 @@ local function calculateSpiritStat(spirit, buff)
 end
 
 rules.rolls = {
+    MIN_ROLL = MIN_ROLL,
     MAX_ROLL = MAX_ROLL,
     getCritReq = getCritReq,
     getMaxFatePoints = getMaxFatePoints,

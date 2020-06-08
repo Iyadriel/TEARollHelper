@@ -57,7 +57,7 @@ end
 
 local function sendRoll()
     gameEvents.listenForRolls()
-    RandomRoll(1, rules.rolls.MAX_ROLL)
+    RandomRoll(rules.rolls.MIN_ROLL, rules.rolls.MAX_ROLL)
 end
 
 local function getRequiredRollsForTurn()
