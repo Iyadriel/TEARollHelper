@@ -30,9 +30,10 @@ local defaults = {
     },
     global = {
         settings = {
+            autoUpdateTRP = false,
             debug = false,
             minimapIcon = {},
-            autoUpdateTRP = false,
+            suggestFatePoints = true,
         },
         warningsSeen = {
             updateTRP = false

@@ -20,9 +20,10 @@ local function updateTurnUI()
 end
 
 for _, setting in ipairs({
+    "autoUpdateTRP",
     "debug",
     --"minimapIcon", -- managed by ldb
-    "autoUpdateTRP"
+    "suggestFatePoints",
 }) do
     settings[setting] = basicGetSet(setting, updateTurnUI)
 end

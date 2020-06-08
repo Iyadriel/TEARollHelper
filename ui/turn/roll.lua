@@ -6,6 +6,7 @@ local constants = ns.constants
 local environment = ns.state.environment
 local rollState = ns.state.rolls
 local rules = ns.rules
+local settings = ns.settings
 local turns = ns.turns
 local turnState = ns.state.turn
 local ui = ns.ui
@@ -182,7 +183,9 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 desc = "Uses a Fate Point and rolls again, picking the highest result.",
                 width = "full",
                 hidden = function()
-                    if characterState.state.numFatePoints.get() > 0 then
+                    local hidden = true
+
+                    if settings.suggestFatePoints.get() and characterState.state.numFatePoints.get() > 0 then
                         local roll = state[options.action].currentRoll.get()
 
                         if not roll then return true end
@@ -203,9 +206,11 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                         elseif action == ACTIONS.rangedSave then
                             rangedSave = rollState.getRangedSave()
                         end
-                        return not rules.rolls.shouldSuggestFatePoint(roll, attack, healing, buff, defence, meleeSave, rangedSave)
+
+                        hidden = not rules.rolls.shouldSuggestFatePoint(roll, attack, healing, buff, defence, meleeSave, rangedSave)
                     end
-                    return true
+
+                    return hidden
                 end,
                 func = function()
                     performRoll(true)
