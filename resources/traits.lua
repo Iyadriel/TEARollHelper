@@ -6,7 +6,7 @@ local traits = ns.resources.traits
 local BUFF_TYPES = constants.BUFF_TYPES
 local TURN_TYPES = constants.TURN_TYPES
 
-traits.TRAIT_KEYS = {"OTHER", "BULWARK", "FOCUS", "SECOND_WIND", "VINDICATION"}
+traits.TRAIT_KEYS = {"OTHER", "BULWARK", "CALAMITY_GAMBIT", "FOCUS", "SECOND_WIND", "VINDICATION"}
 
 traits.TRAITS = {
     OTHER = {
@@ -28,6 +28,19 @@ traits.TRAITS = {
                 defence = 3,
             },
             remainingTurns = 0,
+        },
+    },
+    CALAMITY_GAMBIT = {
+        id = "CALAMITY_GAMBIT",
+        name = "Calamity Gambit",
+        desc = "Activate to double your Offence stat for the current and the next player turn. However, your defence stat is reduced by an amount equal to your regular offense stat for the next two enemy turns. Can be used once per event. Activate and then roll.",
+        icon = "Interface\\Icons\\spell_shadow_unstableaffliction_3",
+        supported = true,
+        numCharges = 1,
+        buff = {
+            type = BUFF_TYPES.STAT,
+            stats = "custom",
+            remainingTurns = 3,
         },
     },
     FOCUS = {

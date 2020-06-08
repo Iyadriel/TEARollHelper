@@ -2,7 +2,9 @@ local _, ns = ...
 
 local COLOURS = TEARollHelper.COLOURS
 
+local character = ns.character
 local characterState = ns.state.character.state
+local consequences = ns.consequences
 local constants = ns.constants
 local feats = ns.resources.feats
 local rolls = ns.state.rolls
@@ -30,6 +32,29 @@ ui.modules.actions.modules.attack.getOptions = function(options)
         hidden = function()
             return shouldHideRoll() or not rules.offence.shouldShowPreRollUI()
         end,
+        args = {
+            useCalamityGambit = {
+                order = 0,
+                type = "execute",
+                name = COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.CALAMITY_GAMBIT.name,
+                desc = TRAITS.CALAMITY_GAMBIT.desc,
+                hidden = function()
+                    return not character.hasTrait(TRAITS.CALAMITY_GAMBIT) or characterState.buffLookup.getTraitBuff(TRAITS.CALAMITY_GAMBIT)
+                end,
+                disabled = function()
+                    return characterState.featsAndTraits.numCalamityGambitCharges.get() == 0
+                end,
+                func = consequences.useCalamityGambit,
+            },
+            calamityGambitActive = {
+                order = 0,
+                type = "description",
+                name = COLOURS.TRAITS.GENERIC .. TRAITS.CALAMITY_GAMBIT.name .. " is active.",
+                hidden = function()
+                    return not (character.hasTrait(TRAITS.CALAMITY_GAMBIT) and characterState.buffLookup.getTraitBuff(TRAITS.CALAMITY_GAMBIT))
+                end,
+            },
+        }
     })
 
     return {

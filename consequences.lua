@@ -52,6 +52,11 @@ local function useFocus()
     bus.fire(EVENTS.TRAIT_ACTIVATED, TRAITS.FOCUS.id)
 end
 
+local function useCalamityGambit()
+    buffs.addTraitBuff(TRAITS.CALAMITY_GAMBIT)
+    useTraitCharge(state.featsAndTraits.numCalamityGambitCharges)
+    bus.fire(EVENTS.TRAIT_ACTIVATED, TRAITS.CALAMITY_GAMBIT.id)
+end
 
 -- [[ Enemy turn ]]
 
@@ -72,6 +77,7 @@ consequences.confirmReboundRoll = confirmReboundRoll
 consequences.useFatePoint = useFatePoint
 
 consequences.useFocus = useFocus
+consequences.useCalamityGambit = useCalamityGambit
 
 consequences.confirmDefenceAction = confirmDefenceAction
 consequences.confirmMeleeSaveAction = confirmMeleeSaveAction

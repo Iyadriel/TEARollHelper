@@ -168,7 +168,7 @@ end
 -- Rolling
 
 local function shouldShowPreRollUI()
-    return character.hasTrait(TRAITS.FOCUS)
+    return character.hasTrait(TRAITS.CALAMITY_GAMBIT) or character.hasTrait(TRAITS.FOCUS)
 end
 
 rules.offence = {

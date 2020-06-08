@@ -3,6 +3,7 @@ local _, ns = ...
 local bus = ns.bus
 local constants = ns.constants
 local characterState = ns.state.character
+local rules = ns.rules
 
 local EVENTS = bus.EVENTS
 local BUFF_SOURCES = constants.BUFF_SOURCES
@@ -152,7 +153,11 @@ local function addTraitBuff(trait)
         }
 
         if types[BUFF_TYPES.STAT] then
-            newBuff.stats = buff.stats
+            if buff.stats == "custom" then
+                newBuff.stats = rules.traits.calculateStatBuff(trait)
+            else
+                newBuff.stats = buff.stats
+            end
         end
         if types[BUFF_TYPES.ADVANTAGE] then
             newBuff.actions = buff.actions or {}

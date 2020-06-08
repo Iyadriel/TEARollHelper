@@ -30,6 +30,7 @@ characterState.initState = function()
         featsAndTraits = {
             numBloodHarvestSlots = rules.offence.getMaxBloodHarvestSlots(),
             numBulwarkCharges = TRAITS.BULWARK.numCharges,
+            numCalamityGambitCharges = TRAITS.CALAMITY_GAMBIT.numCharges,
             numFocusCharges = TRAITS.FOCUS.numCharges,
             numSecondWindCharges = TRAITS.SECOND_WIND.numCharges,
             numVindicationCharges = TRAITS.VINDICATION.numCharges,
@@ -130,6 +131,9 @@ characterState.state = {
         end),
         numBulwarkCharges = basicGetSet("featsAndTraits", "numBulwarkCharges", function(numCharges)
             bus.fire(EVENTS.TRAIT_CHARGES_CHANGED, TRAITS.BULWARK.id, numCharges)
+        end),
+        numCalamityGambitCharges = basicGetSet("featsAndTraits", "numCalamityGambitCharges", function(numCharges)
+            bus.fire(EVENTS.TRAIT_CHARGES_CHANGED, TRAITS.CALAMITY_GAMBIT.id, numCharges)
         end),
         numFocusCharges = basicGetSet("featsAndTraits", "numFocusCharges", function(numCharges)
             bus.fire(EVENTS.TRAIT_CHARGES_CHANGED, TRAITS.BULWARK.id, numCharges)
@@ -346,6 +350,8 @@ bus.addListener(EVENTS.TRAIT_REMOVED, function(traitID)
         -- TODO better system for charges
         if traitID == TRAITS.BULWARK.id then
             characterState.state.featsAndTraits.numBulwarkCharges.set(TRAITS.BULWARK.numCharges)
+        elseif traitID == TRAITS.CALAMITY_GAMBIT.id then
+            characterState.state.featsAndTraits.numCalamityGambitCharges.set(TRAITS.CALAMITY_GAMBIT.numCharges)
         elseif traitID == TRAITS.FOCUS.id then
             characterState.state.featsAndTraits.numFocusCharges.set(TRAITS.FOCUS.numCharges)
         elseif traitID == TRAITS.SECOND_WIND.id then
