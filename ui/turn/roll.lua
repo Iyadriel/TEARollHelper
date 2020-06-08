@@ -39,6 +39,22 @@ local ROLL_MODE_VALUES_DISADVANTAGE = {
 
 --[[ local options = {
     order: Number,
+    hidden: Function,
+    args: Table,
+} ]]
+ui.modules.turn.modules.roll.getPreRollOptions = function(options)
+    return {
+        order = options.order,
+        type = "group",
+        name = "Before rolling",
+        inline = true,
+        hidden = options.hidden,
+        args = options.args,
+    }
+end
+
+--[[ local options = {
+    order: Number,
     action: String, -- attack, healing, buff, defend, meleeSave, rangedSave, utility
     includePrep: Boolean,
     hidden: Function,

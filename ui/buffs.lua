@@ -66,7 +66,7 @@ ui.modules.buffs.getOptions = function(options)
                         if not buff then return "" end
 
                         local msg = " |n"
-                        if buff.type == BUFF_TYPES.STAT then
+                        if buff.types[BUFF_TYPES.STAT] then
                             for stat, amount in pairs(buff.stats) do
                                 if amount > 0 then
                                     msg = msg .. STAT_LABELS[stat] .. " increased by " .. amount .. ". "
@@ -74,7 +74,8 @@ ui.modules.buffs.getOptions = function(options)
                                     msg = msg .. STAT_LABELS[stat] .. " decreased by " .. abs(amount) .. ". "
                                 end
                             end
-                        elseif buff.type == BUFF_TYPES.ADVANTAGE then
+                        end
+                        if buff.types[BUFF_TYPES.ADVANTAGE] then
                             msg = msg .. "Your rolls have advantage.|nApplies to: "
                             if buff.turnTypeId then
                                 msg = msg .. TURN_TYPES[buff.turnTypeId].name .. " turn, "
@@ -83,7 +84,7 @@ ui.modules.buffs.getOptions = function(options)
                                 msg = msg ..  ACTION_LABELS[action] .. ", "
                             end
                             msg = string.sub(msg, 0, -3)
-                        elseif buff.type == BUFF_TYPES.DISADVANTAGE then
+                        elseif buff.types[BUFF_TYPES.DISADVANTAGE] then
                             msg = msg .. "Your rolls have disadvantage.|nApplies to: "
                             if buff.turnTypeId then
                                 msg = msg .. TURN_TYPES[buff.turnTypeId].name .. " turn, "

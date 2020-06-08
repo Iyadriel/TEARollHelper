@@ -3,15 +3,13 @@ local _, ns = ...
 local character = ns.character
 local racialTraits = ns.resources.racialTraits
 local rules = ns.rules
+local traits = ns.resources.traits
 
 local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
+local TRAITS = traits.TRAITS
 
 local function calculateDefendValue(roll, defence, buff)
     return roll + rules.common.calculateDefenceStat(defence, buff)
-end
-
-local function applyBulwarkBonus(defendValue)
-    return defendValue + 3
 end
 
 local function calculateDamageTaken(threshold, defendValue, dmgRisk)
@@ -38,10 +36,14 @@ local function calculateRetaliationDamage(defence)
     return dmg
 end
 
+local function shouldShowPreRollUI()
+    return character.hasTrait(TRAITS.BULWARK)
+end
+
 rules.defence = {
     calculateDefendValue = calculateDefendValue,
-    applyBulwarkBonus = applyBulwarkBonus,
     calculateDamageTaken = calculateDamageTaken,
     isCrit = isCrit,
-    calculateRetaliationDamage = calculateRetaliationDamage
+    calculateRetaliationDamage = calculateRetaliationDamage,
+    shouldShowPreRollUI = shouldShowPreRollUI,
 }

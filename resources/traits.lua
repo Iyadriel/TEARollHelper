@@ -1,6 +1,11 @@
 local _, ns = ...
 
+local constants = ns.constants
 local traits = ns.resources.traits
+
+local BUFF_TYPES = constants.BUFF_TYPES
+local TURN_TYPES = constants.TURN_TYPES
+
 traits.TRAIT_KEYS = {"OTHER", "BULWARK", "SECOND_WIND", "VINDICATION"}
 
 traits.TRAITS = {
@@ -13,8 +18,17 @@ traits.TRAITS = {
         id = "BULWARK",
         name = "Bulwark",
         desc = "Activate to gain +3 to defense as well as advantage on all defense rolls for the current or next enemy turn. Can be used twice per event. Activate and then roll.",
+        icon = "Interface\\Icons\\spell_holy_greaterblessingofsanctuary",
         supported = true,
         numCharges = 2,
+        buff = {
+            types = { [BUFF_TYPES.STAT] = true, [BUFF_TYPES.ADVANTAGE] = true },
+            turnTypeId = TURN_TYPES.ENEMY.id,
+            stats = {
+                defence = 3,
+            },
+            remainingTurns = 0,
+        },
     },
     SECOND_WIND = {
         id = "SECOND_WIND",

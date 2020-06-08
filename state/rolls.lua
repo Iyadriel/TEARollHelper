@@ -43,7 +43,6 @@ rolls.initState = function()
         defend = {
             threshold = nil,
             damageRisk = nil,
-            useBulwark = false,
             rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
         },
@@ -110,7 +109,6 @@ rolls.state = {
     defend = {
         threshold = basicGetSet("defend", "threshold"),
         damageRisk = basicGetSet("defend", "damageRisk"),
-        useBulwark = basicGetSet("defend", "useBulwark"),
         rollMode = basicGetSet("defend", "rollMode"),
         currentRoll = basicGetSet("defend", "currentRoll"),
     },
@@ -139,7 +137,6 @@ local function resetSlots()
     rolls.state.attack.numBloodHarvestSlots.set(0)
     rolls.state.healing.numGreaterHealSlots.set(0)
     rolls.state.healing.mercyFromPainBonusHealing.set(0)
-    rolls.state.defend.useBulwark.set(false)
 end
 
 local function resetRolls()
@@ -184,12 +181,6 @@ end)
 bus.addListener(EVENTS.GREATER_HEAL_CHARGES_CHANGED, function(numCharges)
     if numCharges < state.healing.numGreaterHealSlots then
         rolls.state.healing.numGreaterHealSlots.set(numCharges)
-    end
-end)
-
-bus.addListener(EVENTS.TRAIT_CHARGES_CHANGED, function(traitID, numCharges)
-    if traitID == TRAITS.BULWARK.id and numCharges == 0 then
-        rolls.state.defend.useBulwark.set(false)
     end
 end)
 
@@ -244,9 +235,8 @@ end
 local function getDefence()
     local defence = character.getPlayerDefence()
     local buff = characterState.buffs.defence.get()
-    local useBulwark = state.defend.useBulwark
 
-    return actions.getDefence(state.defend.currentRoll, state.defend.threshold, state.defend.damageRisk, defence, buff, useBulwark)
+    return actions.getDefence(state.defend.currentRoll, state.defend.threshold, state.defend.damageRisk, defence, buff)
 end
 
 local function getMeleeSave()

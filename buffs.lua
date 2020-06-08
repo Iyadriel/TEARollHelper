@@ -10,6 +10,7 @@ local STAT_LABELS = constants.STAT_LABELS
 
 local BUFF_SOURCES = {
     PLAYER = "Player",
+    TRAIT = "Trait",
     WEAKNESS = "Weakness",
     RACIAL_TRAIT = "Racial Trait",
 }
@@ -47,7 +48,7 @@ local function addStatBuff(stat, amount, label, expireAfterNextTurn)
 
     addBuff({
         id = "player_" .. stat,
-        type = BUFF_TYPES.STAT,
+        types = { [BUFF_TYPES.STAT] = true },
         label = label,
         icon = STAT_TYPE_ICONS[stat],
 
@@ -76,7 +77,7 @@ local function addAdvantageBuff(action, label, expireAfterNextTurn)
 
     addBuff({
         id = "player_advantage_" .. action,
-        type = BUFF_TYPES.ADVANTAGE,
+        types = { [BUFF_TYPES.ADVANTAGE] = true },
         label = label,
         icon = "Interface\\Icons\\spell_holy_borrowedtime",
 
@@ -101,7 +102,7 @@ local function addDisadvantageDebuff(action, label, expireAfterNextTurn)
 
     addBuff({
         id = "player_disadvantage_" .. action,
-        type = BUFF_TYPES.DISADVANTAGE,
+        types = { [BUFF_TYPES.DISADVANTAGE] = true },
         label = label,
         icon = "Interface\\Icons\\achievement_bg_overcome500disadvantage",
 
@@ -113,6 +114,67 @@ local function addDisadvantageDebuff(action, label, expireAfterNextTurn)
     })
 end
 
+--[[ local function addHoTBuff(label, healingPerTurn, nmTurns)
+    if label:trim() == "" then
+        label = "Healing"
+    end
+
+    addBuff({
+        id = "advantage",
+        types = { [BUFF_TYPES.HEALING_OVER_TIME] = true },
+        label = label,
+        icon = "Interface\\Icons\\ability_druid_nourish",
+
+        healingPerTurn = healingPerTurn,
+
+        source = BUFF_SOURCES.PLAYER,
+
+        remainingTurns = remainingTurns,
+    })
+end ]]
+
+local function addTraitBuff(trait)
+    local buff = trait.buff
+    if buff then
+        local existingBuff = characterState.state.buffLookup.getTraitBuff(trait)
+        if existingBuff then
+            removeBuff(existingBuff)
+        end
+
+        local types = buff.types or {
+            [buff.type] = true
+        }
+
+        local newBuff = {
+            id = "trait_" .. trait.id,
+            types = types,
+            label = trait.name,
+            icon = trait.icon,
+
+            source = BUFF_SOURCES.TRAIT,
+            traitID = trait.id,
+
+            canCancel = true
+        }
+
+        if types[BUFF_TYPES.STAT] then
+            newBuff.stats = buff.stats
+        end
+        if types[BUFF_TYPES.ADVANTAGE] then
+            newBuff.actions = buff.actions or {}
+            if buff.turnTypeId then
+                newBuff.turnTypeId = buff.turnTypeId
+            end
+        end
+
+        if buff.remainingTurns then
+            newBuff.remainingTurns = buff.remainingTurns
+        end
+
+        addBuff(newBuff)
+    end
+end
+
 local function addWeaknessDebuff(weakness)
     local debuff = weakness.debuff
     if debuff then
@@ -122,9 +184,13 @@ local function addWeaknessDebuff(weakness)
             removeBuff(existingBuff)
         end
 
+        local types = debuff.types or {
+            [debuff.type] = true
+        }
+
         local buff = {
             id = "weakness_" .. weakness.id,
-            type = debuff.type,
+            types = types,
             label = weakness.name,
             icon = weakness.icon,
 
@@ -134,9 +200,10 @@ local function addWeaknessDebuff(weakness)
             canCancel = debuff.canCancel,
         }
 
-        if debuff.type == BUFF_TYPES.STAT then
+        if types[BUFF_TYPES.STAT] then
             buff.stats = debuff.stats
-        elseif debuff.type == BUFF_TYPES.DISADVANTAGE then
+        end
+        if types[BUFF_TYPES.DISADVANTAGE] then
             buff.actions = debuff.actions or {}
             if debuff.turnTypeId then
                 buff.turnTypeId = debuff.turnTypeId
@@ -163,7 +230,7 @@ local function addRacialBuff(racialTrait)
 
         addBuff({
             id = "racial",
-            type = BUFF_TYPES.STAT,
+            types = { [BUFF_TYPES.STAT] = true },
             label = racialTrait.name,
             icon = racialTrait.icon,
 
@@ -181,5 +248,6 @@ ns.buffs.BUFF_SOURCES = BUFF_SOURCES
 ns.buffs.addStatBuff = addStatBuff
 ns.buffs.addAdvantageBuff = addAdvantageBuff
 ns.buffs.addDisadvantageDebuff = addDisadvantageDebuff
+ns.buffs.addTraitBuff = addTraitBuff
 ns.buffs.addWeaknessDebuff = addWeaknessDebuff
 ns.buffs.addRacialBuff = addRacialBuff

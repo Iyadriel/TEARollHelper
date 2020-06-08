@@ -31,6 +31,7 @@ local EVENTS = {
     BUFF_EXPIRED = "BUFF_EXPIRED", -- label
     DAMAGE_TAKEN = "DAMAGE_TAKEN", -- dmgTaken
     HEALED = "HEALED", -- amountHealed, netAmountHealed, overHealing
+    TRAIT_ACTIVATED = "TRAIT_ACTIVATED", -- traitID
 
     -- Buffs
     STAT_BUFF_ADDED = "STAT_BUFF_ADDED", -- stat, amount

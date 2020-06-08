@@ -161,7 +161,7 @@ characterState.state = {
             table.insert(state.activeBuffs, buff)
             characterState.state.buffLookup.add(buff)
 
-            if buff.type == BUFF_TYPES.STAT then
+            if buff.types[BUFF_TYPES.STAT] then
                 for stat, amount in pairs(buff.stats) do
                     local statBuff = characterState.state.buffs[stat]
                     statBuff.set(statBuff.get() + amount)
@@ -191,7 +191,7 @@ characterState.state = {
         removeAtIndex = function(index)
             local buff = state.activeBuffs[index]
 
-            if buff.type == BUFF_TYPES.STAT then
+            if buff.types[BUFF_TYPES.STAT] then
                 for stat, amount in pairs(buff.stats) do
                     local statBuff = characterState.state.buffs[stat]
                     statBuff.set(statBuff.get() - amount)
@@ -222,7 +222,7 @@ characterState.state = {
         getAdvantageBuff = function(action, turnTypeId)
             local activeBuffs = characterState.state.activeBuffs.get()
             for _, buff in ipairs(activeBuffs) do
-                if buff.type == BUFF_TYPES.ADVANTAGE then
+                if buff.types[BUFF_TYPES.ADVANTAGE] then
                     if (action and buff.actions[action]) or (turnTypeId and buff.turnTypeId == turnTypeId) then
                         return buff
                     end
@@ -233,13 +233,16 @@ characterState.state = {
         getDisadvantageDebuff = function(action, turnTypeId)
             local activeBuffs = characterState.state.activeBuffs.get()
             for _, buff in ipairs(activeBuffs) do
-                if buff.type == BUFF_TYPES.DISADVANTAGE then
+                if buff.types[BUFF_TYPES.DISADVANTAGE] then
                     if (action and buff.actions[action]) or (turnTypeId and buff.turnTypeId == turnTypeId) then
                         return buff
                     end
                 end
             end
             return nil
+        end,
+        getTraitBuff = function(trait)
+            return characterState.state.buffLookup.get("trait_" .. trait.id)
         end,
         getWeaknessDebuff = function(weakness)
             return characterState.state.buffLookup.get("weakness_" .. weakness.id)

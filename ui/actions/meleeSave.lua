@@ -16,6 +16,10 @@ local ACTION_LABELS = constants.ACTION_LABELS
 ui.modules.actions.modules.meleeSave.getOptions = function(options)
     local sharedOptions = ui.modules.actions.modules.defend.getSharedOptions("meleeSave")
 
+    local function shouldHideRoll()
+        return not (rolls.state.meleeSave.threshold.get() and rolls.state.meleeSave.damageRisk.get())
+    end
+
     return {
         name = ACTION_LABELS.meleeSave,
         type = "group",
@@ -26,9 +30,7 @@ ui.modules.actions.modules.meleeSave.getOptions = function(options)
             roll = ui.modules.turn.modules.roll.getOptions({
                 order = 2,
                 action = ACTIONS.meleeSave,
-                hidden = function()
-                    return not (rolls.state.meleeSave.threshold.get() and rolls.state.meleeSave.damageRisk.get())
-                end,
+                hidden = shouldHideRoll,
             }),
             meleeSave = {
                 order = 3,

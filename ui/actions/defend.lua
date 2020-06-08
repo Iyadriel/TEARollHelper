@@ -7,6 +7,7 @@ local characterState = ns.state.character
 local consequences = ns.consequences
 local constants = ns.constants
 local rolls = ns.state.rolls
+local rules = ns.rules
 local traits = ns.resources.traits
 local ui = ns.ui
 
@@ -57,6 +58,10 @@ end
 ui.modules.actions.modules.defend.getOptions = function(options)
     local sharedOptions = ui.modules.actions.modules.defend.getSharedOptions("defend")
 
+    local function shouldHideRoll()
+        return not (rolls.state.defend.threshold.get() and rolls.state.defend.damageRisk.get())
+    end
+
     return {
         name = ACTION_LABELS.defend,
         type = "group",
@@ -64,15 +69,42 @@ ui.modules.actions.modules.defend.getOptions = function(options)
         args = {
             defendThreshold = sharedOptions.defendThreshold,
             damageRisk = sharedOptions.damageRisk,
-            roll = ui.modules.turn.modules.roll.getOptions({
+            preRoll = ui.modules.turn.modules.roll.getPreRollOptions({
                 order = 2,
-                action = ACTIONS.defend,
                 hidden = function()
-                    return not (rolls.state.defend.threshold.get() and rolls.state.defend.damageRisk.get())
+                    return shouldHideRoll() or not rules.defence.shouldShowPreRollUI()
                 end,
+                args = {
+                    useBulwark = {
+                        order = 0,
+                        type = "execute",
+                        name = COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.BULWARK.name,
+                        desc = TRAITS.BULWARK.desc,
+                        hidden = function()
+                            return not character.hasTrait(TRAITS.BULWARK) or state.buffLookup.getTraitBuff(TRAITS.BULWARK)
+                        end,
+                        disabled = function()
+                            return state.featsAndTraits.numBulwarkCharges.get() == 0
+                        end,
+                        func = consequences.useBulwark,
+                    },
+                    bulwarkActive = {
+                        order = 0,
+                        type = "description",
+                        name = COLOURS.TRAITS.GENERIC .. TRAITS.BULWARK.name .. " is active.",
+                        hidden = function()
+                            return not (character.hasTrait(TRAITS.BULWARK) and state.buffLookup.getTraitBuff(TRAITS.BULWARK))
+                        end,
+                    },
+                },
+            }),
+            roll = ui.modules.turn.modules.roll.getOptions({
+                order = 3,
+                action = ACTIONS.defend,
+                hidden = shouldHideRoll,
             }),
             defend = {
-                order = 3,
+                order = 4,
                 type = "group",
                 name = ACTION_LABELS.defend,
                 inline = true,
@@ -80,24 +112,8 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                     return not rolls.state.defend.currentRoll.get()
                 end,
                 args = {
-                    useBulwark = {
-                        order = 3,
-                        type = "toggle",
-                        name = COLOURS.TRAITS.GENERIC .. TRAITS.BULWARK.name,
-                        desc = TRAITS.BULWARK.desc,
-                        hidden = function()
-                            return not character.hasTrait(TRAITS.BULWARK)
-                        end,
-                        disabled = function()
-                            return state.featsAndTraits.numBulwarkCharges.get() == 0
-                        end,
-                        get = rolls.state.defend.useBulwark.get,
-                        set = function (info, value)
-                            rolls.state.defend.useBulwark.set(value)
-                        end
-                    },
                     damageTaken = {
-                        order = 4,
+                        order = 0,
                         type = "description",
                         desc = "How much damage you take this turn",
                         fontSize = "medium",
@@ -116,7 +132,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                         end
                     },
                     okay = {
-                        order = 5,
+                        order = 1,
                         type = "execute",
                         name = "Okay :(",
                         desc = "Apply the stated damage to your character's HP",
