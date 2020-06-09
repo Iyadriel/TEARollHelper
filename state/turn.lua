@@ -29,21 +29,38 @@ local function basicGetSet(key, callback)
     }
 end
 
+local function setTurn(index, turnTypeID)
+    local oldIndex = turnState.state.index.get()
+    local oldType = turnState.state.type.get()
+
+    bus.fire(EVENTS.TURN_FINISHED, oldIndex, oldType)
+
+    turnState.state.index.set(index)
+    turnState.state.type.set(turnTypeID)
+
+    bus.fire(EVENTS.TURN_STARTED, index, turnTypeID)
+end
+
 turnState.state = {
     index = {
         get = function ()
             return state.index
         end,
         set = function (index)
-            local oldIndex = state.index
             state.index = index
-            bus.fire(EVENTS.TURN_CHANGED, index)
-            if index > oldIndex then
-                bus.fire(EVENTS.TURN_INCREMENTED)
-            end
         end,
         increment = function()
-            turnState.state.index.set(turnState.state.index.get() + 1)
+            local oldIndex = turnState.state.index.get()
+            local oldType = turnState.state.type.get()
+            local newType
+
+            if oldType == TURN_TYPES.PLAYER.id then
+                newType = TURN_TYPES.ENEMY.id
+            else -- if changing from OUT_OF_COMBAT or ENEMY, set to PLAYER
+                newType = TURN_TYPES.PLAYER.id
+            end
+
+            setTurn(oldIndex + 1, newType)
         end,
         reset = function()
             turnState.state.index.set(0)
@@ -56,23 +73,13 @@ turnState.state = {
         set = function (type)
             state.type = type
         end,
-        switch = function()
-            local currentType = turnState.state.type.get()
-            if currentType == TURN_TYPES.PLAYER.id then
-                turnState.state.type.set(TURN_TYPES.ENEMY.id)
-            else
-                turnState.state.type.set(TURN_TYPES.PLAYER.id)
-            end
-        end
     },
     inCombat = basicGetSet("inCombat", function(inCombat)
         if inCombat then
-            turnState.state.index.set(1)
-            turnState.state.type.set(TURN_TYPES.PLAYER.id)
+            setTurn(1, TURN_TYPES.PLAYER.id)
             bus.fire(EVENTS.COMBAT_STARTED)
         else
-            turnState.state.index.reset()
-            turnState.state.type.set(TURN_TYPES.OUT_OF_COMBAT.id)
+            setTurn(0, TURN_TYPES.OUT_OF_COMBAT.id)
             bus.fire(EVENTS.COMBAT_OVER)
         end
     end),

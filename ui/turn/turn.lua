@@ -49,10 +49,7 @@ ui.modules.turn.modules.turn.getOptions = function(options)
                 hidden = function()
                     return not state.inCombat.get()
                 end,
-                func = function()
-                    state.index.increment()
-                    state.type.switch()
-                end
+                func = state.index.increment,
             },
             startCombat = {
                 type = "execute",

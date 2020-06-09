@@ -24,6 +24,7 @@ local ACTION_LABELS = {
 
 local BUFF_SOURCES = {
     PLAYER = "Player",
+    OTHER_PLAYER = "Other player",
     TRAIT = "Trait",
     WEAKNESS = "Weakness",
     RACIAL_TRAIT = "Racial Trait",
@@ -33,7 +34,7 @@ local BUFF_TYPES = {
     STAT = 0,
     DISADVANTAGE = 1,
     ADVANTAGE = 2,
-    --HEALING_OVER_TIME = 3,
+    HEALING_OVER_TIME = 3,
 }
 
 local ROLL_MODES = {

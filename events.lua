@@ -9,6 +9,7 @@ local traits = ns.resources.traits
 local turnState = ns.state.turn
 local weaknesses = ns.resources.weaknesses
 
+local BUFF_TYPES = constants.BUFF_TYPES
 local EVENTS = bus.EVENTS
 local TRAITS = traits.TRAITS
 local TURN_TYPES = constants.TURN_TYPES
@@ -91,7 +92,7 @@ local function setRemainingTurns(buff, remainingTurns, turnTypeId)
     if type(buff.remainingTurns) == "table" then
         buff.remainingTurns[turnTypeId] = remainingTurns
     else
-        buff.remainingTurns = buff.remainingTurns
+        buff.remainingTurns = remainingTurns
     end
 end
 
@@ -100,27 +101,53 @@ local function expireBuff(index, buff)
     bus.fire(EVENTS.BUFF_EXPIRED, buff.label)
 end
 
-bus.addListener(EVENTS.TURN_INCREMENTED, function()
+local function applyHealTick(buff)
+    if buff.types[BUFF_TYPES.HEALING_OVER_TIME] then
+        characterState.state.health.heal(buff.healingPerTick)
+    end
+end
+
+bus.addListener(EVENTS.TURN_STARTED, function(index, turnTypeID)
     local activeBuffs = characterState.state.activeBuffs.get()
-    local turnTypeId = turnState.state.type.get()
 
     for i = #activeBuffs, 1, -1 do
         local buff = activeBuffs[i]
 
         local remainingTurns
         if type(buff.remainingTurns) == "table" then
-            remainingTurns = buff.remainingTurns[turnTypeId]
+            remainingTurns = buff.remainingTurns[turnTypeID]
         else
             remainingTurns = buff.remainingTurns
         end
 
         if remainingTurns then
-            if remainingTurns <= 0 then
-                expireBuff(i, buff)
-            else
-                setRemainingTurns(buff, remainingTurns - 1, turnTypeId)
+             -- this check shouldn't be needed because buffs with 0 turns left are removed at the end of a turn
+             -- but just to be sure
+            if remainingTurns > 0 then
+                setRemainingTurns(buff, remainingTurns - 1, turnTypeID)
                 TEARollHelper:Debug("Decremented buff remaining turns at index " .. i)
+
+                applyHealTick(buff)
             end
+        end
+    end
+end)
+
+bus.addListener(EVENTS.TURN_FINISHED, function(index, turnTypeID)
+    local activeBuffs = characterState.state.activeBuffs.get()
+
+    for i = #activeBuffs, 1, -1 do
+        local buff = activeBuffs[i]
+
+        local remainingTurns
+        if type(buff.remainingTurns) == "table" then
+            remainingTurns = buff.remainingTurns[turnTypeID]
+        else
+            remainingTurns = buff.remainingTurns
+        end
+
+        if remainingTurns and remainingTurns <= 0 then
+            expireBuff(i, buff)
         end
     end
 end)

@@ -94,6 +94,9 @@ ui.modules.buffs.getOptions = function(options)
                             end
                             msg = string.sub(msg, 0, -3)
                         end
+                        if buff.types[BUFF_TYPES.HEALING_OVER_TIME] then
+                            msg = msg .. "Healing for " .. buff.healingPerTick .. " at the start of every turn."
+                        end
 
                         if buff.remainingTurns then
                             if type(buff.remainingTurns) == "table" then
@@ -105,8 +108,8 @@ ui.modules.buffs.getOptions = function(options)
                                     msg = msg .. COLOURS.NOTE .. "|n|nRemaining " .. TURN_TYPES.ENEMY.name .. " turns: " .. remainingEnemyTurns
                                 end
                             else
-                            msg = msg .. COLOURS.NOTE .. "|n|nRemaining turns: " .. buff.remainingTurns
-                        end
+                                msg = msg .. COLOURS.NOTE .. "|n|nRemaining turns: " .. buff.remainingTurns
+                            end
                         end
 
                         --msg = msg .. COLOURS.NOTE .. "|n|nSource: " .. buff.source

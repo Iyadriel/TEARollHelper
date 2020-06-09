@@ -6,7 +6,7 @@ local traits = ns.resources.traits
 local BUFF_TYPES = constants.BUFF_TYPES
 local TURN_TYPES = constants.TURN_TYPES
 
-traits.TRAIT_KEYS = {"OTHER", "BULWARK", "CALAMITY_GAMBIT", "FOCUS", "SECOND_WIND", "VINDICATION"}
+traits.TRAIT_KEYS = {"OTHER", "BULWARK", "CALAMITY_GAMBIT", "FOCUS", "NOURISH", "SECOND_WIND", "VINDICATION"}
 
 traits.TRAITS = {
     OTHER = {
@@ -23,15 +23,15 @@ traits.TRAITS = {
         numCharges = 2,
         buffs = {
             {
-            types = { [BUFF_TYPES.STAT] = true, [BUFF_TYPES.ADVANTAGE] = true },
-            turnTypeId = TURN_TYPES.ENEMY.id,
-            stats = {
-                defence = 3,
-            },
+                types = { [BUFF_TYPES.STAT] = true, [BUFF_TYPES.ADVANTAGE] = true },
+                turnTypeId = TURN_TYPES.ENEMY.id,
+                stats = {
+                    defence = 3,
+                },
                 remainingTurns = {
                     [TURN_TYPES.ENEMY.id] = 0,
-        },
-    },
+                },
+            },
         },
     },
     CALAMITY_GAMBIT = {
@@ -43,7 +43,7 @@ traits.TRAITS = {
         numCharges = 1,
         buffs = {
             {
-            type = BUFF_TYPES.STAT,
+                type = BUFF_TYPES.STAT,
                 stats = {
                     offence = "custom"
                 },
@@ -57,7 +57,7 @@ traits.TRAITS = {
                     defence = "custom"
                 },
                 remainingTurns = {
-                    [TURN_TYPES.ENEMY.id] = 1,
+                    [TURN_TYPES.ENEMY.id] = 2,
                 },
             }
         },
@@ -71,8 +71,8 @@ traits.TRAITS = {
         numCharges = 2,
         buffs = {
             {
-            type = BUFF_TYPES.ADVANTAGE,
-            turnTypeId = TURN_TYPES.PLAYER.id,
+                type = BUFF_TYPES.ADVANTAGE,
+                turnTypeId = TURN_TYPES.PLAYER.id,
                 remainingTurns = {
                     [TURN_TYPES.PLAYER.id] = 0,
                 },
@@ -85,6 +85,22 @@ traits.TRAITS = {
         desc = "Activate outside of combat to regain 15HP. Can be used once, recharges after every combat. Activate without rolling.",
         supported = true,
         numCharges = 1,
+    },
+    NOURISH = {
+        id = "NOURISH",
+        name = "Nourish",
+        desc = "Activate to have your Healing roll heal half of its total result rounded up every player turn for the duration of four player turns. Can be used thrice per event. Activate after rolling.",
+        icon = "Interface\\Icons\\ability_druid_nourish",
+        supported = true,
+        numCharges = 3,
+        buffs = {
+            {
+                type = BUFF_TYPES.HEALING_OVER_TIME,
+                remainingTurns = {
+                    [TURN_TYPES.PLAYER.id] = 4,
+                },
+            },
+        },
     },
     VINDICATION = {
         id = "VINDICATION",

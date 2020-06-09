@@ -49,7 +49,7 @@ weaknesses.WEAKNESSES = {
             type = BUFF_TYPES.DISADVANTAGE,
             turnTypeId = TURN_TYPES.ENEMY.id,
             remainingTurns = {
-                [TURN_TYPES.ENEMY.id] = 0,
+                [TURN_TYPES.ENEMY.id] = 1,
             },
         }
     },
@@ -63,7 +63,7 @@ weaknesses.WEAKNESSES = {
             type = BUFF_TYPES.DISADVANTAGE,
             turnTypeId = TURN_TYPES.PLAYER.id,
             remainingTurns = {
-                [TURN_TYPES.PLAYER.id] = 0,
+                [TURN_TYPES.PLAYER.id] = 1,
             },
         }
     },

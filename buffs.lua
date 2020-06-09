@@ -117,24 +117,24 @@ local function addDisadvantageDebuff(action, label, expireAfterNextTurn)
     })
 end
 
---[[ local function addHoTBuff(label, healingPerTurn, nmTurns)
+local function addHoTBuff(label, icon, healingPerTick, remainingTurns)
     if label:trim() == "" then
         label = "Healing"
     end
 
     addBuff({
-        id = "advantage",
+        id = "HoT_" .. label,
         types = { [BUFF_TYPES.HEALING_OVER_TIME] = true },
         label = label,
-        icon = "Interface\\Icons\\ability_druid_nourish",
+        icon = icon,
 
-        healingPerTurn = healingPerTurn,
+        healingPerTick = healingPerTick,
 
-        source = BUFF_SOURCES.PLAYER,
+        source = BUFF_SOURCES.OTHER_PLAYER,
 
-        remainingTurns = remainingTurns,
+        remainingTurns = shallowCopy(remainingTurns),
     })
-end ]]
+end
 
 local function addTraitBuff(trait)
     local existingBuffs = characterState.state.buffLookup.getTraitBuffs(trait)
@@ -166,7 +166,7 @@ local function addTraitBuff(trait)
             for stat, value in pairs(buff.stats) do
                 if value == "custom" then
                     newBuff.stats[stat] = rules.traits.calculateStatBuff(trait, stat)
-            else
+                else
                     newBuff.stats[stat] = value
                 end
             end
@@ -258,6 +258,7 @@ end
 ns.buffs.addStatBuff = addStatBuff
 ns.buffs.addAdvantageBuff = addAdvantageBuff
 ns.buffs.addDisadvantageDebuff = addDisadvantageDebuff
+ns.buffs.addHoTBuff = addHoTBuff
 ns.buffs.addTraitBuff = addTraitBuff
 ns.buffs.addWeaknessDebuff = addWeaknessDebuff
 ns.buffs.addRacialBuff = addRacialBuff

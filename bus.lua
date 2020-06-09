@@ -47,8 +47,8 @@ local EVENTS = {
     -- Turn
     COMBAT_STARTED = "COMBAT_STARTED",
     COMBAT_OVER = "COMBAT_OVER",
-    TURN_CHANGED = "TURN_CHANGED", -- index
-    TURN_INCREMENTED = "TURN_INCREMENTED",
+    TURN_STARTED = "TURN_STARTED", -- index, turnTypeID
+    TURN_FINISHED = "TURN_FINISHED", -- index, turnTypeID
 }
 
 local listeners = {}
