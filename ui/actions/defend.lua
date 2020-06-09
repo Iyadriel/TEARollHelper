@@ -84,7 +84,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                             return not character.hasTrait(TRAITS.BULWARK) or state.buffLookup.getTraitBuffs(TRAITS.BULWARK)
                         end,
                         disabled = function()
-                            return state.featsAndTraits.numBulwarkCharges.get() == 0
+                            return state.featsAndTraits.numTraitCharges.get(TRAITS.BULWARK.id) == 0
                         end,
                         func = consequences.useBulwark,
                     },

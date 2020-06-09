@@ -10,10 +10,22 @@ local characterState = ns.state.character
 local settings = ns.settings
 local ui = ns.ui
 
+local TRAIT_KEYS = traits.TRAIT_KEYS
 local TRAITS = traits.TRAITS
 local state = characterState.state
 
-local function traitChargesSlider(order, trait, stateKey)
+local function merge(t1, t2)
+    local t3 = {}
+    for k, v in pairs(t1) do
+        t3[k] = v
+    end
+    for k, v in pairs(t2) do
+        t3[k] = v
+    end
+    return t3
+end
+
+local function traitChargesSlider(order, trait)
     return {
         order = order,
         type = "range",
@@ -22,9 +34,11 @@ local function traitChargesSlider(order, trait, stateKey)
         min = 0,
         max = trait.numCharges,
         step = 1,
-        get = state.featsAndTraits[stateKey].get,
+        get = function()
+            return state.featsAndTraits.numTraitCharges.get(trait.id)
+        end,
         set = function(info, value)
-            state.featsAndTraits[stateKey].set(value)
+            state.featsAndTraits.numTraitCharges.set(trait.id, value)
         end,
         hidden = function()
             return not character.hasTrait(trait)
@@ -145,7 +159,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                 type = "group",
                 name = "Feats and traits",
                 inline = true,
-                args = {
+                args = merge({
                     turn_character_numBloodHarvestSlots = {
                         order = 0,
                         type = "range",
@@ -168,12 +182,18 @@ ui.modules.turn.modules.character.getOptions = function(options)
                             max = rules.offence.getMaxBloodHarvestSlots
                         })
                     },
-                    bulwark = traitChargesSlider(1, TRAITS.BULWARK, "numBulwarkCharges"),
-                    calamityGambit = traitChargesSlider(2, TRAITS.CALAMITY_GAMBIT, "numCalamityGambitCharges"),
-                    focus = traitChargesSlider(3, TRAITS.FOCUS, "numFocusCharges"),
-                    secondWind = traitChargesSlider(4, TRAITS.SECOND_WIND, "numSecondWindCharges"),
-                    vindication = traitChargesSlider(5, TRAITS.VINDICATION, "numVindicationCharges"),
-                }
+                }, (function()
+                    local sliders = {}
+
+                    for i, traitID in ipairs(TRAIT_KEYS) do
+                        local trait = TRAITS[traitID]
+                        if trait.numCharges then
+                            sliders[traitID] = traitChargesSlider(i, trait)
+                        end
+                    end
+
+                    return sliders
+                end)())
             },
             turn_character_fatePoints = {
                 order = 5,

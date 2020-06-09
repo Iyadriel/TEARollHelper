@@ -14,51 +14,49 @@ local WEAKNESSES = weaknesses.WEAKNESSES
 
 local state = characterState.state
 
-local function useTraitCharge(traitGetSet)
-    traitGetSet.set(traitGetSet.get() - 1)
+local function useTraitCharge(trait)
+    local traitGetSet = state.featsAndTraits.numTraitCharges
+    traitGetSet.set(trait.id, traitGetSet.get(trait.id) - 1)
+    bus.fire(EVENTS.TRAIT_ACTIVATED, trait.id)
 end
 
--- [[ Out of combat ]]
-
-local function useSecondWind()
-    state.health.heal(rules.traits.SECOND_WIND_HEAL_AMOUNT)
-    useTraitCharge(state.featsAndTraits.numSecondWindCharges)
-    bus.fire(EVENTS.TRAIT_ACTIVATED, TRAITS.SECOND_WIND.id)
-end
-
--- [[ Rolls ]]
-
-local function useBulwark()
-    buffs.addTraitBuff(TRAITS.BULWARK)
-    useTraitCharge(state.featsAndTraits.numBulwarkCharges)
-    bus.fire(EVENTS.TRAIT_ACTIVATED, TRAITS.BULWARK.id)
-end
-
-local function confirmReboundRoll()
-    buffs.addWeaknessDebuff(WEAKNESSES.REBOUND)
-    characterState.state.health.damage(rules.rolls.calculateReboundDamage())
-end
+-- [[ Feats/Traits/Fate ]]
 
 local function useFatePoint()
     state.numFatePoints.set(state.numFatePoints.get() - 1)
     bus.fire(EVENTS.FATE_POINT_USED)
 end
 
--- [[ Player turn ]]
+-- Traits
 
-local function useFocus()
-    buffs.addTraitBuff(TRAITS.FOCUS)
-    useTraitCharge(state.featsAndTraits.numFocusCharges)
-    bus.fire(EVENTS.TRAIT_ACTIVATED, TRAITS.FOCUS.id)
+local function useBulwark()
+    buffs.addTraitBuff(TRAITS.BULWARK)
+    useTraitCharge(TRAITS.BULWARK)
 end
 
 local function useCalamityGambit()
     buffs.addTraitBuff(TRAITS.CALAMITY_GAMBIT)
-    useTraitCharge(state.featsAndTraits.numCalamityGambitCharges)
-    bus.fire(EVENTS.TRAIT_ACTIVATED, TRAITS.CALAMITY_GAMBIT.id)
+    useTraitCharge(TRAITS.CALAMITY_GAMBIT)
 end
 
--- [[ Enemy turn ]]
+local function useFocus()
+    buffs.addTraitBuff(TRAITS.FOCUS)
+    useTraitCharge(TRAITS.FOCUS)
+end
+
+local function useSecondWind()
+    state.health.heal(rules.traits.SECOND_WIND_HEAL_AMOUNT)
+    useTraitCharge(TRAITS.SECOND_WIND)
+end
+
+-- [[ Rolls ]]
+
+local function confirmReboundRoll()
+    buffs.addWeaknessDebuff(WEAKNESSES.REBOUND)
+    characterState.state.health.damage(rules.rolls.calculateReboundDamage())
+end
+
+-- [[ Actions ]]
 
 local function confirmDefenceAction(defence)
     state.health.damage(defence.damageTaken)
@@ -70,14 +68,14 @@ end
 
 -- [[ Exports ]]
 
-consequences.useSecondWind = useSecondWind
-
-consequences.useBulwark = useBulwark
-consequences.confirmReboundRoll = confirmReboundRoll
 consequences.useFatePoint = useFatePoint
 
-consequences.useFocus = useFocus
+consequences.useBulwark = useBulwark
 consequences.useCalamityGambit = useCalamityGambit
+consequences.useFocus = useFocus
+consequences.useSecondWind = useSecondWind
+
+consequences.confirmReboundRoll = confirmReboundRoll
 
 consequences.confirmDefenceAction = confirmDefenceAction
 consequences.confirmMeleeSaveAction = confirmMeleeSaveAction

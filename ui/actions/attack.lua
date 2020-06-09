@@ -42,7 +42,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                     return not character.hasTrait(TRAITS.CALAMITY_GAMBIT) or characterState.buffLookup.getTraitBuffs(TRAITS.CALAMITY_GAMBIT)
                 end,
                 disabled = function()
-                    return characterState.featsAndTraits.numCalamityGambitCharges.get() == 0
+                    return characterState.featsAndTraits.numTraitCharges.get(TRAITS.CALAMITY_GAMBIT.id) == 0
                 end,
                 func = consequences.useCalamityGambit,
             },

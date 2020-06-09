@@ -18,6 +18,18 @@ local TRAITS = traits.TRAITS
 local WEAKNESSES = weaknesses.WEAKNESSES
 local state
 
+local numTraitCharges = (function()
+    local numCharges = {}
+
+    for traitID, trait in pairs(TRAITS) do
+        if trait.numCharges then
+            numCharges[traitID] = trait.numCharges
+        end
+    end
+
+    return numCharges
+end)()
+
 characterState.initState = function()
     state = {
         health = character.getPlayerMaxHPWithoutBuffs(),
@@ -29,11 +41,7 @@ characterState.initState = function()
 
         featsAndTraits = {
             numBloodHarvestSlots = rules.offence.getMaxBloodHarvestSlots(),
-            numBulwarkCharges = TRAITS.BULWARK.numCharges,
-            numCalamityGambitCharges = TRAITS.CALAMITY_GAMBIT.numCharges,
-            numFocusCharges = TRAITS.FOCUS.numCharges,
-            numSecondWindCharges = TRAITS.SECOND_WIND.numCharges,
-            numVindicationCharges = TRAITS.VINDICATION.numCharges,
+            numTraitCharges = numTraitCharges,
         },
 
         numFatePoints = rules.rolls.getMaxFatePoints(),
@@ -129,17 +137,14 @@ characterState.state = {
         numBloodHarvestSlots = basicGetSet("featsAndTraits", "numBloodHarvestSlots", function(numCharges)
             bus.fire(EVENTS.FEAT_CHARGES_CHANGED, FEATS.BLOOD_HARVEST.id, numCharges)
         end),
-        numBulwarkCharges = basicGetSet("featsAndTraits", "numBulwarkCharges", function(numCharges)
-            bus.fire(EVENTS.TRAIT_CHARGES_CHANGED, TRAITS.BULWARK.id, numCharges)
-        end),
-        numCalamityGambitCharges = basicGetSet("featsAndTraits", "numCalamityGambitCharges", function(numCharges)
-            bus.fire(EVENTS.TRAIT_CHARGES_CHANGED, TRAITS.CALAMITY_GAMBIT.id, numCharges)
-        end),
-        numFocusCharges = basicGetSet("featsAndTraits", "numFocusCharges", function(numCharges)
-            bus.fire(EVENTS.TRAIT_CHARGES_CHANGED, TRAITS.BULWARK.id, numCharges)
-        end),
-        numSecondWindCharges = basicGetSet("featsAndTraits", "numSecondWindCharges"),
-        numVindicationCharges = basicGetSet("featsAndTraits", "numVindicationCharges"),
+        numTraitCharges = {
+            get = function(traitID)
+                return state.featsAndTraits.numTraitCharges[traitID]
+            end,
+            set = function(traitID, numCharges)
+                state.featsAndTraits.numTraitCharges[traitID] = numCharges
+            end,
+        },
     },
     numFatePoints = {
         get = function ()
@@ -359,17 +364,9 @@ bus.addListener(EVENTS.TRAIT_REMOVED, function(traitID)
     end
 
     if not turnState.state.inCombat.get() then
-        -- TODO better system for charges
-        if traitID == TRAITS.BULWARK.id then
-            characterState.state.featsAndTraits.numBulwarkCharges.set(TRAITS.BULWARK.numCharges)
-        elseif traitID == TRAITS.CALAMITY_GAMBIT.id then
-            characterState.state.featsAndTraits.numCalamityGambitCharges.set(TRAITS.CALAMITY_GAMBIT.numCharges)
-        elseif traitID == TRAITS.FOCUS.id then
-            characterState.state.featsAndTraits.numFocusCharges.set(TRAITS.FOCUS.numCharges)
-        elseif traitID == TRAITS.SECOND_WIND.id then
-            characterState.state.featsAndTraits.numSecondWindCharges.set(TRAITS.SECOND_WIND.numCharges)
-        elseif traitID == TRAITS.VINDICATION.id then
-            characterState.state.featsAndTraits.numVindicationCharges.set(TRAITS.VINDICATION.numCharges)
+        local trait = TRAITS[traitID]
+        if trait.numCharges then
+            characterState.state.featsAndTraits.numTraitCharges.set(traitID, trait.numCharges)
         end
     end
 end)

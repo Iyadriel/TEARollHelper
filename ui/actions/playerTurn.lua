@@ -26,7 +26,7 @@ ui.modules.actions.modules.playerTurn.getSharedOptions = function(options)
                 return not character.hasTrait(TRAITS.FOCUS) or characterState.buffLookup.getTraitBuffs(TRAITS.FOCUS)
             end,
             disabled = function()
-                return characterState.featsAndTraits.numFocusCharges.get() == 0
+                return characterState.featsAndTraits.numTraitCharges.get(TRAITS.FOCUS.id) == 0
             end,
             func = consequences.useFocus,
         },

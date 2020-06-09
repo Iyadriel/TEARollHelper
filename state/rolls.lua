@@ -217,7 +217,7 @@ local function getAttack()
     local buff = characterState.buffs.offence.get()
     local threshold = state.attack.threshold
     local numBloodHarvestSlots = state.attack.numBloodHarvestSlots
-    local numVindicationCharges = characterState.featsAndTraits.numVindicationCharges.get()
+    local numVindicationCharges = characterState.featsAndTraits.numTraitCharges.get(TRAITS.VINDICATION.id)
 
     return actions.getAttack(state.attack.currentRoll, state.attack.currentPreppedRoll, threshold, offence, buff, numBloodHarvestSlots, numVindicationCharges)
 end

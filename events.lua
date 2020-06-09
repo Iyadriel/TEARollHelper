@@ -79,11 +79,11 @@ end)
 -- [[ Turns ]]
 
 bus.addListener(EVENTS.COMBAT_OVER, function()
-    local getCharges = characterState.state.featsAndTraits.numSecondWindCharges.get
+    local getSetCharges = characterState.state.featsAndTraits.numTraitCharges
 
-    local oldNumCharges = getCharges()
-    characterState.state.featsAndTraits.numSecondWindCharges.set(TRAITS.SECOND_WIND.numCharges)
-    if getCharges() ~= oldNumCharges then
+    local oldNumCharges = getSetCharges.get(TRAITS.SECOND_WIND.id)
+    getSetCharges.set(TRAITS.SECOND_WIND.id, TRAITS.SECOND_WIND.numCharges)
+    if getSetCharges.get(TRAITS.SECOND_WIND.id) ~= oldNumCharges then
         TEARollHelper:Print(TEARollHelper.COLOURS.TRAITS.GENERIC .. TRAITS.SECOND_WIND.name .. " charge restored.")
     end
 end)

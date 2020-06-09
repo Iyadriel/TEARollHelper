@@ -84,7 +84,7 @@ ui.modules.actions.getOptions = function(options)
                         return not character.hasTrait(TRAITS.SECOND_WIND)
                     end,
                     disabled = function()
-                        return state.featsAndTraits.numSecondWindCharges.get() == 0
+                        return state.featsAndTraits.numTraitCharges.get(TRAITS.SECOND_WIND.id) == 0
                     end,
                     func = consequences.useSecondWind
                 },
