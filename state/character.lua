@@ -249,8 +249,18 @@ characterState.state = {
             end
             return nil
         end,
-        getTraitBuff = function(trait)
-            return characterState.state.buffLookup.get("trait_" .. trait.id)
+        getTraitBuffs = function(trait)
+            local activeBuffs = characterState.state.activeBuffs.get()
+            local traitBuffs = {}
+            for _, buff in ipairs(activeBuffs) do
+                if buff.traitID == trait.id then
+                    table.insert(traitBuffs, buff)
+                end
+            end
+            if #traitBuffs == 0 then
+                return nil
+            end
+            return traitBuffs
         end,
         getWeaknessDebuff = function(weakness)
             return characterState.state.buffLookup.get("weakness_" .. weakness.id)
@@ -341,9 +351,11 @@ bus.addListener(EVENTS.FEAT_CHANGED, function(featID)
 end)
 
 bus.addListener(EVENTS.TRAIT_REMOVED, function(traitID)
-    local buff = characterState.state.buffLookup.getTraitBuff(TRAITS[traitID])
-    if buff then
-        characterState.state.activeBuffs.remove(buff)
+    local traitBuffs = characterState.state.buffLookup.getTraitBuffs(TRAITS[traitID])
+    if traitBuffs then
+        for _, traitBuff in pairs(traitBuffs) do
+            characterState.state.activeBuffs.remove(traitBuff)
+        end
     end
 
     if not turnState.state.inCombat.get() then

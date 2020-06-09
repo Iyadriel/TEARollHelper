@@ -96,7 +96,17 @@ ui.modules.buffs.getOptions = function(options)
                         end
 
                         if buff.remainingTurns then
+                            if type(buff.remainingTurns) == "table" then
+                                local remainingPlayerTurns = buff.remainingTurns[TURN_TYPES.PLAYER.id]
+                                local remainingEnemyTurns = buff.remainingTurns[TURN_TYPES.ENEMY.id]
+                                if remainingPlayerTurns then
+                                    msg = msg .. COLOURS.NOTE .. "|n|nRemaining " .. TURN_TYPES.PLAYER.name .. " turns: " .. remainingPlayerTurns
+                                elseif remainingEnemyTurns then
+                                    msg = msg .. COLOURS.NOTE .. "|n|nRemaining " .. TURN_TYPES.ENEMY.name .. " turns: " .. remainingEnemyTurns
+                                end
+                            else
                             msg = msg .. COLOURS.NOTE .. "|n|nRemaining turns: " .. buff.remainingTurns
+                        end
                         end
 
                         --msg = msg .. COLOURS.NOTE .. "|n|nSource: " .. buff.source

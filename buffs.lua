@@ -17,6 +17,14 @@ local STAT_TYPE_ICONS = {
     stamina = "Interface\\Icons\\spell_holy_wordfortitude",
 }
 
+local function shallowCopy(table)
+    local copy = {}
+    for k, v in pairs(table) do
+        copy[k] = v
+    end
+    return copy
+end
+
 local function addBuff(buff)
     characterState.state.activeBuffs.add(buff)
 end
@@ -129,19 +137,20 @@ end
 end ]]
 
 local function addTraitBuff(trait)
-    local buff = trait.buff
-    if buff then
-        local existingBuff = characterState.state.buffLookup.getTraitBuff(trait)
-        if existingBuff then
+    local existingBuffs = characterState.state.buffLookup.getTraitBuffs(trait)
+    if existingBuffs then
+        for _, existingBuff in pairs(existingBuffs) do
             removeBuff(existingBuff)
         end
+    end
 
+    for i, buff in ipairs(trait.buffs) do
         local types = buff.types or {
             [buff.type] = true
         }
 
         local newBuff = {
-            id = "trait_" .. trait.id,
+            id = "trait_" .. trait.id .. "_" .. i,
             types = types,
             label = trait.name,
             icon = trait.icon,
@@ -153,10 +162,13 @@ local function addTraitBuff(trait)
         }
 
         if types[BUFF_TYPES.STAT] then
-            if buff.stats == "custom" then
-                newBuff.stats = rules.traits.calculateStatBuff(trait)
+            newBuff.stats = {}
+            for stat, value in pairs(buff.stats) do
+                if value == "custom" then
+                    newBuff.stats[stat] = rules.traits.calculateStatBuff(trait, stat)
             else
-                newBuff.stats = buff.stats
+                    newBuff.stats[stat] = value
+                end
             end
         end
         if types[BUFF_TYPES.ADVANTAGE] then
@@ -167,7 +179,7 @@ local function addTraitBuff(trait)
         end
 
         if buff.remainingTurns then
-            newBuff.remainingTurns = buff.remainingTurns
+            newBuff.remainingTurns = shallowCopy(buff.remainingTurns)
         end
 
         addBuff(newBuff)
@@ -210,7 +222,7 @@ local function addWeaknessDebuff(weakness)
         end
 
         if debuff.remainingTurns then
-            buff.remainingTurns = debuff.remainingTurns
+            buff.remainingTurns = shallowCopy(debuff.remainingTurns)
         end
 
         addBuff(buff)

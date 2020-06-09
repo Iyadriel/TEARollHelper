@@ -81,7 +81,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                         name = COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.BULWARK.name,
                         desc = TRAITS.BULWARK.desc,
                         hidden = function()
-                            return not character.hasTrait(TRAITS.BULWARK) or state.buffLookup.getTraitBuff(TRAITS.BULWARK)
+                            return not character.hasTrait(TRAITS.BULWARK) or state.buffLookup.getTraitBuffs(TRAITS.BULWARK)
                         end,
                         disabled = function()
                             return state.featsAndTraits.numBulwarkCharges.get() == 0
@@ -93,7 +93,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                         type = "description",
                         name = COLOURS.TRAITS.GENERIC .. TRAITS.BULWARK.name .. " is active.",
                         hidden = function()
-                            return not (character.hasTrait(TRAITS.BULWARK) and state.buffLookup.getTraitBuff(TRAITS.BULWARK))
+                            return not (character.hasTrait(TRAITS.BULWARK) and state.buffLookup.getTraitBuffs(TRAITS.BULWARK))
                         end,
                     },
                 },

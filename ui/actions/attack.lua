@@ -39,7 +39,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                 name = COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.CALAMITY_GAMBIT.name,
                 desc = TRAITS.CALAMITY_GAMBIT.desc,
                 hidden = function()
-                    return not character.hasTrait(TRAITS.CALAMITY_GAMBIT) or characterState.buffLookup.getTraitBuff(TRAITS.CALAMITY_GAMBIT)
+                    return not character.hasTrait(TRAITS.CALAMITY_GAMBIT) or characterState.buffLookup.getTraitBuffs(TRAITS.CALAMITY_GAMBIT)
                 end,
                 disabled = function()
                     return characterState.featsAndTraits.numCalamityGambitCharges.get() == 0
@@ -51,7 +51,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                 type = "description",
                 name = COLOURS.TRAITS.GENERIC .. TRAITS.CALAMITY_GAMBIT.name .. " is active.",
                 hidden = function()
-                    return not (character.hasTrait(TRAITS.CALAMITY_GAMBIT) and characterState.buffLookup.getTraitBuff(TRAITS.CALAMITY_GAMBIT))
+                    return not (character.hasTrait(TRAITS.CALAMITY_GAMBIT) and characterState.buffLookup.getTraitBuffs(TRAITS.CALAMITY_GAMBIT))
                 end,
             },
         }

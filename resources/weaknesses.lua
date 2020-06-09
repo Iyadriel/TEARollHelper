@@ -48,7 +48,9 @@ weaknesses.WEAKNESSES = {
         debuff = {
             type = BUFF_TYPES.DISADVANTAGE,
             turnTypeId = TURN_TYPES.ENEMY.id,
-            remainingTurns = 1,
+            remainingTurns = {
+                [TURN_TYPES.ENEMY.id] = 0,
+            },
         }
     },
     TEMPO = {
@@ -60,7 +62,9 @@ weaknesses.WEAKNESSES = {
         debuff = {
             type = BUFF_TYPES.DISADVANTAGE,
             turnTypeId = TURN_TYPES.PLAYER.id,
-            remainingTurns = 1,
+            remainingTurns = {
+                [TURN_TYPES.PLAYER.id] = 0,
+            },
         }
     },
     TIMID = {

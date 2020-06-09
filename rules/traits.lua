@@ -26,15 +26,14 @@ local function calculateMaxTraits()
     return maxTraits
 end
 
-local function calculateStatBuff(trait)
+local function calculateStatBuff(trait, stat)
     if trait.id == TRAITS.CALAMITY_GAMBIT.id then
-        local offence = character.getPlayerOffence()
-        return {
-            offence = offence, -- double the stat
-            defence = -offence, -- reduce defence by regular offence stat
-        }
+        if stat == "offence" then
+            return character.getPlayerOffence() -- double the stat
+        else
+            return -character.getPlayerOffence() -- reduce defence by regular offence stat
+        end
     end
-    return {}
 end
 
 rules.traits = {

@@ -21,13 +21,17 @@ traits.TRAITS = {
         icon = "Interface\\Icons\\spell_holy_greaterblessingofsanctuary",
         supported = true,
         numCharges = 2,
-        buff = {
+        buffs = {
+            {
             types = { [BUFF_TYPES.STAT] = true, [BUFF_TYPES.ADVANTAGE] = true },
             turnTypeId = TURN_TYPES.ENEMY.id,
             stats = {
                 defence = 3,
             },
-            remainingTurns = 0,
+                remainingTurns = {
+                    [TURN_TYPES.ENEMY.id] = 0,
+        },
+    },
         },
     },
     CALAMITY_GAMBIT = {
@@ -37,10 +41,25 @@ traits.TRAITS = {
         icon = "Interface\\Icons\\spell_shadow_unstableaffliction_3",
         supported = true,
         numCharges = 1,
-        buff = {
+        buffs = {
+            {
             type = BUFF_TYPES.STAT,
-            stats = "custom",
-            remainingTurns = 3,
+                stats = {
+                    offence = "custom"
+                },
+                remainingTurns = {
+                    [TURN_TYPES.PLAYER.id] = 1,
+                },
+            },
+            {
+                type = BUFF_TYPES.STAT,
+                stats = {
+                    defence = "custom"
+                },
+                remainingTurns = {
+                    [TURN_TYPES.ENEMY.id] = 1,
+                },
+            }
         },
     },
     FOCUS = {
@@ -50,10 +69,14 @@ traits.TRAITS = {
         icon = "Interface\\Icons\\spell_nature_focusedmind",
         supported = true,
         numCharges = 2,
-        buff = {
+        buffs = {
+            {
             type = BUFF_TYPES.ADVANTAGE,
             turnTypeId = TURN_TYPES.PLAYER.id,
-            remainingTurns = 0,
+                remainingTurns = {
+                    [TURN_TYPES.PLAYER.id] = 0,
+                },
+            },
         },
     },
     SECOND_WIND = {

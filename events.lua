@@ -87,17 +87,38 @@ bus.addListener(EVENTS.COMBAT_OVER, function()
     end
 end)
 
+local function setRemainingTurns(buff, remainingTurns, turnTypeId)
+    if type(buff.remainingTurns) == "table" then
+        buff.remainingTurns[turnTypeId] = remainingTurns
+    else
+        buff.remainingTurns = buff.remainingTurns
+    end
+end
+
+local function expireBuff(index, buff)
+    characterState.state.activeBuffs.removeAtIndex(index)
+    bus.fire(EVENTS.BUFF_EXPIRED, buff.label)
+end
+
 bus.addListener(EVENTS.TURN_INCREMENTED, function()
     local activeBuffs = characterState.state.activeBuffs.get()
+    local turnTypeId = turnState.state.type.get()
 
     for i = #activeBuffs, 1, -1 do
         local buff = activeBuffs[i]
-        if buff.remainingTurns then
-            if buff.remainingTurns <= 0 then
-                characterState.state.activeBuffs.removeAtIndex(i)
-                bus.fire(EVENTS.BUFF_EXPIRED, buff.label)
+
+        local remainingTurns
+        if type(buff.remainingTurns) == "table" then
+            remainingTurns = buff.remainingTurns[turnTypeId]
+        else
+            remainingTurns = buff.remainingTurns
+        end
+
+        if remainingTurns then
+            if remainingTurns <= 0 then
+                expireBuff(i, buff)
             else
-                buff.remainingTurns = buff.remainingTurns - 1
+                setRemainingTurns(buff, remainingTurns - 1, turnTypeId)
                 TEARollHelper:Debug("Decremented buff remaining turns at index " .. i)
             end
         end
