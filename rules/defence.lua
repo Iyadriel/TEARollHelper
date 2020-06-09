@@ -27,7 +27,7 @@ local function isCrit(roll)
 end
 
 local function calculateRetaliationDamage(defence)
-    local dmg = 1 + defence
+    local dmg = 1 + (defence * 2)
 
     if character.hasRacialTrait(RACIAL_TRAITS.MIGHT_OF_THE_MOUNTAIN) then
         dmg = dmg + 4
