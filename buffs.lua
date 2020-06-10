@@ -220,6 +220,9 @@ local function addWeaknessDebuff(weakness)
                 buff.turnTypeId = debuff.turnTypeId
             end
         end
+        if types[BUFF_TYPES.MAX_HEALTH] then
+            buff.amount = debuff.amount
+        end
 
         if debuff.remainingTurns then
             buff.remainingTurns = shallowCopy(debuff.remainingTurns)

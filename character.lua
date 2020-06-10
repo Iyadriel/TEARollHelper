@@ -15,7 +15,7 @@ local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
 local TRAITS = traits.TRAITS
 local WEAKNESSES = weaknesses.WEAKNESSES
 
-local getPlayerOffence, getPlayerDefence, getPlayerSpirit, getPlayerStamina, getPlayerMaxHP, getPlayerMaxHPWithoutBuffs
+local getPlayerOffence, getPlayerDefence, getPlayerSpirit, getPlayerStamina, calculatePlayerMaxHealth, calculatePlayerMaxHealthWithoutBuffs
 local hasOffenceMastery, hasSpiritMastery
 local getPlayerFeat, hasFeat, hasFeatByID, setPlayerFeatByID, getPlayerRacialTrait, hasRacialTrait
 local clearExcessTraits
@@ -38,14 +38,19 @@ function getPlayerStamina()
     return tonumber(TEARollHelper.db.profile.stats.stamina)
 end
 
-function getPlayerMaxHP()
-    local buff = characterState.state.buffs.stamina.get()
-    return rules.stats.calculateMaxHP(getPlayerStamina(), buff)
+function calculatePlayerMaxHealth()
+    local staminaBuff = characterState.state.buffs.stamina.get()
+    local maxHealthBuffs = characterState.state.buffLookup.getMaxHealthBuffs()
+    local maxHealthBuff = 0
+    for _, buff in ipairs(maxHealthBuffs) do
+        maxHealthBuff = maxHealthBuff + buff.amount
+    end
+
+    return rules.stats.calculateMaxHealth(getPlayerStamina(), staminaBuff, maxHealthBuff)
 end
 
--- workaround for error when initialising character state (characterState.state is nil at this point)
-function getPlayerMaxHPWithoutBuffs()
-    return rules.stats.calculateMaxHP(getPlayerStamina(), 0)
+function calculatePlayerMaxHealthWithoutBuffs()
+    return rules.stats.calculateMaxHealth(getPlayerStamina())
 end
 
 local function setStat(stat, value)
@@ -188,8 +193,8 @@ character.getPlayerOffence = getPlayerOffence
 character.getPlayerDefence = getPlayerDefence
 character.getPlayerSpirit = getPlayerSpirit
 character.getPlayerStamina = getPlayerStamina
-character.getPlayerMaxHP = getPlayerMaxHP
-character.getPlayerMaxHPWithoutBuffs = getPlayerMaxHPWithoutBuffs
+character.calculatePlayerMaxHealth = calculatePlayerMaxHealth
+character.calculatePlayerMaxHealthWithoutBuffs = calculatePlayerMaxHealthWithoutBuffs
 character.setStat = setStat
 
 character.hasOffenceMastery = hasOffenceMastery

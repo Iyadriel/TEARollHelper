@@ -97,6 +97,14 @@ ui.modules.buffs.getOptions = function(options)
                         if buff.types[BUFF_TYPES.HEALING_OVER_TIME] then
                             msg = msg .. "Healing for " .. buff.healingPerTick .. " at the start of every turn."
                         end
+                        if buff.types[BUFF_TYPES.MAX_HEALTH] then
+                            local amount = buff.amount
+                            if amount > 0 then
+                                msg = msg .. "Maximum health increased by " .. amount .. ". "
+                            else
+                                msg = msg .. "Maximum health decreased by " .. abs(amount) .. ". "
+                            end
+                        end
 
                         if buff.remainingTurns then
                             if type(buff.remainingTurns) == "table" then

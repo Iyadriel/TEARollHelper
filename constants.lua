@@ -35,6 +35,7 @@ local BUFF_TYPES = {
     DISADVANTAGE = 1,
     ADVANTAGE = 2,
     HEALING_OVER_TIME = 3,
+    MAX_HEALTH = 4,
 }
 
 local ROLL_MODES = {

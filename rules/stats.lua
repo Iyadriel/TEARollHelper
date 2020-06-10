@@ -6,7 +6,7 @@ local weaknesses = ns.resources.weaknesses
 
 local WEAKNESSES = weaknesses.WEAKNESSES
 
-local BASE_STAMINA = 25
+local BASE_MAX_HEALTH = 25
 
 local BASE_STAT_POINTS = 12
 local MAX_STAT_POINTS = 16
@@ -86,19 +86,20 @@ local function getAvailableStatPoints()
     return points
 end
 
-local function calculateMaxHP(stamina, buff)
-    buff = buff or 0
-    stamina = stamina + buff
+local function calculateMaxHealth(stamina, staminaBuff, maxHealthBuff)
+    staminaBuff = staminaBuff or 0
+    maxHealthBuff = maxHealthBuff or 0
+    stamina = stamina + staminaBuff
 
-    local maxHP = BASE_STAMINA + (stamina * 2)
+    local maxHealth = BASE_MAX_HEALTH + (stamina * 2) + maxHealthBuff
 
     if character.hasWeakness(WEAKNESSES.FRAGILE) then
-        maxHP = maxHP - 8
+        maxHealth = maxHealth - 8
     end
 
-    maxHP = max(1, maxHP) -- sanity check
+    maxHealth = max(1, maxHealth) -- sanity check
 
-    return maxHP
+    return maxHealth
 end
 
 rules.stats = {
@@ -108,5 +109,5 @@ rules.stats = {
     getNegativePointsUsed = getNegativePointsUsed,
     getAvailableNegativePoints = getAvailableNegativePoints,
     getAvailableStatPoints = getAvailableStatPoints,
-    calculateMaxHP = calculateMaxHP
+    calculateMaxHealth = calculateMaxHealth
 }

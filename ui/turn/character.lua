@@ -99,14 +99,14 @@ ui.modules.turn.modules.character.getOptions = function(options)
                         desc = "How much health your character has",
                         softMin = 0,
                         min = -100,
-                        max = character.getPlayerMaxHP(),
+                        max = state.maxHealth.get(),
                         step = 1,
                         get = state.health.get,
                         set = function(info, value)
                             state.health.set(value)
                         end,
                         dialogControl = TEARollHelper:CreateCustomSlider("turn_character_hp", {
-                            max = character.getPlayerMaxHP
+                            max = state.maxHealth.get
                         })
                     },
                 }
