@@ -3,11 +3,13 @@ local _, ns = ...
 local COLOURS = TEARollHelper.COLOURS
 
 local buffs = ns.buffs
+local characterState = ns.state.character
 local traits = ns.resources.traits
 local ui = ns.ui
 
 local TRAITS = traits.TRAITS
 
+local healAmount = 1
 local healingPerTick = 1
 
 --[[ local options = {
@@ -28,8 +30,37 @@ ui.modules.turn.modules.otherPlayers.getOptions = function(options)
                 name = "Healing",
                 inline = true,
                 args = {
-                    nourish = {
+                    regularHealing = {
                         order = 0,
+                        type = "group",
+                        name = "Regular healing",
+                        inline = true,
+                        args = {
+                            healAmount = {
+                                order = 0,
+                                type = "input",
+                                name = "Incoming heal",
+                                pattern = "%d+",
+                                get = function()
+                                    return tostring(healAmount)
+                                end,
+                                set = function(info, value)
+                                    healAmount = tonumber(value)
+                                end,
+                            },
+                            heal = {
+                                order = 1,
+                                type = "execute",
+                                name = COLOURS.HEALING .. "Apply heal",
+                                desc = "Get healed for the specified incoming heal amount.",
+                                func = function()
+                                    characterState.state.health.heal(healAmount)
+                                end,
+                            }
+                        },
+                    },
+                    nourish = {
+                        order = 1,
                         type = "group",
                         name = COLOURS.TRAITS.GENERIC .. NOURISH.name,
                         inline = true,
