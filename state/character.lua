@@ -117,14 +117,12 @@ characterState.state = {
             bus.fire(EVENTS.CHARACTER_HEALTH, state.health)
             bus.fire(EVENTS.DAMAGE_TAKEN, dmgTaken)
         end,
-        heal = function(amountHealed)
-            local maxHP = character.getPlayerMaxHP()
-            local overhealing = max(0, state.health + amountHealed - maxHP)
-            local netAmountHealed = amountHealed - overhealing
+        heal = function(incomingHealAmount)
+            local heal = ns.rules.other.calculateHealingReceived(incomingHealAmount, state.health)
 
-            characterState.state.health.set(state.health + netAmountHealed)
+            characterState.state.health.set(state.health + heal.netAmountHealed)
 
-            bus.fire(EVENTS.HEALED, amountHealed, netAmountHealed, overhealing)
+            bus.fire(EVENTS.HEALED, heal.amountHealed, heal.netAmountHealed, heal.overhealing)
         end
     },
     healing = {
