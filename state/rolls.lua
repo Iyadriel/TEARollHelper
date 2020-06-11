@@ -194,7 +194,10 @@ end)
 
 bus.addListener(EVENTS.REROLLED, function(action, roll)
     local currentRoll = rolls.state[action].currentRoll.get()
-    local currentPreppedRoll = rolls.state[action].currentPreppedRoll.get()
+    local currentPreppedRoll
+    if rolls.state[action].currentPreppedRoll then
+        currentPreppedRoll = rolls.state[action].currentPreppedRoll.get()
+    end
 
     if currentPreppedRoll then
         -- when rerolling, we can replace either the current or the prepped roll, so check which is the lowest.
