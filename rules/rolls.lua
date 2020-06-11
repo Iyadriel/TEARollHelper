@@ -30,9 +30,9 @@ local function shouldSuggestFatePoint(roll, attack, healing, buff, defence, mele
     if attack then
         return attack.dmg <= 0
     elseif healing then
-        return healing.amountHealed <= 0
+        return healing.amountHealed <= 1
     elseif buff then
-        return buff.amountBuffed <= 0
+        return buff.amountBuffed <= 2
     elseif defence then
         return defence.damageTaken > 0
     elseif meleeSave then
