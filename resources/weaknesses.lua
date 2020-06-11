@@ -6,7 +6,7 @@ local weaknesses = ns.resources.weaknesses
 local BUFF_TYPES = constants.BUFF_TYPES
 local TURN_TYPES = constants.TURN_TYPES
 
-weaknesses.WEAKNESS_KEYS = {"CORRUPTED", "FATELESS", "FRAGILE", "OUTCAST", "REBOUND", "TEMPO", "TIMID"}
+weaknesses.WEAKNESS_KEYS = {"CORRUPTED", "FATELESS", "FRAGILE", "OUTCAST", "OVERFLOW", "REBOUND", "TEMPO", "TIMID"}
 
 weaknesses.WEAKNESSES = {
 --[[     BRUTE = {
