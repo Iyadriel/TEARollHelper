@@ -65,10 +65,6 @@ local function canProcRebound()
     return character.hasWeakness(WEAKNESSES.REBOUND)
 end
 
-local function validateStatsForRebound()
-    return max(character.getPlayerOffence(), character.getPlayerSpirit()) >= 4
-end
-
 local function hasReboundProc(roll, turnTypeId)
     return turnTypeId == TURN_TYPES.PLAYER.id and roll == MIN_ROLL
 end
@@ -88,7 +84,6 @@ rules.rolls = {
 
     getRollModeModifier = getRollModeModifier,
 
-    validateStatsForRebound = validateStatsForRebound,
     canProcRebound = canProcRebound,
     hasReboundProc = hasReboundProc,
     calculateReboundDamage = calculateReboundDamage,

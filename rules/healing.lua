@@ -5,10 +5,12 @@ local feats = ns.resources.feats
 local racialTraits = ns.resources.racialTraits
 local rules = ns.rules
 local traits = ns.resources.traits
+local weaknesses = ns.resources.weaknesses
 
 local FEATS = feats.FEATS
 local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
 local TRAITS = traits.TRAITS
+local WEAKNESSES = weaknesses.WEAKNESSES
 
 local NUM_SPIRIT_PER_GREATER_HEAL_SLOT = 2
 
@@ -69,6 +71,10 @@ local function calculateGreaterHealBonus(numGreaterHealSlots)
     return numGreaterHealSlots * 3
 end
 
+local function canUseExcess()
+    return not character.hasWeakness(WEAKNESSES.OVERFLOW)
+end
+
 local function getMaxExcess()
     return 6
 end
@@ -114,7 +120,10 @@ rules.healing = {
     applyCritModifier = applyCritModifier,
     getMaxGreaterHealSlots = getMaxGreaterHealSlots,
     calculateGreaterHealBonus = calculateGreaterHealBonus,
+
+    canUseExcess = canUseExcess,
     getMaxExcess = getMaxExcess,
+
     applyOutOfCombatBonus = applyOutOfCombatBonus,
     calculateNumHealsAllowedOutOfCombat = calculateNumHealsAllowedOutOfCombat,
     usesParagon = usesParagon,

@@ -147,6 +147,9 @@ ui.modules.turn.modules.character.getOptions = function(options)
                         min = 0,
                         max = rules.healing.getMaxExcess(),
                         step = 1,
+                        hidden = function()
+                            return not rules.healing.canUseExcess()
+                        end,
                         get = state.healing.excess.get,
                         set = function(info, value)
                             state.healing.excess.set(value)

@@ -46,6 +46,12 @@ weaknesses.WEAKNESSES = {
         desc = "You no longer benefit from your Racial Trait.",
         supported = true,
     },
+    OVERFLOW = {
+        id = "OVERFLOW",
+        name = "Overflow",
+        desc = "You no longer benefit from the Excess mechanic. Requires at least 4 out  of 6 points in the Spirit stat in order to pick.",
+        supported = true,
+    },
     REBOUND = {
         id = "REBOUND",
         name = "Rebound",

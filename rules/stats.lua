@@ -102,6 +102,14 @@ local function calculateMaxHealth(stamina, staminaBuff, maxHealthBuff)
     return maxHealth
 end
 
+local function validateStatsForRebound()
+    return max(character.getPlayerOffence(), character.getPlayerSpirit()) >= 4
+end
+
+local function validateStatsForOverflow()
+    return character.getPlayerSpirit() >= 4
+end
+
 rules.stats = {
     STAT_MIN_VALUE = STAT_MIN_VALUE,
     STAT_MAX_VALUE = STAT_MAX_VALUE,
@@ -109,5 +117,8 @@ rules.stats = {
     getNegativePointsUsed = getNegativePointsUsed,
     getAvailableNegativePoints = getAvailableNegativePoints,
     getAvailableStatPoints = getAvailableStatPoints,
-    calculateMaxHealth = calculateMaxHealth
+    calculateMaxHealth = calculateMaxHealth,
+
+    validateStatsForRebound = validateStatsForRebound,
+    validateStatsForOverflow = validateStatsForOverflow,
 }

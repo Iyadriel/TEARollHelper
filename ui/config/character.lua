@@ -153,7 +153,15 @@ ui.modules.config.modules.character.getOptions = function()
                         type = "description",
                         name = COLOURS.ERROR .. "These stats are not compatible with your " .. WEAKNESSES.REBOUND.name .. " weakness.",
                         hidden = function()
-                            return not rules.rolls.canProcRebound() or rules.rolls.validateStatsForRebound()
+                            return not rules.rolls.canProcRebound() or rules.stats.validateStatsForRebound()
+                        end,
+                    },
+                    overflowWarning = {
+                        order = 6,
+                        type = "description",
+                        name = COLOURS.ERROR .. "These stats are not compatible with your " .. WEAKNESSES.OVERFLOW.name .. " weakness.",
+                        hidden = function()
+                            return not character.hasWeakness(WEAKNESSES.OVERFLOW) or rules.stats.validateStatsForOverflow()
                         end,
                     }
                 }
