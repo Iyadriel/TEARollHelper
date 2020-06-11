@@ -186,13 +186,18 @@ local function addTraitBuff(trait)
     end
 end
 
-local function addWeaknessDebuff(weakness)
+local function addWeaknessDebuff(weakness, addStacks)
     local debuff = weakness.debuff
     if debuff then
         local existingBuff = characterState.state.buffLookup.getWeaknessDebuff(weakness)
 
         if existingBuff then
+            if addStacks then
+                characterState.state.activeBuffs.addStack(existingBuff)
+                return
+            else
             removeBuff(existingBuff)
+        end
         end
 
         local types = debuff.types or {
@@ -208,6 +213,8 @@ local function addWeaknessDebuff(weakness)
             source = BUFF_SOURCES.WEAKNESS,
             weaknessID = weakness.id,
 
+            stacks = 1,
+
             canCancel = debuff.canCancel,
         }
 
@@ -222,6 +229,7 @@ local function addWeaknessDebuff(weakness)
         end
         if types[BUFF_TYPES.MAX_HEALTH] then
             buff.amount = debuff.amount
+            buff.originalAmount = debuff.amount
         end
 
         if debuff.remainingTurns then

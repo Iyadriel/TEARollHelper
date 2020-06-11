@@ -78,13 +78,22 @@ end)
 
 -- [[ Turns ]]
 
-bus.addListener(EVENTS.COMBAT_OVER, function()
+local function restoreSecondWindCharge()
     local getSetCharges = characterState.state.featsAndTraits.numTraitCharges
 
     local oldNumCharges = getSetCharges.get(TRAITS.SECOND_WIND.id)
     getSetCharges.set(TRAITS.SECOND_WIND.id, TRAITS.SECOND_WIND.numCharges)
     if getSetCharges.get(TRAITS.SECOND_WIND.id) ~= oldNumCharges then
         TEARollHelper:Print(TEARollHelper.COLOURS.TRAITS.GENERIC .. TRAITS.SECOND_WIND.name .. " charge restored.")
+    end
+end
+
+bus.addListener(EVENTS.COMBAT_OVER, function()
+    restoreSecondWindCharge()
+    local debuff = characterState.state.buffLookup.getWeaknessDebuff(WEAKNESSES.CORRUPTED)
+    if debuff then
+        characterState.state.activeBuffs.remove(debuff)
+        TEARollHelper:Print("Corruption stacks removed, max health returned to normal.")
     end
 end)
 

@@ -27,6 +27,10 @@ TEARollHelper.COLOURS = {
         GENERIC = '|cff00ccff',
     },
 
+    WEAKNESSES = {
+        CORRUPTED = '|cff7669b8',
+    },
+
     DAMAGE_TYPES = {
         SHADOW = '|cff7669b8'
     }

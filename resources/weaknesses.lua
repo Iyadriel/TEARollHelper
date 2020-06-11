@@ -25,8 +25,12 @@ weaknesses.WEAKNESSES = {
         id = "CORRUPTED",
         name = "Corrupted",
         desc = "All healing received from other players and NPCs is cut in half, rounded down. Furthermore you must choose one of the following types of healing: Holy, Unholy, Life. Whenever you are healed by the chosen type, your max HP is reduced by 3. Your HP returns to normal after combat ends, but you are not healed for the missing HP. If healed by your chosen type outside of combat your HP returns to normal after the next combat section ends.",
-        note = "Maximum health reduction is not yet implemented.",
+        icon = "Interface\\Icons\\spell_deathknight_bloodplague",
         supported = true,
+        debuff = {
+            type = BUFF_TYPES.MAX_HEALTH,
+            amount = -3
+        }
     },
     FATELESS = {
         id = "FATELESS",

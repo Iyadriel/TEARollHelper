@@ -49,7 +49,7 @@ ui.modules.buffs.getOptions = function(options)
 
                         local msg = (buff.colour or "|cffffffff") .. buff.label
 
-                        if buff.stacks then
+                        if buff.stacks and buff.stacks > 1 then
                             msg = msg .. " (" .. buff.stacks .. ")"
                         end
 
