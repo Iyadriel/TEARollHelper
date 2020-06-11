@@ -30,6 +30,7 @@ rolls.initState = function()
 
         healing = {
             numGreaterHealSlots = 0,
+            lifePulse = false,
             mercyFromPainBonusHealing = 0,
             rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
@@ -96,6 +97,7 @@ rolls.state = {
 
     healing = {
         numGreaterHealSlots = basicGetSet("healing", "numGreaterHealSlots"),
+        lifePulse = basicGetSet("healing", "lifePulse"),
         mercyFromPainBonusHealing = basicGetSet("healing", "mercyFromPainBonusHealing"),
         rollMode = basicGetSet("healing", "rollMode"),
         currentRoll = basicGetSet("healing", "currentRoll"),
@@ -136,6 +138,7 @@ rolls.state = {
 local function resetSlots()
     rolls.state.attack.numBloodHarvestSlots.set(0)
     rolls.state.healing.numGreaterHealSlots.set(0)
+    rolls.state.healing.lifePulse.set(false)
     rolls.state.healing.mercyFromPainBonusHealing.set(0)
 end
 
@@ -229,7 +232,7 @@ local function getHealing(outOfCombat)
     local spirit = character.getPlayerSpirit()
     local buff = characterState.buffs.spirit.get()
 
-    return actions.getHealing(state.healing.currentRoll, spirit, buff, state.healing.numGreaterHealSlots, state.healing.mercyFromPainBonusHealing, outOfCombat)
+    return actions.getHealing(state.healing.currentRoll, spirit, buff, state.healing.numGreaterHealSlots, state.healing.lifePulse, state.healing.mercyFromPainBonusHealing, outOfCombat)
 end
 
 local function getBuff()

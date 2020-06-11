@@ -140,7 +140,7 @@ local function getRangedSave(roll, threshold, spirit, buff)
     }
 end
 
-local function getHealing(roll, spirit, buff, numGreaterHealSlots, mercyFromPainBonusHealing, outOfCombat)
+local function getHealing(roll, spirit, buff, numGreaterHealSlots, lifePulse, mercyFromPainBonusHealing, outOfCombat)
     local healValue = rules.healing.calculateHealValue(roll, spirit, buff)
     local amountHealed = rules.healing.calculateAmountHealed(healValue)
     local isCrit = rules.healing.isCrit(roll)
@@ -167,6 +167,8 @@ local function getHealing(roll, spirit, buff, numGreaterHealSlots, mercyFromPain
     return {
         amountHealed = amountHealed,
         isCrit = isCrit,
+        numGreaterHealSlots = numGreaterHealSlots,
+        lifePulse = lifePulse,
         usesParagon = usesParagon,
         playersHealableWithParagon = playersHealableWithParagon,
     }

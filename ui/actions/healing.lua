@@ -8,11 +8,13 @@ local constants = ns.constants
 local feats = ns.resources.feats
 local rolls = ns.state.rolls
 local rules = ns.rules
+local traits = ns.resources.traits
 local ui = ns.ui
 
 local ACTIONS = constants.ACTIONS
 local ACTION_LABELS = constants.ACTION_LABELS
 local FEATS = feats.FEATS
+local TRAITS = traits.TRAITS
 local TURN_TYPES = constants.TURN_TYPES
 
 local state = rolls.state
@@ -91,11 +93,27 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                             state.healing.mercyFromPainBonusHealing.set(value)
                         end
                     },
+                    lifePulse = {
+                        name = COLOURS.TRAITS.GENERIC .. TRAITS.LIFE_PULSE.name,
+                        type = "toggle",
+                        desc = TRAITS.LIFE_PULSE.desc,
+                        order = 3,
+                        hidden = function()
+                            return not character.hasTrait(TRAITS.LIFE_PULSE)
+                        end,
+                        disabled = function()
+                            return characterState.featsAndTraits.numTraitCharges.get(TRAITS.LIFE_PULSE.id) == 0
+                        end,
+                        get = state.healing.lifePulse.get,
+                        set = function(info, value)
+                            state.healing.lifePulse.set(value)
+                        end
+                    },
                     healing = {
                         type = "description",
                         desc = "How much you can heal for",
                         fontSize = "medium",
-                        order = 3,
+                        order = 4,
                         name = function()
                             local healing = rolls.getHealing(options.outOfCombat)
                             local msg = rules.healing.getMaxGreaterHealSlots() > 0 and " |n" or "" -- Only show spacing if greater heals are shown. Dirty hack
@@ -107,7 +125,10 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                                 if healing.isCrit then
                                     msg = msg .. COLOURS.CRITICAL .. "MANY HEALS!|r " .. healColour .. "You can heal everyone in line of sight for " .. amount .. " HP."
                                 else
-                                    if healing.usesParagon then
+                                    if healing.lifePulse then
+                                        healColour = COLOURS.TRAITS.GENERIC
+                                        msg = msg .. healColour .. "You can heal everyone in melee range of your target for " .. amount .. " HP."
+                                    elseif healing.usesParagon then
                                         local targets = healing.playersHealableWithParagon > 1 and " allies" or " ally"
                                         msg = msg .. healColour .. "You can heal " .. healing.playersHealableWithParagon .. targets .. " for " .. amount .. " HP."
                                     else
@@ -122,7 +143,7 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                         end
                     },
                     outOfCombatNote = {
-                        order = 4,
+                        order = 5,
                         type = "description",
                         name = function()
                             local msg = COLOURS.NOTE .. " |nOut of combat, you can perform "
@@ -135,7 +156,7 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                             return msg
                         end,
                         hidden = not options.outOfCombat,
-                    }
+                    },
                 }
             },
         }
