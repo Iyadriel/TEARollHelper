@@ -118,6 +118,8 @@ ui.modules.buffs.getOptions = function(options)
                             else
                                 msg = msg .. COLOURS.NOTE .. "|n|nRemaining turns: " .. buff.remainingTurns
                             end
+                        elseif buff.expireOnCombatEnd then
+                            msg = msg .. COLOURS.NOTE .. "|n|nLasts until end of combat"
                         end
 
                         --msg = msg .. COLOURS.NOTE .. "|n|nSource: " .. buff.source

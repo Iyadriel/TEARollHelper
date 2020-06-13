@@ -160,3 +160,15 @@ bus.addListener(EVENTS.TURN_FINISHED, function(index, turnTypeID)
         end
     end
 end)
+
+bus.addListener(EVENTS.COMBAT_OVER, function()
+    local activeBuffs = characterState.state.activeBuffs.get()
+
+    for i = #activeBuffs, 1, -1 do
+        local buff = activeBuffs[i]
+
+        if buff.expireOnCombatEnd then
+            expireBuff(i, buff)
+        end
+    end
+end)

@@ -180,6 +180,8 @@ local function addTraitBuff(trait)
 
         if buff.remainingTurns then
             newBuff.remainingTurns = shallowCopy(buff.remainingTurns)
+        elseif buff.expireOnCombatEnd then
+            newBuff.expireOnCombatEnd = buff.expireOnCombatEnd
         end
 
         addBuff(newBuff)
