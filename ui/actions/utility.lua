@@ -51,10 +51,10 @@ ui.modules.actions.modules.utility.getOptions = function(options)
                         name = "Use utility trait",
                         desc = "Enable if you have a utility trait that fits what you are rolling for.",
                         get = function()
-                            return state.utility.useUtilityTrait
+                            return state.utility.useUtilityTrait.get()
                         end,
                         set = function(info, value)
-                            state.utility.useUtilityTrait = value
+                            state.utility.useUtilityTrait.set(value)
                         end
                     },
                     utility = {
@@ -64,7 +64,7 @@ ui.modules.actions.modules.utility.getOptions = function(options)
                         fontSize = "medium",
                         name = function()
                             local roll = state.utility.currentRoll.get()
-                            return " |nYour total utility roll: " .. actions.getUtility(roll, state.utility.useUtilityTrait)
+                            return " |nYour total utility roll: " .. actions.getUtility(roll, state.utility.useUtilityTrait.get())
                         end
                     }
                 }

@@ -152,6 +152,7 @@ local function resetSlots()
     rolls.state.healing.numGreaterHealSlots.set(0)
     rolls.state.healing.lifePulse.set(false)
     rolls.state.healing.mercyFromPainBonusHealing.set(0)
+    rolls.state.utility.useUtilityTrait.set(false)
 end
 
 local function resetRolls()
