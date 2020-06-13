@@ -420,6 +420,8 @@ bus.addListener(EVENTS.WEAKNESS_ADDED, function(weaknessID)
             characterState.state.numFatePoints.set(maxFatePoints)
             TEARollHelper:Debug("Reduced remaining fate points because player now has Fateless weakness.")
         end
+    elseif weaknessID == WEAKNESSES.TEMPERED_BENEVOLENCE.id then
+        updateGreaterHealSlots("player now has Tempered Benevolence weakness")
     end
 end)
 
@@ -433,6 +435,8 @@ bus.addListener(EVENTS.WEAKNESS_REMOVED, function(weaknessID)
             characterState.state.numFatePoints.set(maxFatePoints)
             TEARollHelper:Debug("Increased remaining fate points because player no longer has Fateless weakness.")
         end
+    elseif weaknessID == WEAKNESSES.TEMPERED_BENEVOLENCE.id then
+        updateGreaterHealSlots("player no longer has Tempered Benevolence weakness")
     elseif weaknessID == WEAKNESSES.TEMPO.id then
         removeWeaknessDebuff(WEAKNESSES.TEMPO)
     elseif weaknessID == WEAKNESSES.TIMID.id then
