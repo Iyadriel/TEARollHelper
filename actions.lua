@@ -140,12 +140,24 @@ local function getRangedSave(roll, threshold, spirit, buff)
     }
 end
 
-local function getHealing(roll, spirit, buff, numGreaterHealSlots, lifePulse, mercyFromPainBonusHealing, outOfCombat)
-    local healValue = rules.healing.calculateHealValue(roll, spirit, buff)
-    local amountHealed = rules.healing.calculateAmountHealed(healValue)
+local function getHealing(roll, preppedRoll, spirit, buff, numGreaterHealSlots, lifePulse, mercyFromPainBonusHealing, outOfCombat)
+    local healValue
+    local amountHealed
     local isCrit = rules.healing.isCrit(roll)
     local usesParagon = rules.healing.usesParagon()
     local playersHealableWithParagon = nil
+
+    healValue = rules.healing.calculateHealValue(roll, spirit, buff)
+
+    if preppedRoll then
+        healValue = healValue + rules.healing.calculateHealValue(preppedRoll, spirit, buff)
+    end
+
+    amountHealed = rules.healing.calculateAmountHealed(healValue)
+
+    if not isCrit and preppedRoll then
+        isCrit = rules.healing.isCrit(preppedRoll)
+    end
 
     amountHealed = amountHealed + rules.healing.calculateGreaterHealBonus(numGreaterHealSlots)
 
@@ -154,7 +166,6 @@ local function getHealing(roll, spirit, buff, numGreaterHealSlots, lifePulse, me
     else
         amountHealed = amountHealed + mercyFromPainBonusHealing
     end
-
 
     if usesParagon then
         playersHealableWithParagon = rules.healing.calculateNumPlayersHealableWithParagon()
@@ -174,10 +185,23 @@ local function getHealing(roll, spirit, buff, numGreaterHealSlots, lifePulse, me
     }
 end
 
-local function getBuff(roll, spirit, spiritBuff, offence, offenceBuff)
-    local buffValue = rules.buffing.calculateBuffValue(roll, spirit, spiritBuff, offence, offenceBuff)
-    local amountBuffed = rules.buffing.calculateBuffAmount(buffValue)
+local function getBuff(roll, preppedRoll, spirit, spiritBuff, offence, offenceBuff)
+    local buffValue
+    local amountBuffed
     local isCrit = rules.buffing.isCrit(roll)
+
+
+    buffValue = rules.buffing.calculateBuffValue(roll, spirit, spiritBuff, offence, offenceBuff)
+
+    if preppedRoll then
+        buffValue = buffValue + rules.buffing.calculateBuffValue(preppedRoll, spirit, spiritBuff, offence, offenceBuff)
+    end
+
+    amountBuffed = rules.buffing.calculateBuffAmount(buffValue)
+
+    if not isCrit and preppedRoll then
+        isCrit = rules.buffing.isCrit(preppedRoll)
+    end
 
     return {
         amountBuffed = amountBuffed,

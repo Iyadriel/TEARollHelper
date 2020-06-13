@@ -43,7 +43,11 @@ ui.modules.actions.modules.healing.getOptions = function(options)
         order = options.order,
         args = {
             preRoll = shouldShowPlayerTurnOptions and sharedOptions.preRoll or nil,
-            roll = ui.modules.turn.modules.roll.getOptions({ order = 1, action = ACTIONS.healing }),
+            roll = ui.modules.turn.modules.roll.getOptions({
+                order = 1,
+                action = ACTIONS.healing,
+                includePrep = options.turnTypeID == TURN_TYPES.PLAYER.id,
+            }),
             heal = {
                 order = 2,
                 type = "group",

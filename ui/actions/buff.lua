@@ -27,7 +27,11 @@ ui.modules.actions.modules.buff.getOptions = function(options)
         order = options.order,
         args = {
             preRoll = sharedOptions.preRoll,
-            roll = ui.modules.turn.modules.roll.getOptions({ order = 1, action = ACTIONS.buff }),
+            roll = ui.modules.turn.modules.roll.getOptions({
+                order = 1,
+                action = ACTIONS.buff,
+                includePrep = true,
+            }),
             buff = {
                 order = 2,
                 type = "group",

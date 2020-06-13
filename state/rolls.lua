@@ -10,6 +10,7 @@ local feats = ns.resources.feats
 local rolls = ns.state.rolls
 local traits = ns.resources.traits
 
+local ACTIONS = constants.ACTIONS
 local EVENTS = bus.EVENTS
 local FEATS = feats.FEATS
 local ROLL_MODES = constants.ROLL_MODES
@@ -34,11 +35,15 @@ rolls.initState = function()
             mercyFromPainBonusHealing = 0,
             rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
+            prepMode = false,
+            currentPreppedRoll = nil,
         },
 
         buff = {
             rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
+            prepMode = false,
+            currentPreppedRoll = nil,
         },
 
         defend = {
@@ -81,17 +86,21 @@ local function basicGetSet(section, key, callback)
     }
 end
 
+local function clearPreppedRoll(action)
+    return function(prepMode)
+        if not prepMode then
+            rolls.state[action].currentPreppedRoll.set(nil)
+        end
+    end
+end
+
 rolls.state = {
     attack = {
         threshold = basicGetSet("attack", "threshold"),
         numBloodHarvestSlots = basicGetSet("attack", "numBloodHarvestSlots"),
         rollMode = basicGetSet("attack", "rollMode"),
         currentRoll = basicGetSet("attack", "currentRoll"),
-        prepMode = basicGetSet("attack", "prepMode", function(prepMode)
-            if not prepMode then
-                rolls.state.attack.currentPreppedRoll.set(nil)
-            end
-        end),
+        prepMode = basicGetSet("attack", "prepMode", clearPreppedRoll("attack")),
         currentPreppedRoll = basicGetSet("attack", "currentPreppedRoll"),
     },
 
@@ -101,11 +110,15 @@ rolls.state = {
         mercyFromPainBonusHealing = basicGetSet("healing", "mercyFromPainBonusHealing"),
         rollMode = basicGetSet("healing", "rollMode"),
         currentRoll = basicGetSet("healing", "currentRoll"),
+        prepMode = basicGetSet("healing", "prepMode", clearPreppedRoll("healing")),
+        currentPreppedRoll = basicGetSet("healing", "currentPreppedRoll"),
     },
 
     buff = {
         rollMode = basicGetSet("buff", "rollMode"),
         currentRoll = basicGetSet("buff", "currentRoll"),
+        prepMode = basicGetSet("buff", "prepMode", clearPreppedRoll("buff")),
+        currentPreppedRoll = basicGetSet("buff", "currentPreppedRoll"),
     },
 
     defend = {
@@ -143,15 +156,15 @@ local function resetSlots()
 end
 
 local function resetRolls()
-    rolls.state.attack.currentRoll.set(nil)
-    rolls.state.attack.prepMode.set(false)
-    rolls.state.attack.currentPreppedRoll.set(nil)
-    rolls.state.healing.currentRoll.set(nil)
-    rolls.state.buff.currentRoll.set(nil)
-    rolls.state.defend.currentRoll.set(nil)
-    rolls.state.meleeSave.currentRoll.set(nil)
-    rolls.state.rangedSave.currentRoll.set(nil)
-    rolls.state.utility.currentRoll.set(nil)
+    for _, action in pairs(ACTIONS) do
+        local actionState = rolls.state[action]
+
+        actionState.currentRoll.set(nil)
+        if actionState.prepMode then
+            actionState.prepMode.set(false)
+            actionState.currentPreppedRoll.set(nil)
+        end
+    end
 end
 
 local function resetThresholds()
@@ -232,7 +245,7 @@ local function getHealing(outOfCombat)
     local spirit = character.getPlayerSpirit()
     local buff = characterState.buffs.spirit.get()
 
-    return actions.getHealing(state.healing.currentRoll, spirit, buff, state.healing.numGreaterHealSlots, state.healing.lifePulse, state.healing.mercyFromPainBonusHealing, outOfCombat)
+    return actions.getHealing(state.healing.currentRoll, state.healing.currentPreppedRoll, spirit, buff, state.healing.numGreaterHealSlots, state.healing.lifePulse, state.healing.mercyFromPainBonusHealing, outOfCombat)
 end
 
 local function getBuff()
@@ -241,7 +254,7 @@ local function getBuff()
     local offenceBuff = characterState.buffs.offence.get()
     local spiritBuff = characterState.buffs.spirit.get()
 
-    return actions.getBuff(state.buff.currentRoll, spirit, spiritBuff, offence, offenceBuff)
+    return actions.getBuff(state.buff.currentRoll, state.buff.currentPreppedRoll, spirit, spiritBuff, offence, offenceBuff)
 end
 
 local function getDefence()
