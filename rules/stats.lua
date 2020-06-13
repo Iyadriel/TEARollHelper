@@ -106,6 +106,10 @@ local function validateStatsForRebound()
     return max(character.getPlayerOffence(), character.getPlayerSpirit()) >= 4
 end
 
+local function validateStatsForTemperedBenevolence()
+    return character.getPlayerSpirit() >= 4
+end
+
 local function validateStatsForOverflow()
     return character.getPlayerSpirit() >= 4
 end
@@ -120,5 +124,6 @@ rules.stats = {
     calculateMaxHealth = calculateMaxHealth,
 
     validateStatsForRebound = validateStatsForRebound,
+    validateStatsForTemperedBenevolence = validateStatsForTemperedBenevolence,
     validateStatsForOverflow = validateStatsForOverflow,
 }

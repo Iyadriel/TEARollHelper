@@ -48,16 +48,24 @@ local function applyCritModifier(amountHealed)
     return amountHealed
 end
 
+local function gainsGreaterHealSlotsFromSpirit()
+    return not character.hasWeakness(WEAKNESSES.TEMPERED_BENEVOLENCE)
+end
+
 local function getMaxGreaterHealSlots()
     if character.hasFeat(FEATS.PARAGON) then
         return 0
     end
 
-    local spirit = character.getPlayerSpirit()
-    local numSlots = max(0, floor(spirit / NUM_SPIRIT_PER_GREATER_HEAL_SLOT))
+    local numSlots = 0
 
-    if character.hasSpiritMastery() then
-        numSlots = numSlots + 1
+    if gainsGreaterHealSlotsFromSpirit() then
+        local spirit = character.getPlayerSpirit()
+        numSlots = max(0, floor(spirit / NUM_SPIRIT_PER_GREATER_HEAL_SLOT))
+
+        if character.hasSpiritMastery() then
+            numSlots = numSlots + 1
+        end
     end
 
     if character.hasFeat(FEATS.MENDER) then

@@ -9,6 +9,7 @@ local rules = ns.rules
 local ui = ns.ui
 local weaknesses = ns.resources.weaknesses
 
+local FEATS = feats.FEATS
 local STAT_MIN_VALUE = rules.stats.STAT_MIN_VALUE
 local STAT_MAX_VALUE = rules.stats.STAT_MAX_VALUE
 local WEAKNESSES = weaknesses.WEAKNESSES
@@ -30,7 +31,7 @@ ui.modules.config.modules.character.modules = {
 
 ui.modules.config.modules.character.getOptions = function()
     local traitOptions = {}
-    local traitOrder = 4
+    local traitOrder = 5
     for i = 1, rules.traits.MAX_NUM_TRAITS do
         traitOptions[i] = ui.modules.config.modules.character.modules.traits.getOptions({ slotIndex = i, order = traitOrder })
         traitOrder = traitOrder + 3
@@ -156,8 +157,16 @@ ui.modules.config.modules.character.getOptions = function()
                             return not rules.rolls.canProcRebound() or rules.stats.validateStatsForRebound()
                         end,
                     },
-                    overflowWarning = {
+                    temperedBenevolenceWarning = {
                         order = 6,
+                        type = "description",
+                        name = COLOURS.ERROR .. "These stats are not compatible with your " .. WEAKNESSES.TEMPERED_BENEVOLENCE.name .. " weakness.",
+                        hidden = function()
+                            return not character.hasWeakness(WEAKNESSES.TEMPERED_BENEVOLENCE) or rules.stats.validateStatsForTemperedBenevolence()
+                        end,
+                    },
+                    overflowWarning = {
+                        order = 7,
                         type = "description",
                         name = COLOURS.ERROR .. "These stats are not compatible with your " .. WEAKNESSES.OVERFLOW.name .. " weakness.",
                         hidden = function()
@@ -175,7 +184,7 @@ ui.modules.config.modules.character.getOptions = function()
                     local featOptions = {}
                     for i = 1, #feats.FEAT_KEYS do
                         local key = feats.FEAT_KEYS[i]
-                        local feat = feats.FEATS[key]
+                        local feat = FEATS[key]
                         featOptions[key] = feat.name
                     end
                     return featOptions
@@ -189,22 +198,30 @@ ui.modules.config.modules.character.getOptions = function()
                     updateTurnUI()
                 end
             },
+            temperedBenevolenceWarning = {
+                order = 2,
+                type = "description",
+                name = COLOURS.ERROR .. "This Feat is not compatible with your " .. WEAKNESSES.TEMPERED_BENEVOLENCE.name .. " weakness.",
+                hidden = function()
+                    return not (character.hasFeat(FEATS.PARAGON) and character.hasWeakness(WEAKNESSES.TEMPERED_BENEVOLENCE))
+                end,
+            },
             featDesc = {
+                order = 3,
                 type = "description",
                 name = function()
                     local feat = character.getPlayerFeat()
                     return feat and feat.desc or ""
                 end,
                 fontSize = "medium",
-                order = 2
             },
             featNote = {
+                order = 4,
                 type = "description",
                 name = function()
                     local feat = character.getPlayerFeat()
                     return COLOURS.NOTE .. (feat and (feat.note and feat.note .. "|n ") or "")
                 end,
-                order = 3
             },
             trait1 = traitOptions[1].trait,
             trait1Desc = traitOptions[1].traitDesc,
@@ -217,29 +234,29 @@ ui.modules.config.modules.character.getOptions = function()
             trait3Note = traitOptions[3].traitNote,
             weaknesses = ui.modules.config.modules.character.modules.weaknesses.getOptions({ order = 13 }),
             numWeaknesses = {
+                order = 15,
                 type = "range",
                 name = "Weaknesses",
                 min = 0,
                 max = 2,
                 step = 1,
-                order = 14,
                 get = character.getNumWeaknesses,
                 set = function(info, value)
                     character.setNumWeaknesses(value)
                 end,
             },
             weaknessNote = {
+                order = 16,
                 type = "description",
                 name = COLOURS.NOTE .. "Not all weaknesses are currently supported, but the amount of weaknesses you have affects how many traits you can have.|n ",
-                order = 15,
             },
             racialTrait = {
+                order = 17,
                 name = "Racial trait",
                 type = "select",
                 disabled = function()
                     return character.hasWeakness(WEAKNESSES.OUTCAST)
                 end,
-                order = 16,
                 get = function()
                     return character.getPlayerRacialTrait().id
                 end,
@@ -250,6 +267,7 @@ ui.modules.config.modules.character.getOptions = function()
                 values = RACIAL_TRAIT_LIST
             },
             racialTraitDesc = {
+                order = 18,
                 type = "description",
                 image = function()
                     local trait = character.getPlayerRacialTrait()
@@ -268,10 +286,9 @@ ui.modules.config.modules.character.getOptions = function()
                     return msg
                 end,
                 fontSize = "medium",
-                order = 17
             },
             racialTraitNote = {
-                order = 18,
+                order = 19,
                 type = "description",
                 name = function()
                     local trait = character.getPlayerRacialTrait()

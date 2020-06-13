@@ -6,19 +6,13 @@ local weaknesses = ns.resources.weaknesses
 local BUFF_TYPES = constants.BUFF_TYPES
 local TURN_TYPES = constants.TURN_TYPES
 
-weaknesses.WEAKNESS_KEYS = {"CORRUPTED", "FATELESS", "FRAGILE", "OUTCAST", "OVERFLOW", "REBOUND", "TEMPO", "TIMID"}
+weaknesses.WEAKNESS_KEYS = {"CORRUPTED", "FATELESS", "FRAGILE", "OUTCAST", "OVERFLOW", "REBOUND", "TEMPERED_BENEVOLENCE", "TEMPO", "TIMID"}
 
 weaknesses.WEAKNESSES = {
 --[[     BRUTE = {
         id = "BRUTE",
         name = "Brute",
         desc = "You can no longer heal, buff, or pick any Utility traits.",
-        supported = true,
-    }, ]]
---[[     CORRUPTED = {
-        id = "CORRUPTED",
-        name = "Corrupted",
-        desc = "All healing received from other players and NPCs are cut in half, rounded down. Furthermore you must choose one of the following types of healing: Holy, Unholy, Life. Whenever you are healed by the chosen type, your max HP is reduced by 3. Your HP returns to normal after combat ends, but you are not healed for the missing HP. If healed by your chosen type outside of combat your HP returns to normal after the next combat section ends.",
         supported = true,
     }, ]]
     CORRUPTED = {
@@ -83,6 +77,12 @@ weaknesses.WEAKNESSES = {
                 [TURN_TYPES.PLAYER.id] = 1,
             },
         }
+    },
+    TEMPERED_BENEVOLENCE = {
+        id = "TEMPERED_BENEVOLENCE",
+        name = "Tempered Benevolence",
+        desc = "You no longer gain Greater Heal Slots from your Spirit stat. Requires at least 4/6 in Spirit in order to pick. Can not be picked together with Paragon.",
+        supported = true,
     },
     TIMID = {
         id = "TIMID",
