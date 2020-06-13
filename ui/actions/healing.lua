@@ -41,6 +41,9 @@ ui.modules.actions.modules.healing.getOptions = function(options)
         name = ACTION_LABELS.healing,
         type = "group",
         order = options.order,
+        hidden = function()
+            return not rules.healing.canHeal()
+        end,
         args = {
             preRoll = shouldShowPlayerTurnOptions and sharedOptions.preRoll or nil,
             roll = ui.modules.turn.modules.roll.getOptions({

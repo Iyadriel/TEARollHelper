@@ -182,6 +182,7 @@ bus.addListener(EVENTS.FEAT_CHANGED, function()
     resetRolls() -- in case of crit threshold change
 end)
 bus.addListener(EVENTS.TRAITS_CHANGED, resetSlots)
+bus.addListener(EVENTS.WEAKNESSES_CHANGED, resetSlots)
 bus.addListener(EVENTS.RACIAL_TRAIT_CHANGED, resetRolls) -- in case of crit threshold change
 bus.addListener(EVENTS.TURN_STARTED, function()
     resetSlots()

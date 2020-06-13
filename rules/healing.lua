@@ -14,6 +14,10 @@ local WEAKNESSES = weaknesses.WEAKNESSES
 
 local NUM_SPIRIT_PER_GREATER_HEAL_SLOT = 2
 
+local function canHeal()
+    return not character.hasWeakness(WEAKNESSES.BRUTE)
+end
+
 local function calculateHealValue(roll, spirit, buff)
     return roll + rules.common.calculateSpiritStat(spirit, buff)
 end
@@ -124,6 +128,7 @@ local function shouldShowPreRollUI()
 end
 
 rules.healing = {
+    canHeal = canHeal,
     calculateHealValue = calculateHealValue,
     calculateAmountHealed = calculateAmountHealed,
     isCrit = isCrit,

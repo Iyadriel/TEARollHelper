@@ -6,15 +6,15 @@ local weaknesses = ns.resources.weaknesses
 local BUFF_TYPES = constants.BUFF_TYPES
 local TURN_TYPES = constants.TURN_TYPES
 
-weaknesses.WEAKNESS_KEYS = {"CORRUPTED", "FATELESS", "FRAGILE", "OUTCAST", "OVERFLOW", "REBOUND", "TEMPERED_BENEVOLENCE", "TEMPO", "TIMID"}
+weaknesses.WEAKNESS_KEYS = {"BRUTE", "CORRUPTED", "FATELESS", "FRAGILE", "OUTCAST", "OVERFLOW", "REBOUND", "TEMPERED_BENEVOLENCE", "TEMPO", "TIMID"}
 
 weaknesses.WEAKNESSES = {
---[[     BRUTE = {
+    BRUTE = {
         id = "BRUTE",
         name = "Brute",
         desc = "You can no longer heal, buff, or pick any Utility traits.",
         supported = true,
-    }, ]]
+    },
     CORRUPTED = {
         id = "CORRUPTED",
         name = "Corrupted",

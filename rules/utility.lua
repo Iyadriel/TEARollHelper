@@ -4,9 +4,15 @@ local character = ns.character
 local feats = ns.resources.feats
 local rules = ns.rules
 local traits = ns.resources.traits
+local weaknesses = ns.resources.weaknesses
 
 local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
+local WEAKNESSES = weaknesses.WEAKNESSES
+
+local function canUseUtilityTraits()
+    return not character.hasWeakness(WEAKNESSES.BRUTE)
+end
 
 local function calculateUtilityValue(roll, useUtilityTrait)
     local value = roll
@@ -22,6 +28,7 @@ local function shouldShowPreRollUI()
 end
 
 rules.utility = {
+    canUseUtilityTraits = canUseUtilityTraits,
     calculateUtilityValue = calculateUtilityValue,
     shouldShowPreRollUI = shouldShowPreRollUI,
 }

@@ -4,9 +4,15 @@ local character = ns.character
 local feats = ns.resources.feats
 local rules = ns.rules
 local traits = ns.resources.traits
+local weaknesses = ns.resources.weaknesses
 
 local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
+local WEAKNESSES = weaknesses.WEAKNESSES
+
+local function canBuff()
+    return not character.hasWeakness(WEAKNESSES.BRUTE)
+end
 
 local function usesInspiringPresence()
     return character.hasFeat(FEATS.INSPIRING_PRESENCE)
@@ -49,6 +55,7 @@ local function shouldShowPreRollUI()
 end
 
 rules.buffing = {
+    canBuff = canBuff,
     usesInspiringPresence = usesInspiringPresence,
     calculateBuffValue = calculateBuffValue,
     calculateBuffAmount = calculateBuffAmount,

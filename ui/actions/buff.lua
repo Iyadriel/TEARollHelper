@@ -25,6 +25,9 @@ ui.modules.actions.modules.buff.getOptions = function(options)
         name = ACTION_LABELS.buff,
         type = "group",
         order = options.order,
+        hidden = function()
+            return not rules.buffing.canBuff()
+        end,
         args = {
             preRoll = sharedOptions.preRoll,
             roll = ui.modules.turn.modules.roll.getOptions({

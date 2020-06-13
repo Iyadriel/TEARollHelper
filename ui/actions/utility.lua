@@ -50,6 +50,9 @@ ui.modules.actions.modules.utility.getOptions = function(options)
                         type = "toggle",
                         name = "Use utility trait",
                         desc = "Enable if you have a utility trait that fits what you are rolling for.",
+                        hidden = function()
+                            return not rules.utility.canUseUtilityTraits()
+                        end,
                         get = function()
                             return state.utility.useUtilityTrait.get()
                         end,
@@ -57,14 +60,22 @@ ui.modules.actions.modules.utility.getOptions = function(options)
                             state.utility.useUtilityTrait.set(value)
                         end
                     },
-                    utility = {
+                    whitespace = {
                         order = 2,
+                        type = "description",
+                        name = " |n",
+                        hidden = function()
+                            return not rules.utility.canUseUtilityTraits()
+                        end,
+                    },
+                    utility = {
+                        order = 3,
                         type = "description",
                         desc = "The result of your utility roll",
                         fontSize = "medium",
                         name = function()
                             local roll = state.utility.currentRoll.get()
-                            return " |nYour total utility roll: " .. actions.getUtility(roll, state.utility.useUtilityTrait.get())
+                            return "Your total utility roll: " .. actions.getUtility(roll, state.utility.useUtilityTrait.get())
                         end
                     }
                 }
