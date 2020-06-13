@@ -106,7 +106,9 @@ end
 
 local function calculateNumPlayersHealableWithParagon()
     local spirit = character.getPlayerSpirit()
-    return 1 + floor(spirit / 3)
+    local playersHealable = 1 + floor(spirit / 3)
+
+    return max(1, playersHealable)
 end
 
 local function shouldShowPreRollUI()
