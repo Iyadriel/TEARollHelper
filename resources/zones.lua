@@ -2,7 +2,7 @@ local _, ns = ...
 
 local zones = ns.resources.zones
 
-zones.ZONE_KEYS = {"OTHER", "FOREST"}
+zones.ZONE_KEYS = {"OTHER", "FOREST", "INDOORS", "TAINTED"}
 
 zones.ZONES = {
     OTHER = {
@@ -12,5 +12,13 @@ zones.ZONES = {
     FOREST = {
         id = "FOREST",
         name = "Forest",
+    },
+    INDOORS = {
+        id = "INDOORS",
+        name = "Indoors / Underground",
+    },
+    TAINTED = {
+        id = "TAINTED",
+        name = "Tainted by evil",
     },
 }

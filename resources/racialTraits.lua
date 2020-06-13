@@ -116,8 +116,18 @@ local RACIAL_TRAITS = {
         desc = DESCRIPTIONS.HEROIC_PRESENCE,
         name = "Heroic Presence",
         icon = "Interface\\Icons\\inv_helmet_21",
-        supported = false,
-        manualActivation = true
+        supported = true,
+        manualActivation = false,
+        zones = {
+            TAINTED = true,
+        },
+        buffs = {
+            stats = {
+                offence = 1,
+                defence = 1,
+                spirit = 1,
+            }
+        }
     },
     VICIOUSNESS = {
         id = 22,
@@ -174,8 +184,18 @@ local RACIAL_TRAITS = {
         desc = DESCRIPTIONS.DUNGEON_DELVER,
         name = "Dungeon Delver",
         icon = "Interface\\Icons\\ability_racial_dungeondelver",
-        supported = false,
-        manualActivation = false
+        supported = true,
+        manualActivation = false,
+        zones = {
+            INDOORS = true,
+        },
+        buffs = {
+            stats = {
+                offence = 1,
+                defence = 1,
+                spirit = 1,
+            }
+        }
     },
     MASTERCRAFT = {
         id = 37,

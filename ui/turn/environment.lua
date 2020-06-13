@@ -60,6 +60,7 @@ ui.modules.turn.modules.environment.getOptions = function(options)
                     end
                     return zoneOptions
                 end)(),
+                sorting = zones.ZONE_KEYS,
                 get = state.zoneId.get,
                 set = function(info, value)
                     state.zoneId.set(value)
