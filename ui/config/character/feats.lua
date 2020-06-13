@@ -4,6 +4,7 @@ local COLOURS = TEARollHelper.COLOURS
 
 local character = ns.character
 local feats = ns.resources.feats
+local rules = ns.rules
 local ui = ns.ui
 local weaknesses = ns.resources.weaknesses
 
@@ -26,6 +27,9 @@ ui.modules.config.modules.character.modules.feats.getOptions = function(options)
             name = "Feat",
             type = "select",
             desc = "More Feats may be supported in the future.",
+            disabled = function()
+                return not rules.other.canUseFeats()
+            end,
             values = (function()
                 local featOptions = {}
                 for i = 1, #FEAT_KEYS do

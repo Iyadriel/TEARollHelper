@@ -184,7 +184,9 @@ local function togglePlayerWeaknessByID(weaknessID, value)
 end
 
 bus.addListener(EVENTS.WEAKNESS_ADDED, function(weaknessID)
-    if weaknessID == WEAKNESSES.OUTCAST.id then
+    if weaknessID == WEAKNESSES.FEATLESS.id then
+        setPlayerFeatByID(FEATS.FEATLESS.id)
+    elseif weaknessID == WEAKNESSES.OUTCAST.id then
         setPlayerRacialTrait(RACIAL_TRAITS.OUTCAST)
     end
 end)

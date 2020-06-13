@@ -22,6 +22,10 @@ local function applyCorruptionModifier(healAmount)
     return floor(healAmount / 2)
 end
 
+local function canUseFeats()
+    return not character.hasWeakness(WEAKNESSES.FEATLESS)
+end
+
 local function calculateHealingReceived(incomingHealAmount, currentHealth, maxHealth)
     local amountHealed
     if character.hasWeakness(WEAKNESSES.CORRUPTED) then
@@ -48,5 +52,6 @@ rules.common = {
 }
 
 rules.other = {
+    canUseFeats = canUseFeats,
     calculateHealingReceived = calculateHealingReceived,
 }

@@ -6,7 +6,7 @@ local weaknesses = ns.resources.weaknesses
 local BUFF_TYPES = constants.BUFF_TYPES
 local TURN_TYPES = constants.TURN_TYPES
 
-weaknesses.WEAKNESS_KEYS = {"BRUTE", "CORRUPTED", "FATELESS", "FRAGILE", "OUTCAST", "OVERFLOW", "REBOUND", "TEMPERED_BENEVOLENCE", "TEMPO", "TIMID"}
+weaknesses.WEAKNESS_KEYS = {"BRUTE", "CORRUPTED", "FATELESS", "FEATLESS", "FRAGILE", "OUTCAST", "OVERFLOW", "REBOUND", "TEMPERED_BENEVOLENCE", "TEMPO", "TIMID"}
 
 weaknesses.WEAKNESSES = {
     BRUTE = {
@@ -30,6 +30,12 @@ weaknesses.WEAKNESSES = {
         id = "FATELESS",
         name = "Fateless",
         desc = "You no longer have access to your Fate Point.",
+        supported = true,
+    },
+    FEATLESS = {
+        id = "FEATLESS",
+        name = "Featless",
+        desc = "You may no longer pick a Feat.",
         supported = true,
     },
     FRAGILE = {
