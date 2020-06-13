@@ -16,39 +16,58 @@ end
 } ]]
 ui.modules.config.modules.character.modules.weaknesses.getOptions = function(options)
     return {
-        order = options.order,
-        type = "group",
-        name = "Weaknesses",
-        inline = true,
-        get = function(info)
-            local weaknessID = info[#info]
-            return character.hasWeaknessByID(weaknessID)
-        end,
-        set = function(info, value)
-            local weaknessID = info[#info]
-            character.togglePlayerWeaknessByID(weaknessID, value)
-            updateTurnUI()
-        end,
-        args = (function()
-            local weaknessOptions = {}
-            for i = 1, #weaknesses.WEAKNESS_KEYS do
-                local key = weaknesses.WEAKNESS_KEYS[i]
-                local weakness = weaknesses.WEAKNESSES[key]
+        weaknesses = {
+            order = options.order,
+            type = "group",
+            name = "Weaknesses",
+            inline = true,
+            get = function(info)
+                local weaknessID = info[#info]
+                return character.hasWeaknessByID(weaknessID)
+            end,
+            set = function(info, value)
+                local weaknessID = info[#info]
+                character.togglePlayerWeaknessByID(weaknessID, value)
+                updateTurnUI()
+            end,
+            args = (function()
+                local weaknessOptions = {}
+                for i = 1, #weaknesses.WEAKNESS_KEYS do
+                    local key = weaknesses.WEAKNESS_KEYS[i]
+                    local weakness = weaknesses.WEAKNESSES[key]
 
-                weaknessOptions[key] = {
-                    order = i,
-                    type = "toggle",
-                    name = weakness.name,
-                    desc = function()
-                        local msg = weakness.desc
-                        if weakness.note then
-                            msg = msg .. "|n|n" .. COLOURS.NOTE .. weakness.note
-                        end
-                        return msg
-                    end,
-                }
-            end
-            return weaknessOptions
-        end)(),
+                    weaknessOptions[key] = {
+                        order = i,
+                        type = "toggle",
+                        name = weakness.name,
+                        desc = function()
+                            local msg = weakness.desc
+                            if weakness.note then
+                                msg = msg .. "|n|n" .. COLOURS.NOTE .. weakness.note
+                            end
+                            return msg
+                        end,
+                    }
+                end
+                return weaknessOptions
+            end)(),
+        },
+        numWeaknesses = {
+            order = options.order + 1,
+            type = "range",
+            name = "Weaknesses",
+            min = 0,
+            max = 2,
+            step = 1,
+            get = character.getNumWeaknesses,
+            set = function(info, value)
+                character.setNumWeaknesses(value)
+            end,
+        },
+        weaknessNote = {
+            order = options.order + 2,
+            type = "description",
+            name = COLOURS.NOTE .. "Not all weaknesses are currently supported, but the amount of weaknesses you have affects how many traits you can have.|n ",
+        },
     }
 end
