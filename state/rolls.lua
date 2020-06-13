@@ -5,7 +5,6 @@ local bus = ns.bus
 local character = ns.character
 local characterState = ns.state.character.state
 local constants = ns.constants
-local enemies = ns.resources.enemies
 local feats = ns.resources.feats
 local rolls = ns.state.rolls
 local traits = ns.resources.traits
@@ -20,7 +19,7 @@ local state
 
 rolls.initState = function()
     state = {
-        attack = {
+        [ACTIONS.attack] = {
             threshold = nil,
             numBloodHarvestSlots = 0,
             rollMode = ROLL_MODES.NORMAL,
@@ -29,7 +28,7 @@ rolls.initState = function()
             currentPreppedRoll = nil,
         },
 
-        healing = {
+        [ACTIONS.healing] = {
             numGreaterHealSlots = 0,
             lifePulse = false,
             mercyFromPainBonusHealing = 0,
@@ -39,34 +38,34 @@ rolls.initState = function()
             currentPreppedRoll = nil,
         },
 
-        buff = {
+        [ACTIONS.buff] = {
             rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
             prepMode = false,
             currentPreppedRoll = nil,
         },
 
-        defend = {
+        [ACTIONS.defend] = {
             threshold = nil,
             damageRisk = nil,
             rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
         },
 
-        meleeSave = {
+        [ACTIONS.meleeSave] = {
             threshold = nil,
             damageRisk = nil,
             rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
         },
 
-        rangedSave = {
+        [ACTIONS.rangedSave] = {
             threshold = nil,
             rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
         },
 
-        utility = {
+        [ACTIONS.utility] = {
             useUtilityTrait = false,
             rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
@@ -95,56 +94,56 @@ local function clearPreppedRoll(action)
 end
 
 rolls.state = {
-    attack = {
-        threshold = basicGetSet("attack", "threshold"),
-        numBloodHarvestSlots = basicGetSet("attack", "numBloodHarvestSlots"),
-        rollMode = basicGetSet("attack", "rollMode"),
-        currentRoll = basicGetSet("attack", "currentRoll"),
-        prepMode = basicGetSet("attack", "prepMode", clearPreppedRoll("attack")),
-        currentPreppedRoll = basicGetSet("attack", "currentPreppedRoll"),
+    [ACTIONS.attack] = {
+        threshold = basicGetSet(ACTIONS.attack, "threshold"),
+        numBloodHarvestSlots = basicGetSet(ACTIONS.attack, "numBloodHarvestSlots"),
+        rollMode = basicGetSet(ACTIONS.attack, "rollMode"),
+        currentRoll = basicGetSet(ACTIONS.attack, "currentRoll"),
+        prepMode = basicGetSet(ACTIONS.attack, "prepMode", clearPreppedRoll(ACTIONS.attack)),
+        currentPreppedRoll = basicGetSet(ACTIONS.attack, "currentPreppedRoll"),
     },
 
-    healing = {
-        numGreaterHealSlots = basicGetSet("healing", "numGreaterHealSlots"),
-        lifePulse = basicGetSet("healing", "lifePulse"),
-        mercyFromPainBonusHealing = basicGetSet("healing", "mercyFromPainBonusHealing"),
-        rollMode = basicGetSet("healing", "rollMode"),
-        currentRoll = basicGetSet("healing", "currentRoll"),
-        prepMode = basicGetSet("healing", "prepMode", clearPreppedRoll("healing")),
-        currentPreppedRoll = basicGetSet("healing", "currentPreppedRoll"),
+    [ACTIONS.healing] = {
+        numGreaterHealSlots = basicGetSet(ACTIONS.healing, "numGreaterHealSlots"),
+        lifePulse = basicGetSet(ACTIONS.healing, "lifePulse"),
+        mercyFromPainBonusHealing = basicGetSet(ACTIONS.healing, "mercyFromPainBonusHealing"),
+        rollMode = basicGetSet(ACTIONS.healing, "rollMode"),
+        currentRoll = basicGetSet(ACTIONS.healing, "currentRoll"),
+        prepMode = basicGetSet(ACTIONS.healing, "prepMode", clearPreppedRoll(ACTIONS.healing)),
+        currentPreppedRoll = basicGetSet(ACTIONS.healing, "currentPreppedRoll"),
     },
 
-    buff = {
-        rollMode = basicGetSet("buff", "rollMode"),
-        currentRoll = basicGetSet("buff", "currentRoll"),
-        prepMode = basicGetSet("buff", "prepMode", clearPreppedRoll("buff")),
-        currentPreppedRoll = basicGetSet("buff", "currentPreppedRoll"),
+    [ACTIONS.buff] = {
+        rollMode = basicGetSet(ACTIONS.buff, "rollMode"),
+        currentRoll = basicGetSet(ACTIONS.buff, "currentRoll"),
+        prepMode = basicGetSet(ACTIONS.buff, "prepMode", clearPreppedRoll(ACTIONS.buff)),
+        currentPreppedRoll = basicGetSet(ACTIONS.buff, "currentPreppedRoll"),
     },
 
-    defend = {
-        threshold = basicGetSet("defend", "threshold"),
-        damageRisk = basicGetSet("defend", "damageRisk"),
-        rollMode = basicGetSet("defend", "rollMode"),
-        currentRoll = basicGetSet("defend", "currentRoll"),
+    [ACTIONS.defend] = {
+        threshold = basicGetSet(ACTIONS.defend, "threshold"),
+        damageRisk = basicGetSet(ACTIONS.defend, "damageRisk"),
+        rollMode = basicGetSet(ACTIONS.defend, "rollMode"),
+        currentRoll = basicGetSet(ACTIONS.defend, "currentRoll"),
     },
 
-    meleeSave = {
-        threshold = basicGetSet("meleeSave", "threshold"),
-        damageRisk = basicGetSet("meleeSave", "damageRisk"),
-        rollMode = basicGetSet("meleeSave", "rollMode"),
-        currentRoll = basicGetSet("meleeSave", "currentRoll"),
+    [ACTIONS.meleeSave] = {
+        threshold = basicGetSet(ACTIONS.meleeSave, "threshold"),
+        damageRisk = basicGetSet(ACTIONS.meleeSave, "damageRisk"),
+        rollMode = basicGetSet(ACTIONS.meleeSave, "rollMode"),
+        currentRoll = basicGetSet(ACTIONS.meleeSave, "currentRoll"),
     },
 
-    rangedSave = {
-        threshold = basicGetSet("rangedSave", "threshold"),
-        rollMode = basicGetSet("rangedSave", "rollMode"),
-        currentRoll = basicGetSet("rangedSave", "currentRoll"),
+    [ACTIONS.rangedSave] = {
+        threshold = basicGetSet(ACTIONS.rangedSave, "threshold"),
+        rollMode = basicGetSet(ACTIONS.rangedSave, "rollMode"),
+        currentRoll = basicGetSet(ACTIONS.rangedSave, "currentRoll"),
     },
 
-    utility = {
-        useUtilityTrait = basicGetSet("utility", "useUtilityTrait"),
-        rollMode = basicGetSet("utility", "rollMode"),
-        currentRoll = basicGetSet("utility", "currentRoll"),
+    [ACTIONS.utility] = {
+        useUtilityTrait = basicGetSet(ACTIONS.utility, "useUtilityTrait"),
+        rollMode = basicGetSet(ACTIONS.utility, "rollMode"),
+        currentRoll = basicGetSet(ACTIONS.utility, "currentRoll"),
     },
 }
 
