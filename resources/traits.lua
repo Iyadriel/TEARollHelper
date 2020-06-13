@@ -3,6 +3,7 @@ local _, ns = ...
 local constants = ns.constants
 local traits = ns.resources.traits
 
+local ACTIONS = constants.ACTIONS
 local BUFF_TYPES = constants.BUFF_TYPES
 local TURN_TYPES = constants.TURN_TYPES
 
@@ -24,7 +25,9 @@ traits.TRAITS = {
         buffs = {
             {
                 types = { [BUFF_TYPES.STAT] = true, [BUFF_TYPES.ADVANTAGE] = true },
-                turnTypeId = TURN_TYPES.ENEMY.id,
+                actions = {
+                    [ACTIONS.defend] = true,
+                },
                 stats = {
                     defence = 3,
                 },
