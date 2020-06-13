@@ -44,6 +44,12 @@ local function useFocus()
     useTraitCharge(TRAITS.FOCUS)
 end
 
+local function useLifeWithin()
+    buffs.addTraitBuff(TRAITS.LIFE_WITHIN)
+    state.health.heal(rules.traits.LIFE_WITHIN_HEAL_AMOUNT)
+    useTraitCharge(TRAITS.LIFE_WITHIN)
+end
+
 local function useSecondWind()
     state.health.heal(rules.traits.SECOND_WIND_HEAL_AMOUNT)
     useTraitCharge(TRAITS.SECOND_WIND)
@@ -73,6 +79,7 @@ consequences.useFatePoint = useFatePoint
 consequences.useBulwark = useBulwark
 consequences.useCalamityGambit = useCalamityGambit
 consequences.useFocus = useFocus
+consequences.useLifeWithin = useLifeWithin
 consequences.useSecondWind = useSecondWind
 
 consequences.confirmReboundRoll = confirmReboundRoll

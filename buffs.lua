@@ -177,6 +177,10 @@ local function addTraitBuff(trait)
                 newBuff.turnTypeId = buff.turnTypeId
             end
         end
+        if types[BUFF_TYPES.MAX_HEALTH] then
+            newBuff.amount = buff.amount
+            newBuff.originalAmount = buff.amount
+        end
 
         if buff.remainingTurns then
             newBuff.remainingTurns = shallowCopy(buff.remainingTurns)

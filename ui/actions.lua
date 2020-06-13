@@ -31,6 +31,20 @@ ui.modules.actions.modules = {
     groupName: String
 } ]]
 ui.modules.actions.getOptions = function(options)
+    local lifeWithin = {
+        order = 0,
+        type = "execute",
+        name = COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.LIFE_WITHIN.name,
+        desc = TRAITS.LIFE_WITHIN.desc,
+        hidden = function()
+            return not character.hasTrait(TRAITS.LIFE_WITHIN)
+        end,
+        disabled = function()
+            return state.featsAndTraits.numTraitCharges.get(TRAITS.LIFE_WITHIN.id) == 0
+        end,
+        func = consequences.useLifeWithin
+    }
+
     return {
         playerTurn = {
             name = options.groupName or "Player turn",
@@ -38,17 +52,18 @@ ui.modules.actions.getOptions = function(options)
             order = options.order,
             childGroups = "tab",
             hidden = function()
-                return not (turnState.inCombat.get() and turnState.type.get() == TURN_TYPES.PLAYER.id)
+                return turnState.type.get() ~= TURN_TYPES.PLAYER.id
             end,
             args = {
-                attack = ui.modules.actions.modules.attack.getOptions({ order = 0 }),
+                lifeWithin = lifeWithin,
+                attack = ui.modules.actions.modules.attack.getOptions({ order = 1 }),
                 heal = ui.modules.actions.modules.healing.getOptions({
-                    order = 1,
+                    order = 2,
                     outOfCombat = false,
                     turnTypeID = TURN_TYPES.PLAYER.id,
                 }),
-                buff = ui.modules.actions.modules.buff.getOptions({ order = 2 }),
-                utility = ui.modules.actions.modules.utility.getOptions({ order = 3, turnTypeID = TURN_TYPES.PLAYER.id }),
+                buff = ui.modules.actions.modules.buff.getOptions({ order = 3 }),
+                utility = ui.modules.actions.modules.utility.getOptions({ order = 4, turnTypeID = TURN_TYPES.PLAYER.id }),
             }
         },
         enemyTurn = {
@@ -57,9 +72,10 @@ ui.modules.actions.getOptions = function(options)
             order = options.order,
             childGroups = "tab",
             hidden = function()
-                return not (turnState.inCombat.get() and turnState.type.get() == TURN_TYPES.ENEMY.id)
+                return turnState.type.get() ~= TURN_TYPES.ENEMY.id
             end,
             args = {
+                lifeWithin = lifeWithin,
                 defend = ui.modules.actions.modules.defend.getOptions({ order = 2 }),
                 meleeSave = ui.modules.actions.modules.meleeSave.getOptions({ order = 3 }),
                 rangedSave = ui.modules.actions.modules.rangedSave.getOptions({ order = 4 }),

@@ -7,7 +7,7 @@ local ACTIONS = constants.ACTIONS
 local BUFF_TYPES = constants.BUFF_TYPES
 local TURN_TYPES = constants.TURN_TYPES
 
-traits.TRAIT_KEYS = {"OTHER", "BULWARK", "CALAMITY_GAMBIT", "FOCUS", "LIFE_PULSE", "NOURISH", "SECOND_WIND", "VINDICATION"}
+traits.TRAIT_KEYS = {"OTHER", "BULWARK", "CALAMITY_GAMBIT", "FOCUS", "LIFE_PULSE", "LIFE_WITHIN", "NOURISH", "SECOND_WIND", "VINDICATION"}
 
 traits.TRAITS = {
     OTHER = {
@@ -88,6 +88,21 @@ traits.TRAITS = {
         desc = "Activate to apply the result of a Heal to the target and all friendly characters in melee range of that target. Can be used once per event. Activate after rolling.",
         supported = true,
         numCharges = 1,
+    },
+    LIFE_WITHIN = {
+        id = "LIFE_WITHIN",
+        name = "Life Within",
+        desc = "Activate to increase your current and max HP by 10. Lasts until end of combat. Can be used once per event. Activate outside of rolling on either a player or enemy turn.",
+        icon = "Interface\\Icons\\ability_druid_flourish",
+        supported = true,
+        numCharges = 1,
+        buffs = {
+            {
+                type = BUFF_TYPES.MAX_HEALTH,
+                amount = 10,
+                expireOnCombatEnd = true,
+            }
+        }
     },
     SECOND_WIND = {
         id = "SECOND_WIND",

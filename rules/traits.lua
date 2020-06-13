@@ -9,6 +9,7 @@ local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
 
 local MAX_NUM_TRAITS = 3
+local LIFE_WITHIN_HEAL_AMOUNT = 10
 local SECOND_WIND_HEAL_AMOUNT = 15
 
 local function calculateMaxTraits()
@@ -38,6 +39,7 @@ end
 
 rules.traits = {
     MAX_NUM_TRAITS = MAX_NUM_TRAITS,
+    LIFE_WITHIN_HEAL_AMOUNT = LIFE_WITHIN_HEAL_AMOUNT,
     SECOND_WIND_HEAL_AMOUNT = SECOND_WIND_HEAL_AMOUNT,
 
     calculateMaxTraits = calculateMaxTraits,
