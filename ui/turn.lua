@@ -4,8 +4,8 @@ local ui = ns.ui
 
 ui.modules.turn.modules = {
     character = {},
+    effects = {},
     environment = {},
-    otherPlayers = {},
     roll = {},
     turn = {},
 }
@@ -25,7 +25,7 @@ ui.modules.turn.getOptions = function()
             enemyTurn = actionOptions.enemyTurn,
             outOfCombat = actionOptions.outOfCombat,
             character = ui.modules.turn.modules.character.getOptions({ order = 3 }),
-            otherPlayers = ui.modules.turn.modules.otherPlayers.getOptions({ order = 4 }),
+            effects = ui.modules.turn.modules.effects.getOptions({ order = 4 }),
         }
     }
 end

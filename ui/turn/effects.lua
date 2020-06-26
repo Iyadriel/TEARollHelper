@@ -12,6 +12,8 @@ local weaknesses = ns.resources.weaknesses
 local TRAITS = traits.TRAITS
 local WEAKNESSES = weaknesses.WEAKNESSES
 
+local damageAmount = 1
+
 local healAmount = 1
 local healingPerTick = 1
 local addCorruptedDebuff = false -- TODO reset when weakness is removed (move to state)
@@ -19,19 +21,50 @@ local addCorruptedDebuff = false -- TODO reset when weakness is removed (move to
 --[[ local options = {
     order: Number
 } ]]
-ui.modules.turn.modules.otherPlayers.getOptions = function(options)
+ui.modules.turn.modules.effects.getOptions = function(options)
     local NOURISH = TRAITS.NOURISH
 
     return {
         order = options.order,
         type = "group",
-        name = "Other players",
-        desc = "Effects from other players",
+        name = "Effects",
         args = {
-            healing = {
+            damage = {
                 order = 0,
                 type = "group",
-                name = "Healing",
+                name = "Take damage",
+                inline = true,
+                args = {
+                    damageAmount = {
+                        order = 0,
+                        type = "range",
+                        name = "Incoming damage",
+                        min = 1,
+                        softMax = 30,
+                        max = 50,
+                        step = 1,
+                        get = function()
+                            return damageAmount
+                        end,
+                        set = function(info, value)
+                            damageAmount = value
+                        end,
+                    },
+                    damage = {
+                        order = 1,
+                        type = "execute",
+                        name = COLOURS.DAMAGE .. "Take damage",
+                        desc = "Take the specified amount of damage.",
+                        func = function()
+                            characterState.state.health.damage(damageAmount)
+                        end,
+                    },
+                }
+            },
+            healing = {
+                order = 1,
+                type = "group",
+                name = "Get healed",
                 inline = true,
                 args = {
                     regularHealing = {
@@ -42,14 +75,17 @@ ui.modules.turn.modules.otherPlayers.getOptions = function(options)
                         args = {
                             healAmount = {
                                 order = 0,
-                                type = "input",
+                                type = "range",
                                 name = "Incoming heal",
-                                pattern = "%d+",
+                                min = 1,
+                                softMax = 30,
+                                max = 50,
+                                step = 1,
                                 get = function()
-                                    return tostring(healAmount)
+                                    return healAmount
                                 end,
                                 set = function(info, value)
-                                    healAmount = tonumber(value)
+                                    healAmount = value
                                 end,
                             },
                             heal = {
@@ -89,15 +125,18 @@ ui.modules.turn.modules.otherPlayers.getOptions = function(options)
                         args = {
                             healingPerTick = {
                                 order = 0,
-                                type = "input",
+                                type = "range",
                                 name = "Healing per tick",
                                 desc = "The amount you are healed for at the start of every applicable turn.",
-                                pattern = "%d+",
+                                min = 1,
+                                softMax = 30,
+                                max = 50,
+                                step = 1,
                                 get = function()
-                                    return tostring(healingPerTick)
+                                    return healingPerTick
                                 end,
                                 set = function(info, value)
-                                    healingPerTick = tonumber(value)
+                                    healingPerTick = value
                                 end,
                             },
                             nourish = {

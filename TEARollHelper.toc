@@ -80,8 +80,8 @@ ui/config/settings.lua
 
 ui/turn.lua
 ui/turn/character.lua
+ui/turn/effects.lua
 ui/turn/environment.lua
-ui/turn/other-players.lua
 ui/turn/roll.lua
 ui/turn/turn.lua
 
