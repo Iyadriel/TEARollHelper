@@ -51,7 +51,7 @@ local function isCrit(roll)
 end
 
 local function shouldShowPreRollUI()
-    return character.hasTrait(TRAITS.FOCUS)
+    return character.hasTrait(TRAITS.FOCUS) or rules.other.shouldShowPreRollUI()
 end
 
 rules.buffing = {

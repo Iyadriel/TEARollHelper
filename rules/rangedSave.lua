@@ -19,8 +19,14 @@ local function calculateDamageReduction(spirit)
     return baseReduction + max(0, floor(spirit / 2))
 end
 
+local function shouldShowPreRollUI()
+    return rules.other.shouldShowPreRollUI()
+end
+
 rules.rangedSave = {
     calculateRangedSaveValue = calculateRangedSaveValue,
     canFullyProtect = canFullyProtect,
     calculateDamageReduction = calculateDamageReduction,
+
+    shouldShowPreRollUI = shouldShowPreRollUI,
 }

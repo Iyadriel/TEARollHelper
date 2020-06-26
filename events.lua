@@ -172,3 +172,14 @@ bus.addListener(EVENTS.COMBAT_OVER, function()
         end
     end
 end)
+
+bus.addListener(EVENTS.ROLL_CHANGED, function()
+    local activeBuffs = characterState.state.activeBuffs.get()
+
+    for i = #activeBuffs, 1, -1 do
+        local buff = activeBuffs[i]
+        if buff.expireAfterRolling then
+            expireBuff(i, buff)
+        end
+    end
+end)

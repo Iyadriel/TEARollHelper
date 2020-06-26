@@ -11,6 +11,7 @@ local rolls = ns.state.rolls
 local rules = ns.rules
 local traits = ns.resources.traits
 local ui = ns.ui
+local utils = ns.utils
 
 local ACTIONS = constants.ACTIONS
 local ACTION_LABELS = constants.ACTION_LABELS
@@ -27,34 +28,38 @@ ui.modules.actions.modules.attack.getOptions = function(options)
         return not state.attack.threshold.get()
     end
 
-    local sharedOptions = ui.modules.actions.modules.playerTurn.getSharedOptions({
+    local preRoll = ui.modules.turn.modules.roll.getPreRollOptions({
         order = 1,
         hidden = function()
             return shouldHideRoll() or not rules.offence.shouldShowPreRollUI()
         end,
-        args = {
-            useCalamityGambit = {
-                order = 0,
-                type = "execute",
-                name = COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.CALAMITY_GAMBIT.name,
-                desc = TRAITS.CALAMITY_GAMBIT.desc,
-                hidden = function()
-                    return not character.hasTrait(TRAITS.CALAMITY_GAMBIT) or characterState.buffLookup.getTraitBuffs(TRAITS.CALAMITY_GAMBIT)
-                end,
-                disabled = function()
-                    return characterState.featsAndTraits.numTraitCharges.get(TRAITS.CALAMITY_GAMBIT.id) == 0
-                end,
-                func = consequences.useCalamityGambit,
-            },
-            calamityGambitActive = {
-                order = 0,
-                type = "description",
-                name = COLOURS.TRAITS.GENERIC .. TRAITS.CALAMITY_GAMBIT.name .. " is active.",
-                hidden = function()
-                    return not (character.hasTrait(TRAITS.CALAMITY_GAMBIT) and characterState.buffLookup.getTraitBuffs(TRAITS.CALAMITY_GAMBIT))
-                end,
-            },
-        }
+        args = utils.merge(
+            ui.modules.actions.modules.playerTurn.getSharedPreRollOptions({ order = 1 }),
+            ui.modules.actions.modules.anyTurn.getSharedPreRollOptions({ order = 2 }),
+            {
+                useCalamityGambit = {
+                    order = 0,
+                    type = "execute",
+                    name = COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.CALAMITY_GAMBIT.name,
+                    desc = TRAITS.CALAMITY_GAMBIT.desc,
+                    hidden = function()
+                        return not character.hasTrait(TRAITS.CALAMITY_GAMBIT) or characterState.buffLookup.getTraitBuffs(TRAITS.CALAMITY_GAMBIT)
+                    end,
+                    disabled = function()
+                        return characterState.featsAndTraits.numTraitCharges.get(TRAITS.CALAMITY_GAMBIT.id) == 0
+                    end,
+                    func = consequences.useCalamityGambit,
+                },
+                calamityGambitActive = {
+                    order = 0,
+                    type = "description",
+                    name = COLOURS.TRAITS.GENERIC .. TRAITS.CALAMITY_GAMBIT.name .. " is active.",
+                    hidden = function()
+                        return not (character.hasTrait(TRAITS.CALAMITY_GAMBIT) and characterState.buffLookup.getTraitBuffs(TRAITS.CALAMITY_GAMBIT))
+                    end,
+                },
+            }
+        ),
     })
 
     return {
@@ -76,7 +81,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                     state.attack.threshold.set(value)
                 end
             },
-            preRoll = sharedOptions.preRoll,
+            preRoll = preRoll,
             roll = ui.modules.turn.modules.roll.getOptions({
                 order = 2,
                 action = ACTIONS.attack,

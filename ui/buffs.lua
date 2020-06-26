@@ -163,7 +163,7 @@ ui.modules.buffs.getOptions = function(options)
                             spirit = STAT_LABELS.spirit,
                             stamina = STAT_LABELS.stamina,
                         },
-                        sorting = { "offence", "defence", "spirit", "stamina" },
+                        sorting = constants.STATS_SORTED,
                         hidden = function()
                             return state.newPlayerBuff.type.get() ~= "stat"
                         end,

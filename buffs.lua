@@ -136,7 +136,7 @@ local function addHoTBuff(label, icon, healingPerTick, remainingTurns)
     })
 end
 
-local function addTraitBuff(trait)
+local function addTraitBuff(trait, providedStats)
     local existingBuffs = characterState.state.buffLookup.getTraitBuffs(trait)
     if existingBuffs then
         for _, existingBuff in pairs(existingBuffs) do
@@ -162,12 +162,16 @@ local function addTraitBuff(trait)
         }
 
         if types[BUFF_TYPES.STAT] then
-            newBuff.stats = {}
-            for stat, value in pairs(buff.stats) do
-                if value == "custom" then
-                    newBuff.stats[stat] = rules.traits.calculateStatBuff(trait, stat)
-                else
-                    newBuff.stats[stat] = value
+            if providedStats then
+                newBuff.stats = providedStats
+            else
+                newBuff.stats = {}
+                for stat, value in pairs(buff.stats) do
+                    if value == "custom" then
+                        newBuff.stats[stat] = rules.traits.calculateStatBuff(trait, stat)
+                    else
+                        newBuff.stats[stat] = value
+                    end
                 end
             end
         end
@@ -183,8 +187,13 @@ local function addTraitBuff(trait)
         end
 
         if buff.remainingTurns then
-            newBuff.remainingTurns = shallowCopy(buff.remainingTurns)
-        elseif buff.expireOnCombatEnd then
+            if type(buff.remainingTurns) == "table" then
+                newBuff.remainingTurns = shallowCopy(buff.remainingTurns)
+            else
+                newBuff.remainingTurns = buff.remainingTurns
+            end
+        end
+        if buff.expireOnCombatEnd then
             newBuff.expireOnCombatEnd = buff.expireOnCombatEnd
         end
 

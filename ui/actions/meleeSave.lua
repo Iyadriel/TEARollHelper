@@ -5,6 +5,7 @@ local COLOURS = TEARollHelper.COLOURS
 local consequences = ns.consequences
 local constants = ns.constants
 local rolls = ns.state.rolls
+local rules = ns.rules
 local ui = ns.ui
 
 local ACTIONS = constants.ACTIONS
@@ -27,13 +28,20 @@ ui.modules.actions.modules.meleeSave.getOptions = function(options)
         args = {
             defendThreshold = sharedOptions.defendThreshold,
             damageRisk = sharedOptions.damageRisk,
-            roll = ui.modules.turn.modules.roll.getOptions({
+            preRoll = ui.modules.turn.modules.roll.getPreRollOptions({
                 order = 2,
+                hidden = function()
+                    return shouldHideRoll() or not rules.meleeSave.shouldShowPreRollUI()
+                end,
+                args = ui.modules.actions.modules.anyTurn.getSharedPreRollOptions({ order = 0 }),
+            }),
+            roll = ui.modules.turn.modules.roll.getOptions({
+                order = 3,
                 action = ACTIONS.meleeSave,
                 hidden = shouldHideRoll,
             }),
             meleeSave = {
-                order = 3,
+                order = 4,
                 type = "group",
                 name = ACTION_LABELS.meleeSave,
                 inline = true,

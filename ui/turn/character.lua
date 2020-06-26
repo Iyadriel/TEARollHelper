@@ -9,21 +9,11 @@ local traits = ns.resources.traits
 local characterState = ns.state.character
 local settings = ns.settings
 local ui = ns.ui
+local utils = ns.utils
 
 local TRAIT_KEYS = traits.TRAIT_KEYS
 local TRAITS = traits.TRAITS
 local state = characterState.state
-
-local function merge(t1, t2)
-    local t3 = {}
-    for k, v in pairs(t1) do
-        t3[k] = v
-    end
-    for k, v in pairs(t2) do
-        t3[k] = v
-    end
-    return t3
-end
 
 local function traitChargesSlider(order, trait)
     return {
@@ -162,7 +152,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                 type = "group",
                 name = "Feats and traits",
                 inline = true,
-                args = merge({
+                args = utils.merge({
                     turn_character_numBloodHarvestSlots = {
                         order = 0,
                         type = "range",

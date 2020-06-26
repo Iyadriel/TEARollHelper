@@ -6,6 +6,7 @@ local constants = ns.constants
 local rolls = ns.state.rolls
 local rules = ns.rules
 local ui = ns.ui
+local utils = ns.utils
 
 local ACTIONS = constants.ACTIONS
 local ACTION_LABELS = constants.ACTION_LABELS
@@ -14,13 +15,6 @@ local ACTION_LABELS = constants.ACTION_LABELS
     order: Number
 } ]]
 ui.modules.actions.modules.buff.getOptions = function(options)
-    local sharedOptions = ui.modules.actions.modules.playerTurn.getSharedOptions({
-        order = 0,
-        hidden = function()
-            return not rules.buffing.shouldShowPreRollUI()
-        end,
-    })
-
     return {
         name = ACTION_LABELS.buff,
         type = "group",
@@ -29,7 +23,16 @@ ui.modules.actions.modules.buff.getOptions = function(options)
             return not rules.buffing.canBuff()
         end,
         args = {
-            preRoll = sharedOptions.preRoll,
+            preRoll = ui.modules.turn.modules.roll.getPreRollOptions({
+                order = 0,
+                hidden = function()
+                    return not rules.buffing.shouldShowPreRollUI()
+                end,
+                args = utils.merge(
+                    ui.modules.actions.modules.playerTurn.getSharedPreRollOptions({ order = 0 }),
+                    ui.modules.actions.modules.anyTurn.getSharedPreRollOptions({ order = 1 })
+                )
+            }),
             roll = ui.modules.turn.modules.roll.getOptions({
                 order = 1,
                 action = ACTIONS.buff,

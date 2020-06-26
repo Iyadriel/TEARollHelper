@@ -62,7 +62,10 @@ ui.modules.config.modules.character.modules.traits.getOptions = function(options
         },
         traitNote = {
             type = "description",
-            name = COLOURS.NOTE .. "",
+            name = function()
+                local trait = character.getPlayerTraitAtSlot(slotIndex)
+                return COLOURS.NOTE .. (trait and (trait.note and trait.note .. "|n ") or "")
+            end,
             hidden = shouldHide,
             order = options.order + 2
         },

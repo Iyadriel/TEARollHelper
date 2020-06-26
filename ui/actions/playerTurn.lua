@@ -12,13 +12,11 @@ local TRAITS = traits.TRAITS
 
 --[[ local options = {
     order: Number,
-    hidden: Function,
-    args: Table
 } ]]
-ui.modules.actions.modules.playerTurn.getSharedOptions = function(options)
-    local args = {
+ui.modules.actions.modules.playerTurn.getSharedPreRollOptions = function(options)
+    return {
         useFocus = {
-            order = 0,
+            order = options.order,
             type = "execute",
             name = COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.FOCUS.name,
             desc = TRAITS.FOCUS.desc,
@@ -38,19 +36,5 @@ ui.modules.actions.modules.playerTurn.getSharedOptions = function(options)
                 return not (character.hasTrait(TRAITS.FOCUS) and characterState.buffLookup.getTraitBuffs(TRAITS.FOCUS))
             end,
         },
-    }
-
-    if options.args then
-        for k, v in pairs(options.args) do
-            args[k] = v
-        end
-    end
-
-    return {
-        preRoll = ui.modules.turn.modules.roll.getPreRollOptions({
-            order = options.order,
-            hidden = options.hidden,
-            args = args,
-        })
     }
 end

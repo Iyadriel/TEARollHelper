@@ -35,11 +35,19 @@ local function applyBigFailModifier(damageTaken)
     return damageTaken * 2
 end
 
+local function shouldShowPreRollUI()
+    return rules.other.shouldShowPreRollUI()
+end
+
 rules.meleeSave = {
     calculateMeleeSaveValue = calculateMeleeSaveValue,
+
     canProcCounterForce = canProcCounterForce,
     hasCounterForceProc = hasCounterForceProc,
     calculateCounterForceProcDmg = calculateCounterForceProcDmg,
+
     isSaveBigFail = isSaveBigFail,
-    applyBigFailModifier = applyBigFailModifier
+    applyBigFailModifier = applyBigFailModifier,
+
+    shouldShowPreRollUI = shouldShowPreRollUI
 }

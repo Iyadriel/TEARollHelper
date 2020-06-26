@@ -3,6 +3,7 @@ local _, ns = ...
 local bus = ns.bus
 local character = ns.character
 local characterState = ns.state.character
+local constants = ns.constants
 local feats = ns.resources.feats
 local racialTraits = ns.resources.racialTraits
 local rules = ns.rules
@@ -12,30 +13,43 @@ local weaknesses = ns.resources.weaknesses
 local EVENTS = bus.EVENTS
 local FEATS = feats.FEATS
 local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
+local STATS = constants.STATS
 local TRAITS = traits.TRAITS
 local WEAKNESSES = weaknesses.WEAKNESSES
 
-local getPlayerOffence, getPlayerDefence, getPlayerSpirit, getPlayerStamina, calculatePlayerMaxHealth, calculatePlayerMaxHealthWithoutBuffs
+local calculatePlayerMaxHealth, calculatePlayerMaxHealthWithoutBuffs
 local hasOffenceMastery, hasSpiritMastery
 local getPlayerFeat, hasFeat, hasFeatByID, setPlayerFeatByID, getPlayerRacialTrait, hasRacialTrait
 local clearExcessTraits
 
 -- [[ Stats ]]
 
-function getPlayerOffence()
+local function getPlayerOffence()
     return tonumber(TEARollHelper.db.profile.stats.offence)
 end
 
-function getPlayerDefence()
+local function getPlayerDefence()
     return tonumber(TEARollHelper.db.profile.stats.defence)
 end
 
-function getPlayerSpirit()
+local function getPlayerSpirit()
     return tonumber(TEARollHelper.db.profile.stats.spirit)
 end
 
-function getPlayerStamina()
+local function getPlayerStamina()
     return tonumber(TEARollHelper.db.profile.stats.stamina)
+end
+
+local function getPlayerStat(stat)
+    if stat == STATS.offence then
+        return getPlayerOffence()
+    elseif stat == STATS.defence then
+        return getPlayerDefence()
+    elseif stat == STATS.spirit then
+        return getPlayerSpirit()
+    elseif stat == STATS.stamina then
+        return getPlayerStamina()
+    end
 end
 
 function calculatePlayerMaxHealth()
@@ -195,6 +209,7 @@ character.getPlayerOffence = getPlayerOffence
 character.getPlayerDefence = getPlayerDefence
 character.getPlayerSpirit = getPlayerSpirit
 character.getPlayerStamina = getPlayerStamina
+character.getPlayerStat = getPlayerStat
 character.calculatePlayerMaxHealth = calculatePlayerMaxHealth
 character.calculatePlayerMaxHealthWithoutBuffs = calculatePlayerMaxHealthWithoutBuffs
 character.setStat = setStat

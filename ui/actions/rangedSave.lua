@@ -6,6 +6,7 @@ local character = ns.character
 local constants = ns.constants
 local feats = ns.resources.feats
 local rolls = ns.state.rolls
+local rules = ns.rules
 local ui = ns.ui
 
 local ACTIONS = constants.ACTIONS
@@ -18,21 +19,30 @@ local FEATS = feats.FEATS
 ui.modules.actions.modules.rangedSave.getOptions = function(options)
     local sharedOptions = ui.modules.actions.modules.defend.getSharedOptions("rangedSave")
 
+    local function shouldHideRoll()
+        return not rolls.state.rangedSave.threshold.get()
+    end
+
     return {
         name = ACTION_LABELS.rangedSave,
         type = "group",
         order = options.order,
         args = {
             defendThreshold = sharedOptions.defendThreshold,
-            roll = ui.modules.turn.modules.roll.getOptions({
+            preRoll = ui.modules.turn.modules.roll.getPreRollOptions({
                 order = 2,
-                action = ACTIONS.rangedSave,
                 hidden = function()
-                    return not rolls.state.rangedSave.threshold.get()
+                    return shouldHideRoll() or not rules.meleeSave.shouldShowPreRollUI()
                 end,
+                args = ui.modules.actions.modules.anyTurn.getSharedPreRollOptions({ order = 0 }),
+            }),
+            roll = ui.modules.turn.modules.roll.getOptions({
+                order = 3,
+                action = ACTIONS.rangedSave,
+                hidden = shouldHideRoll,
             }),
             rangedSave = {
-                order = 3,
+                order = 4,
                 type = "group",
                 name = ACTION_LABELS.rangedSave,
                 inline = true,

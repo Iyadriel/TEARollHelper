@@ -32,6 +32,7 @@ ns.state = {
 }
 ns.turns = {}
 ns.ui = {}
+ns.utils = {}
 
 TEARollHelper = LibStub("AceAddon-3.0"):NewAddon("TEARollHelper", "AceConsole-3.0", "AceEvent-3.0")
 

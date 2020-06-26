@@ -7,7 +7,7 @@ local ACTIONS = constants.ACTIONS
 local BUFF_TYPES = constants.BUFF_TYPES
 local TURN_TYPES = constants.TURN_TYPES
 
-traits.TRAIT_KEYS = {"OTHER", "BULWARK", "CALAMITY_GAMBIT", "FOCUS", "LIFE_PULSE", "LIFE_WITHIN", "NOURISH", "SECOND_WIND", "VINDICATION"}
+traits.TRAIT_KEYS = {"OTHER", "BULWARK", "CALAMITY_GAMBIT", "FOCUS", "LIFE_PULSE", "LIFE_WITHIN", "NOURISH", "SECOND_WIND", "VERSATILE", "VINDICATION"}
 
 traits.TRAITS = {
     OTHER = {
@@ -124,6 +124,21 @@ traits.TRAITS = {
                 remainingTurns = {
                     [TURN_TYPES.PLAYER.id] = 4,
                 },
+            },
+        },
+    },
+    VERSATILE = {
+        id = "VERSATILE",
+        name = "Versatile",
+        desc = "Activate to choose one stat, and transfer its value to another stat of your choice for the duration of your next roll. Can be used twice per event. Activate before rolling. Does not grant additional Greater Heal Slots. If you use Versatile to gain HP, and then have that amount or less HP left total by the end of your turn, you go down to 1 HP rather than 0 HP.",
+        icon = "Interface\\Icons\\spell_arcane_arcanetactics",
+        supported = true,
+        note = "If you roll more than once during a turn, you must manually clear the Versatile buff after the first roll.",
+        numCharges = 2,
+        buffs = {
+            {
+                type = BUFF_TYPES.STAT,
+                remainingTurns = 0,
             },
         },
     },

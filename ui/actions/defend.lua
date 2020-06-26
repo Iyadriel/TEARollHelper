@@ -10,6 +10,7 @@ local rolls = ns.state.rolls
 local rules = ns.rules
 local traits = ns.resources.traits
 local ui = ns.ui
+local utils = ns.utils
 
 local ACTIONS = constants.ACTIONS
 local ACTION_LABELS = constants.ACTION_LABELS
@@ -74,29 +75,32 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                 hidden = function()
                     return shouldHideRoll() or not rules.defence.shouldShowPreRollUI()
                 end,
-                args = {
-                    useBulwark = {
-                        order = 0,
-                        type = "execute",
-                        name = COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.BULWARK.name,
-                        desc = TRAITS.BULWARK.desc,
-                        hidden = function()
-                            return not character.hasTrait(TRAITS.BULWARK) or state.buffLookup.getTraitBuffs(TRAITS.BULWARK)
-                        end,
-                        disabled = function()
-                            return state.featsAndTraits.numTraitCharges.get(TRAITS.BULWARK.id) == 0
-                        end,
-                        func = consequences.useBulwark,
-                    },
-                    bulwarkActive = {
-                        order = 0,
-                        type = "description",
-                        name = COLOURS.TRAITS.GENERIC .. TRAITS.BULWARK.name .. " is active.",
-                        hidden = function()
-                            return not (character.hasTrait(TRAITS.BULWARK) and state.buffLookup.getTraitBuffs(TRAITS.BULWARK))
-                        end,
-                    },
-                },
+                args = utils.merge(
+                    ui.modules.actions.modules.anyTurn.getSharedPreRollOptions({ order = 1 }),
+                    {
+                        useBulwark = {
+                            order = 0,
+                            type = "execute",
+                            name = COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.BULWARK.name,
+                            desc = TRAITS.BULWARK.desc,
+                            hidden = function()
+                                return not character.hasTrait(TRAITS.BULWARK) or state.buffLookup.getTraitBuffs(TRAITS.BULWARK)
+                            end,
+                            disabled = function()
+                                return state.featsAndTraits.numTraitCharges.get(TRAITS.BULWARK.id) == 0
+                            end,
+                            func = consequences.useBulwark,
+                        },
+                        bulwarkActive = {
+                            order = 0,
+                            type = "description",
+                            name = COLOURS.TRAITS.GENERIC .. TRAITS.BULWARK.name .. " is active.",
+                            hidden = function()
+                                return not (character.hasTrait(TRAITS.BULWARK) and state.buffLookup.getTraitBuffs(TRAITS.BULWARK))
+                            end,
+                        },
+                    }
+                ),
             }),
             roll = ui.modules.turn.modules.roll.getOptions({
                 order = 3,

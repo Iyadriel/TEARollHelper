@@ -24,7 +24,7 @@ local function calculateUtilityValue(roll, useUtilityTrait)
 end
 
 local function shouldShowPreRollUI()
-    return character.hasTrait(TRAITS.FOCUS)
+    return character.hasTrait(TRAITS.FOCUS) or rules.other.shouldShowPreRollUI()
 end
 
 rules.utility = {

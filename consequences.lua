@@ -2,8 +2,10 @@ local _, ns = ...
 
 local buffs = ns.buffs
 local bus = ns.bus
+local character = ns.character
 local characterState = ns.state.character
 local consequences = ns.consequences
+local rollState = ns.state.rolls.state
 local rules = ns.rules
 local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
@@ -55,6 +57,16 @@ local function useSecondWind()
     useTraitCharge(TRAITS.SECOND_WIND)
 end
 
+local function useVersatile()
+    local stat1 = rollState.shared.versatile.stat1.get()
+    local stat2 = rollState.shared.versatile.stat2.get()
+    buffs.addTraitBuff(TRAITS.VERSATILE, {
+        [stat1] = -character.getPlayerStat(stat1),
+        [stat2] = character.getPlayerStat(stat1),
+    })
+    useTraitCharge(TRAITS.VERSATILE)
+end
+
 -- [[ Rolls ]]
 
 local function confirmReboundRoll()
@@ -81,6 +93,7 @@ consequences.useCalamityGambit = useCalamityGambit
 consequences.useFocus = useFocus
 consequences.useLifeWithin = useLifeWithin
 consequences.useSecondWind = useSecondWind
+consequences.useVersatile = useVersatile
 
 consequences.confirmReboundRoll = confirmReboundRoll
 

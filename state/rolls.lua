@@ -13,12 +13,20 @@ local ACTIONS = constants.ACTIONS
 local EVENTS = bus.EVENTS
 local FEATS = feats.FEATS
 local ROLL_MODES = constants.ROLL_MODES
+local STATS = constants.STATS
 local TRAITS = traits.TRAITS
 
 local state
 
 rolls.initState = function()
     state = {
+        shared = {
+            versatile = {
+                stat1 = STATS.offence,
+                stat2 = STATS.spirit,
+            }
+        },
+
         [ACTIONS.attack] = {
             threshold = nil,
             numBloodHarvestSlots = 0,
@@ -94,6 +102,27 @@ local function clearPreppedRoll(action)
 end
 
 rolls.state = {
+    shared = {
+        versatile = {
+            stat1 = {
+                get = function()
+                    return state.shared.versatile.stat1
+                end,
+                set = function(value)
+                    state.shared.versatile.stat1 = value
+                end
+            },
+            stat2 = {
+                get = function()
+                    return state.shared.versatile.stat2
+                end,
+                set = function(value)
+                    state.shared.versatile.stat2 = value
+                end
+            },
+        },
+    },
+
     [ACTIONS.attack] = {
         threshold = basicGetSet(ACTIONS.attack, "threshold"),
         numBloodHarvestSlots = basicGetSet(ACTIONS.attack, "numBloodHarvestSlots"),

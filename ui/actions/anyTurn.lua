@@ -1,0 +1,68 @@
+local _, ns = ...
+
+local COLOURS = TEARollHelper.COLOURS
+
+local character = ns.character
+local constants = ns.constants
+local characterState = ns.state.character.state
+local consequences = ns.consequences
+local rolls = ns.state.rolls
+local traits = ns.resources.traits
+local ui = ns.ui
+
+local TRAITS = traits.TRAITS
+
+local state = rolls.state
+
+--[[ local options = {
+    order: Number,
+} ]]
+ui.modules.actions.modules.anyTurn.getSharedPreRollOptions = function(options)
+    return {
+        versatile = {
+            order = options.order,
+            type = "group",
+            name = COLOURS.TRAITS.GENERIC .. TRAITS.VERSATILE.name,
+            inline = true,
+            hidden = function()
+                return not character.hasTrait(TRAITS.VERSATILE) or characterState.buffLookup.getTraitBuffs(TRAITS.VERSATILE)
+            end,
+            args = {
+                stat1 = {
+                    order = 0,
+                    type = "select",
+                    name = "Source stat",
+                    width = 0.6,
+                    values = constants.STAT_LABELS,
+                    sorting = constants.STATS_SORTED,
+                    get = state.shared.versatile.stat1.get,
+                    set = function(info, value)
+                        state.shared.versatile.stat1.set(value)
+                    end,
+                },
+                stat2 = {
+                    order = 1,
+                    type = "select",
+                    name = "Transfer to",
+                    width = 0.6,
+                    values = constants.STAT_LABELS,
+                    sorting = constants.STATS_SORTED,
+                    get = state.shared.versatile.stat2.get,
+                    set = function(info, value)
+                        state.shared.versatile.stat2.set(value)
+                    end,
+                },
+                transfer = {
+                    order = 2,
+                    type = "execute",
+                    name = "Transfer",
+                    width = 0.65,
+                    disabled = function()
+                        return characterState.featsAndTraits.numTraitCharges.get(TRAITS.VERSATILE.id) == 0
+                    end,
+                    func = consequences.useVersatile
+                }
+            },
+        },
+    }
+end

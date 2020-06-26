@@ -4,12 +4,14 @@ local COLOURS = TEARollHelper.COLOURS
 
 local character = ns.character
 local characterState = ns.state.character.state
+local consequences = ns.consequences
 local constants = ns.constants
 local feats = ns.resources.feats
 local rolls = ns.state.rolls
 local rules = ns.rules
 local traits = ns.resources.traits
 local ui = ns.ui
+local utils = ns.utils
 
 local ACTIONS = constants.ACTIONS
 local ACTION_LABELS = constants.ACTION_LABELS
@@ -26,15 +28,10 @@ local state = rolls.state
 } ]]
 ui.modules.actions.modules.healing.getOptions = function(options)
     local shouldShowPlayerTurnOptions = options.turnTypeID == TURN_TYPES.PLAYER.id
-    local sharedOptions
+    local preRollArgs = ui.modules.actions.modules.anyTurn.getSharedPreRollOptions({ order = 1 })
 
     if shouldShowPlayerTurnOptions then
-        sharedOptions = ui.modules.actions.modules.playerTurn.getSharedOptions({
-            order = 0,
-            hidden = function()
-                return not rules.healing.shouldShowPreRollUI()
-            end,
-        })
+        preRollArgs = utils.merge(preRollArgs, ui.modules.actions.modules.playerTurn.getSharedPreRollOptions({ order = 1 }))
     end
 
     return {
@@ -45,7 +42,13 @@ ui.modules.actions.modules.healing.getOptions = function(options)
             return not rules.healing.canHeal()
         end,
         args = {
-            preRoll = shouldShowPlayerTurnOptions and sharedOptions.preRoll or nil,
+            preRoll = ui.modules.turn.modules.roll.getPreRollOptions({
+                order = 0,
+                hidden = function()
+                    return not rules.healing.shouldShowPreRollUI(options.turnTypeID)
+                end,
+                args = preRollArgs,
+            }),
             roll = ui.modules.turn.modules.roll.getOptions({
                 order = 1,
                 action = ACTIONS.healing,

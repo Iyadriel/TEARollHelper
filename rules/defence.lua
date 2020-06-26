@@ -37,7 +37,7 @@ local function calculateRetaliationDamage(defence)
 end
 
 local function shouldShowPreRollUI()
-    return character.hasTrait(TRAITS.BULWARK)
+    return character.hasTrait(TRAITS.BULWARK) or rules.other.shouldShowPreRollUI()
 end
 
 rules.defence = {

@@ -44,12 +44,21 @@ local ROLL_MODES = {
     ADVANTAGE = 1
 }
 
+local STATS = {
+    offence = "offence",
+    defence = "defence",
+    spirit = "spirit",
+    stamina = "stamina"
+}
+
 local STAT_LABELS = {
     offence = "Offence",
     defence = "Defence",
     spirit = "Spirit",
     stamina = "Stamina"
 }
+
+local STATS_SORTED = { STATS.offence, STATS.defence, STATS.spirit, STATS.stamina }
 
 local TURN_TYPES = {
     PLAYER = { id = "PLAYER", name = "Player" },
@@ -62,5 +71,7 @@ constants.ACTION_LABELS = ACTION_LABELS
 constants.BUFF_SOURCES = BUFF_SOURCES
 constants.BUFF_TYPES = BUFF_TYPES
 constants.ROLL_MODES = ROLL_MODES
+constants.STATS = STATS
 constants.STAT_LABELS = STAT_LABELS
+constants.STATS_SORTED = STATS_SORTED
 constants.TURN_TYPES = TURN_TYPES

@@ -1,6 +1,7 @@
 local _, ns = ...
 
 local character = ns.character
+local constants = ns.constants
 local feats = ns.resources.feats
 local racialTraits = ns.resources.racialTraits
 local rules = ns.rules
@@ -10,6 +11,7 @@ local weaknesses = ns.resources.weaknesses
 local FEATS = feats.FEATS
 local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
 local TRAITS = traits.TRAITS
+local TURN_TYPES = constants.TURN_TYPES
 local WEAKNESSES = weaknesses.WEAKNESSES
 
 local NUM_SPIRIT_PER_GREATER_HEAL_SLOT = 2
@@ -123,8 +125,8 @@ local function calculateNumPlayersHealableWithParagon()
     return max(1, playersHealable)
 end
 
-local function shouldShowPreRollUI()
-    return character.hasTrait(TRAITS.FOCUS)
+local function shouldShowPreRollUI(turnTypeID)
+    return rules.other.shouldShowPreRollUI() or (turnTypeID == TURN_TYPES.PLAYER.id and character.hasTrait(TRAITS.FOCUS))
 end
 
 rules.healing = {

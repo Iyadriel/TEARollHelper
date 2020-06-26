@@ -18,14 +18,15 @@ local state = rolls.state
 } ]]
 ui.modules.actions.modules.utility.getOptions = function(options)
     local shouldShowPlayerTurnOptions = options.turnTypeID == TURN_TYPES.PLAYER.id
-    local sharedOptions
+    local preRoll
 
     if shouldShowPlayerTurnOptions then
-        sharedOptions = ui.modules.actions.modules.playerTurn.getSharedOptions({
+        preRoll = ui.modules.turn.modules.roll.getPreRollOptions({
             order = 0,
             hidden = function()
                 return not rules.utility.shouldShowPreRollUI()
             end,
+            args = ui.modules.actions.modules.playerTurn.getSharedPreRollOptions({ order = 0 }),
         })
     end
 
@@ -34,7 +35,7 @@ ui.modules.actions.modules.utility.getOptions = function(options)
         name = ACTION_LABELS.utility,
         order = options.order,
         args = {
-            preRoll = shouldShowPlayerTurnOptions and sharedOptions.preRoll or nil,
+            preRoll = shouldShowPlayerTurnOptions and preRoll or nil,
             roll = ui.modules.turn.modules.roll.getOptions({ order = 1, action = ACTIONS.utility }),
             utility = {
                 order = 2,

@@ -15,6 +15,7 @@ local turnState = turn.state
 local state = characterState.state
 
 ui.modules.actions.modules = {
+    anyTurn = {},
     playerTurn = {},
 
     attack = {},

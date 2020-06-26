@@ -2,8 +2,10 @@ local _, ns = ...
 
 local character = ns.character
 local rules = ns.rules
+local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
 
+local TRAITS = traits.TRAITS
 local WEAKNESSES = weaknesses.WEAKNESSES
 
 local function calculateOffenceStat(offence, buff)
@@ -44,6 +46,10 @@ local function calculateHealingReceived(incomingHealAmount, currentHealth, maxHe
     }
 end
 
+local function shouldShowPreRollUI()
+    return character.hasTrait(TRAITS.VERSATILE)
+end
+
 -- For use by other rule modules
 rules.common = {
     calculateOffenceStat = calculateOffenceStat,
@@ -54,4 +60,5 @@ rules.common = {
 rules.other = {
     canUseFeats = canUseFeats,
     calculateHealingReceived = calculateHealingReceived,
+    shouldShowPreRollUI = shouldShowPreRollUI,
 }
