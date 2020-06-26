@@ -120,7 +120,7 @@ feats.FEATS = {
     WARDER = {
         id = "WARDER",
         name = "Warder",
-        desc = "The base amount of damage reduced on a failed Ranged Save is increased to 4 up from 2.",
+        desc = "You have advantage on all ranged saves.",
         supported = true
     },
 }

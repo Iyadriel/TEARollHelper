@@ -6,6 +6,8 @@ local rules = ns.rules
 
 local FEATS = feats.FEATS
 
+local BASE_DAMAGE_REDUCTION = 2
+
 local function calculateRangedSaveValue(roll, spirit, buff)
     return roll + rules.common.calculateSpiritStat(spirit, buff)
 end
@@ -15,12 +17,21 @@ local function canFullyProtect(threshold, saveValue)
 end
 
 local function calculateDamageReduction(spirit)
-    local baseReduction = character.hasFeat(FEATS.WARDER) and 4 or 2
-    return baseReduction + max(0, floor(spirit / 2))
+    return BASE_DAMAGE_REDUCTION + max(0, floor(spirit / 2))
 end
 
 local function shouldShowPreRollUI()
     return rules.other.shouldShowPreRollUI()
+end
+
+local function getRollModeModifier()
+    local modifier = 0
+
+    if character.hasFeat(FEATS.WARDER) then
+        modifier = modifier + 1
+    end
+
+    return modifier
 end
 
 rules.rangedSave = {
@@ -29,4 +40,5 @@ rules.rangedSave = {
     calculateDamageReduction = calculateDamageReduction,
 
     shouldShowPreRollUI = shouldShowPreRollUI,
+    getRollModeModifier = getRollModeModifier,
 }
