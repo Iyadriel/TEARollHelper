@@ -31,7 +31,7 @@ ui.modules.actions.modules.healing.getOptions = function(options)
     local preRollArgs = ui.modules.actions.modules.anyTurn.getSharedPreRollOptions({ order = 1 })
 
     if shouldShowPlayerTurnOptions then
-        preRollArgs = utils.merge(preRollArgs, ui.modules.actions.modules.playerTurn.getSharedPreRollOptions({ order = 1 }))
+        preRollArgs = utils.merge(preRollArgs, ui.modules.actions.modules.playerTurn.getSharedPreRollOptions({ order = 0 }))
     end
 
     return {

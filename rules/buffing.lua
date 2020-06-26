@@ -3,11 +3,9 @@ local _, ns = ...
 local character = ns.character
 local feats = ns.resources.feats
 local rules = ns.rules
-local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
 
 local FEATS = feats.FEATS
-local TRAITS = traits.TRAITS
 local WEAKNESSES = weaknesses.WEAKNESSES
 
 local function canBuff()
@@ -51,7 +49,7 @@ local function isCrit(roll)
 end
 
 local function shouldShowPreRollUI()
-    return character.hasTrait(TRAITS.FOCUS) or rules.other.shouldShowPreRollUI()
+    return rules.playerTurn.shouldShowPreRollUI() or rules.other.shouldShowPreRollUI()
 end
 
 rules.buffing = {

@@ -34,6 +34,7 @@ rules.lua
 rules/rolls.lua
 rules/stats.lua
 rules/environment.lua
+rules/playerTurn.lua
 rules/offence.lua
 rules/defence.lua
 rules/healing.lua

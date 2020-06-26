@@ -1,13 +1,13 @@
 local _, ns = ...
 
 local character = ns.character
+local constants = ns.constants
 local feats = ns.resources.feats
 local rules = ns.rules
-local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
 
 local FEATS = feats.FEATS
-local TRAITS = traits.TRAITS
+local TURN_TYPES = constants.TURN_TYPES
 local WEAKNESSES = weaknesses.WEAKNESSES
 
 local function canUseUtilityTraits()
@@ -23,8 +23,8 @@ local function calculateUtilityValue(roll, useUtilityTrait)
     return value
 end
 
-local function shouldShowPreRollUI()
-    return character.hasTrait(TRAITS.FOCUS) or rules.other.shouldShowPreRollUI()
+local function shouldShowPreRollUI(turnTypeID)
+    return rules.other.shouldShowPreRollUI() or (turnTypeID == TURN_TYPES.PLAYER.id and rules.playerTurn.shouldShowPreRollUI())
 end
 
 rules.utility = {

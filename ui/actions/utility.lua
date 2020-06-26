@@ -5,6 +5,7 @@ local constants = ns.constants
 local rolls = ns.state.rolls
 local rules = ns.rules
 local ui = ns.ui
+local utils = ns.utils
 
 local ACTIONS = constants.ACTIONS
 local ACTION_LABELS = constants.ACTION_LABELS
@@ -18,16 +19,10 @@ local state = rolls.state
 } ]]
 ui.modules.actions.modules.utility.getOptions = function(options)
     local shouldShowPlayerTurnOptions = options.turnTypeID == TURN_TYPES.PLAYER.id
-    local preRoll
+    local preRollArgs = ui.modules.actions.modules.anyTurn.getSharedPreRollOptions({ order = 1 })
 
     if shouldShowPlayerTurnOptions then
-        preRoll = ui.modules.turn.modules.roll.getPreRollOptions({
-            order = 0,
-            hidden = function()
-                return not rules.utility.shouldShowPreRollUI()
-            end,
-            args = ui.modules.actions.modules.playerTurn.getSharedPreRollOptions({ order = 0 }),
-        })
+        preRollArgs = utils.merge(preRollArgs, ui.modules.actions.modules.playerTurn.getSharedPreRollOptions({ order = 0 }))
     end
 
     return {
@@ -35,7 +30,13 @@ ui.modules.actions.modules.utility.getOptions = function(options)
         name = ACTION_LABELS.utility,
         order = options.order,
         args = {
-            preRoll = shouldShowPlayerTurnOptions and preRoll or nil,
+            preRoll = ui.modules.turn.modules.roll.getPreRollOptions({
+                order = 0,
+                hidden = function()
+                    return not rules.utility.shouldShowPreRollUI(options.turnTypeID)
+                end,
+                args = preRollArgs,
+            }),
             roll = ui.modules.turn.modules.roll.getOptions({ order = 1, action = ACTIONS.utility }),
             utility = {
                 order = 2,
