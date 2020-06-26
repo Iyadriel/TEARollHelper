@@ -32,7 +32,7 @@ ui.modules.actions.modules.anyTurn.getSharedPreRollOptions = function(options)
                     order = 0,
                     type = "select",
                     name = "Source stat",
-                    width = 0.6,
+                    width = 0.55,
                     values = constants.STAT_LABELS,
                     sorting = constants.STATS_SORTED,
                     get = state.shared.versatile.stat1.get,
@@ -44,7 +44,7 @@ ui.modules.actions.modules.anyTurn.getSharedPreRollOptions = function(options)
                     order = 1,
                     type = "select",
                     name = "Transfer to",
-                    width = 0.6,
+                    width = 0.55,
                     values = constants.STAT_LABELS,
                     sorting = constants.STATS_SORTED,
                     get = state.shared.versatile.stat2.get,
@@ -64,6 +64,14 @@ ui.modules.actions.modules.anyTurn.getSharedPreRollOptions = function(options)
                     func = consequences.useVersatile
                 }
             },
+        },
+        versatileActive = {
+            order = options.order,
+            type = "description",
+            name = COLOURS.TRAITS.GENERIC .. TRAITS.VERSATILE.name .. " is active.",
+            hidden = function()
+                return not (character.hasTrait(TRAITS.VERSATILE) and characterState.buffLookup.getTraitBuffs(TRAITS.VERSATILE))
+            end,
         },
     }
 end
