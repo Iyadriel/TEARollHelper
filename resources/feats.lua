@@ -11,7 +11,7 @@ feats.FEATS = {
     ADRENALINE = {
         id = "ADRENALINE",
         name = "Adrenaline",
-        desc = "Beating the threshold by 4 or more with an offence attack roll yields bonus damage equal to half of your Offence stat rounded up.",
+        desc = "Beating the threshold by 6 or more with an Offense attack roll lets you perform a second attack against the same target. Cannot trigger more than once per player turn.",
         supported = true
     },
     BLOOD_HARVEST = {

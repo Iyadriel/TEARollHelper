@@ -135,14 +135,14 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                                     msg = msg .. COLOURS.CRITICAL .. "CRITICAL HIT!|r "
                                 end
 
-                                if attack.hasAdrenalineProc then
-                                    msg = msg .. COLOURS.FEATS.ADRENALINE .. "ADRENALINE!|r "
-                                end
-
                                 if attack.isCrit and attack.critType == rules.offence.CRIT_TYPES.REAPER then
                                     msg = msg .. COLOURS.FEATS.REAPER .. "TIME TO REAP!|r You can deal " .. tostring(attack.dmg) .. " damage to all enemies in melee range of you or your target!"
                                 else
                                     msg = msg .. "You can deal " .. tostring(attack.dmg) .. " damage" .. (excited and "!" or ".")
+                                end
+
+                                if attack.hasAdrenalineProc then
+                                    msg = msg .. COLOURS.FEATS.ADRENALINE .. "|nADRENALINE! You can attack the same target a second time.|r "
                                 end
 
                                 if attack.hasEntropicEmbraceProc then

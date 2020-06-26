@@ -95,15 +95,7 @@ local function canProcAdrenaline()
 end
 
 local function hasAdrenalineProc(threshold, attackValue)
-    return attackValue >= threshold + 4
-end
-
-local function calculateAdrenalineProcDmg(offence)
-    return ceil(offence / 2)
-end
-
-local function applyAdrenalineProcModifier(dmg, offence)
-    return dmg + calculateAdrenalineProcDmg(offence)
+    return attackValue >= threshold + 6
 end
 
 -- Feat: Blood Harvest
@@ -184,7 +176,6 @@ rules.offence = {
 
     canProcAdrenaline = canProcAdrenaline,
     hasAdrenalineProc = hasAdrenalineProc,
-    applyAdrenalineProcModifier = applyAdrenalineProcModifier,
 
     canUseBloodHarvest = canUseBloodHarvest,
     getMaxBloodHarvestSlots = getMaxBloodHarvestSlots,

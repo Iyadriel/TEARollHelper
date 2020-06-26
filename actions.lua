@@ -28,9 +28,6 @@ local function getAttack(roll, preppedRoll, threshold, offence, buff, numBloodHa
 
     if rules.offence.canProcAdrenaline() then
         hasAdrenalineProc = rules.offence.hasAdrenalineProc(threshold, attackValue)
-        if hasAdrenalineProc then
-            dmg = rules.offence.applyAdrenalineProcModifier(dmg, offence)
-        end
     end
 
     if rules.offence.canUseBloodHarvest() then
