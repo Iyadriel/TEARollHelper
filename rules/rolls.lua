@@ -56,6 +56,8 @@ local function getRollModeModifier(action, advantageBuff, disadvantageDebuff, en
 
     if action == ACTIONS.attack then
         modifier = modifier + rules.offence.getRollModeModifier(enemyId)
+    elseif action == ACTIONS.meleeSave then
+        modifier = modifier + rules.meleeSave.getRollModeModifier()
     end
 
     return modifier

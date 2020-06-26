@@ -102,7 +102,7 @@ feats.FEATS = {
     PHALANX = {
         id = "PHALANX",
         name = "Phalanx",
-        desc = "The threshold for taking double damage on a failed Melee Save is increased to 8 below target threshold, up from 5 below target threshold.",
+        desc = "You have advantage on all melee saves.",
         supported = true
     },
     PROFESSIONAL = {

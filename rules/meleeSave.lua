@@ -6,6 +6,8 @@ local rules = ns.rules
 
 local FEATS = feats.FEATS
 
+local BIG_FAIL_TREHSHOLD = 5
+
 local function calculateMeleeSaveValue(roll, defence, buff)
     local value = roll
     if not character.hasFeat(FEATS.COUNTER_FORCE) then
@@ -27,8 +29,7 @@ local function calculateCounterForceProcDmg(defence)
 end
 
 local function isSaveBigFail(defendValue, threshold)
-    local failThreshold = character.hasFeat(FEATS.PHALANX) and 8 or 5
-    return (defendValue + failThreshold) <= threshold
+    return (defendValue + BIG_FAIL_TREHSHOLD) <= threshold
 end
 
 local function applyBigFailModifier(damageTaken)
@@ -37,6 +38,16 @@ end
 
 local function shouldShowPreRollUI()
     return rules.other.shouldShowPreRollUI()
+end
+
+local function getRollModeModifier()
+    local modifier = 0
+
+    if character.hasFeat(FEATS.PHALANX) then
+        modifier = modifier + 1
+    end
+
+    return modifier
 end
 
 rules.meleeSave = {
@@ -49,5 +60,6 @@ rules.meleeSave = {
     isSaveBigFail = isSaveBigFail,
     applyBigFailModifier = applyBigFailModifier,
 
-    shouldShowPreRollUI = shouldShowPreRollUI
+    shouldShowPreRollUI = shouldShowPreRollUI,
+    getRollModeModifier = getRollModeModifier,
 }
