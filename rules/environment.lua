@@ -7,7 +7,9 @@ local weaknesses = ns.resources.weaknesses
 local WEAKNESSES = weaknesses.WEAKNESSES
 
 local function shouldShowEnemySelect()
-    return character.getPlayerFeat().advantageAgainstEnemies or character.getPlayerRacialTrait().buffAgainstEnemies
+    return character.getPlayerFeat().advantageAgainstEnemies
+        or character.getPlayerRacialTrait().buffAgainstEnemies
+        or character.hasWeakness(WEAKNESSES.WOE_UPON_THE_AFFLICTED)
 end
 
 local function shouldShowZoneSelect()

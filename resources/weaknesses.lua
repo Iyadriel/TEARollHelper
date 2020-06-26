@@ -6,7 +6,7 @@ local weaknesses = ns.resources.weaknesses
 local BUFF_TYPES = constants.BUFF_TYPES
 local TURN_TYPES = constants.TURN_TYPES
 
-weaknesses.WEAKNESS_KEYS = {"BRUTE", "CORRUPTED", "FATELESS", "FEATLESS", "FRAGILE", "OUTCAST", "OVERFLOW", "REBOUND", "TEMPERED_BENEVOLENCE", "TEMPO", "TIMID"}
+weaknesses.WEAKNESS_KEYS = {"BRUTE", "CORRUPTED", "FATELESS", "FEATLESS", "FRAGILE", "OUTCAST", "OVERFLOW", "REBOUND", "TEMPERED_BENEVOLENCE", "TEMPO", "TIMID", "WOE_UPON_THE_AFFLICTED"}
 
 weaknesses.WEAKNESSES = {
     BRUTE = {
@@ -106,5 +106,17 @@ weaknesses.WEAKNESSES = {
             },
             canCancel = false,
         }
+    },
+    WOE_UPON_THE_AFFLICTED = {
+        id = "WOE_UPON_THE_AFFLICTED",
+        name = "Woe Upon The Afflicted",
+        desc = "You take 4 additional damage from creatures and magical sources of the following types - undead, demon, void, eldritch.",
+        weakAgainstEnemies = {
+            DEMON = true,
+            ELDRITCH = true,
+            UNDEAD = true,
+            VOID = true,
+        },
+        supported = true,
     },
 }

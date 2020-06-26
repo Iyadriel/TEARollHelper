@@ -33,6 +33,7 @@ launchers.lua
 rules.lua
 rules/rolls.lua
 rules/stats.lua
+rules/effects.lua
 rules/environment.lua
 rules/playerTurn.lua
 rules/offence.lua

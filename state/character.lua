@@ -116,6 +116,7 @@ characterState.state = {
             end
         end,
         damage = function(dmgTaken)
+            dmgTaken = rules.effects.calculateDamageTaken(dmgTaken)
             if dmgTaken <= 0 then return end
 
             state.health = state.health - dmgTaken
@@ -123,7 +124,7 @@ characterState.state = {
             bus.fire(EVENTS.DAMAGE_TAKEN, dmgTaken)
         end,
         heal = function(incomingHealAmount)
-            local heal = ns.rules.other.calculateHealingReceived(incomingHealAmount, state.health, state.maxHealth)
+            local heal = rules.effects.calculateHealingReceived(incomingHealAmount, state.health, state.maxHealth)
 
             characterState.state.health.set(state.health + heal.netAmountHealed)
 
