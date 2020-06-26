@@ -58,7 +58,8 @@ ui.modules.actions.modules.anyTurn.getSharedPreRollOptions = function(options)
                     name = "Transfer",
                     width = 0.65,
                     disabled = function()
-                        return characterState.featsAndTraits.numTraitCharges.get(TRAITS.VERSATILE.id) == 0
+                        local statsDiffer = state.shared.versatile.stat1.get() ~= state.shared.versatile.stat2.get()
+                        return not statsDiffer or characterState.featsAndTraits.numTraitCharges.get(TRAITS.VERSATILE.id) == 0
                     end,
                     func = consequences.useVersatile
                 }
