@@ -122,6 +122,10 @@ local function addHoTBuff(label, icon, healingPerTick, remainingTurns)
         label = "Healing"
     end
 
+    if type(remainingTurns) == "table" then
+        remainingTurns = shallowCopy(remainingTurns)
+    end
+
     addBuff({
         id = "HoT_" .. label,
         types = { [BUFF_TYPES.HEALING_OVER_TIME] = true },
@@ -132,7 +136,7 @@ local function addHoTBuff(label, icon, healingPerTick, remainingTurns)
 
         source = BUFF_SOURCES.OTHER_PLAYER,
 
-        remainingTurns = shallowCopy(remainingTurns),
+        remainingTurns = remainingTurns,
     })
 end
 

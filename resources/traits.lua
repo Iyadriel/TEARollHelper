@@ -114,16 +114,14 @@ traits.TRAITS = {
     NOURISH = {
         id = "NOURISH",
         name = "Nourish",
-        desc = "Activate to have your Healing roll heal half of its total result rounded up every player turn for the duration of four player turns. Can be used thrice per event. Activate after rolling.",
+        desc = "Activate to have your Healing roll replicate half of its healing amount rounded up for the next enemy turn, and the following player turn in addition to the full healing on the current player turn. Can be used thrice per event. Activate after rolling.",
         icon = "Interface\\Icons\\ability_druid_nourish",
         supported = true,
         numCharges = 3,
         buffs = {
             {
                 type = BUFF_TYPES.HEALING_OVER_TIME,
-                remainingTurns = {
-                    [TURN_TYPES.PLAYER.id] = 4,
-                },
+                remainingTurns = 2,
             },
         },
     },
