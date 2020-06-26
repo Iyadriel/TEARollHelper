@@ -66,7 +66,7 @@ feats.FEATS = {
     MENDER = {
         id = "MENDER",
         name = "Mender",
-        desc = "Gain 1 additional Greater Heal Slot.",
+        desc = "Gain 2 additional Greater Heal Slots.",
         supported = true
     },
     MERCY_FROM_PAIN = {

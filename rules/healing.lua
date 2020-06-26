@@ -75,7 +75,7 @@ local function getMaxGreaterHealSlots()
     end
 
     if character.hasFeat(FEATS.MENDER) then
-        numSlots = numSlots + 1
+        numSlots = numSlots + 2
     end
 
     return numSlots
