@@ -38,6 +38,12 @@ bus.addListener(EVENTS.FATE_POINT_USED, function()
     TEARollHelper:Print("Using Fate Point.")
 end)
 
+bus.addListener(EVENTS.TRAIT_ACTIVATED, function(traitID)
+    TEARollHelper:Print("Activated trait:", TRAITS[traitID].name)
+end)
+
+-- [[ Buffs ]]
+
 bus.addListener(EVENTS.STAT_BUFF_ADDED, function(stat, amount)
     TEARollHelper:Print("Your " .. constants.STAT_LABELS[stat] .. " stat has been buffed by " .. amount .. ".")
 end)
@@ -46,12 +52,12 @@ bus.addListener(EVENTS.BUFF_STACK_ADDED, function(buff)
     TEARollHelper:Print("Added a stack to buff: " .. buff.label .. ". (" .. buff.stacks .. ")")
 end)
 
-bus.addListener(EVENTS.TRAIT_ACTIVATED, function(traitID)
-    TEARollHelper:Print("Activated trait:", TRAITS[traitID].name)
-end)
-
 bus.addListener(EVENTS.WEAKNESS_DEBUFF_ADDED, function(weaknessID)
     TEARollHelper:Print("Added debuff:", WEAKNESSES[weaknessID].name)
+end)
+
+bus.addListener(EVENTS.HEALING_OVER_TIME_BUFF_ADDED, function(label)
+    TEARollHelper:Print("Added healing over time effect:", label)
 end)
 
 bus.addListener(EVENTS.BUFF_EXPIRED, function(label)

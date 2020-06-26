@@ -38,6 +38,7 @@ local EVENTS = {
     STAT_BUFF_ADDED = "STAT_BUFF_ADDED", -- stat, amount
     BUFF_STACK_ADDED = "BUFF_STACK_ADDED", -- buff
     WEAKNESS_DEBUFF_ADDED = "WEAKNESS_DEBUFF_ADDED", -- weaknessID
+    HEALING_OVER_TIME_BUFF_ADDED = "HEALING_OVER_TIME_BUFF_ADDED", -- label
 
     -- Rolling
     ROLL_CHANGED = "ROLL_CHANGED", -- action, roll

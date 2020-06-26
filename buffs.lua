@@ -138,6 +138,8 @@ local function addHoTBuff(label, icon, healingPerTick, remainingTurns)
 
         remainingTurns = remainingTurns,
     })
+
+    bus.fire(EVENTS.HEALING_OVER_TIME_BUFF_ADDED, label)
 end
 
 local function addTraitBuff(trait, providedStats)
