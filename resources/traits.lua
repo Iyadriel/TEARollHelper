@@ -7,7 +7,7 @@ local ACTIONS = constants.ACTIONS
 local BUFF_TYPES = constants.BUFF_TYPES
 local TURN_TYPES = constants.TURN_TYPES
 
-traits.TRAIT_KEYS = {"OTHER", "BULWARK", "CALAMITY_GAMBIT", "FOCUS", "LIFE_PULSE", "LIFE_WITHIN", "NOURISH", "SECOND_WIND", "VERSATILE", "VINDICATION"}
+traits.TRAIT_KEYS = {"OTHER", "BULWARK", "CALAMITY_GAMBIT", "FOCUS", "LIFE_PULSE", "LIFE_WITHIN", "FAELUNES_REGROWTH", "SECOND_WIND", "VERSATILE", "VINDICATION"}
 
 traits.TRAITS = {
     OTHER = {
@@ -111,9 +111,9 @@ traits.TRAITS = {
         supported = true,
         numCharges = 1,
     },
-    NOURISH = {
-        id = "NOURISH",
-        name = "Nourish",
+    FAELUNES_REGROWTH = {
+        id = "FAELUNES_REGROWTH",
+        name = "Faelune's Regrowth",
         desc = "Activate to have your Healing roll replicate half of its healing amount rounded up for the next enemy turn, and the following player turn in addition to the full healing on the current player turn. Can be used thrice per event. Activate after rolling.",
         icon = "Interface\\Icons\\ability_druid_nourish",
         supported = true,

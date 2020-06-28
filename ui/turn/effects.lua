@@ -22,7 +22,7 @@ local addCorruptedDebuff = false -- TODO reset when weakness is removed (move to
     order: Number
 } ]]
 ui.modules.turn.modules.effects.getOptions = function(options)
-    local NOURISH = TRAITS.NOURISH
+    local FAELUNES_REGROWTH = TRAITS.FAELUNES_REGROWTH
 
     return {
         order = options.order,
@@ -117,10 +117,10 @@ ui.modules.turn.modules.effects.getOptions = function(options)
                             }
                         },
                     },
-                    nourish = {
+                    faelunesRegrowth = {
                         order = 1,
                         type = "group",
-                        name = COLOURS.TRAITS.GENERIC .. NOURISH.name,
+                        name = COLOURS.TRAITS.GENERIC .. FAELUNES_REGROWTH.name,
                         inline = true,
                         args = {
                             healingPerTick = {
@@ -139,13 +139,13 @@ ui.modules.turn.modules.effects.getOptions = function(options)
                                     healingPerTick = value
                                 end,
                             },
-                            nourish = {
+                            faelunesRegrowth = {
                                 order = 1,
                                 type = "execute",
-                                name = COLOURS.HEALING .. "Apply " .. NOURISH.name,
-                                desc = "Applies the " .. NOURISH.name .. " effect to you.",
+                                name = COLOURS.HEALING .. "Apply " .. FAELUNES_REGROWTH.name,
+                                desc = "Applies the " .. FAELUNES_REGROWTH.name .. " effect to you.",
                                 func = function()
-                                    buffs.addHoTBuff(NOURISH.name, NOURISH.icon, healingPerTick, NOURISH.buffs[1].remainingTurns)
+                                    buffs.addHoTBuff(FAELUNES_REGROWTH.name, FAELUNES_REGROWTH.icon, healingPerTick, FAELUNES_REGROWTH.buffs[1].remainingTurns)
                                 end,
                             }
                         },
