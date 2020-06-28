@@ -15,7 +15,7 @@ local WEAKNESSES = weaknesses.WEAKNESSES
 local damageAmount = 1
 
 local healAmount = 1
-local healingPerTick = 1
+local regrowthHealing = 1
 local addCorruptedDebuff = false -- TODO reset when weakness is removed (move to state)
 
 --[[ local options = {
@@ -123,20 +123,20 @@ ui.modules.turn.modules.effects.getOptions = function(options)
                         name = COLOURS.TRAITS.GENERIC .. FAELUNES_REGROWTH.name,
                         inline = true,
                         args = {
-                            healingPerTick = {
+                            regrowthHealing = {
                                 order = 0,
                                 type = "range",
-                                name = "Healing per tick",
-                                desc = "The amount you are healed for at the start of every applicable turn.",
+                                name = "Initial heal amount",
+                                desc = "The amount you are healed for immediately. You will also be healed for half of this amount for the next two turns.",
                                 min = 1,
                                 softMax = 30,
                                 max = 50,
                                 step = 1,
                                 get = function()
-                                    return healingPerTick
+                                    return regrowthHealing
                                 end,
                                 set = function(info, value)
-                                    healingPerTick = value
+                                    regrowthHealing = value
                                 end,
                             },
                             faelunesRegrowth = {
@@ -145,6 +145,8 @@ ui.modules.turn.modules.effects.getOptions = function(options)
                                 name = COLOURS.HEALING .. "Apply " .. FAELUNES_REGROWTH.name,
                                 desc = "Applies the " .. FAELUNES_REGROWTH.name .. " effect to you.",
                                 func = function()
+                                    characterState.state.health.heal(regrowthHealing)
+                                    local healingPerTick = ceil(regrowthHealing / 2)
                                     buffs.addHoTBuff(FAELUNES_REGROWTH.name, FAELUNES_REGROWTH.icon, healingPerTick, FAELUNES_REGROWTH.buffs[1].remainingTurns)
                                 end,
                             }
