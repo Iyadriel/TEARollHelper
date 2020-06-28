@@ -11,7 +11,7 @@ feats.FEATS = {
     ADRENALINE = {
         id = "ADRENALINE",
         name = "Adrenaline",
-        desc = "Beating the threshold by 6 or more with an Offense attack roll lets you perform a second attack against the same target. Cannot trigger more than once per player turn.",
+        desc = "Beating the threshold by 6 or more with an Offence attack roll lets you perform a second attack against the same target. Cannot trigger more than once per player turn.",
         supported = true
     },
     BLOOD_HARVEST = {
@@ -102,7 +102,7 @@ feats.FEATS = {
     PHALANX = {
         id = "PHALANX",
         name = "Phalanx",
-        desc = "You have advantage on all melee saves.",
+        desc = "You now have advantage on Melee save rolls.",
         supported = true
     },
     PROFESSIONAL = {
@@ -120,7 +120,7 @@ feats.FEATS = {
     WARDER = {
         id = "WARDER",
         name = "Warder",
-        desc = "You have advantage on all ranged saves.",
+        desc = "You now have advantage on Ranged save rolls.",
         supported = true
     },
 }
