@@ -1,10 +1,12 @@
 local _, ns = ...
 
 local character = ns.character
+local constants = ns.constants
 local environment = ns.state.environment
 local rules = ns.rules
 local weaknesses = ns.resources.weaknesses
 
+local INCOMING_HEAL_SOURCES = constants.INCOMING_HEAL_SOURCES
 local WEAKNESSES = weaknesses.WEAKNESSES
 
 local function calculateDamageTaken(incomingDamage)
@@ -22,9 +24,10 @@ local function applyCorruptionModifier(healAmount)
     return floor(healAmount / 2)
 end
 
-local function calculateHealingReceived(incomingHealAmount, currentHealth, maxHealth)
+local function calculateHealingReceived(incomingHealAmount, source, currentHealth, maxHealth)
     local amountHealed
-    if character.hasWeakness(WEAKNESSES.CORRUPTED) then
+
+    if character.hasWeakness(WEAKNESSES.CORRUPTED) and source ~= INCOMING_HEAL_SOURCES.SELF then
         amountHealed = applyCorruptionModifier(incomingHealAmount)
     else
         amountHealed = incomingHealAmount

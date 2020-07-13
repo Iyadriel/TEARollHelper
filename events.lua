@@ -11,6 +11,7 @@ local weaknesses = ns.resources.weaknesses
 
 local BUFF_TYPES = constants.BUFF_TYPES
 local EVENTS = bus.EVENTS
+local INCOMING_HEAL_SOURCES = constants.INCOMING_HEAL_SOURCES
 local TRAITS = traits.TRAITS
 local TURN_TYPES = constants.TURN_TYPES
 local WEAKNESSES = weaknesses.WEAKNESSES
@@ -112,7 +113,7 @@ end
 
 local function applyHealTick(buff)
     if buff.types[BUFF_TYPES.HEALING_OVER_TIME] then
-        characterState.state.health.heal(buff.healingPerTick)
+        characterState.state.health.heal(buff.healingPerTick, INCOMING_HEAL_SOURCES.OTHER_PLAYER)
     end
 end
 

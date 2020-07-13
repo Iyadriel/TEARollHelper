@@ -5,12 +5,14 @@ local bus = ns.bus
 local character = ns.character
 local characterState = ns.state.character
 local consequences = ns.consequences
+local constants = ns.constants
 local rollState = ns.state.rolls.state
 local rules = ns.rules
 local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
 
 local EVENTS = bus.EVENTS
+local INCOMING_HEAL_SOURCES = constants.INCOMING_HEAL_SOURCES
 local TRAITS = traits.TRAITS
 local WEAKNESSES = weaknesses.WEAKNESSES
 
@@ -48,12 +50,12 @@ end
 
 local function useLifeWithin()
     buffs.addTraitBuff(TRAITS.LIFE_WITHIN)
-    state.health.heal(rules.traits.LIFE_WITHIN_HEAL_AMOUNT)
+    state.health.heal(rules.traits.LIFE_WITHIN_HEAL_AMOUNT, INCOMING_HEAL_SOURCES.SELF)
     useTraitCharge(TRAITS.LIFE_WITHIN)
 end
 
 local function useSecondWind()
-    state.health.heal(rules.traits.SECOND_WIND_HEAL_AMOUNT)
+    state.health.heal(rules.traits.SECOND_WIND_HEAL_AMOUNT, INCOMING_HEAL_SOURCES.SELF)
     useTraitCharge(TRAITS.SECOND_WIND)
 end
 

@@ -5,10 +5,12 @@ local COLOURS = TEARollHelper.COLOURS
 local buffs = ns.buffs
 local character = ns.character
 local characterState = ns.state.character
+local constants = ns.constants
 local traits = ns.resources.traits
 local ui = ns.ui
 local weaknesses = ns.resources.weaknesses
 
+local INCOMING_HEAL_SOURCES = constants.INCOMING_HEAL_SOURCES
 local TRAITS = traits.TRAITS
 local WEAKNESSES = weaknesses.WEAKNESSES
 
@@ -94,7 +96,7 @@ ui.modules.turn.modules.effects.getOptions = function(options)
                                 name = COLOURS.HEALING .. "Apply heal",
                                 desc = "Get healed for the specified incoming heal amount.",
                                 func = function()
-                                    characterState.state.health.heal(healAmount)
+                                    characterState.state.health.heal(healAmount, INCOMING_HEAL_SOURCES.OTHER_PLAYER)
                                     if addCorruptedDebuff then
                                         buffs.addWeaknessDebuff(WEAKNESSES.CORRUPTED, true)
                                     end
@@ -145,7 +147,7 @@ ui.modules.turn.modules.effects.getOptions = function(options)
                                 name = COLOURS.HEALING .. "Apply " .. FAELUNES_REGROWTH.name,
                                 desc = "Applies the " .. FAELUNES_REGROWTH.name .. " effect to you.",
                                 func = function()
-                                    characterState.state.health.heal(regrowthHealing)
+                                    characterState.state.health.heal(regrowthHealing, INCOMING_HEAL_SOURCES.OTHER_PLAYER)
                                     local healingPerTick = ceil(regrowthHealing / 2)
                                     buffs.addHoTBuff(FAELUNES_REGROWTH.name, FAELUNES_REGROWTH.icon, healingPerTick, FAELUNES_REGROWTH.buffs[1].remainingTurns)
                                 end,
