@@ -85,11 +85,24 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                             max = characterState.healing.numGreaterHealSlots.get
                         })
                     },
+                    targetIsKO = {
+                        order = 2,
+                        type = "toggle",
+                        name = "Target is unconscious",
+                        desc = COLOURS.MASTERY .. "Your Spirit mastery increases healing done to KO'd targets by +3.",
+                        hidden = function()
+                            return not rules.healing.canUseTargetKOBonus()
+                        end,
+                        get = state.healing.targetIsKO.get,
+                        set = function(info, value)
+                            state.healing.targetIsKO.set(value)
+                        end,
+                    },
                     mercyFromPain = {
                         name = COLOURS.FEATS.MERCY_FROM_PAIN .. FEATS.MERCY_FROM_PAIN.name,
                         type = "select",
                         desc = FEATS.MERCY_FROM_PAIN.desc,
-                        order = 2,
+                        order = 3,
                         values = {
                             [0] = "Inactive",
                             [rules.offence.calculateMercyFromPainBonusHealing(false)] = "Single enemy damaged",
@@ -107,7 +120,7 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                         name = COLOURS.TRAITS.GENERIC .. TRAITS.LIFE_PULSE.name,
                         type = "toggle",
                         desc = TRAITS.LIFE_PULSE.desc,
-                        order = 3,
+                        order = 4,
                         hidden = function()
                             return not character.hasTrait(TRAITS.LIFE_PULSE)
                         end,
@@ -123,7 +136,7 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                         type = "description",
                         desc = "How much you can heal for",
                         fontSize = "medium",
-                        order = 4,
+                        order = 5,
                         name = function()
                             local healing = rolls.getHealing(options.outOfCombat)
                             local msg = rules.healing.getMaxGreaterHealSlots() > 0 and " |n" or "" -- Only show spacing if greater heals are shown. Dirty hack
@@ -153,7 +166,7 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                         end
                     },
                     outOfCombatNote = {
-                        order = 5,
+                        order = 6,
                         type = "description",
                         name = function()
                             local msg = COLOURS.NOTE .. " |nOut of combat, you can perform "

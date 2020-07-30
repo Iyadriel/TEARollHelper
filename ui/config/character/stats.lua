@@ -81,7 +81,7 @@ ui.modules.config.modules.character.modules.stats.getOptions = function(options)
                     end
                     return label
                 end,
-                desc = "Mastery bonus: +1 Greater Heal slot",
+                desc = "Mastery bonus: +1 Greater Heal slot. Increases healing done to KO'd targets by +3.",
                 min = STAT_MIN_VALUE,
                 max = STAT_MAX_VALUE,
                 step = 1,

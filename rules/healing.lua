@@ -83,6 +83,14 @@ local function calculateGreaterHealBonus(numGreaterHealSlots)
     return numGreaterHealSlots * 3
 end
 
+local function canUseTargetKOBonus()
+    return character.hasSpiritMastery()
+end
+
+local function getTargetKOBonus()
+    return 3
+end
+
 local function canUseExcess()
     return not character.hasWeakness(WEAKNESSES.OVERFLOW)
 end
@@ -135,6 +143,9 @@ rules.healing = {
     applyCritModifier = applyCritModifier,
     getMaxGreaterHealSlots = getMaxGreaterHealSlots,
     calculateGreaterHealBonus = calculateGreaterHealBonus,
+
+    canUseTargetKOBonus = canUseTargetKOBonus,
+    getTargetKOBonus = getTargetKOBonus,
 
     canUseExcess = canUseExcess,
     getMaxExcess = getMaxExcess,
