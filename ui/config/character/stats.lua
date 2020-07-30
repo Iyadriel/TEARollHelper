@@ -57,7 +57,7 @@ ui.modules.config.modules.character.modules.stats.getOptions = function(options)
                     end
                     return label
                 end,
-                desc = "Mastery bonus: +2 base damage",
+                desc = "Mastery bonus: +2 base damage, increases to +4 on first player turn after being saved by another player",
                 min = STAT_MIN_VALUE,
                 max = STAT_MAX_VALUE,
                 step = 1,
