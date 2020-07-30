@@ -36,6 +36,7 @@ local BUFF_TYPES = {
     ADVANTAGE = 2,
     HEALING_OVER_TIME = 3,
     MAX_HEALTH = 4,
+    BASE_DMG = 5,
 }
 
 local INCOMING_HEAL_SOURCES = {

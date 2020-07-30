@@ -75,6 +75,13 @@ ui.modules.buffs.getOptions = function(options)
                                 end
                             end
                         end
+                        if buff.types[BUFF_TYPES.BASE_DMG] then
+                            if buff.amount > 0 then
+                                msg = msg .. "Base damage increased by " .. buff.amount .. ". "
+                            else
+                                msg = msg .. "Base damage decreased by " .. buff.amount .. ". "
+                            end
+                        end
                         if buff.types[BUFF_TYPES.ADVANTAGE] then
                             msg = msg .. "Your rolls have advantage.|nApplies to: "
                             if buff.turnTypeId then
@@ -142,11 +149,12 @@ ui.modules.buffs.getOptions = function(options)
                         name = "Type",
                         width = 0.55,
                         values = {
-                            stat = "Stat",
+                            [BUFF_TYPES.STAT] = "Stat",
+                            [BUFF_TYPES.BASE_DMG] = "Base dmg",
                             [ROLL_MODES.DISADVANTAGE] = "Disadvantage",
                             [ROLL_MODES.ADVANTAGE] = "Advantage"
                         },
-                        sorting = {"stat", ROLL_MODES.ADVANTAGE, ROLL_MODES.DISADVANTAGE},
+                        sorting = {BUFF_TYPES.STAT, BUFF_TYPES.BASE_DMG, ROLL_MODES.ADVANTAGE, ROLL_MODES.DISADVANTAGE},
                         get = state.newPlayerBuff.type.get,
                         set = function(info, value)
                             state.newPlayerBuff.type.set(value)
@@ -165,7 +173,7 @@ ui.modules.buffs.getOptions = function(options)
                         },
                         sorting = constants.STATS_SORTED,
                         hidden = function()
-                            return state.newPlayerBuff.type.get() ~= "stat"
+                            return state.newPlayerBuff.type.get() ~= BUFF_TYPES.STAT
                         end,
                         get = state.newPlayerBuff.stat.get,
                         set = function(info, value)
@@ -185,7 +193,8 @@ ui.modules.buffs.getOptions = function(options)
                             return true
                         end,
                         hidden = function()
-                            return state.newPlayerBuff.type.get() ~= "stat"
+                            local type = state.newPlayerBuff.type.get()
+                            return type ~= BUFF_TYPES.STAT and type ~= BUFF_TYPES.BASE_DMG
                         end,
                         get = function()
                             return tostring(state.newPlayerBuff.amount.get())
@@ -201,7 +210,8 @@ ui.modules.buffs.getOptions = function(options)
                         width = 0.9,
                         values = ACTION_LABELS,
                         hidden = function()
-                            return state.newPlayerBuff.type.get() == "stat"
+                            local type = state.newPlayerBuff.type.get()
+                            return not (type == BUFF_TYPES.ADVANTAGE or type == BUFF_TYPES.DISADVANTAGE)
                         end,
                         get = state.newPlayerBuff.action.get,
                         set = function(info, value)
@@ -238,10 +248,13 @@ ui.modules.buffs.getOptions = function(options)
                             local buffType = newBuff.type.get()
                             local label = newBuff.label.get()
                             local expireAfterNextTurn = newBuff.expireAfterNextTurn.get()
-                            if buffType == "stat" then
+                            if buffType == BUFF_TYPES.STAT then
                                 local stat = newBuff.stat.get()
                                 local amount = newBuff.amount.get()
                                 buffs.addStatBuff(stat, amount, label, expireAfterNextTurn)
+                            elseif buffType == BUFF_TYPES.BASE_DMG then
+                                local amount = newBuff.amount.get()
+                                buffs.addBaseDmgBuff(amount, label, expireAfterNextTurn)
                             elseif buffType == ROLL_MODES.ADVANTAGE then
                                 local action = newBuff.action.get()
                                 buffs.addAdvantageBuff(action, label, expireAfterNextTurn)

@@ -46,13 +46,15 @@ local function calculateAttackValue(roll, offence, buff)
     return roll + rules.common.calculateOffenceStat(offence, buff)
 end
 
-local function calculateAttackDmg(threshold, attackValue)
+local function calculateAttackDmg(threshold, attackValue, baseDmgBuffAmount)
     local overkill = attackValue - threshold
     if overkill >= 0 then
+        local baseDamage = getBaseDamage() + baseDmgBuffAmount
+
         if character.hasFeat(FEATS.ONSLAUGHT) then
-            return getBaseDamage() + ceil(character.getPlayerOffence() / 2)
+            return baseDamage + ceil(character.getPlayerOffence() / 2)
         end
-        return getBaseDamage() + floor(overkill / 2)
+        return baseDamage + floor(overkill / 2)
     end
     return 0
 end

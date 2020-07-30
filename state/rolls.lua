@@ -263,12 +263,14 @@ end)
 
 local function getAttack()
     local offence = character.getPlayerOffence()
-    local buff = characterState.buffs.offence.get()
+    local offenceBuff = characterState.buffs.offence.get()
+    local baseDmgBuff = characterState.buffLookup.getPlayerBaseDmgBuff()
+    local baseDmgBuffAmount = baseDmgBuff and baseDmgBuff.amount or 0
     local threshold = state.attack.threshold
     local numBloodHarvestSlots = state.attack.numBloodHarvestSlots
     local numVindicationCharges = characterState.featsAndTraits.numTraitCharges.get(TRAITS.VINDICATION.id)
 
-    return actions.getAttack(state.attack.currentRoll, state.attack.currentPreppedRoll, threshold, offence, buff, numBloodHarvestSlots, numVindicationCharges)
+    return actions.getAttack(state.attack.currentRoll, state.attack.currentPreppedRoll, threshold, offence, offenceBuff, baseDmgBuffAmount, numBloodHarvestSlots, numVindicationCharges)
 end
 
 local function getHealing(outOfCombat)

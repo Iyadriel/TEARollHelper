@@ -67,6 +67,33 @@ local function addStatBuff(stat, amount, label, expireAfterNextTurn)
     bus.fire(EVENTS.STAT_BUFF_ADDED, stat, amount)
 end
 
+local function addBaseDmgBuff(amount, label, expireAfterNextTurn)
+    local existingBuff = characterState.state.buffLookup.getPlayerBaseDmgBuff()
+
+    if existingBuff then
+        removeBuff(existingBuff)
+    end
+
+    if label:trim() == "" then
+        label = "Base damage"
+    end
+
+    addBuff({
+        id = "player_baseDmg",
+        types = { [BUFF_TYPES.BASE_DMG] = true },
+        label = label,
+        icon = "Interface\\Icons\\ability_warrior_victoryrush",
+
+        amount = amount,
+
+        source = BUFF_SOURCES.PLAYER,
+
+        remainingTurns = getRemainingTurns(expireAfterNextTurn),
+    })
+
+    bus.fire(EVENTS.BASE_DMG_BUFF_ADDED, amount)
+end
+
 local function addAdvantageBuff(action, label, expireAfterNextTurn)
     local existingBuff = characterState.state.buffLookup.getPlayerAdvantageBuff(action)
 
@@ -288,6 +315,7 @@ local function addRacialBuff(racialTrait)
 end
 
 ns.buffs.addStatBuff = addStatBuff
+ns.buffs.addBaseDmgBuff = addBaseDmgBuff
 ns.buffs.addAdvantageBuff = addAdvantageBuff
 ns.buffs.addDisadvantageDebuff = addDisadvantageDebuff
 ns.buffs.addHoTBuff = addHoTBuff

@@ -48,6 +48,10 @@ bus.addListener(EVENTS.STAT_BUFF_ADDED, function(stat, amount)
     TEARollHelper:Print("Your " .. constants.STAT_LABELS[stat] .. " stat has been buffed by " .. amount .. ".")
 end)
 
+bus.addListener(EVENTS.BASE_DMG_BUFF_ADDED, function(amount)
+    TEARollHelper:Print("Your base damage has been increased by " .. amount .. ".")
+end)
+
 bus.addListener(EVENTS.BUFF_STACK_ADDED, function(buff)
     TEARollHelper:Print("Added a stack to buff: " .. buff.label .. ". (" .. buff.stacks .. ")")
 end)

@@ -2,7 +2,7 @@ local _, ns = ...
 
 local rules = ns.rules
 
-local function getAttack(roll, preppedRoll, threshold, offence, buff, numBloodHarvestSlots, numVindicationCharges)
+local function getAttack(roll, preppedRoll, threshold, offence, offenceBuff, baseDmgBuffAmount, numBloodHarvestSlots, numVindicationCharges)
     local attackValue
     local dmg
     local critType = rules.offence.getCritType()
@@ -14,13 +14,13 @@ local function getAttack(roll, preppedRoll, threshold, offence, buff, numBloodHa
     local hasVindicationProc = nil
     local vindicationHealing = 0
 
-    attackValue = rules.offence.calculateAttackValue(roll, offence, buff)
+    attackValue = rules.offence.calculateAttackValue(roll, offence, offenceBuff)
 
     if preppedRoll then
-        attackValue = attackValue + rules.offence.calculateAttackValue(preppedRoll, offence, buff)
+        attackValue = attackValue + rules.offence.calculateAttackValue(preppedRoll, offence, offenceBuff)
     end
 
-    dmg = rules.offence.calculateAttackDmg(threshold, attackValue)
+    dmg = rules.offence.calculateAttackDmg(threshold, attackValue, baseDmgBuffAmount)
 
     if not isCrit and preppedRoll then
         isCrit = rules.offence.isCrit(preppedRoll)

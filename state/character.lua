@@ -57,7 +57,7 @@ characterState.initState = function()
         activeBuffs = {},
         buffLookup = {},
         newPlayerBuff = {
-            type = "stat",
+            type = BUFF_TYPES.STAT,
             stat = "offence",
             amount = 1,
             action = ACTIONS.attack,
@@ -267,6 +267,9 @@ characterState.state = {
         end,
         getPlayerStatBuff = function(stat)
             return characterState.state.buffLookup.get("player_" .. stat)
+        end,
+        getPlayerBaseDmgBuff = function()
+            return characterState.state.buffLookup.get("player_baseDmg")
         end,
         getPlayerAdvantageBuff = function(action)
             return characterState.state.buffLookup.get("player_advantage_" .. action)
