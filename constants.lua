@@ -39,6 +39,16 @@ local BUFF_TYPES = {
     BASE_DMG = 5,
 }
 
+local DAMAGE_TYPES = {
+    PHYSICAL = 0,
+    MAGICAL = 1,
+}
+
+local DAMAGE_TYPE_LABELS = {
+    PHYSICAL = "Physical",
+    MAGICAL = "Magical",
+}
+
 local INCOMING_HEAL_SOURCES = {
     SELF = 0,
     OTHER_PLAYER = 1,
@@ -76,6 +86,8 @@ constants.ACTIONS = ACTIONS
 constants.ACTION_LABELS = ACTION_LABELS
 constants.BUFF_SOURCES = BUFF_SOURCES
 constants.BUFF_TYPES = BUFF_TYPES
+constants.DAMAGE_TYPES = DAMAGE_TYPES
+constants.DAMAGE_TYPE_LABELS = DAMAGE_TYPE_LABELS
 constants.INCOMING_HEAL_SOURCES = INCOMING_HEAL_SOURCES
 constants.ROLL_MODES = ROLL_MODES
 constants.STATS = STATS

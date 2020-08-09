@@ -80,12 +80,12 @@ local function getAttack(roll, preppedRoll, threshold, offence, offenceBuff, bas
     }
 end
 
-local function getDefence(roll, threshold, dmgRisk, defence, buff)
+local function getDefence(roll, threshold, damageType, dmgRisk, defence, buff)
     local isCrit = rules.defence.isCrit(roll)
     local defendValue, damageTaken
     local retaliateDmg = 0
 
-    defendValue = rules.defence.calculateDefendValue(roll, defence, buff)
+    defendValue = rules.defence.calculateDefendValue(roll, damageType, defence, buff)
     damageTaken = rules.defence.calculateDamageTaken(threshold, defendValue, dmgRisk)
 
     if isCrit then
@@ -100,8 +100,8 @@ local function getDefence(roll, threshold, dmgRisk, defence, buff)
     }
 end
 
-local function getMeleeSave(roll, threshold, dmgRisk, defence, buff)
-    local meleeSaveValue = rules.meleeSave.calculateMeleeSaveValue(roll, defence, buff)
+local function getMeleeSave(roll, threshold, damageType, dmgRisk, defence, buff)
+    local meleeSaveValue = rules.meleeSave.calculateMeleeSaveValue(roll, damageType, defence, buff)
     local damageTaken = rules.defence.calculateDamageTaken(threshold, meleeSaveValue, dmgRisk)
     local isBigFail = rules.meleeSave.isSaveBigFail(meleeSaveValue, threshold)
     local hasCounterForceProc = nil

@@ -27,6 +27,7 @@ ui.modules.actions.modules.meleeSave.getOptions = function(options)
         order = options.order,
         args = {
             defendThreshold = sharedOptions.defendThreshold,
+            damageType = sharedOptions.damageType,
             damageRisk = sharedOptions.damageRisk,
             preRoll = ui.modules.turn.modules.roll.getPreRollOptions({
                 order = 2,

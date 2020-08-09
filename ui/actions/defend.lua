@@ -50,6 +50,25 @@ ui.modules.actions.modules.defend.getSharedOptions = function(action)
                 rolls.state[action].damageRisk.set(value)
             end
         },
+        damageType = action ~= "rangedSave" and {
+            order = 2,
+            name = "Damage type",
+            type = "select",
+            values = (function()
+                local damageTypeOptions = {}
+                for key, value in pairs(constants.DAMAGE_TYPES) do
+                    damageTypeOptions[value] = constants.DAMAGE_TYPE_LABELS[key]
+                end
+                return damageTypeOptions
+            end)(),
+            hidden = function()
+                return not rules.defence.shouldShowDamageType()
+            end,
+            get = rolls.state[action].damageType.get,
+            set = function(info, value)
+                rolls.state[action].damageType.set(value)
+            end
+        },
     }
 end
 
@@ -69,6 +88,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
         order = options.order,
         args = {
             defendThreshold = sharedOptions.defendThreshold,
+            damageType = sharedOptions.damageType,
             damageRisk = sharedOptions.damageRisk,
             preRoll = ui.modules.turn.modules.roll.getPreRollOptions({
                 order = 2,

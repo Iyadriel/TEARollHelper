@@ -8,10 +8,10 @@ local FEATS = feats.FEATS
 
 local BIG_FAIL_TREHSHOLD = 5
 
-local function calculateMeleeSaveValue(roll, defence, buff)
+local function calculateMeleeSaveValue(roll, damageType, defence, buff)
     local value = roll
     if not character.hasFeat(FEATS.COUNTER_FORCE) then
-        value = value + rules.common.calculateDefenceStat(defence, buff)
+        value = value + rules.common.calculateDefenceStat(damageType, defence, buff)
     end
     return value
 end
@@ -61,5 +61,6 @@ rules.meleeSave = {
     applyBigFailModifier = applyBigFailModifier,
 
     shouldShowPreRollUI = shouldShowPreRollUI,
+
     getRollModeModifier = getRollModeModifier,
 }

@@ -57,6 +57,7 @@ rolls.initState = function()
 
         [ACTIONS.defend] = {
             threshold = nil,
+            damageType = nil,
             damageRisk = nil,
             rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
@@ -64,6 +65,7 @@ rolls.initState = function()
 
         [ACTIONS.meleeSave] = {
             threshold = nil,
+            damageType = nil,
             damageRisk = nil,
             rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
@@ -154,6 +156,7 @@ rolls.state = {
 
     [ACTIONS.defend] = {
         threshold = basicGetSet(ACTIONS.defend, "threshold"),
+        damageType = basicGetSet(ACTIONS.defend, "damageType"),
         damageRisk = basicGetSet(ACTIONS.defend, "damageRisk"),
         rollMode = basicGetSet(ACTIONS.defend, "rollMode"),
         currentRoll = basicGetSet(ACTIONS.defend, "currentRoll"),
@@ -161,6 +164,7 @@ rolls.state = {
 
     [ACTIONS.meleeSave] = {
         threshold = basicGetSet(ACTIONS.meleeSave, "threshold"),
+        damageType = basicGetSet(ACTIONS.meleeSave, "damageType"),
         damageRisk = basicGetSet(ACTIONS.meleeSave, "damageRisk"),
         rollMode = basicGetSet(ACTIONS.meleeSave, "rollMode"),
         currentRoll = basicGetSet(ACTIONS.meleeSave, "currentRoll"),
@@ -298,14 +302,14 @@ local function getDefence()
     local defence = character.getPlayerDefence()
     local buff = characterState.buffs.defence.get()
 
-    return actions.getDefence(state.defend.currentRoll, state.defend.threshold, state.defend.damageRisk, defence, buff)
+    return actions.getDefence(state.defend.currentRoll, state.defend.threshold, state.defend.damageType, state.defend.damageRisk, defence, buff)
 end
 
 local function getMeleeSave()
     local defence = character.getPlayerDefence()
     local buff = characterState.buffs.defence.get()
 
-    return actions.getMeleeSave(state.meleeSave.currentRoll, state.meleeSave.threshold, state.meleeSave.damageRisk, defence, buff)
+    return actions.getMeleeSave(state.meleeSave.currentRoll, state.meleeSave.threshold, state.meleeSave.damageType, state.meleeSave.damageRisk, defence, buff)
 end
 
 local function getRangedSave()

@@ -12,8 +12,15 @@ local function calculateOffenceStat(offence, buff)
     return offence + buff
 end
 
-local function calculateDefenceStat(defence, buff)
-    return defence + buff
+local function calculateDefenceStat(damageType, defence, buff)
+    local defenceStat = defence + buff
+    local feat = character.getPlayerFeat()
+
+    if feat.passives and feat.passives.resistance and feat.passives.resistance[damageType] then
+        defenceStat = defenceStat + feat.passives.resistance[damageType]
+    end
+
+    return defenceStat
 end
 
 local function calculateSpiritStat(spirit, buff)
