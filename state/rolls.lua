@@ -5,6 +5,7 @@ local bus = ns.bus
 local character = ns.character
 local characterState = ns.state.character.state
 local constants = ns.constants
+local environment = ns.state.environment
 local feats = ns.resources.feats
 local rolls = ns.state.rolls
 local traits = ns.resources.traits
@@ -269,11 +270,12 @@ local function getAttack()
     local offenceBuff = characterState.buffs.offence.get()
     local baseDmgBuff = characterState.buffLookup.getPlayerBaseDmgBuff()
     local baseDmgBuffAmount = baseDmgBuff and baseDmgBuff.amount or 0
+    local enemyId = environment.state.enemyId.get()
     local threshold = state.attack.threshold
     local numBloodHarvestSlots = state.attack.numBloodHarvestSlots
     local numVindicationCharges = characterState.featsAndTraits.numTraitCharges.get(TRAITS.VINDICATION.id)
 
-    return actions.getAttack(state.attack.currentRoll, state.attack.currentPreppedRoll, threshold, offence, offenceBuff, baseDmgBuffAmount, numBloodHarvestSlots, numVindicationCharges)
+    return actions.getAttack(state.attack.currentRoll, state.attack.currentPreppedRoll, threshold, offence, offenceBuff, baseDmgBuffAmount, enemyId, numBloodHarvestSlots, numVindicationCharges)
 end
 
 local function getHealing(outOfCombat)

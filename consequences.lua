@@ -6,11 +6,14 @@ local character = ns.character
 local characterState = ns.state.character
 local consequences = ns.consequences
 local constants = ns.constants
+local enemies = ns.resources.enemies
+local environmentState = ns.state.environment.state
 local rollState = ns.state.rolls.state
 local rules = ns.rules
 local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
 
+local ENEMIES = enemies.ENEMIES
 local EVENTS = bus.EVENTS
 local INCOMING_HEAL_SOURCES = constants.INCOMING_HEAL_SOURCES
 local TRAITS = traits.TRAITS
@@ -59,6 +62,16 @@ local function useSecondWind()
     useTraitCharge(TRAITS.SECOND_WIND)
 end
 
+local function useShatterSoul()
+    state.health.heal(rules.traits.SHATTER_SOUL_HEAL_AMOUNT, INCOMING_HEAL_SOURCES.SELF)
+
+    if environmentState.enemyId.get() == ENEMIES.DEMON.id then
+        buffs.addTraitBuff(TRAITS.SHATTER_SOUL)
+    end
+
+    useTraitCharge(TRAITS.SHATTER_SOUL)
+end
+
 local function useVersatile()
     local stat1 = rollState.shared.versatile.stat1.get()
     local stat2 = rollState.shared.versatile.stat2.get()
@@ -95,6 +108,7 @@ consequences.useCalamityGambit = useCalamityGambit
 consequences.useFocus = useFocus
 consequences.useLifeWithin = useLifeWithin
 consequences.useSecondWind = useSecondWind
+consequences.useShatterSoul = useShatterSoul
 consequences.useVersatile = useVersatile
 
 consequences.confirmReboundRoll = confirmReboundRoll

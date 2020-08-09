@@ -2,7 +2,7 @@ local _, ns = ...
 
 local rules = ns.rules
 
-local function getAttack(roll, preppedRoll, threshold, offence, offenceBuff, baseDmgBuffAmount, numBloodHarvestSlots, numVindicationCharges)
+local function getAttack(roll, preppedRoll, threshold, offence, offenceBuff, baseDmgBuffAmount, enemyId, numBloodHarvestSlots, numVindicationCharges)
     local attackValue
     local dmg
     local critType = rules.offence.getCritType()
@@ -11,6 +11,7 @@ local function getAttack(roll, preppedRoll, threshold, offence, offenceBuff, bas
     local hasMercyFromPainProc = nil
     local hasEntropicEmbraceProc = nil
     local entropicEmbraceDmg = 0
+    local shatterSoulEnabled = false
     local hasVindicationProc = nil
     local vindicationHealing = 0
 
@@ -49,6 +50,10 @@ local function getAttack(roll, preppedRoll, threshold, offence, offenceBuff, bas
         entropicEmbraceDmg = rules.offence.applyCritModifier(entropicEmbraceDmg)
     end
 
+    if rules.offence.canUseShatterSoul() then
+        shatterSoulEnabled = rules.offence.shatterSoulEnabled(dmg, enemyId)
+    end
+
     if rules.offence.canProcMercyFromPain() then
         hasMercyFromPainProc = rules.offence.hasMercyFromPainProc(dmg + entropicEmbraceDmg)
     end
@@ -69,6 +74,7 @@ local function getAttack(roll, preppedRoll, threshold, offence, offenceBuff, bas
         hasMercyFromPainProc = hasMercyFromPainProc,
         hasEntropicEmbraceProc = hasEntropicEmbraceProc,
         entropicEmbraceDmg = entropicEmbraceDmg,
+        shatterSoulEnabled = shatterSoulEnabled,
         hasVindicationProc = hasVindicationProc,
         vindicationHealing = vindicationHealing,
     }

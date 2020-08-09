@@ -25,6 +25,7 @@ TEARollHelper.COLOURS = {
 
     TRAITS = {
         GENERIC = '|cff00ccff',
+        SHATTER_SOUL = '|cffa22fc8',
     },
 
     WEAKNESSES = {

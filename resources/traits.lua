@@ -7,7 +7,7 @@ local ACTIONS = constants.ACTIONS
 local BUFF_TYPES = constants.BUFF_TYPES
 local TURN_TYPES = constants.TURN_TYPES
 
-traits.TRAIT_KEYS = {"OTHER", "BULWARK", "CALAMITY_GAMBIT", "FOCUS", "LIFE_PULSE", "LIFE_WITHIN", "FAELUNES_REGROWTH", "SECOND_WIND", "VERSATILE", "VINDICATION"}
+traits.TRAIT_KEYS = {"OTHER", "BULWARK", "CALAMITY_GAMBIT", "FOCUS", "LIFE_PULSE", "LIFE_WITHIN", "FAELUNES_REGROWTH", "SECOND_WIND", "SHATTER_SOUL", "VERSATILE", "VINDICATION"}
 
 traits.TRAITS = {
     OTHER = {
@@ -110,6 +110,28 @@ traits.TRAITS = {
         desc = "Activate outside of combat to regain 15HP. Can be used once, recharges after every combat. Activate without rolling.",
         supported = true,
         numCharges = 1,
+    },
+    SHATTER_SOUL = {
+        id = "SHATTER_SOUL",
+        name = "Shatter Soul",
+        desc = "Activate after a successful attack to heal yourself for 6 HP. The target of your attack must not be mechanical. If the target is a demon, your Offence is also increased by +6 on the next player turn. Can be used thrice per event. Activate after rolling.",
+        icon = "Interface\\Icons\\ability_warlock_soullink",
+        supported = true,
+        numCharges = 3,
+        buffs = {
+            {
+                type = BUFF_TYPES.STAT,
+                stats = {
+                    offence = 6,
+                },
+                remainingTurns = {
+                    [TURN_TYPES.PLAYER.id] = 1,
+                },
+            },
+        },
+        isCustom = true,
+        playerName = "Kelanra",
+        playerClass = "DEMONHUNTER",
     },
     FAELUNES_REGROWTH = {
         id = "FAELUNES_REGROWTH",

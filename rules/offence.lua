@@ -1,11 +1,13 @@
 local _, ns = ...
 
 local character = ns.character
+local enemies = ns.resources.enemies
 local feats = ns.resources.feats
 local racialTraits = ns.resources.racialTraits
 local rules = ns.rules
 local traits = ns.resources.traits
 
+local ENEMIES = enemies.ENEMIES
 local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
 local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
@@ -83,6 +85,10 @@ end
 local function getRollModeModifier(enemyId)
     local modifier = 0
 
+    if character.hasFeat(FEATS.ETERNAL_SACRIFICE) then
+        modifier = modifier + 1
+    end
+
     if hasAdvantageAgainstEnemy(enemyId) then
         modifier = modifier + 1
     end
@@ -129,6 +135,16 @@ end
 
 local function calculateMercyFromPainBonusHealing(multipleEnemiesHit)
     return multipleEnemiesHit and 4 or 2
+end
+
+-- Trait: Shatter Soul
+
+local function canUseShatterSoul()
+    return character.hasTrait(TRAITS.SHATTER_SOUL)
+end
+
+local function shatterSoulEnabled(dmgDealt, enemyId)
+    return dmgDealt > 0 and enemyId ~= ENEMIES.MECHANICAL.id
 end
 
 -- Trait: Vindication
@@ -186,6 +202,9 @@ rules.offence = {
     canProcMercyFromPain = canProcMercyFromPain,
     hasMercyFromPainProc = hasMercyFromPainProc,
     calculateMercyFromPainBonusHealing = calculateMercyFromPainBonusHealing,
+
+    canUseShatterSoul = canUseShatterSoul,
+    shatterSoulEnabled = shatterSoulEnabled,
 
     canProcVindication = canProcVindication,
     hasVindicationProc = hasVindicationProc,

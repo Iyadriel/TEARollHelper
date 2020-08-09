@@ -165,6 +165,19 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                             return msg
                         end
                     },
+                    useShatterSoul = {
+                        order = 4,
+                        type = "execute",
+                        name = COLOURS.TRAITS.SHATTER_SOUL .. "Use " .. TRAITS.SHATTER_SOUL.name,
+                        desc = TRAITS.SHATTER_SOUL.desc,
+                        hidden = function()
+                            return not rolls.getAttack().shatterSoulEnabled
+                        end,
+                        disabled = function()
+                            return characterState.featsAndTraits.numTraitCharges.get(TRAITS.SHATTER_SOUL.id) == 0
+                        end,
+                        func = consequences.useShatterSoul,
+                    }
                 }
             },
         }
