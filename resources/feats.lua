@@ -1,7 +1,11 @@
 local _, ns = ...
 
+local constants = ns.constants
 local feats = ns.resources.feats
-feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "COUNTER_FORCE", "EXPANSIVE_ARSENAL", "FOREIGN_DISCIPLE", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "MONSTER_HUNTER", "ONSLAUGHT", "PARAGON", "PHALANX", "PROFESSIONAL", "REAPER", "WARDER"}
+
+local DAMAGE_TYPES = constants.DAMAGE_TYPES
+
+feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "COUNTER_FORCE", "ETERNAL_SACRIFICE", "EXPANSIVE_ARSENAL", "FOREIGN_DISCIPLE", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "MONSTER_HUNTER", "ONSLAUGHT", "PARAGON", "PHALANX", "PROFESSIONAL", "REAPER", "WARDER"}
 
 feats.FEATS = {
     FEATLESS = {
@@ -25,6 +29,20 @@ feats.FEATS = {
         name = "Counter-Force",
         desc = "Your melee save rolls no longer benefit from your Defence stat, but if you manage the roll you deal damage back to the attacker by an amount equal to your Defence stat.",
         supported = true
+    },
+    ETERNAL_SACRIFICE = {
+        id = "ETERNAL_SACRIFICE",
+        name = "Eternal Sacrifice",
+        desc = "Your Offence rolls have advantage.|nYour Defence is increased by +4 against magical attacks.|nYou unlock the following traits: Empowered Blades, Shatter Soul.|nYou gain the following weaknesses: Corrupted, Fateless, Old Scars, Outcast.",
+        passives = {
+            resistance = {
+                [DAMAGE_TYPES.MAGICAL] = 4,
+            }
+        },
+        supported = true,
+        isCustom = true,
+        playerName = "Kelanra",
+        playerClass = "DEMONHUNTER",
     },
     EXPANSIVE_ARSENAL = {
         id = "EXPANSIVE_ARSENAL",
