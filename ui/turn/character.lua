@@ -16,10 +16,12 @@ local TRAITS = traits.TRAITS
 local state = characterState.state
 
 local function traitChargesSlider(order, trait)
+    local colour = COLOURS.TRAITS[trait.id] or COLOURS.TRAITS.GENERIC
+
     return {
         order = order,
         type = "range",
-        name = COLOURS.TRAITS.GENERIC .. trait.name .. " charges",
+        name = colour .. trait.name .. " charges",
         desc = trait.desc,
         min = 0,
         max = trait.numCharges,

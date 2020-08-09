@@ -122,7 +122,7 @@ ui.modules.turn.modules.effects.getOptions = function(options)
                     faelunesRegrowth = {
                         order = 1,
                         type = "group",
-                        name = COLOURS.TRAITS.GENERIC .. FAELUNES_REGROWTH.name,
+                        name = COLOURS.TRAITS.FAELUNES_REGROWTH .. FAELUNES_REGROWTH.name,
                         inline = true,
                         args = {
                             regrowthHealing = {
@@ -144,7 +144,7 @@ ui.modules.turn.modules.effects.getOptions = function(options)
                             faelunesRegrowth = {
                                 order = 1,
                                 type = "execute",
-                                name = COLOURS.HEALING .. "Apply " .. FAELUNES_REGROWTH.name,
+                                name = COLOURS.TRAITS.FAELUNES_REGROWTH .. "Apply " .. FAELUNES_REGROWTH.name,
                                 desc = "Applies the " .. FAELUNES_REGROWTH.name .. " effect to you.",
                                 func = function()
                                     characterState.state.health.heal(regrowthHealing, INCOMING_HEAL_SOURCES.OTHER_PLAYER)

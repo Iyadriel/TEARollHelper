@@ -28,6 +28,8 @@ TEARollHelper.COLOURS = {
 
     TRAITS = {
         GENERIC = '|cff00ccff',
+
+        FAELUNES_REGROWTH = '|cff02752a',
         SHATTER_SOUL = '|cffa22fc8',
     },
 
