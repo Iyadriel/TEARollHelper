@@ -23,7 +23,7 @@ bus.addListener(EVENTS.DAMAGE_PREVENTED, function(damagePrevented)
 end)
 
 bus.addListener(EVENTS.DAMAGE_PREVENTED_COUNTER_RESET, function()
-    TEARollHelper:Print(COLOURS.NOTE .. "Your 'Damage prevented' counter has been reset.")
+    TEARollHelper:Print(COLOURS.MASTERY .. "Your 'Damage prevented' counter was maxed out and has been reset.")
 end)
 
 bus.addListener(EVENTS.DAMAGE_TAKEN, function(dmgTaken)
