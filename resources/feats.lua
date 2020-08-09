@@ -79,11 +79,13 @@ feats.FEATS = {
         id = "MONSTER_HUNTER",
         name = "Monster Hunter",
         desc = "You have advantage on offense attack rolls against creatures of the following types - Undead, Demon, Void, Eldritch.",
-        advantageAgainstEnemies = {
-            DEMON = true,
-            ELDRITCH = true,
-            UNDEAD = true,
-            VOID = true,
+        passives = {
+            advantageAgainstEnemies = {
+                DEMON = true,
+                ELDRITCH = true,
+                UNDEAD = true,
+                VOID = true,
+            },
         },
         supported = true
     },

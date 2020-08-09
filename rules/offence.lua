@@ -75,9 +75,9 @@ end
 
 local function hasAdvantageAgainstEnemy(enemyId)
     local hasAdvantage = false
-    local feat = character.getPlayerFeat()
-    if feat.advantageAgainstEnemies then
-        hasAdvantage = feat.advantageAgainstEnemies[enemyId]
+    local featPassives = character.getPlayerFeat().passives
+    if featPassives and featPassives.advantageAgainstEnemies then
+        hasAdvantage = featPassives.advantageAgainstEnemies[enemyId]
     end
     return hasAdvantage
 end

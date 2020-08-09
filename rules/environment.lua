@@ -9,7 +9,9 @@ local WEAKNESSES = weaknesses.WEAKNESSES
 local TRAITS = traits.TRAITS
 
 local function shouldShowEnemySelect()
-    return character.getPlayerFeat().advantageAgainstEnemies
+    local featPassives = character.getPlayerFeat().passives
+
+    return featPassives and featPassives.advantageAgainstEnemies
         or character.getPlayerRacialTrait().buffAgainstEnemies
         or character.hasTrait(TRAITS.SHATTER_SOUL)
         or character.hasWeakness(WEAKNESSES.WOE_UPON_THE_AFFLICTED)
