@@ -52,7 +52,6 @@ ui.modules.actions.modules.healing.getOptions = function(options)
             roll = ui.modules.turn.modules.roll.getOptions({
                 order = 1,
                 action = ACTIONS.healing,
-                includePrep = options.turnTypeID == TURN_TYPES.PLAYER.id,
             }),
             heal = {
                 order = 2,

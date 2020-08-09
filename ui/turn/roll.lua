@@ -56,7 +56,6 @@ end
 --[[ local options = {
     order: Number,
     action: String, -- attack, healing, buff, defend, meleeSave, rangedSave, utility
-    includePrep: Boolean,
     hidden: Function,
 } ]]
 ui.modules.turn.modules.roll.getOptions = function(options)
@@ -77,10 +76,9 @@ ui.modules.turn.modules.roll.getOptions = function(options)
     local function performRoll(isReroll)
         local rollMode = state[options.action].rollMode.get()
         local rollModeMod = getRollModeModifier()
-        local prepMode = options.includePrep and state[options.action].prepMode.get() or false
 
         turns.setAction(options.action)
-        turns.roll(rollMode, rollModeMod, prepMode, isReroll)
+        turns.roll(rollMode, rollModeMod, isReroll)
     end
 
     return {
@@ -112,7 +110,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                     return msg
                 end,
                 type = "select",
-                width = 0.65,
+                width = 0.75,
                 values = function()
                     local rollModeMod = getRollModeModifier()
                     if rollModeMod == ROLL_MODES.ADVANTAGE then
@@ -127,29 +125,14 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                     state[options.action].rollMode.set(value)
                 end
             },
-            prep = {
-                order = 1,
-                type = "toggle",
-                name = "Include prep",
-                desc = "Activate if you prepared during the last player turn.",
-                width = 0.55,
-                hidden = not options.includePrep,
-                get = function()
-                    return state[options.action].prepMode.get()
-                end,
-                set = function(info, value)
-                    turns.setAction(options.action)
-                    state[options.action].prepMode.set(value)
-                end,
-            },
             performRoll = {
-                order = 2,
+                order = 1,
                 type = "execute",
                 name = function()
                     return turns.isRolling() and "Rolling..." or "Roll"
                 end,
                 desc = "Do a /roll " .. rules.rolls.MAX_ROLL .. ".",
-                width = options.includePrep and 0.85 or 1.4,
+                width = 1.3,
                 disabled = function()
                     return turns.isRolling()
                 end,
@@ -158,7 +141,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 end,
             },
             roll = {
-                order = 3,
+                order = 2,
                 name = "Roll result",
                 type = "range",
                 desc = "The number you rolled",
@@ -173,27 +156,8 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                     turns.setCurrentRoll(value)
                 end
             },
-            prepRoll = {
-                order = 4,
-                name = "Prep roll result",
-                type = "range",
-                desc = "The number you rolled",
-                min = 1,
-                max = rules.rolls.MAX_ROLL,
-                step = 1,
-                hidden = not options.includePrep or function()
-                    return not state[options.action].prepMode.get()
-                end,
-                get = function()
-                    return state[options.action].currentPreppedRoll.get()
-                end,
-                set = function(info, value)
-                    turns.setAction(options.action)
-                    turns.setPreppedRoll(value)
-                end
-            },
             useFatePoint = {
-                order = 5,
+                order = 3,
                 type = "execute",
                 name = "Use Fate Point",
                 desc = "Uses a Fate Point and rolls again, picking the highest result.",
@@ -234,7 +198,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 end,
             },
             rebound = {
-                order = 6,
+                order = 4,
                 type = "execute",
                 name = COLOURS.DAMAGE .. "Confirm " .. WEAKNESSES.REBOUND.name,
                 desc = WEAKNESSES.REBOUND.desc,

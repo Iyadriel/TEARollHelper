@@ -2,7 +2,7 @@ local _, ns = ...
 
 local rules = ns.rules
 
-local function getAttack(roll, preppedRoll, threshold, offence, offenceBuff, baseDmgBuffAmount, enemyId, numBloodHarvestSlots, numVindicationCharges)
+local function getAttack(roll, threshold, offence, offenceBuff, baseDmgBuffAmount, enemyId, numBloodHarvestSlots, numVindicationCharges)
     local attackValue
     local dmg
     local critType = rules.offence.getCritType()
@@ -17,15 +17,7 @@ local function getAttack(roll, preppedRoll, threshold, offence, offenceBuff, bas
 
     attackValue = rules.offence.calculateAttackValue(roll, offence, offenceBuff)
 
-    if preppedRoll then
-        attackValue = attackValue + rules.offence.calculateAttackValue(preppedRoll, offence, offenceBuff)
-    end
-
     dmg = rules.offence.calculateAttackDmg(threshold, attackValue, baseDmgBuffAmount)
-
-    if not isCrit and preppedRoll then
-        isCrit = rules.offence.isCrit(preppedRoll)
-    end
 
     if rules.offence.canProcAdrenaline() then
         hasAdrenalineProc = rules.offence.hasAdrenalineProc(threshold, attackValue)
@@ -37,9 +29,7 @@ local function getAttack(roll, preppedRoll, threshold, offence, offenceBuff, bas
 
     if rules.offence.canProcEntropicEmbrace() then
         hasEntropicEmbraceProc = rules.offence.hasEntropicEmbraceProc(roll, threshold)
-        if not hasEntropicEmbraceProc and preppedRoll then
-            hasEntropicEmbraceProc = rules.offence.hasEntropicEmbraceProc(preppedRoll, threshold)
-        end
+
         if hasEntropicEmbraceProc then
             entropicEmbraceDmg = rules.offence.getEntropicEmbraceDmg()
         end
@@ -145,7 +135,7 @@ local function getRangedSave(roll, threshold, spirit, buff)
     }
 end
 
-local function getHealing(roll, preppedRoll, spirit, buff, numGreaterHealSlots, targetIsKO, lifePulse, mercyFromPainBonusHealing, outOfCombat)
+local function getHealing(roll, spirit, buff, numGreaterHealSlots, targetIsKO, lifePulse, mercyFromPainBonusHealing, outOfCombat)
     local healValue
     local amountHealed
     local isCrit = rules.healing.isCrit(roll)
@@ -154,15 +144,7 @@ local function getHealing(roll, preppedRoll, spirit, buff, numGreaterHealSlots, 
 
     healValue = rules.healing.calculateHealValue(roll, spirit, buff)
 
-    if preppedRoll then
-        healValue = healValue + rules.healing.calculateHealValue(preppedRoll, spirit, buff)
-    end
-
     amountHealed = rules.healing.calculateAmountHealed(healValue)
-
-    if not isCrit and preppedRoll then
-        isCrit = rules.healing.isCrit(preppedRoll)
-    end
 
     amountHealed = amountHealed + rules.healing.calculateGreaterHealBonus(numGreaterHealSlots)
 
@@ -194,23 +176,14 @@ local function getHealing(roll, preppedRoll, spirit, buff, numGreaterHealSlots, 
     }
 end
 
-local function getBuff(roll, preppedRoll, spirit, spiritBuff, offence, offenceBuff)
+local function getBuff(roll, spirit, spiritBuff, offence, offenceBuff)
     local buffValue
     local amountBuffed
     local isCrit = rules.buffing.isCrit(roll)
 
-
     buffValue = rules.buffing.calculateBuffValue(roll, spirit, spiritBuff, offence, offenceBuff)
 
-    if preppedRoll then
-        buffValue = buffValue + rules.buffing.calculateBuffValue(preppedRoll, spirit, spiritBuff, offence, offenceBuff)
-    end
-
     amountBuffed = rules.buffing.calculateBuffAmount(buffValue)
-
-    if not isCrit and preppedRoll then
-        isCrit = rules.buffing.isCrit(preppedRoll)
-    end
 
     return {
         amountBuffed = amountBuffed,

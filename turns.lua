@@ -10,7 +10,7 @@ local ui = ns.ui
 local EVENTS = bus.EVENTS
 local ROLL_MODES = constants.ROLL_MODES
 
-local isRolling, setCurrentRoll, setPreppedRoll, handleRollResult
+local isRolling, setCurrentRoll, handleRollResult
 local doRoll
 
 local rollValues = {
@@ -18,11 +18,6 @@ local rollValues = {
     tempRoll = nil,
     action = nil,
     tempRollMode = nil,
-
-    isPrepRolling = false,
-    tempPreppedRoll = nil,
-    tempPrepMode = false,
-
     tempIsReroll = nil,
 }
 local totalRequiredRolls = 1
@@ -40,10 +35,6 @@ function setCurrentRoll(roll)
     bus.fire(EVENTS.ROLL_CHANGED, rollValues.action, roll)
 end
 
-function setPreppedRoll(roll)
-    bus.fire(EVENTS.PREPPED_ROLL_CHANGED, rollValues.action, roll)
-end
-
 local function setAction(action)
     rollValues.action = action
 end
@@ -51,8 +42,6 @@ end
 local function resetTempValues()
     rollValues.tempRollMode = nil
     rollValues.tempRoll = nil
-    rollValues.tempPreppedMode = nil
-    rollValues.tempPreppedRoll = nil
     rollValues.tempIsReroll = nil
 end
 
@@ -73,21 +62,12 @@ local function getRequiredRollsForTurn()
     return numRolls
 end
 
-function doRoll(rollMode, rollModeModifier, prepMode, isReroll)
+function doRoll(rollMode, rollModeModifier, isReroll)
     rollMode = rollMode + rollModeModifier
     rollMode = max(ROLL_MODES.DISADVANTAGE, min(ROLL_MODES.ADVANTAGE, rollMode))
 
-    -- rerolling can only be done for one roll, either the normal or the prepped one.
-    -- when we reroll we roll as if it's normal but fire a different event for the result,
-    -- so we can compare the result against the current normal and prepped rolls and replace the lowest.
-    if isReroll then
-        prepMode = false
-    end
-
     rollValues.tempRollMode = rollMode
-    rollValues.tempPrepMode = prepMode
     rollValues.isRolling = true
-    rollValues.isPrepRolling = prepMode
     rollValues.tempIsReroll = isReroll
 
     updateUI() -- so we can update the button state
@@ -101,31 +81,18 @@ end
 
 function handleRollResult(result)
     local rollMode = rollValues.tempRollMode
-    local roll = rollValues.isPrepRolling and rollValues.tempPreppedRoll or rollValues.tempRoll
+    local roll = rollValues.tempRoll
 
     if
         (remainingRolls == totalRequiredRolls) or
         (rollMode == ROLL_MODES.ADVANTAGE and result > roll) or
         (rollMode == ROLL_MODES.DISADVANTAGE and result < roll) then
-        if rollValues.isPrepRolling then
-            rollValues.tempPreppedRoll = result
-        else
             rollValues.tempRoll = result
-        end
     end
 
     remainingRolls = remainingRolls - 1
 
     if remainingRolls > 0 then
-        sendRoll()
-    elseif rollValues.isPrepRolling then
-        local numRolls = getRequiredRollsForTurn()
-
-        totalRequiredRolls = numRolls
-        remainingRolls = numRolls
-
-        rollValues.isPrepRolling = false
-
         sendRoll()
     else
         rollValues.isRolling = false
@@ -134,10 +101,6 @@ function handleRollResult(result)
             bus.fire(EVENTS.REROLLED, rollValues.action, rollValues.tempRoll)
         else
             setCurrentRoll(rollValues.tempRoll)
-
-            if rollValues.tempPrepMode then
-                setPreppedRoll(rollValues.tempPreppedRoll)
-            end
         end
 
         resetTempValues()
@@ -148,7 +111,6 @@ end
 
 turns.isRolling = isRolling
 turns.setCurrentRoll = setCurrentRoll
-turns.setPreppedRoll = setPreppedRoll
 turns.setAction = setAction
 turns.roll = doRoll
 turns.handleRollResult = handleRollResult

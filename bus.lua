@@ -45,7 +45,6 @@ local EVENTS = {
 
     -- Rolling
     ROLL_CHANGED = "ROLL_CHANGED", -- action, roll
-    PREPPED_ROLL_CHANGED = "PREPPED_ROLL_CHANGED", -- action, roll
     REROLLED = "REROLLED", -- action, roll
 
     -- Turn

@@ -85,7 +85,6 @@ ui.modules.actions.modules.attack.getOptions = function(options)
             roll = ui.modules.turn.modules.roll.getOptions({
                 order = 2,
                 action = ACTIONS.attack,
-                includePrep = true,
                 hidden = shouldHideRoll,
             }),
             attack = {
