@@ -92,11 +92,19 @@ end
 -- [[ Actions ]]
 
 local function confirmDefenceAction(defence)
-    state.health.damage(defence.damageTaken)
+    if defence.damageTaken > 0 then
+        state.health.damage(defence.damageTaken)
+    else
+        state.defence.damagePrevented.increment(defence.dmgRisk)
+    end
 end
 
 local function confirmMeleeSaveAction(meleeSave)
-    state.health.damage(meleeSave.damageTaken)
+    if meleeSave.damageTaken > 0 then
+        state.health.damage(meleeSave.damageTaken)
+    else
+        state.defence.damagePrevented.increment(meleeSave.dmgRisk)
+    end
 end
 
 -- [[ Exports ]]

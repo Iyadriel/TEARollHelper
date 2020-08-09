@@ -10,6 +10,8 @@ local FEATS = feats.FEATS
 local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
 local TRAITS = traits.TRAITS
 
+local MAX_DAMAGE_PREVENTED = 50
+
 local function calculateDefendValue(roll, damageType, defence, buff)
     return roll + rules.common.calculateDefenceStat(damageType, defence, buff)
 end
@@ -47,6 +49,8 @@ local function shouldShowDamageType()
 end
 
 rules.defence = {
+    MAX_DAMAGE_PREVENTED = MAX_DAMAGE_PREVENTED,
+
     calculateDefendValue = calculateDefendValue,
     calculateDamageTaken = calculateDamageTaken,
     isCrit = isCrit,

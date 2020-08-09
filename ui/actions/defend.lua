@@ -155,13 +155,18 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                             end
                         end
                     },
-                    okay = {
+                    confirm = {
                         order = 1,
                         type = "execute",
-                        name = "Okay :(",
-                        desc = "Apply the stated damage to your character's HP",
+                        name = "Confirm",
+                        desc = function()
+                            if character.hasDefenceMastery() then
+                                return "Apply the stated damage to your character's HP, or update your 'Damage prevented' counter."
+                            end
+                            return "Apply the stated damage to your character's HP."
+                        end,
                         hidden = function()
-                            return rolls.getDefence().damageTaken == 0
+                            return rolls.getDefence().damageTaken <= 0 and not character.hasDefenceMastery()
                         end,
                         func = function()
                             consequences.confirmDefenceAction(rolls.getDefence())

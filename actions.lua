@@ -94,6 +94,7 @@ local function getDefence(roll, threshold, damageType, dmgRisk, defence, buff)
 
     return {
         defendValue = defendValue,
+        dmgRisk = dmgRisk,
         damageTaken = damageTaken,
         canRetaliate = isCrit,
         retaliateDmg = retaliateDmg
@@ -120,6 +121,7 @@ local function getMeleeSave(roll, threshold, damageType, dmgRisk, defence, buff)
 
     return {
         meleeSaveValue = meleeSaveValue,
+        dmgRisk = dmgRisk,
         damageTaken = damageTaken,
         isBigFail = isBigFail,
         hasCounterForceProc = hasCounterForceProc,

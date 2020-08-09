@@ -5,7 +5,6 @@ TEARollHelper.COLOURS = {
 
     DAMAGE = '|cffff0000',
     HEALING = '|cff00ff00',
-    SAVE = '|cff00ff00',
     BUFF = '|cff0070dd',
     DEBUFF = '|cff996600',
     CRITICAL = '|cffa335ee',
@@ -13,6 +12,10 @@ TEARollHelper.COLOURS = {
     MASTERY = '|cffff8000',
 
     NOTE = '|cffbbbbbb',
+
+    ROLES = {
+        TANK = '|cff4d6fb8',
+    },
 
     FEATS = {
         GENERIC = '|cffe6cc80',

@@ -55,7 +55,7 @@ ui.modules.actions.modules.rangedSave.getOptions = function(options)
                             local save = rolls.getRangedSave()
 
                             if save.canFullyProtect then
-                                return COLOURS.SAVE .. "You can fully protect your ally."
+                                return COLOURS.ROLES.TANK .. "You can fully protect your ally."
                             elseif save.damageReduction > 0 then
                                 return "You can reduce the damage your ally takes by " .. save.damageReduction .. ".|n" .. COLOURS.NOTE .. "However, you cannot act during the next player turn."
                             else

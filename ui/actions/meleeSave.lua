@@ -2,6 +2,7 @@ local _, ns = ...
 
 local COLOURS = TEARollHelper.COLOURS
 
+local character = ns.character
 local consequences = ns.consequences
 local constants = ns.constants
 local rolls = ns.state.rolls
@@ -66,7 +67,7 @@ ui.modules.actions.modules.meleeSave.getOptions = function(options)
                                 end
                                 msg = msg .. "You can save your ally, |r" .. COLOURS.DAMAGE .. "but you will take " .. tostring(save.damageTaken) .. " damage."
                             else
-                                msg = COLOURS.SAVE .. "You can save your ally without taking any damage yourself."
+                                msg = COLOURS.ROLES.TANK .. "You can save your ally without taking any damage yourself."
                             end
 
                             if save.hasCounterForceProc then
@@ -80,9 +81,14 @@ ui.modules.actions.modules.meleeSave.getOptions = function(options)
                         order = 1,
                         type = "execute",
                         name = "Confirm",
-                        desc = "Apply the stated damage to your character's HP",
+                        desc = function()
+                            if character.hasDefenceMastery() then
+                                return "Apply the stated damage to your character's HP, or update your 'Damage prevented' counter."
+                            end
+                            return "Apply the stated damage to your character's HP."
+                        end,
                         hidden = function()
-                            return rolls.getMeleeSave().damageTaken <= 0
+                            return rolls.getMeleeSave().damageTaken <= 0 and not character.hasDefenceMastery()
                         end,
                         func = function()
                             consequences.confirmMeleeSaveAction(rolls.getMeleeSave())

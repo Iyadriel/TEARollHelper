@@ -65,8 +65,14 @@ ui.modules.config.modules.character.modules.stats.getOptions = function(options)
             },
             defence = {
                 type = "range",
-                name = "Defence",
-                desc = "Your character's defence stat",
+                name = function()
+                    local label = "Defence"
+                    if character.hasDefenceMastery() then
+                        label = label .. COLOURS.MASTERY .. " Mastery unlocked!"
+                    end
+                    return label
+                end,
+                desc = "Mastery bonus: When you block incoming damage to yourself, or to someone else via Melee save, it counts towards your ”Damage prevented”. When that counter reaches 50 it resets back to zero and you can regain 1 charge to a trait of your choice.",
                 min = STAT_MIN_VALUE,
                 max = STAT_MAX_VALUE,
                 step = 1,

@@ -101,8 +101,32 @@ ui.modules.turn.modules.character.getOptions = function(options)
                     },
                 }
             },
-            healing = {
+            defence = {
                 order = 3,
+                type = "group",
+                name = "Defence",
+                inline = true,
+                hidden = function()
+                    return not character.hasDefenceMastery()
+                end,
+                args = {
+                    damagePrevented = {
+                        order = 0,
+                        type = "range",
+                        name = COLOURS.ROLES.TANK .. "Damage prevented",
+                        desc = "When you block incoming damage to yourself, or to someone else via Melee save, it counts towards your ”Damage prevented”. When that counter reaches 50 it resets back to zero and you can regain 1 charge to a trait of your choice.",
+                        min = 0,
+                        max = rules.defence.MAX_DAMAGE_PREVENTED - 1,
+                        step = 1,
+                        get = state.defence.damagePrevented.get,
+                        set = function(info, value)
+                            state.defence.damagePrevented.set(value)
+                        end,
+                    },
+                }
+            },
+            healing = {
+                order = 4,
                 type = "group",
                 name = "Healing",
                 inline = true,
@@ -148,7 +172,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                 }
             },
             featsAndTraits = {
-                order = 4,
+                order = 5,
                 type = "group",
                 name = "Feats and traits",
                 inline = true,
@@ -189,7 +213,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                 end)())
             },
             turn_character_fatePoints = {
-                order = 5,
+                order = 6,
                 type = "range",
                 name = "Fate Points",
                 desc = "How many Fate Points you have left",
@@ -208,7 +232,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                 })
             },
             updateTRP = {
-                order = 6,
+                order = 7,
                 type = "execute",
                 name = "Update Total RP",
                 desc = "Update your Total RP 'Currently' with your current/max HP",
@@ -229,7 +253,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                 end,
             },
             autoUpdateTRPNote = {
-                order = 7,
+                order = 8,
                 type = "description",
                 name = COLOURS.NOTE .. " |nYour Total RP is set to update automatically when needed.",
                 hidden = function()

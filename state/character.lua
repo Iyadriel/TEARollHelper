@@ -35,6 +35,10 @@ characterState.initState = function()
         health = character.calculatePlayerMaxHealthWithoutBuffs(),
         maxHealth = character.calculatePlayerMaxHealthWithoutBuffs(),
 
+        defence = {
+            damagePrevented = 0,
+        },
+
         healing = {
             numGreaterHealSlots = rules.healing.getMaxGreaterHealSlots(),
             excess = 0,
@@ -151,6 +155,30 @@ characterState.state = {
 
             bus.fire(EVENTS.CHARACTER_MAX_HEALTH, state.maxHealth)
         end,
+    },
+    defence = {
+        damagePrevented = {
+            get = function()
+                return state.defence.damagePrevented
+            end,
+            set = function(damagePrevented)
+                if damagePrevented ~= state.defence.damagePrevented then
+                    state.defence.damagePrevented = damagePrevented
+
+                    if state.defence.damagePrevented >= rules.defence.MAX_DAMAGE_PREVENTED then
+                        characterState.state.defence.damagePrevented.reset()
+                    end
+                end
+            end,
+            increment = function(damagePrevented)
+                bus.fire(EVENTS.DAMAGE_PREVENTED, damagePrevented)
+                characterState.state.defence.damagePrevented.set(state.defence.damagePrevented + damagePrevented)
+            end,
+            reset = function()
+                characterState.state.defence.damagePrevented.set(0)
+                bus.fire(EVENTS.DAMAGE_PREVENTED_COUNTER_RESET)
+            end,
+        }
     },
     healing = {
         numGreaterHealSlots = basicGetSet("healing", "numGreaterHealSlots", function(numCharges)
@@ -378,6 +406,8 @@ bus.addListener(EVENTS.CHARACTER_STAT_CHANGED, function(stat, value)
             characterState.state.featsAndTraits.numBloodHarvestSlots.set(maxSlots)
             TEARollHelper:Debug("Increased remaining " .. FEATS.BLOOD_HARVEST.name .. " charges because offence stat changed.")
         end
+    elseif stat == "defence" then
+        characterState.state.defence.damagePrevented.set(0)
     elseif stat == "spirit" then
         updateGreaterHealSlots("spirit stat changed")
     elseif stat == "stamina" then

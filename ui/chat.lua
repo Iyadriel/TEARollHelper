@@ -18,6 +18,14 @@ local function printCriticalHealth()
     end
 end
 
+bus.addListener(EVENTS.DAMAGE_PREVENTED, function(damagePrevented)
+    TEARollHelper:Print(COLOURS.ROLES.TANK .. "You prevented " .. damagePrevented .. " damage.")
+end)
+
+bus.addListener(EVENTS.DAMAGE_PREVENTED_COUNTER_RESET, function()
+    TEARollHelper:Print(COLOURS.NOTE .. "Your 'Damage prevented' counter has been reset.")
+end)
+
 bus.addListener(EVENTS.DAMAGE_TAKEN, function(dmgTaken)
     TEARollHelper:Print(COLOURS.DAMAGE .. "You took " .. dmgTaken .. " damage.")
     printCriticalHealth()
