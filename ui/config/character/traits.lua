@@ -4,6 +4,7 @@ local COLOURS = TEARollHelper.COLOURS
 
 local character = ns.character
 local rules = ns.rules
+local settings = ns.settings
 local traits = ns.resources.traits
 local ui = ns.ui
 
@@ -11,6 +12,40 @@ local ui = ns.ui
 local function updateTurnUI()
     ui.update(ui.modules.turn.name)
 end
+
+local BASE_TRAITS = (function()
+    local traitOptions = {}
+
+    for i = 1, #traits.TRAIT_KEYS do
+        local key = traits.TRAIT_KEYS[i]
+        local trait = traits.TRAITS[key]
+
+        if not trait.isCustom then
+            traitOptions[key] = trait.name
+        end
+    end
+
+    return traitOptions
+end)()
+
+local ALL_TRAITS = (function()
+    local traitOptions = {}
+
+    for i = 1, #traits.TRAIT_KEYS do
+        local key = traits.TRAIT_KEYS[i]
+        local trait = traits.TRAITS[key]
+
+        local name = trait.name
+
+        if trait.isCustom then
+            name = name.. " (|c" .. RAID_CLASS_COLORS[trait.playerClass].colorStr .. trait.playerName .. "|r)"
+        end
+
+        traitOptions[key] = name
+    end
+
+    return traitOptions
+end)()
 
 --[[ local options = {
     order: Number,
@@ -32,15 +67,12 @@ ui.modules.config.modules.character.modules.traits.getOptions = function(options
             type = "select",
             desc = "More Traits may be supported in the future.",
             order = options.order,
-            values = (function()
-                local traitOptions = {}
-                for i = 1, #traits.TRAIT_KEYS do
-                    local key = traits.TRAIT_KEYS[i]
-                    local trait = traits.TRAITS[key]
-                    traitOptions[key] = trait.name
+            values = function()
+                if settings.showCustomFeatsTraits.get() then
+                    return ALL_TRAITS
                 end
-                return traitOptions
-            end)(),
+                return BASE_TRAITS
+            end,
             hidden = shouldHide,
             get = function()
                 return character.getPlayerTraitIDAtSlot(slotIndex)

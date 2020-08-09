@@ -33,6 +33,7 @@ local defaults = {
             autoUpdateTRP = false,
             debug = false,
             minimapIcon = {},
+            showCustomFeatsTraits = false,
             suggestFatePoints = true,
         },
         warningsSeen = {

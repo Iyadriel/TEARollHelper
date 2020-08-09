@@ -5,6 +5,7 @@ local COLOURS = TEARollHelper.COLOURS
 local character = ns.character
 local feats = ns.resources.feats
 local rules = ns.rules
+local settings = ns.settings
 local ui = ns.ui
 local weaknesses = ns.resources.weaknesses
 
@@ -16,6 +17,37 @@ local WEAKNESSES = weaknesses.WEAKNESSES
 local function updateTurnUI()
     ui.update(ui.modules.turn.name)
 end
+
+local BASE_FEATS = (function()
+    local featOptions = {}
+
+    for i = 1, #FEAT_KEYS do
+        local key = FEAT_KEYS[i]
+        local feat = FEATS[key]
+        if not feat.isCustom then
+            featOptions[key] = feat.name
+        end
+    end
+    return featOptions
+end)()
+
+local ALL_FEATS = (function()
+    local featOptions = {}
+
+    for i = 1, #FEAT_KEYS do
+        local key = FEAT_KEYS[i]
+        local feat = FEATS[key]
+
+        local name = feat.name
+
+        if feat.isCustom then
+            name = name.. " (|c" .. RAID_CLASS_COLORS[feat.playerClass].colorStr .. feat.playerName .. "|r)"
+        end
+
+        featOptions[key] = name
+    end
+    return featOptions
+end)()
 
 --[[ local options = {
     order: Number,
@@ -30,15 +62,12 @@ ui.modules.config.modules.character.modules.feats.getOptions = function(options)
             disabled = function()
                 return not rules.other.canUseFeats()
             end,
-            values = (function()
-                local featOptions = {}
-                for i = 1, #FEAT_KEYS do
-                    local key = FEAT_KEYS[i]
-                    local feat = FEATS[key]
-                    featOptions[key] = feat.name
+            values = function()
+                if settings.showCustomFeatsTraits.get() then
+                    return ALL_FEATS
                 end
-                return featOptions
-            end)(),
+                return BASE_FEATS
+            end,
             get = function()
                 local feat = character.getPlayerFeat()
                 return feat and feat.id

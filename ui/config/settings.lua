@@ -67,6 +67,17 @@ ui.modules.config.modules.settings.getOptions = function()
                             settings.debug.set(value)
                         end,
                     },
+                    showCustomFeatsTraits = {
+                        order = 1,
+                        type = "toggle",
+                        name = "Show custom Feats and Traits",
+                        desc = "Allows you to select supported custom Feats and Traits.",
+                        width = "full",
+                        get = settings.showCustomFeatsTraits.get,
+                        set = function(info, value)
+                            settings.showCustomFeatsTraits.set(value)
+                        end,
+                    },
                     minimapIcon = {
                         order = 2,
                         type = "toggle",
