@@ -26,9 +26,11 @@ local function getMaxFatePoints()
     return character.hasWeakness(WEAKNESSES.FATELESS) and 0 or 1
 end
 
-local function shouldSuggestFatePoint(roll, attack, healing, buff, defence, meleeSave, rangedSave)
+local function shouldSuggestFatePoint(roll, attack, cc, healing, buff, defence, meleeSave, rangedSave)
     if attack then
         return attack.dmg <= 0
+    elseif cc then
+        return cc.ccValue <= 10
     elseif healing then
         return healing.amountHealed <= 1
     elseif buff then

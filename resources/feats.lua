@@ -5,7 +5,7 @@ local feats = ns.resources.feats
 
 local DAMAGE_TYPES = constants.DAMAGE_TYPES
 
-feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "COUNTER_FORCE", "ETERNAL_SACRIFICE", "EXPANSIVE_ARSENAL", "FOREIGN_DISCIPLE", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "MONSTER_HUNTER", "ONSLAUGHT", "PARAGON", "PHALANX", "PROFESSIONAL", "REAPER", "WARDER"}
+feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "COUNTER_FORCE", "ETERNAL_SACRIFICE", "EXPANSIVE_ARSENAL", "FOREIGN_DISCIPLE", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "MONSTER_HUNTER", "ONSLAUGHT", "PARAGON", "PHALANX", "PROFESSIONAL", "REAPER", "SHEPHERD_OF_THE_WICKED", "WARDER"}
 
 feats.FEATS = {
     FEATLESS = {
@@ -135,6 +135,13 @@ feats.FEATS = {
         id = "REAPER",
         name = "Reaper",
         desc = "When scoring a nat 20 on an Offence attack roll, you no longer deal double damage, but instead activate the Reap trait without cost. You do not have to have Reap as a chosen trait.",
+        supported = true
+    },
+    SHEPHERD_OF_THE_WICKED = {
+        id = "SHEPHERD_OF_THE_WICKED",
+        name = "Shepherd of the Wicked",
+        desc = "You can now roll CC rolls with your Defence stat instead of your Offence stat.",
+        note = "The addon will automatically use the highest stat.",
         supported = true
     },
     WARDER = {

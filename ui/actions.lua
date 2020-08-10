@@ -19,6 +19,7 @@ ui.modules.actions.modules = {
     playerTurn = {},
 
     attack = {},
+    cc = {},
     healing = {},
     buff = {},
     defend = {},
@@ -58,13 +59,14 @@ ui.modules.actions.getOptions = function(options)
             args = {
                 lifeWithin = lifeWithin,
                 attack = ui.modules.actions.modules.attack.getOptions({ order = 1 }),
+                cc = ui.modules.actions.modules.cc.getOptions({ order = 2 }),
                 heal = ui.modules.actions.modules.healing.getOptions({
-                    order = 2,
+                    order = 3,
                     outOfCombat = false,
                     turnTypeID = TURN_TYPES.PLAYER.id,
                 }),
-                buff = ui.modules.actions.modules.buff.getOptions({ order = 3 }),
-                utility = ui.modules.actions.modules.utility.getOptions({ order = 4, turnTypeID = TURN_TYPES.PLAYER.id }),
+                buff = ui.modules.actions.modules.buff.getOptions({ order = 4 }),
+                utility = ui.modules.actions.modules.utility.getOptions({ order = 5, turnTypeID = TURN_TYPES.PLAYER.id }),
             }
         },
         enemyTurn = {

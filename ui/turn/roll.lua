@@ -179,10 +179,12 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                         if not roll then return true end
 
                         local action = options.action
-                        local attack, healing, buff, defence, meleeSave, rangedSave
+                        local attack, cc, healing, buff, defence, meleeSave, rangedSave
 
                         if action == ACTIONS.attack then
                             attack = rollState.getAttack()
+                        elseif action == ACTIONS.cc then
+                            cc = rollState.getCC()
                         elseif action == ACTIONS.healing then
                             healing = rollState.getHealing(not turnState.state.inCombat.get())
                         elseif action == ACTIONS.buff then
@@ -195,7 +197,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                             rangedSave = rollState.getRangedSave()
                         end
 
-                        hidden = not rules.rolls.shouldSuggestFatePoint(roll, attack, healing, buff, defence, meleeSave, rangedSave)
+                        hidden = not rules.rolls.shouldSuggestFatePoint(roll, attack, cc, healing, buff, defence, meleeSave, rangedSave)
                     end
 
                     return hidden

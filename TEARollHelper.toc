@@ -38,6 +38,7 @@ rules/environment.lua
 rules/playerTurn.lua
 rules/offence.lua
 rules/defence.lua
+rules/cc.lua
 rules/healing.lua
 rules/buffing.lua
 rules/meleeSave.lua
@@ -61,6 +62,7 @@ ui/actions/anyTurn.lua
 ui/actions/playerTurn.lua
 ui/actions/attack.lua
 ui/actions/buff.lua
+ui/actions/cc.lua
 ui/actions/defend.lua
 ui/actions/healing.lua
 ui/actions/meleeSave.lua

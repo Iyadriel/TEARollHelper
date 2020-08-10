@@ -35,6 +35,11 @@ rolls.initState = function()
             currentRoll = nil,
         },
 
+        [ACTIONS.cc] = {
+            rollMode = ROLL_MODES.NORMAL,
+            currentRoll = nil,
+        },
+
         [ACTIONS.healing] = {
             numGreaterHealSlots = 0,
             targetIsKO = false,
@@ -118,6 +123,11 @@ rolls.state = {
         numBloodHarvestSlots = basicGetSet(ACTIONS.attack, "numBloodHarvestSlots"),
         rollMode = basicGetSet(ACTIONS.attack, "rollMode"),
         currentRoll = basicGetSet(ACTIONS.attack, "currentRoll"),
+    },
+
+    [ACTIONS.cc] = {
+        rollMode = basicGetSet(ACTIONS.cc, "rollMode"),
+        currentRoll = basicGetSet(ACTIONS.cc, "currentRoll"),
     },
 
     [ACTIONS.healing] = {
@@ -238,6 +248,15 @@ local function getAttack()
     return actions.getAttack(state.attack.currentRoll, threshold, offence, offenceBuff, baseDmgBuffAmount, enemyId, numBloodHarvestSlots, numVindicationCharges)
 end
 
+local function getCC()
+    local offence = character.getPlayerOffence()
+    local offenceBuff = characterState.buffs.offence.get()
+    local defence = character.getPlayerDefence()
+    local defenceBuff = characterState.buffs.defence.get()
+
+    return actions.getCC(state.cc.currentRoll, offence, offenceBuff, defence, defenceBuff)
+end
+
 local function getHealing(outOfCombat)
     local spirit = character.getPlayerSpirit()
     local buff = characterState.buffs.spirit.get()
@@ -276,6 +295,7 @@ local function getRangedSave()
 end
 
 rolls.getAttack = getAttack
+rolls.getCC = getCC
 rolls.getHealing = getHealing
 rolls.getBuff = getBuff
 rolls.getDefence = getDefence

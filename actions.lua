@@ -70,6 +70,16 @@ local function getAttack(roll, threshold, offence, offenceBuff, baseDmgBuffAmoun
     }
 end
 
+local function getCC(roll, offence, offenceBuff, defence, defenceBuff)
+    local ccValue = rules.cc.calculateCCValue(roll, offence, offenceBuff, defence, defenceBuff)
+    local isCrit = rules.cc.isCrit(roll)
+
+    return {
+        ccValue = ccValue,
+        isCrit = isCrit,
+    }
+end
+
 local function getDefence(roll, threshold, damageType, dmgRisk, defence, buff)
     local isCrit = rules.defence.isCrit(roll)
     local defendValue, damageTaken
@@ -197,6 +207,7 @@ local function getUtility(roll, useUtilityTrait)
 end
 
 ns.actions.getAttack = getAttack
+ns.actions.getCC = getCC
 ns.actions.getDefence = getDefence
 ns.actions.getMeleeSave = getMeleeSave
 ns.actions.getRangedSave = getRangedSave
