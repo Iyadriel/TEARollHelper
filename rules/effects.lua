@@ -9,7 +9,7 @@ local weaknesses = ns.resources.weaknesses
 local INCOMING_HEAL_SOURCES = constants.INCOMING_HEAL_SOURCES
 local WEAKNESSES = weaknesses.WEAKNESSES
 
-local function calculateDamageTaken(incomingDamage)
+local function calculateDamageTaken(incomingDamage, currentHealth)
     if character.hasWeakness(WEAKNESSES.WOE_UPON_THE_AFFLICTED) then
         local enemyId = environment.state.enemyId.get()
         if WEAKNESSES.WOE_UPON_THE_AFFLICTED.weakAgainstEnemies[enemyId] then
@@ -17,7 +17,14 @@ local function calculateDamageTaken(incomingDamage)
         end
     end
 
-    return incomingDamage
+    local overkill = max(0, incomingDamage - currentHealth)
+    local damageTaken = incomingDamage - overkill
+
+    return {
+        incomingDamage = incomingDamage,
+        damageTaken = damageTaken,
+        overkill = overkill
+    }
 end
 
 local function applyCorruptionModifier(healAmount)

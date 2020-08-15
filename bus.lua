@@ -32,7 +32,7 @@ local EVENTS = {
     BUFF_EXPIRED = "BUFF_EXPIRED", -- label
     DAMAGE_PREVENTED = "DAMAGE_PREVENTED", -- damagePrevented
     DAMAGE_PREVENTED_COUNTER_RESET = "DAMAGE_PREVENTED_COUNTER_RESET",
-    DAMAGE_TAKEN = "DAMAGE_TAKEN", -- dmgTaken
+    DAMAGE_TAKEN = "DAMAGE_TAKEN", -- incomingDamage, damageTaken, overkill
     HEALED = "HEALED", -- amountHealed, netAmountHealed, overHealing
     TRAIT_ACTIVATED = "TRAIT_ACTIVATED", -- traitID
 

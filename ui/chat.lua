@@ -26,8 +26,15 @@ bus.addListener(EVENTS.DAMAGE_PREVENTED_COUNTER_RESET, function()
     TEARollHelper:Print(COLOURS.MASTERY .. "Your 'Damage prevented' counter was maxed out and has been reset.")
 end)
 
-bus.addListener(EVENTS.DAMAGE_TAKEN, function(dmgTaken)
-    TEARollHelper:Print(COLOURS.DAMAGE .. "You took " .. dmgTaken .. " damage.")
+bus.addListener(EVENTS.DAMAGE_TAKEN, function(incomingDamage, damageTaken, overkill)
+    local initialColour = damageTaken > 0 and COLOURS.DAMAGE or COLOURS.NOTE
+
+    local msg = initialColour .. "You took " .. damageTaken .. " damage."
+    if overkill > 0 then
+        msg = msg .. COLOURS.NOTE .. " (Incoming damage of " .. incomingDamage .. ", overkill of " .. overkill .. ")"
+    end
+
+    TEARollHelper:Print(msg)
     printCriticalHealth()
 end)
 
@@ -38,6 +45,7 @@ bus.addListener(EVENTS.HEALED, function(amountHealed, netAmountHealed, overheali
     if overhealing > 0 then
         msg = msg .. COLOURS.NOTE .. " (Heal of " .. amountHealed .. " overhealed by " .. overhealing .. ")"
     end
+
     TEARollHelper:Print(msg)
     printCriticalHealth()
 end)

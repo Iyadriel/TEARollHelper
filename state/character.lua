@@ -114,24 +114,24 @@ characterState.state = {
             return state.health
         end,
         set = function(health)
+            health = max(0, health)
+
             if health ~= state.health then
                 state.health = health
                 bus.fire(EVENTS.CHARACTER_HEALTH, state.health)
             end
         end,
         damage = function(dmgTaken)
-            dmgTaken = rules.effects.calculateDamageTaken(dmgTaken)
-            if dmgTaken <= 0 then return end
-
-            state.health = state.health - dmgTaken
-            bus.fire(EVENTS.CHARACTER_HEALTH, state.health)
-            bus.fire(EVENTS.DAMAGE_TAKEN, dmgTaken)
+            local damage = rules.effects.calculateDamageTaken(dmgTaken, state.health)
+            characterState.state.health.set(state.health - damage.damageTaken)
+            bus.fire(EVENTS.DAMAGE_TAKEN, damage.incomingDamage, damage.damageTaken, damage.overkill)
         end,
         heal = function(incomingHealAmount, source)
             TEARollHelper:Debug("Incoming heal", incomingHealAmount, source)
 
             local heal = rules.effects.calculateHealingReceived(incomingHealAmount, source, state.health, state.maxHealth)
             characterState.state.health.set(state.health + heal.netAmountHealed)
+
             bus.fire(EVENTS.HEALED, heal.amountHealed, heal.netAmountHealed, heal.overhealing)
         end
     },
