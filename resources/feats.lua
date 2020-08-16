@@ -42,7 +42,7 @@ feats.FEATS = {
         supported = true,
         isCustom = true,
         playerName = "Kelanra",
-        playerClass = "DEMONHUNTER",
+        playerColour = "ffa22fc8",
     },
     EXPANSIVE_ARSENAL = {
         id = "EXPANSIVE_ARSENAL",

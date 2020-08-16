@@ -41,7 +41,7 @@ local ALL_FEATS = (function()
         local name = feat.name
 
         if feat.isCustom then
-            name = name.. " (|c" .. RAID_CLASS_COLORS[feat.playerClass].colorStr .. feat.playerName .. "|r)"
+            name = name.. " (|c" .. feat.playerColour .. feat.playerName .. "|r)"
         end
 
         featOptions[key] = name

@@ -38,7 +38,7 @@ local ALL_TRAITS = (function()
         local name = trait.name
 
         if trait.isCustom then
-            name = name.. " (|c" .. RAID_CLASS_COLORS[trait.playerClass].colorStr .. trait.playerName .. "|r)"
+            name = name.. " (|c" .. trait.playerColour .. trait.playerName .. "|r)"
         end
 
         traitOptions[key] = name
