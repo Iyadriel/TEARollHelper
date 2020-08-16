@@ -96,9 +96,13 @@ ui.modules.config.modules.character.modules.stats.getOptions = function(options)
             stamina = {
                 type = "range",
                 name = function()
-                    return "Stamina (max HP: " .. character.calculatePlayerMaxHealthWithoutBuffs() .. ")"
+                    local label = "Stamina (max HP: " .. character.calculatePlayerMaxHealthWithoutBuffs() .. ")"
+                    if character.hasStaminaMastery() then
+                        label = label .. COLOURS.MASTERY .. " Mastery!"
+                    end
+                    return label
                 end,
-                desc = "Affects your character's maximum HP.",
+                desc = "Mastery bonus: Enemy attacks can no longer reduce your stats, stun you, or impose disadvantage upon you.",
                 min = STAT_MIN_VALUE,
                 max = STAT_MAX_VALUE,
                 step = 1,

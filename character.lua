@@ -18,7 +18,6 @@ local TRAITS = traits.TRAITS
 local WEAKNESSES = weaknesses.WEAKNESSES
 
 local calculatePlayerMaxHealth, calculatePlayerMaxHealthWithoutBuffs
-local hasOffenceMastery, hasDefenceMastery, hasSpiritMastery
 local getPlayerFeat, hasFeat, hasFeatByID, setPlayerFeatByID, getPlayerRacialTrait, hasRacialTrait
 local clearExcessTraits
 
@@ -75,16 +74,20 @@ local function setStat(stat, value)
     end
 end
 
-function hasOffenceMastery()
+local function hasOffenceMastery()
     return getPlayerOffence() >= 6
 end
 
-function hasDefenceMastery()
+local function hasDefenceMastery()
     return getPlayerDefence() >= 6
 end
 
-function hasSpiritMastery()
+local function hasSpiritMastery()
     return getPlayerSpirit() >= 6
+end
+
+local function hasStaminaMastery()
+    return getPlayerStamina() >= 6
 end
 
 -- [[ Feats ]]
@@ -221,6 +224,7 @@ character.setStat = setStat
 character.hasOffenceMastery = hasOffenceMastery
 character.hasDefenceMastery = hasDefenceMastery
 character.hasSpiritMastery = hasSpiritMastery
+character.hasStaminaMastery = hasStaminaMastery
 
 character.getPlayerFeat = getPlayerFeat
 character.hasFeat = hasFeat
