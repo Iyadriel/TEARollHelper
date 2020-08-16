@@ -17,6 +17,7 @@ ns.launchers = {}
 ns.resources = {
     enemies = {},
     feats = {},
+    players = {},
     racialTraits = {},
     traits = {},
     weaknesses = {},

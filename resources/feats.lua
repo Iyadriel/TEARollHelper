@@ -41,8 +41,7 @@ feats.FEATS = {
         },
         supported = true,
         isCustom = true,
-        playerName = "Kelanra",
-        playerColour = "ffa22fc8",
+        player = "KELANRA",
     },
     EXPANSIVE_ARSENAL = {
         id = "EXPANSIVE_ARSENAL",

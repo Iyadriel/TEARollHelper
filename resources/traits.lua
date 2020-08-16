@@ -130,8 +130,7 @@ traits.TRAITS = {
             },
         },
         isCustom = true,
-        playerName = "Kelanra",
-        playerColour = "ffa22fc8",
+        player = "KELANRA",
     },
     FAELUNES_REGROWTH = {
         id = "FAELUNES_REGROWTH",

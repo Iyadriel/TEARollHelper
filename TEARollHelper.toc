@@ -16,6 +16,7 @@ ui.lua
 
 resources/enemies.lua
 resources/feats.lua
+resources/players.lua
 resources/racialTraits.lua
 resources/traits.lua
 resources/weaknesses.lua

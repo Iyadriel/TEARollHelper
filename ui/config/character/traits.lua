@@ -3,10 +3,13 @@ local _, ns = ...
 local COLOURS = TEARollHelper.COLOURS
 
 local character = ns.character
+local players = ns.resources.players
 local rules = ns.rules
 local settings = ns.settings
 local traits = ns.resources.traits
 local ui = ns.ui
+
+local PLAYERS = players.PLAYERS
 
 -- Update turn UI, in case it is also open
 local function updateTurnUI()
@@ -38,7 +41,8 @@ local ALL_TRAITS = (function()
         local name = trait.name
 
         if trait.isCustom then
-            name = name.. " (|c" .. trait.playerColour .. trait.playerName .. "|r)"
+            local player = PLAYERS[trait.player]
+            name = name.. " (|c" .. player.colour .. player.name .. "|r)"
         end
 
         traitOptions[key] = name

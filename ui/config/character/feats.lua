@@ -4,6 +4,7 @@ local COLOURS = TEARollHelper.COLOURS
 
 local character = ns.character
 local feats = ns.resources.feats
+local players = ns.resources.players
 local rules = ns.rules
 local settings = ns.settings
 local ui = ns.ui
@@ -11,6 +12,7 @@ local weaknesses = ns.resources.weaknesses
 
 local FEATS = feats.FEATS
 local FEAT_KEYS = feats.FEAT_KEYS
+local PLAYERS = players.PLAYERS
 local WEAKNESSES = weaknesses.WEAKNESSES
 
 -- Update turn UI, in case it is also open
@@ -41,7 +43,8 @@ local ALL_FEATS = (function()
         local name = feat.name
 
         if feat.isCustom then
-            name = name.. " (|c" .. feat.playerColour .. feat.playerName .. "|r)"
+            local player = PLAYERS[feat.player]
+            name = name.. " (|c" .. player.colour .. player.name .. "|r)"
         end
 
         featOptions[key] = name
