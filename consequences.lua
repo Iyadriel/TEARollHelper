@@ -38,28 +38,23 @@ end
 
 local function useBulwark()
     buffs.addTraitBuff(TRAITS.BULWARK)
-    useTraitCharge(TRAITS.BULWARK)
 end
 
 local function useCalamityGambit()
     buffs.addTraitBuff(TRAITS.CALAMITY_GAMBIT)
-    useTraitCharge(TRAITS.CALAMITY_GAMBIT)
 end
 
 local function useFocus()
     buffs.addTraitBuff(TRAITS.FOCUS)
-    useTraitCharge(TRAITS.FOCUS)
 end
 
 local function useLifeWithin()
     buffs.addTraitBuff(TRAITS.LIFE_WITHIN)
     state.health.heal(rules.traits.LIFE_WITHIN_HEAL_AMOUNT, INCOMING_HEAL_SOURCES.SELF)
-    useTraitCharge(TRAITS.LIFE_WITHIN)
 end
 
 local function useSecondWind()
     state.health.heal(rules.traits.SECOND_WIND_HEAL_AMOUNT, INCOMING_HEAL_SOURCES.SELF)
-    useTraitCharge(TRAITS.SECOND_WIND)
 end
 
 local function useShatterSoul()
@@ -68,8 +63,6 @@ local function useShatterSoul()
     if environmentState.enemyId.get() == ENEMIES.DEMON.id then
         buffs.addTraitBuff(TRAITS.SHATTER_SOUL)
     end
-
-    useTraitCharge(TRAITS.SHATTER_SOUL)
 end
 
 local function useVersatile()
@@ -79,7 +72,28 @@ local function useVersatile()
         [stat1] = -character.getPlayerStat(stat1),
         [stat2] = character.getPlayerStat(stat1),
     })
-    useTraitCharge(TRAITS.VERSATILE)
+end
+
+local function useVindication()
+end
+
+local TRAIT_FNS = {
+    [TRAITS.BULWARK.id] = useBulwark,
+    [TRAITS.CALAMITY_GAMBIT.id] = useCalamityGambit,
+    [TRAITS.FOCUS.id] = useFocus,
+    [TRAITS.LIFE_WITHIN.id] = useLifeWithin,
+    [TRAITS.SECOND_WIND.id] = useSecondWind,
+    [TRAITS.SHATTER_SOUL.id] = useShatterSoul,
+    [TRAITS.VERSATILE.id] = useVersatile,
+    [TRAITS.VINDICATION.id] = useVindication,
+}
+
+local function useTrait(trait, ...)
+    local args = {...}
+    return function()
+        TRAIT_FNS[trait.id](unpack(args))
+        useTraitCharge(trait)
+    end
 end
 
 -- [[ Rolls ]]
@@ -110,14 +124,7 @@ end
 -- [[ Exports ]]
 
 consequences.useFatePoint = useFatePoint
-
-consequences.useBulwark = useBulwark
-consequences.useCalamityGambit = useCalamityGambit
-consequences.useFocus = useFocus
-consequences.useLifeWithin = useLifeWithin
-consequences.useSecondWind = useSecondWind
-consequences.useShatterSoul = useShatterSoul
-consequences.useVersatile = useVersatile
+consequences.useTrait = useTrait
 
 consequences.confirmReboundRoll = confirmReboundRoll
 

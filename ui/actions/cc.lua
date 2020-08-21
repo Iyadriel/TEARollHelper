@@ -42,7 +42,7 @@ ui.modules.actions.modules.cc.getOptions = function(options)
                     disabled = function()
                         return characterState.featsAndTraits.numTraitCharges.get(TRAITS.CALAMITY_GAMBIT.id) == 0
                     end,
-                    func = consequences.useCalamityGambit,
+                    func = consequences.useTrait(TRAITS.CALAMITY_GAMBIT),
                 },
                 calamityGambitActive = {
                     order = 0,

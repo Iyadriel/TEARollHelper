@@ -26,7 +26,7 @@ ui.modules.actions.modules.playerTurn.getSharedPreRollOptions = function(options
             disabled = function()
                 return characterState.featsAndTraits.numTraitCharges.get(TRAITS.FOCUS.id) == 0
             end,
-            func = consequences.useFocus,
+            func = consequences.useTrait(TRAITS.FOCUS),
         },
         focusActive = {
             order = 0,

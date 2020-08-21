@@ -61,7 +61,7 @@ ui.modules.actions.modules.anyTurn.getSharedPreRollOptions = function(options)
                         local statsDiffer = state.shared.versatile.stat1.get() ~= state.shared.versatile.stat2.get()
                         return not statsDiffer or characterState.featsAndTraits.numTraitCharges.get(TRAITS.VERSATILE.id) == 0
                     end,
-                    func = consequences.useVersatile
+                    func = consequences.useTrait(TRAITS.VERSATILE)
                 }
             },
         },

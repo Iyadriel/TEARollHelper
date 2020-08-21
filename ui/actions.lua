@@ -44,7 +44,7 @@ ui.modules.actions.getOptions = function(options)
         disabled = function()
             return state.featsAndTraits.numTraitCharges.get(TRAITS.LIFE_WITHIN.id) == 0
         end,
-        func = consequences.useLifeWithin
+        func = consequences.useTrait(TRAITS.LIFE_WITHIN)
     }
 
     return {
@@ -105,7 +105,7 @@ ui.modules.actions.getOptions = function(options)
                     disabled = function()
                         return state.featsAndTraits.numTraitCharges.get(TRAITS.SECOND_WIND.id) == 0
                     end,
-                    func = consequences.useSecondWind
+                    func = consequences.useTrait(TRAITS.SECOND_WIND)
                 },
                 heal = ui.modules.actions.modules.healing.getOptions({
                     order = 1,

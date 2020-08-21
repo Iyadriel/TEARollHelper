@@ -48,7 +48,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                     disabled = function()
                         return characterState.featsAndTraits.numTraitCharges.get(TRAITS.CALAMITY_GAMBIT.id) == 0
                     end,
-                    func = consequences.useCalamityGambit,
+                    func = consequences.useTrait(TRAITS.CALAMITY_GAMBIT),
                 },
                 calamityGambitActive = {
                     order = 0,
@@ -175,7 +175,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                         disabled = function()
                             return characterState.featsAndTraits.numTraitCharges.get(TRAITS.SHATTER_SOUL.id) == 0
                         end,
-                        func = consequences.useShatterSoul,
+                        func = consequences.useTrait(TRAITS.SHATTER_SOUL),
                     }
                 }
             },

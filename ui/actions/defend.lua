@@ -109,7 +109,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                             disabled = function()
                                 return state.featsAndTraits.numTraitCharges.get(TRAITS.BULWARK.id) == 0
                             end,
-                            func = consequences.useBulwark,
+                            func = consequences.useTrait(TRAITS.BULWARK),
                         },
                         bulwarkActive = {
                             order = 0,
