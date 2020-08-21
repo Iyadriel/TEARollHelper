@@ -151,11 +151,11 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                                 if attack.hasMercyFromPainProc then
                                     local healingSingleTargetHit = rules.offence.calculateMercyFromPainBonusHealing(false)
                                     local healingMultipleEnemiesHit = rules.offence.calculateMercyFromPainBonusHealing(true)
-                                    msg = msg .. COLOURS.FEATS.MERCY_FROM_PAIN .."|nMercy from Pain: +" .. healingSingleTargetHit .. " HP on your next heal roll (+" .. healingMultipleEnemiesHit .. "HP if AoE)"
+                                    msg = msg .. COLOURS.FEATS.MERCY_FROM_PAIN .."|n|nMercy from Pain: +" .. healingSingleTargetHit .. " HP on your next heal roll (+" .. healingMultipleEnemiesHit .. "HP if AoE)"
                                 end
 
                                 if attack.hasVindicationProc then
-                                    msg = msg .. COLOURS.HEALING .. "|n" .. TRAITS.VINDICATION.name .. ": You can heal for " .. attack.vindicationHealing .. " HP!|r"
+                                    msg = msg .. COLOURS.HEALING .. "|n|n" .. TRAITS.VINDICATION.name .. ": You can heal for " .. attack.vindicationHealing .. " HP!|r"
                                 end
                             else
                                 msg = msg .. COLOURS.NOTE .. "You can't deal any damage with this roll."
@@ -176,6 +176,21 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                             return characterState.featsAndTraits.numTraitCharges.get(TRAITS.SHATTER_SOUL.id) == 0
                         end,
                         func = consequences.useTrait(TRAITS.SHATTER_SOUL),
+                    },
+                    useVindication = {
+                        order = 4,
+                        type = "execute",
+                        name = function()
+                            return COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.VINDICATION.name
+                        end,
+                        desc = TRAITS.VINDICATION.desc,
+                        hidden = function()
+                            return not rolls.getAttack().hasVindicationProc
+                        end,
+                        disabled = function()
+                            return characterState.featsAndTraits.numTraitCharges.get(TRAITS.VINDICATION.id) == 0
+                        end,
+                        func = consequences.useTrait(TRAITS.VINDICATION),
                     }
                 }
             },

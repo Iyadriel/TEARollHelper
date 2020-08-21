@@ -56,6 +56,10 @@ end)
 
 bus.addListener(EVENTS.TRAIT_ACTIVATED, function(traitID)
     TEARollHelper:Print("Activated trait:", TRAITS[traitID].name)
+
+    if traitID == TRAITS.VINDICATION.id then
+        TEARollHelper:Print(COLOURS.HEALING .. "You may heal for the stated amount.")
+    end
 end)
 
 -- [[ Buffs ]]
