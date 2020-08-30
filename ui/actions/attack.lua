@@ -160,10 +160,6 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                                 if attack.hasEntropicEmbraceProc then
                                     msg = msg .. COLOURS.DAMAGE_TYPES.SHADOW .. "|nEntropic Embrace: You deal " .. attack.entropicEmbraceDmg .. " extra Shadow damage!"
                                 end
-
-                                if attack.hasMercyFromPainProc then
-                                    msg = msg .. COLOURS.FEATS.MERCY_FROM_PAIN .."|n|nMercy from Pain: +" .. attack.mercyFromPainBonusHealing .. " HP on your next heal roll."
-                                end
                             else
                                 msg = msg .. COLOURS.NOTE .. "You can't deal any damage with this roll."
                             end
@@ -171,11 +167,25 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                             return msg
                         end
                     },
-                    confirm = {
-                        order = 4,
+                }
+            },
+            postRoll = {
+                order = 4,
+                type = "group",
+                name = "After rolling",
+                inline = true,
+                hidden = function()
+                    return not state.attack.currentRoll.get()
+                end,
+                args = {
+                    confirmMercyFromPain = {
+                        order = 0,
                         type = "execute",
-                        width = "full",
-                        name = COLOURS.FEATS.MERCY_FROM_PAIN .. "Confirm",
+                        name = COLOURS.FEATS.MERCY_FROM_PAIN .."Apply Mercy from Pain",
+                        desc = function()
+                            local attack = rolls.getAttack()
+                            return "Apply a buff that increases your next heal roll by +" .. attack.mercyFromPainBonusHealing .. " HP."
+                        end,
                         hidden = function()
                             return not rolls.getAttack().hasMercyFromPainProc
                         end,
@@ -184,7 +194,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                         end
                     },
                     useShatterSoul = {
-                        order = 5,
+                        order = 1,
                         type = "execute",
                         name = COLOURS.TRAITS.SHATTER_SOUL .. "Use " .. TRAITS.SHATTER_SOUL.name,
                         desc = TRAITS.SHATTER_SOUL.desc,
@@ -197,7 +207,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                         func = consequences.useTrait(TRAITS.SHATTER_SOUL),
                     },
                     useVindication = {
-                        order = 6,
+                        order = 2,
                         type = "execute",
                         width = "full",
                         name = function()
@@ -213,7 +223,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                         func = consequences.useTrait(TRAITS.VINDICATION),
                     }
                 }
-            },
+            }
         }
     }
 end
