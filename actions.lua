@@ -2,13 +2,14 @@ local _, ns = ...
 
 local rules = ns.rules
 
-local function getAttack(roll, threshold, offence, offenceBuff, baseDmgBuffAmount, enemyId, numBloodHarvestSlots, numVindicationCharges)
+local function getAttack(roll, threshold, offence, offenceBuff, baseDmgBuffAmount, enemyId, isAOE, numBloodHarvestSlots, numVindicationCharges)
     local attackValue
     local dmg
     local critType = rules.offence.getCritType()
     local isCrit = rules.offence.isCrit(roll)
     local hasAdrenalineProc = nil
     local hasMercyFromPainProc = nil
+    local mercyFromPainBonusHealing = 0
     local hasEntropicEmbraceProc = nil
     local entropicEmbraceDmg = 0
     local shatterSoulEnabled = false
@@ -48,6 +49,10 @@ local function getAttack(roll, threshold, offence, offenceBuff, baseDmgBuffAmoun
         hasMercyFromPainProc = rules.offence.hasMercyFromPainProc(dmg + entropicEmbraceDmg)
     end
 
+    if hasMercyFromPainProc then
+        mercyFromPainBonusHealing = rules.offence.calculateMercyFromPainBonusHealing(isAOE)
+    end
+
     if rules.offence.canProcVindication() and numVindicationCharges > 0 then
         hasVindicationProc = rules.offence.hasVindicationProc(dmg)
         if hasVindicationProc then
@@ -62,6 +67,7 @@ local function getAttack(roll, threshold, offence, offenceBuff, baseDmgBuffAmoun
         critType = critType,
         hasAdrenalineProc = hasAdrenalineProc,
         hasMercyFromPainProc = hasMercyFromPainProc,
+        mercyFromPainBonusHealing = mercyFromPainBonusHealing,
         hasEntropicEmbraceProc = hasEntropicEmbraceProc,
         entropicEmbraceDmg = entropicEmbraceDmg,
         shatterSoulEnabled = shatterSoulEnabled,
@@ -145,17 +151,17 @@ local function getRangedSave(roll, threshold, spirit, buff)
     }
 end
 
-local function getHealing(roll, spirit, buff, numGreaterHealSlots, targetIsKO, lifePulse, mercyFromPainBonusHealing, outOfCombat)
+local function getHealing(roll, spirit, spiritBuff, healingDoneBuff, numGreaterHealSlots, targetIsKO, lifePulse, outOfCombat)
     local healValue
     local amountHealed
     local isCrit = rules.healing.isCrit(roll)
     local usesParagon = rules.healing.usesParagon()
     local playersHealableWithParagon = nil
 
-    healValue = rules.healing.calculateHealValue(roll, spirit, buff)
+    healValue = rules.healing.calculateHealValue(roll, spirit, spiritBuff)
 
     amountHealed = rules.healing.calculateAmountHealed(healValue)
-
+    amountHealed = rules.healing.applyHealingDoneBuff(amountHealed, healingDoneBuff)
     amountHealed = amountHealed + rules.healing.calculateGreaterHealBonus(numGreaterHealSlots)
 
     if targetIsKO then
@@ -164,8 +170,6 @@ local function getHealing(roll, spirit, buff, numGreaterHealSlots, targetIsKO, l
 
     if outOfCombat then
         amountHealed = rules.healing.applyOutOfCombatBonus(amountHealed)
-    else
-        amountHealed = amountHealed + mercyFromPainBonusHealing
     end
 
     if usesParagon then

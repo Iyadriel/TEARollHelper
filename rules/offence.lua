@@ -133,8 +133,8 @@ local function hasMercyFromPainProc(dmgDealt)
     return dmgDealt >= 5
 end
 
-local function calculateMercyFromPainBonusHealing(multipleEnemiesHit)
-    return multipleEnemiesHit and 4 or 2
+local function calculateMercyFromPainBonusHealing(attackIsAOE)
+    return attackIsAOE and 4 or 2
 end
 
 -- Trait: Shatter Soul

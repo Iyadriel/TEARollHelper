@@ -8,6 +8,7 @@ local consequences = ns.consequences
 local constants = ns.constants
 local enemies = ns.resources.enemies
 local environmentState = ns.state.environment.state
+local feats = ns.resources.feats
 local rollState = ns.state.rolls.state
 local rules = ns.rules
 local traits = ns.resources.traits
@@ -15,6 +16,7 @@ local weaknesses = ns.resources.weaknesses
 
 local ENEMIES = enemies.ENEMIES
 local EVENTS = bus.EVENTS
+local FEATS = feats.FEATS
 local INCOMING_HEAL_SOURCES = constants.INCOMING_HEAL_SOURCES
 local TRAITS = traits.TRAITS
 local WEAKNESSES = weaknesses.WEAKNESSES
@@ -105,6 +107,12 @@ end
 
 -- [[ Actions ]]
 
+local function confirmAttackAction(attack)
+    if attack.hasMercyFromPainProc then
+        buffs.addFeatBuff(FEATS.MERCY_FROM_PAIN, attack.mercyFromPainBonusHealing)
+    end
+end
+
 local function confirmDefenceAction(defence)
     if defence.damageTaken > 0 then
         state.health.damage(defence.damageTaken)
@@ -128,5 +136,6 @@ consequences.useTrait = useTrait
 
 consequences.confirmReboundRoll = confirmReboundRoll
 
+consequences.confirmAttackAction = confirmAttackAction
 consequences.confirmDefenceAction = confirmDefenceAction
 consequences.confirmMeleeSaveAction = confirmMeleeSaveAction

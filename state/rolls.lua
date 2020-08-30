@@ -11,6 +11,7 @@ local rolls = ns.state.rolls
 local traits = ns.resources.traits
 
 local ACTIONS = constants.ACTIONS
+local BUFF_TYPES = constants.BUFF_TYPES
 local EVENTS = bus.EVENTS
 local FEATS = feats.FEATS
 local ROLL_MODES = constants.ROLL_MODES
@@ -31,6 +32,7 @@ rolls.initState = function()
         [ACTIONS.attack] = {
             threshold = nil,
             numBloodHarvestSlots = 0,
+            isAOE = false,
             rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
         },
@@ -44,7 +46,6 @@ rolls.initState = function()
             numGreaterHealSlots = 0,
             targetIsKO = false,
             lifePulse = false,
-            mercyFromPainBonusHealing = 0,
             rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
         },
@@ -121,6 +122,7 @@ rolls.state = {
     [ACTIONS.attack] = {
         threshold = basicGetSet(ACTIONS.attack, "threshold"),
         numBloodHarvestSlots = basicGetSet(ACTIONS.attack, "numBloodHarvestSlots"),
+        isAOE = basicGetSet(ACTIONS.attack, "isAOE"),
         rollMode = basicGetSet(ACTIONS.attack, "rollMode"),
         currentRoll = basicGetSet(ACTIONS.attack, "currentRoll"),
     },
@@ -134,7 +136,6 @@ rolls.state = {
         numGreaterHealSlots = basicGetSet(ACTIONS.healing, "numGreaterHealSlots"),
         targetIsKO = basicGetSet(ACTIONS.healing, "targetIsKO"),
         lifePulse = basicGetSet(ACTIONS.healing, "lifePulse"),
-        mercyFromPainBonusHealing = basicGetSet(ACTIONS.healing, "mercyFromPainBonusHealing"),
         rollMode = basicGetSet(ACTIONS.healing, "rollMode"),
         currentRoll = basicGetSet(ACTIONS.healing, "currentRoll"),
     },
@@ -175,10 +176,10 @@ rolls.state = {
 
 local function resetSlots()
     rolls.state.attack.numBloodHarvestSlots.set(0)
+    rolls.state.attack.isAOE.set(false)
     rolls.state.healing.numGreaterHealSlots.set(0)
     rolls.state.healing.targetIsKO.set(false)
     rolls.state.healing.lifePulse.set(false)
-    rolls.state.healing.mercyFromPainBonusHealing.set(0)
     rolls.state.utility.useUtilityTrait.set(false)
 end
 
@@ -241,11 +242,12 @@ local function getAttack()
     local baseDmgBuff = characterState.buffLookup.getPlayerBaseDmgBuff()
     local baseDmgBuffAmount = baseDmgBuff and baseDmgBuff.amount or 0
     local enemyId = environment.state.enemyId.get()
+    local isAOE = state.attack.isAOE
     local threshold = state.attack.threshold
     local numBloodHarvestSlots = state.attack.numBloodHarvestSlots
     local numVindicationCharges = characterState.featsAndTraits.numTraitCharges.get(TRAITS.VINDICATION.id)
 
-    return actions.getAttack(state.attack.currentRoll, threshold, offence, offenceBuff, baseDmgBuffAmount, enemyId, numBloodHarvestSlots, numVindicationCharges)
+    return actions.getAttack(state.attack.currentRoll, threshold, offence, offenceBuff, baseDmgBuffAmount, enemyId, isAOE, numBloodHarvestSlots, numVindicationCharges)
 end
 
 local function getCC()
@@ -259,9 +261,16 @@ end
 
 local function getHealing(outOfCombat)
     local spirit = character.getPlayerSpirit()
-    local buff = characterState.buffs.spirit.get()
+    local spiritBuff = characterState.buffs.spirit.get()
 
-    return actions.getHealing(state.healing.currentRoll, spirit, buff, state.healing.numGreaterHealSlots, state.healing.targetIsKO, state.healing.lifePulse, state.healing.mercyFromPainBonusHealing, outOfCombat)
+    local healingDoneBuffs = characterState.buffLookup.getBuffsOfType(BUFF_TYPES.HEALING_DONE)
+    local healingDoneBuff = 0
+    for _, buff in ipairs(healingDoneBuffs) do
+        healingDoneBuff = healingDoneBuff + buff.amount
+    end
+
+
+    return actions.getHealing(state.healing.currentRoll, spirit, spiritBuff, healingDoneBuff, state.healing.numGreaterHealSlots, state.healing.targetIsKO, state.healing.lifePulse, outOfCombat)
 end
 
 local function getBuff()

@@ -66,6 +66,7 @@ ui.modules.buffs.getOptions = function(options)
                         if not buff then return "" end
 
                         local msg = " |n"
+
                         if buff.types[BUFF_TYPES.STAT] then
                             for stat, amount in pairs(buff.stats) do
                                 if amount > 0 then
@@ -75,6 +76,7 @@ ui.modules.buffs.getOptions = function(options)
                                 end
                             end
                         end
+
                         if buff.types[BUFF_TYPES.BASE_DMG] then
                             if buff.amount > 0 then
                                 msg = msg .. "Base damage increased by " .. buff.amount .. ". "
@@ -82,6 +84,7 @@ ui.modules.buffs.getOptions = function(options)
                                 msg = msg .. "Base damage decreased by " .. buff.amount .. ". "
                             end
                         end
+
                         if buff.types[BUFF_TYPES.ADVANTAGE] then
                             msg = msg .. "Your rolls have advantage.|nApplies to: "
                             if buff.turnTypeId then
@@ -101,9 +104,11 @@ ui.modules.buffs.getOptions = function(options)
                             end
                             msg = string.sub(msg, 0, -3)
                         end
+
                         if buff.types[BUFF_TYPES.HEALING_OVER_TIME] then
                             msg = msg .. "Healing for " .. buff.healingPerTick .. " at the start of every turn."
                         end
+
                         if buff.types[BUFF_TYPES.MAX_HEALTH] then
                             local amount = buff.amount
                             if amount > 0 then
@@ -111,6 +116,11 @@ ui.modules.buffs.getOptions = function(options)
                             else
                                 msg = msg .. "Maximum health decreased by " .. abs(amount) .. ". "
                             end
+                        end
+
+                        if buff.types[BUFF_TYPES.HEALING_DONE] then
+                            local amount = buff.amount
+                            msg = msg .. "Healing done increased by " .. amount .. ". "
                         end
 
                         if buff.remainingTurns then

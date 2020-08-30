@@ -38,6 +38,10 @@ local function calculateAmountHealed(healValue)
     return 0
 end
 
+local function applyHealingDoneBuff(amountHealed, healingDoneBuff)
+    return amountHealed + healingDoneBuff
+end
+
 local function isCrit(roll)
     local critReq = rules.rolls.getCritReq(roll)
 
@@ -139,6 +143,7 @@ rules.healing = {
     canHeal = canHeal,
     calculateHealValue = calculateHealValue,
     calculateAmountHealed = calculateAmountHealed,
+    applyHealingDoneBuff = applyHealingDoneBuff,
     isCrit = isCrit,
     applyCritModifier = applyCritModifier,
     getMaxGreaterHealSlots = getMaxGreaterHealSlots,

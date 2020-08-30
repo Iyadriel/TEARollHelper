@@ -327,6 +327,9 @@ characterState.state = {
             end
             return nil
         end,
+        getFeatBuff = function(feat)
+            return characterState.state.buffLookup.get("feat_" .. feat.id)
+        end,
         getTraitBuffs = function(trait)
             local activeBuffs = characterState.state.activeBuffs.get()
             local traitBuffs = {}
@@ -346,15 +349,15 @@ characterState.state = {
         getRacialBuff = function()
             return characterState.state.buffLookup.get("racial")
         end,
-        getMaxHealthBuffs = function()
+        getBuffsOfType = function(type)
             local activeBuffs = characterState.state.activeBuffs.get()
-            local maxHealthBuffs = {}
+            local buffsOfType = {}
             for _, buff in ipairs(activeBuffs) do
-                if buff.types[BUFF_TYPES.MAX_HEALTH] then
-                    table.insert(maxHealthBuffs, buff)
+                if buff.types[type] then
+                    table.insert(buffsOfType, buff)
                 end
             end
-            return maxHealthBuffs
+            return buffsOfType
         end,
         add = function(buff)
             state.buffLookup[buff.id] = buff

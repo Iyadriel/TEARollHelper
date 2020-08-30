@@ -96,6 +96,19 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                     return not state.attack.currentRoll.get()
                 end,
                 args = {
+                    isAOE = {
+                        order = 1,
+                        type = "toggle",
+                        name = "Damage multiple targets",
+                        desc = "Spread your damage over multiple targets. This may affect how certain feats and traits behave.",
+                        hidden = function()
+                            return not rules.offence.canProcMercyFromPain()
+                        end,
+                        get = state.attack.isAOE.get,
+                        set = function(info, value)
+                            state.attack.isAOE.set(value)
+                        end
+                    },
                     actions_attack_bloodHarvest = {
                         order = 2,
                         type = "range",
@@ -149,13 +162,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                                 end
 
                                 if attack.hasMercyFromPainProc then
-                                    local healingSingleTargetHit = rules.offence.calculateMercyFromPainBonusHealing(false)
-                                    local healingMultipleEnemiesHit = rules.offence.calculateMercyFromPainBonusHealing(true)
-                                    msg = msg .. COLOURS.FEATS.MERCY_FROM_PAIN .."|n|nMercy from Pain: +" .. healingSingleTargetHit .. " HP on your next heal roll (+" .. healingMultipleEnemiesHit .. "HP if AoE)"
-                                end
-
-                                if attack.hasVindicationProc then
-                                    msg = msg .. COLOURS.HEALING .. "|n|n" .. TRAITS.VINDICATION.name .. ": You can heal for " .. attack.vindicationHealing .. " HP!|r"
+                                    msg = msg .. COLOURS.FEATS.MERCY_FROM_PAIN .."|n|nMercy from Pain: +" .. attack.mercyFromPainBonusHealing .. " HP on your next heal roll."
                                 end
                             else
                                 msg = msg .. COLOURS.NOTE .. "You can't deal any damage with this roll."
@@ -164,8 +171,20 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                             return msg
                         end
                     },
-                    useShatterSoul = {
+                    confirm = {
                         order = 4,
+                        type = "execute",
+                        width = "full",
+                        name = COLOURS.FEATS.MERCY_FROM_PAIN .. "Confirm",
+                        hidden = function()
+                            return not rolls.getAttack().hasMercyFromPainProc
+                        end,
+                        func = function()
+                            consequences.confirmAttackAction(rolls.getAttack())
+                        end
+                    },
+                    useShatterSoul = {
+                        order = 5,
                         type = "execute",
                         name = COLOURS.TRAITS.SHATTER_SOUL .. "Use " .. TRAITS.SHATTER_SOUL.name,
                         desc = TRAITS.SHATTER_SOUL.desc,
@@ -178,10 +197,11 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                         func = consequences.useTrait(TRAITS.SHATTER_SOUL),
                     },
                     useVindication = {
-                        order = 4,
+                        order = 6,
                         type = "execute",
+                        width = "full",
                         name = function()
-                            return COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.VINDICATION.name
+                            return COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.VINDICATION.name ..  ": " .. COLOURS.HEALING .. "Heal for " .. rolls.getAttack().vindicationHealing .. " HP"
                         end,
                         desc = TRAITS.VINDICATION.desc,
                         hidden = function()

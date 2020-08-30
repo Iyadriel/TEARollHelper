@@ -169,6 +169,47 @@ local function addHoTBuff(label, icon, healingPerTick, remainingTurns)
     bus.fire(EVENTS.HEALING_OVER_TIME_BUFF_ADDED, label)
 end
 
+local function addFeatBuff(feat, providedValue)
+    local existingBuff = characterState.state.buffLookup.getFeatBuff(feat)
+    if existingBuff then
+        removeBuff(existingBuff)
+    end
+
+    local buff = feat.buff
+
+    local types = buff.types or {
+        [buff.type] = true
+    }
+
+    local newBuff = {
+        id = "feat_" .. feat.id,
+        types = types,
+        label = feat.name,
+        icon = feat.icon,
+
+        source = BUFF_SOURCES.TRAIT,
+        featID = feat.id,
+
+        canCancel = true
+    }
+
+    if types[BUFF_TYPES.HEALING_DONE] then
+        if providedValue then
+            newBuff.amount = providedValue
+        end
+    end
+
+    if buff.remainingTurns then
+        if type(buff.remainingTurns) == "table" then
+            newBuff.remainingTurns = shallowCopy(buff.remainingTurns)
+        else
+            newBuff.remainingTurns = buff.remainingTurns
+        end
+    end
+
+    addBuff(newBuff)
+end
+
 local function addTraitBuff(trait, providedStats)
     local existingBuffs = characterState.state.buffLookup.getTraitBuffs(trait)
     if existingBuffs then
@@ -319,6 +360,7 @@ ns.buffs.addBaseDmgBuff = addBaseDmgBuff
 ns.buffs.addAdvantageBuff = addAdvantageBuff
 ns.buffs.addDisadvantageDebuff = addDisadvantageDebuff
 ns.buffs.addHoTBuff = addHoTBuff
+ns.buffs.addFeatBuff = addFeatBuff
 ns.buffs.addTraitBuff = addTraitBuff
 ns.buffs.addWeaknessDebuff = addWeaknessDebuff
 ns.buffs.addRacialBuff = addRacialBuff

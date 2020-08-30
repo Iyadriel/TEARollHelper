@@ -4,7 +4,6 @@ local COLOURS = TEARollHelper.COLOURS
 
 local character = ns.character
 local characterState = ns.state.character.state
-local consequences = ns.consequences
 local constants = ns.constants
 local feats = ns.resources.feats
 local rolls = ns.state.rolls
@@ -97,29 +96,11 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                             state.healing.targetIsKO.set(value)
                         end,
                     },
-                    mercyFromPain = {
-                        name = COLOURS.FEATS.MERCY_FROM_PAIN .. FEATS.MERCY_FROM_PAIN.name,
-                        type = "select",
-                        desc = FEATS.MERCY_FROM_PAIN.desc,
-                        order = 3,
-                        values = {
-                            [0] = "Inactive",
-                            [rules.offence.calculateMercyFromPainBonusHealing(false)] = "Single enemy damaged",
-                            [rules.offence.calculateMercyFromPainBonusHealing(true)] = "Multple enemies damaged",
-                        },
-                        hidden = function()
-                            return not rules.offence.canProcMercyFromPain()
-                        end,
-                        get = state.healing.mercyFromPainBonusHealing.get,
-                        set = function(info, value)
-                            state.healing.mercyFromPainBonusHealing.set(value)
-                        end
-                    },
                     lifePulse = {
                         name = COLOURS.TRAITS.GENERIC .. TRAITS.LIFE_PULSE.name,
                         type = "toggle",
                         desc = TRAITS.LIFE_PULSE.desc,
-                        order = 4,
+                        order = 3,
                         hidden = function()
                             return not character.hasTrait(TRAITS.LIFE_PULSE)
                         end,
@@ -135,7 +116,7 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                         type = "description",
                         desc = "How much you can heal for",
                         fontSize = "medium",
-                        order = 5,
+                        order = 4,
                         name = function()
                             local healing = rolls.getHealing(options.outOfCombat)
                             local msg = rules.healing.getMaxGreaterHealSlots() > 0 and " |n" or "" -- Only show spacing if greater heals are shown. Dirty hack
@@ -165,7 +146,7 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                         end
                     },
                     outOfCombatNote = {
-                        order = 6,
+                        order = 5,
                         type = "description",
                         name = function()
                             local msg = COLOURS.NOTE .. " |nOut of combat, you can perform "

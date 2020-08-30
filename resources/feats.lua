@@ -3,7 +3,9 @@ local _, ns = ...
 local constants = ns.constants
 local feats = ns.resources.feats
 
+local BUFF_TYPES = constants.BUFF_TYPES
 local DAMAGE_TYPES = constants.DAMAGE_TYPES
+local TURN_TYPES = constants.TURN_TYPES
 
 feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "COUNTER_FORCE", "ETERNAL_SACRIFICE", "EXPANSIVE_ARSENAL", "FOREIGN_DISCIPLE", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "MONSTER_HUNTER", "ONSLAUGHT", "PARAGON", "PHALANX", "PROFESSIONAL", "REAPER", "SHEPHERD_OF_THE_WICKED", "WARDER"}
 
@@ -90,7 +92,14 @@ feats.FEATS = {
         id = "MERCY_FROM_PAIN",
         name = "Mercy from Pain",
         desc = "Every time you deal 5 damage or more to a single enemy, your next healing roll is boosted by +2 HP, if you deal 5 damage or more to multiple enemies at once, your next healing roll is instead boosted by +4HP (does not stack). If you do not use this bonus on your next player turn, it fades.",
-        supported = true
+        icon = "Interface\\Icons\\spell_holy_holyguidance",
+        supported = true,
+        buff = {
+            type = BUFF_TYPES.HEALING_DONE,
+            remainingTurns = {
+                [TURN_TYPES.PLAYER.id] = 1,
+            },
+        },
     },
     MONSTER_HUNTER = {
         id = "MONSTER_HUNTER",
