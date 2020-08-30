@@ -25,130 +25,148 @@ ui.modules.buffs.getOptions = function(options)
     return {
         order = options.order,
         type = "group",
-        name = "Buffs",
-        inline = true,
-        args = (function()
-            local rows = {}
+        name = "Buff view",
+        args = {
+            activeBuffs = {
+                order = 0,
+                type = "group",
+                name = "Active buffs",
+                inline = true,
+                args = (function()
+                    local rows = {}
 
-            for i = 1, MAX_BUFFS do
-                rows["buff" .. i] = {
-                    order = i,
-                    type = "execute",
-                    width = 0.5,
-                    hidden = function()
-                        return not state.activeBuffs.get()[i]
-                    end,
-                    image = function()
-                        local buff = state.activeBuffs.get()[i]
-                        return buff and buff.icon or ""
-                    end,
-                    imageCoords = {.08, .92, .08, .92},
-                    name = function()
-                        local buff = state.activeBuffs.get()[i]
-                        if not buff then return "" end
+                    rows.noActiveBuffs = {
+                        order = 0,
+                        type = "description",
+                        fontSize = "medium",
+                        name = COLOURS.NOTE .. "Active buffs will appear here.",
+                        hidden = function()
+                            return state.activeBuffs.get()[1]
+                        end,
+                    }
 
-                        local msg = (buff.colour or "|cffffffff") .. buff.label
+                    for i = 1, MAX_BUFFS do
+                        rows["buff" .. i] = {
+                            order = i,
+                            type = "execute",
+                            width = 0.5,
+                            hidden = function()
+                                return not state.activeBuffs.get()[i]
+                            end,
+                            image = function()
+                                local buff = state.activeBuffs.get()[i]
+                                return buff and buff.icon or ""
+                            end,
+                            imageCoords = {.08, .92, .08, .92},
+                            name = function()
+                                local buff = state.activeBuffs.get()[i]
+                                if not buff then return "" end
 
-                        if buff.stacks and buff.stacks > 1 then
-                            msg = msg .. " (" .. buff.stacks .. ")"
-                        end
+                                local msg = (buff.colour or "|cffffffff") .. buff.label
 
-                        return msg
-                    end,
-                    func = function()
-                        local buff = state.activeBuffs.get()[i]
-                        if buff.canCancel then
-                            state.activeBuffs.cancel(i)
-                        end
-                    end,
-                    desc = function()
-                        local buff = state.activeBuffs.get()[i]
-                        if not buff then return "" end
-
-                        local msg = " |n"
-
-                        if buff.types[BUFF_TYPES.STAT] then
-                            for stat, amount in pairs(buff.stats) do
-                                if amount > 0 then
-                                    msg = msg .. STAT_LABELS[stat] .. " increased by " .. amount .. ". "
-                                else
-                                    msg = msg .. STAT_LABELS[stat] .. " decreased by " .. abs(amount) .. ". "
+                                if buff.stacks and buff.stacks > 1 then
+                                    msg = msg .. " (" .. buff.stacks .. ")"
                                 end
-                            end
-                        end
 
-                        if buff.types[BUFF_TYPES.BASE_DMG] then
-                            if buff.amount > 0 then
-                                msg = msg .. "Base damage increased by " .. buff.amount .. ". "
-                            else
-                                msg = msg .. "Base damage decreased by " .. buff.amount .. ". "
-                            end
-                        end
-
-                        if buff.types[BUFF_TYPES.ADVANTAGE] then
-                            msg = msg .. "Your rolls have advantage.|nApplies to: "
-                            if buff.turnTypeId then
-                                msg = msg .. TURN_TYPES[buff.turnTypeId].name .. " turn, "
-                            end
-                            for action in pairs(buff.actions) do
-                                msg = msg ..  ACTION_LABELS[action] .. ", "
-                            end
-                            msg = string.sub(msg, 0, -3)
-                        elseif buff.types[BUFF_TYPES.DISADVANTAGE] then
-                            msg = msg .. "Your rolls have disadvantage.|nApplies to: "
-                            if buff.turnTypeId then
-                                msg = msg .. TURN_TYPES[buff.turnTypeId].name .. " turn, "
-                            end
-                            for action in pairs(buff.actions) do
-                                msg = msg ..  ACTION_LABELS[action] .. ", "
-                            end
-                            msg = string.sub(msg, 0, -3)
-                        end
-
-                        if buff.types[BUFF_TYPES.HEALING_OVER_TIME] then
-                            msg = msg .. "Healing for " .. buff.healingPerTick .. " at the start of every turn."
-                        end
-
-                        if buff.types[BUFF_TYPES.MAX_HEALTH] then
-                            local amount = buff.amount
-                            if amount > 0 then
-                                msg = msg .. "Maximum health increased by " .. amount .. ". "
-                            else
-                                msg = msg .. "Maximum health decreased by " .. abs(amount) .. ". "
-                            end
-                        end
-
-                        if buff.types[BUFF_TYPES.HEALING_DONE] then
-                            local amount = buff.amount
-                            msg = msg .. "Healing done increased by " .. amount .. ". "
-                        end
-
-                        if buff.remainingTurns then
-                            if type(buff.remainingTurns) == "table" then
-                                local remainingPlayerTurns = buff.remainingTurns[TURN_TYPES.PLAYER.id]
-                                local remainingEnemyTurns = buff.remainingTurns[TURN_TYPES.ENEMY.id]
-                                if remainingPlayerTurns then
-                                    msg = msg .. COLOURS.NOTE .. "|n|nRemaining " .. TURN_TYPES.PLAYER.name .. " turns: " .. remainingPlayerTurns
-                                elseif remainingEnemyTurns then
-                                    msg = msg .. COLOURS.NOTE .. "|n|nRemaining " .. TURN_TYPES.ENEMY.name .. " turns: " .. remainingEnemyTurns
+                                return msg
+                            end,
+                            func = function()
+                                local buff = state.activeBuffs.get()[i]
+                                if buff.canCancel then
+                                    state.activeBuffs.cancel(i)
                                 end
-                            else
-                                msg = msg .. COLOURS.NOTE .. "|n|nRemaining turns: " .. buff.remainingTurns
-                            end
-                        elseif buff.expireOnCombatEnd then
-                            msg = msg .. COLOURS.NOTE .. "|n|nLasts until end of combat"
-                        end
+                            end,
+                            desc = function()
+                                local buff = state.activeBuffs.get()[i]
+                                if not buff then return "" end
 
-                        --msg = msg .. COLOURS.NOTE .. "|n|nSource: " .. buff.source
+                                local msg = " |n"
 
-                        return msg
-                    end,
-                    dialogControl = "TEABuffButton"
-                }
-            end
+                                if buff.types[BUFF_TYPES.STAT] then
+                                    for stat, amount in pairs(buff.stats) do
+                                        if amount > 0 then
+                                            msg = msg .. STAT_LABELS[stat] .. " increased by " .. amount .. ". "
+                                        else
+                                            msg = msg .. STAT_LABELS[stat] .. " decreased by " .. abs(amount) .. ". "
+                                        end
+                                    end
+                                end
 
-            rows.newBuff = {
-                order = 11,
+                                if buff.types[BUFF_TYPES.BASE_DMG] then
+                                    if buff.amount > 0 then
+                                        msg = msg .. "Base damage increased by " .. buff.amount .. ". "
+                                    else
+                                        msg = msg .. "Base damage decreased by " .. buff.amount .. ". "
+                                    end
+                                end
+
+                                if buff.types[BUFF_TYPES.ADVANTAGE] then
+                                    msg = msg .. "Your rolls have advantage.|nApplies to: "
+                                    if buff.turnTypeId then
+                                        msg = msg .. TURN_TYPES[buff.turnTypeId].name .. " turn, "
+                                    end
+                                    for action in pairs(buff.actions) do
+                                        msg = msg ..  ACTION_LABELS[action] .. ", "
+                                    end
+                                    msg = string.sub(msg, 0, -3)
+                                elseif buff.types[BUFF_TYPES.DISADVANTAGE] then
+                                    msg = msg .. "Your rolls have disadvantage.|nApplies to: "
+                                    if buff.turnTypeId then
+                                        msg = msg .. TURN_TYPES[buff.turnTypeId].name .. " turn, "
+                                    end
+                                    for action in pairs(buff.actions) do
+                                        msg = msg ..  ACTION_LABELS[action] .. ", "
+                                    end
+                                    msg = string.sub(msg, 0, -3)
+                                end
+
+                                if buff.types[BUFF_TYPES.HEALING_OVER_TIME] then
+                                    msg = msg .. "Healing for " .. buff.healingPerTick .. " at the start of every turn."
+                                end
+
+                                if buff.types[BUFF_TYPES.MAX_HEALTH] then
+                                    local amount = buff.amount
+                                    if amount > 0 then
+                                        msg = msg .. "Maximum health increased by " .. amount .. ". "
+                                    else
+                                        msg = msg .. "Maximum health decreased by " .. abs(amount) .. ". "
+                                    end
+                                end
+
+                                if buff.types[BUFF_TYPES.HEALING_DONE] then
+                                    local amount = buff.amount
+                                    msg = msg .. "Healing done increased by " .. amount .. ". "
+                                end
+
+                                if buff.remainingTurns then
+                                    if type(buff.remainingTurns) == "table" then
+                                        local remainingPlayerTurns = buff.remainingTurns[TURN_TYPES.PLAYER.id]
+                                        local remainingEnemyTurns = buff.remainingTurns[TURN_TYPES.ENEMY.id]
+                                        if remainingPlayerTurns then
+                                            msg = msg .. COLOURS.NOTE .. "|n|nRemaining " .. TURN_TYPES.PLAYER.name .. " turns: " .. remainingPlayerTurns
+                                        elseif remainingEnemyTurns then
+                                            msg = msg .. COLOURS.NOTE .. "|n|nRemaining " .. TURN_TYPES.ENEMY.name .. " turns: " .. remainingEnemyTurns
+                                        end
+                                    else
+                                        msg = msg .. COLOURS.NOTE .. "|n|nRemaining turns: " .. buff.remainingTurns
+                                    end
+                                elseif buff.expireOnCombatEnd then
+                                    msg = msg .. COLOURS.NOTE .. "|n|nLasts until end of combat"
+                                end
+
+                                --msg = msg .. COLOURS.NOTE .. "|n|nSource: " .. buff.source
+
+                                return msg
+                            end,
+                            dialogControl = "TEABuffButton"
+                        }
+                    end
+
+                    return rows
+                end)()
+            },
+            newBuff = {
+                order = 1,
                 type = "group",
                 name = "Add buff",
                 inline = true,
@@ -276,8 +294,6 @@ ui.modules.buffs.getOptions = function(options)
                     },
                 }
             }
-
-            return rows
-        end)()
+        }
     }
 end

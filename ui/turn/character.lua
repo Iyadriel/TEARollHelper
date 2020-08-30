@@ -44,7 +44,7 @@ end
 ui.modules.turn.modules.character.getOptions = function(options)
     return {
         type = "group",
-        name = "Character",
+        name = "Health and resources",
         desc = "The current state of your character",
         order = options.order,
         args = {
@@ -77,9 +77,8 @@ ui.modules.turn.modules.character.getOptions = function(options)
                     }
                 }
             },
-            buffs = ui.modules.buffs.getOptions({ order = 1 }),
             health = {
-                order = 2,
+                order = 1,
                 type = "group",
                 name = "Health",
                 inline = true,
@@ -104,7 +103,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                 }
             },
             defence = {
-                order = 3,
+                order = 2,
                 type = "group",
                 name = "Defence",
                 inline = true,
@@ -128,7 +127,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                 }
             },
             healing = {
-                order = 4,
+                order = 3,
                 type = "group",
                 name = "Healing",
                 inline = true,
@@ -174,7 +173,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                 }
             },
             featsAndTraits = {
-                order = 5,
+                order = 4,
                 type = "group",
                 name = "Feats and traits",
                 inline = true,
@@ -215,7 +214,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                 end)())
             },
             turn_character_fatePoints = {
-                order = 6,
+                order = 5,
                 type = "range",
                 name = "Fate Points",
                 desc = "How many Fate Points you have left",
@@ -234,7 +233,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                 })
             },
             updateTRP = {
-                order = 7,
+                order = 6,
                 type = "execute",
                 name = "Update Total RP",
                 desc = "Update your Total RP 'Currently' with your current/max HP",
@@ -255,7 +254,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                 end,
             },
             autoUpdateTRPNote = {
-                order = 8,
+                order = 7,
                 type = "description",
                 name = COLOURS.NOTE .. " |nYour Total RP is set to update automatically when needed.",
                 hidden = function()

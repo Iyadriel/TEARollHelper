@@ -29,7 +29,7 @@ ui.modules.turn.modules.effects.getOptions = function(options)
     return {
         order = options.order,
         type = "group",
-        name = "Effects",
+        name = "Apply effect",
         args = {
             damage = {
                 order = 0,
