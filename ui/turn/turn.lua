@@ -16,7 +16,7 @@ ui.modules.turn.modules.turn.getOptions = function(options)
         type = "group",
         name = function()
             if state.inCombat.get() then
-                return "Turn " .. state.index.get()
+                return ui.iconString("Interface\\Icons\\ability_warrior_challange", "small") .. "Turn " .. state.index.get()
             end
             return TURN_TYPES.OUT_OF_COMBAT.name
         end,
@@ -53,7 +53,7 @@ ui.modules.turn.modules.turn.getOptions = function(options)
             },
             startCombat = {
                 type = "execute",
-                name = "Start combat",
+                name = ui.iconString("Interface\\Icons\\ability_warrior_challange", "small") .. "Start combat",
                 width = "full",
                 order = 2,
                 hidden = function()

@@ -25,7 +25,7 @@ ui.modules.buffs.getOptions = function(options)
     return {
         order = options.order,
         type = "group",
-        name = "Buff view",
+        name = ui.iconString("Interface\\Icons\\spell_holy_wordfortitude") .. "Buff view",
         args = {
             activeBuffs = {
                 order = 0,

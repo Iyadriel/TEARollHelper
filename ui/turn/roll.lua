@@ -19,22 +19,25 @@ local WEAKNESSES = weaknesses.WEAKNESSES
 
 local state = rollState.state
 
+local VALUE_DISADVANTAGE = ui.iconString("Interface\\Icons\\petbattle_speed-down") .. "Disadvantage"
+local VALUE_ADVANTAGE = ui.iconString("Interface\\Icons\\petbattle_speed") .. "Advantage"
+
 local ROLL_MODE_VALUES_NORMAL = {
-    [ROLL_MODES.DISADVANTAGE] = "Disadvantage",
+    [ROLL_MODES.DISADVANTAGE] = VALUE_DISADVANTAGE,
     [ROLL_MODES.NORMAL] = "Normal",
-    [ROLL_MODES.ADVANTAGE] = "Advantage"
+    [ROLL_MODES.ADVANTAGE] = VALUE_ADVANTAGE
 }
 
 local ROLL_MODE_VALUES_ADVANTAGE = {
-    [ROLL_MODES.DISADVANTAGE] = "Disadvantage+",
+    [ROLL_MODES.DISADVANTAGE] = VALUE_DISADVANTAGE .. "+",
     [ROLL_MODES.NORMAL] = "Normal+",
-    [ROLL_MODES.ADVANTAGE] = "Advantage"
+    [ROLL_MODES.ADVANTAGE] = VALUE_ADVANTAGE
 }
 
 local ROLL_MODE_VALUES_DISADVANTAGE = {
-    [ROLL_MODES.DISADVANTAGE] = "Disadvantage",
+    [ROLL_MODES.DISADVANTAGE] = VALUE_DISADVANTAGE,
     [ROLL_MODES.NORMAL] = "Normal-",
-    [ROLL_MODES.ADVANTAGE] = "Advantage-"
+    [ROLL_MODES.ADVANTAGE] = VALUE_ADVANTAGE .. "-"
 }
 
 --[[ local options = {
@@ -137,7 +140,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 order = 1,
                 type = "execute",
                 name = function()
-                    return turns.isRolling() and "Rolling..." or "Roll"
+                    return turns.isRolling() and "Rolling..." or ui.iconString("Interface\\Buttons\\UI-GroupLoot-Dice-Up", "small", false) .. "Roll"
                 end,
                 desc = "Do a /roll " .. rules.rolls.MAX_ROLL .. ".",
                 width = 1.3,

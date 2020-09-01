@@ -34,7 +34,7 @@ ui.modules.turn.modules.environment.getOptions = function(options)
                     for i = 1, #enemies.ENEMY_KEYS do
                         local key = enemies.ENEMY_KEYS[i]
                         local enemy = enemies.ENEMIES[key]
-                        enemyOptions[key] = enemy.name
+                        enemyOptions[key] = ui.iconString(enemy.icon) .. enemy.name
                     end
                     return enemyOptions
                 end)(),
@@ -56,7 +56,7 @@ ui.modules.turn.modules.environment.getOptions = function(options)
                     for i = 1, #zones.ZONE_KEYS do
                         local key = zones.ZONE_KEYS[i]
                         local zone = zones.ZONES[key]
-                        zoneOptions[key] = zone.name
+                        zoneOptions[key] = ui.iconString(zone.icon) .. zone.name
                     end
                     return zoneOptions
                 end)(),

@@ -44,7 +44,7 @@ end
 ui.modules.turn.modules.character.getOptions = function(options)
     return {
         type = "group",
-        name = "Health and resources",
+        name = ui.iconString("Interface\\Icons\\petbattle_health") .. "Health and resources",
         desc = "The current state of your character",
         order = options.order,
         args = {
@@ -256,11 +256,20 @@ ui.modules.turn.modules.character.getOptions = function(options)
             autoUpdateTRPNote = {
                 order = 7,
                 type = "description",
-                name = COLOURS.NOTE .. " |nYour Total RP is set to update automatically when needed.",
+                name = COLOURS.NOTE .. " |nYour Total RP is set to update automatically when needed.|n ",
                 hidden = function()
                     return not (integrations.TRP and settings.autoUpdateTRP.get())
                 end,
-            }
+            },
+            openConfig = {
+                order = 8,
+                type = "execute",
+                width = "full",
+                name = "Show character sheet",
+                func = function()
+                    toggleDialog(ui.modules.config.name)
+                end,
+            },
         }
     }
 end

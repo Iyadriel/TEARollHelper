@@ -11,7 +11,7 @@ ui.modules.turn.modules = {
 }
 
 ui.modules.turn.getOptions = function()
-    local actionOptions = ui.modules.actions.getOptions({ order = 2, groupName = "Perform action" })
+    local actionOptions = ui.modules.actions.getOptions({ order = 2, groupName = ui.iconString("Interface\\Buttons\\UI-GroupLoot-Dice-Up") .. "Perform action" })
 
     return {
         name = ui.modules.turn.friendlyName,
