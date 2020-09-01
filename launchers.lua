@@ -22,7 +22,7 @@ end
 
 local dataObject = ldb:NewDataObject(LDB_NAME, {
     type = "data source",
-    icon = "Interface\\Icons\\inv_misc_dice_02",
+    icon = "Interface\\Buttons\\UI-GroupLoot-Dice-Up",
     OnClick = function(_, button)
         if button == "LeftButton" then
             toggleDialog(ui.modules.turn.name)
