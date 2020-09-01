@@ -267,7 +267,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                 width = "full",
                 name = "Show character sheet",
                 func = function()
-                    toggleDialog(ui.modules.config.name)
+                    ui.openWindow(ui.modules.config.name)
                 end,
             },
         }

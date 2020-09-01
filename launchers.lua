@@ -1,6 +1,5 @@
 local _, ns = ...
 
-local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 local ldb = LibStub:GetLibrary("LibDataBroker-1.1")
 local icon = LibStub("LibDBIcon-1.0")
 
@@ -12,24 +11,16 @@ local ui = ns.ui
 local EVENTS = bus.EVENTS
 local LDB_NAME = ui.constants.FRIENDLY_ADDON_NAME
 
-local function toggleDialog(name)
-    if AceConfigDialog.OpenFrames[name] then
-        AceConfigDialog:Close(name)
-    else
-        AceConfigDialog:Open(name)
-    end
-end
-
 local dataObject = ldb:NewDataObject(LDB_NAME, {
     type = "data source",
     icon = "Interface\\Buttons\\UI-GroupLoot-Dice-Up",
     OnClick = function(_, button)
         if button == "LeftButton" then
-            toggleDialog(ui.modules.turn.name)
+            ui.toggleWindow(ui.modules.turn.name)
         elseif button == "RightButton" then
-            toggleDialog(ui.modules.config.name)
+            ui.toggleWindow(ui.modules.config.name)
         elseif button == "MiddleButton" then
-            toggleDialog(ui.modules.turn.name)
+            ui.toggleWindow(ui.modules.turn.name)
         end
     end
 })

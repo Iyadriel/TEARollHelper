@@ -1,8 +1,6 @@
 local _, ns = ...
 local ui = ns.ui
 
-local AceConfigDialog = LibStub("AceConfigDialog-3.0")
-
 ui.modules.config.modules = {
     character = {},
     settings = {},
@@ -18,7 +16,7 @@ ui.modules.config.getOptions = function()
                 name = "Show turn window",
                 type = "execute",
                 func = function()
-                    AceConfigDialog:Open(ui.modules.turn.name)
+                    ui.openWindow(ui.modules.turn.name)
                 end
             },
             character = {
@@ -39,7 +37,7 @@ ui.modules.config.getOptions = function()
                 type = "execute",
                 guiHidden = true,
                 func = function()
-                    AceConfigDialog:Open("TEARollHelper")
+                    ui.openWindow("TEARollHelper")
                 end
             },
         }

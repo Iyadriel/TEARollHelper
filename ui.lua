@@ -1,5 +1,6 @@
 local _, ns = ...
 
+local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
 
 local ui = ns.ui
@@ -19,6 +20,18 @@ local modules = {
         friendlyName = "Turn View"
     }
 }
+
+local function openWindow(name)
+    AceConfigDialog:Open(name)
+end
+
+local function toggleWindow(name)
+    if AceConfigDialog.OpenFrames[name] then
+        AceConfigDialog:Close(name)
+    else
+        openWindow(name)
+    end
+end
 
 local function update(moduleName)
     AceConfigRegistry:NotifyChange(moduleName)
@@ -45,5 +58,7 @@ end
 ui.constants = constants
 ui.modules = modules
 
+ui.openWindow = openWindow
+ui.toggleWindow = toggleWindow
 ui.update = update
 ui.iconString = iconString
