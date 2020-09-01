@@ -50,6 +50,9 @@ local function useFocus()
     buffs.addTraitBuff(TRAITS.FOCUS)
 end
 
+local function useLifePulse()
+end
+
 local function useLifeWithin()
     buffs.addTraitBuff(TRAITS.LIFE_WITHIN)
     state.health.heal(rules.traits.LIFE_WITHIN_HEAL_AMOUNT, INCOMING_HEAL_SOURCES.SELF)
@@ -83,6 +86,7 @@ local TRAIT_FNS = {
     [TRAITS.BULWARK.id] = useBulwark,
     [TRAITS.CALAMITY_GAMBIT.id] = useCalamityGambit,
     [TRAITS.FOCUS.id] = useFocus,
+    [TRAITS.LIFE_PULSE.id] = useLifePulse,
     [TRAITS.LIFE_WITHIN.id] = useLifeWithin,
     [TRAITS.SECOND_WIND.id] = useSecondWind,
     [TRAITS.SHATTER_SOUL.id] = useShatterSoul,

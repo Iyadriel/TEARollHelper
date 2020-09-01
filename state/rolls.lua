@@ -45,7 +45,6 @@ rolls.initState = function()
         [ACTIONS.healing] = {
             numGreaterHealSlots = 0,
             targetIsKO = false,
-            lifePulse = false,
             rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
         },
@@ -135,7 +134,6 @@ rolls.state = {
     [ACTIONS.healing] = {
         numGreaterHealSlots = basicGetSet(ACTIONS.healing, "numGreaterHealSlots"),
         targetIsKO = basicGetSet(ACTIONS.healing, "targetIsKO"),
-        lifePulse = basicGetSet(ACTIONS.healing, "lifePulse"),
         rollMode = basicGetSet(ACTIONS.healing, "rollMode"),
         currentRoll = basicGetSet(ACTIONS.healing, "currentRoll"),
     },
@@ -179,7 +177,6 @@ local function resetSlots()
     rolls.state.attack.isAOE.set(false)
     rolls.state.healing.numGreaterHealSlots.set(0)
     rolls.state.healing.targetIsKO.set(false)
-    rolls.state.healing.lifePulse.set(false)
     rolls.state.utility.useUtilityTrait.set(false)
 end
 
@@ -270,7 +267,7 @@ local function getHealing(outOfCombat)
     end
 
 
-    return actions.getHealing(state.healing.currentRoll, spirit, spiritBuff, healingDoneBuff, state.healing.numGreaterHealSlots, state.healing.targetIsKO, state.healing.lifePulse, outOfCombat)
+    return actions.getHealing(state.healing.currentRoll, spirit, spiritBuff, healingDoneBuff, state.healing.numGreaterHealSlots, state.healing.targetIsKO, outOfCombat)
 end
 
 local function getBuff()
