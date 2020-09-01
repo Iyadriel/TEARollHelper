@@ -14,7 +14,7 @@ ui.modules.turn.getOptions = function()
     local actionOptions = ui.modules.actions.getOptions({ order = 2, groupName = "Perform action" })
 
     return {
-        name = "TEA Turn View",
+        name = ui.modules.turn.friendlyName,
         type = "group",
         desc = "See an overview of the current turn",
         childGroups = "select",

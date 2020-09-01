@@ -10,7 +10,7 @@ local launchers = ns.launchers
 local ui = ns.ui
 
 local EVENTS = bus.EVENTS
-local LDB_NAME = ui.constants.FRIENDLY_NAME
+local LDB_NAME = ui.constants.FRIENDLY_ADDON_NAME
 
 local function toggleDialog(name)
     if AceConfigDialog.OpenFrames[name] then

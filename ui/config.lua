@@ -10,7 +10,7 @@ ui.modules.config.modules = {
 
 ui.modules.config.getOptions = function()
     local options = {
-        name = ui.constants.FRIENDLY_NAME,
+        name = ui.modules.config.friendlyName,
         type = 'group',
         args = {
             turn = {

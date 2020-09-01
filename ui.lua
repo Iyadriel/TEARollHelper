@@ -5,16 +5,18 @@ local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
 local ui = ns.ui
 
 local constants = {
-    FRIENDLY_NAME = "TEA Roll Helper"
+    FRIENDLY_ADDON_NAME = "TEA Roll Helper"
 }
 
 local modules = {
     actions = {},
     config = {
-        name = "TEARollHelper"
+        name = "TEARollHelper",
+        friendlyName = constants.FRIENDLY_ADDON_NAME,
     },
     turn = {
-        name = "TEARollHelperTurn"
+        name = "TEARollHelperTurn",
+        friendlyName = "Turn View"
     }
 }
 
