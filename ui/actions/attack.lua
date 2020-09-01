@@ -175,7 +175,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                 name = "After rolling",
                 inline = true,
                 hidden = function()
-                    return not state.attack.currentRoll.get()
+                    return not state.attack.currentRoll.get() or not (rolls.getAttack().dmg > 0) or not rules.offence.shouldShowPostRollUI()
                 end,
                 args = {
                     confirmMercyFromPain = {

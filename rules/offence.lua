@@ -181,6 +181,10 @@ local function shouldShowPreRollUI()
     return character.hasTrait(TRAITS.CALAMITY_GAMBIT) or rules.playerTurn.shouldShowPreRollUI() or rules.other.shouldShowPreRollUI()
 end
 
+local function shouldShowPostRollUI()
+    return character.hasFeat(FEATS.MERCY_FROM_PAIN) or character.hasTrait(TRAITS.SHATTER_SOUL) or character.hasTrait(TRAITS.VINDICATION)
+end
+
 rules.offence = {
     isCrit = isCrit,
     CRIT_TYPES = CRIT_TYPES,
@@ -215,4 +219,5 @@ rules.offence = {
     getEntropicEmbraceDmg = getEntropicEmbraceDmg,
 
     shouldShowPreRollUI = shouldShowPreRollUI,
+    shouldShowPostRollUI = shouldShowPostRollUI,
 }
