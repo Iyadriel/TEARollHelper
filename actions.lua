@@ -183,6 +183,7 @@ local function getHealing(roll, spirit, spiritBuff, healingDoneBuff, numGreaterH
     return {
         amountHealed = amountHealed,
         isCrit = isCrit,
+        outOfCombat = outOfCombat,
         numGreaterHealSlots = numGreaterHealSlots,
         usesParagon = usesParagon,
         playersHealableWithParagon = playersHealableWithParagon,

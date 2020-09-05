@@ -70,6 +70,8 @@ ui/actions/meleeSave.lua
 ui/actions/rangedSave.lua
 ui/actions/utility.lua
 
+ui/actions-tostring.lua
+
 ui/buffs.lua
 ui/chat.lua
 

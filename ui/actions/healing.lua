@@ -2,6 +2,7 @@ local _, ns = ...
 
 local COLOURS = TEARollHelper.COLOURS
 
+local actions = ns.actions
 local character = ns.character
 local characterState = ns.state.character.state
 local consequences = ns.consequences
@@ -106,29 +107,23 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                             local healing = rolls.getHealing(options.outOfCombat)
                             local msg = rules.healing.getMaxGreaterHealSlots() > 0 and " |n" or "" -- Only show spacing if greater heals are shown. Dirty hack
 
-                            if healing.amountHealed > 0 then
-                                local amount = tostring(healing.amountHealed)
-                                local healColour = (options.outOfCombat and character.hasFeat(FEATS.MEDIC)) and COLOURS.FEATS.GENERIC or COLOURS.HEALING
-
-                                if healing.isCrit then
-                                    msg = msg .. COLOURS.CRITICAL .. "MANY HEALS!|r " .. healColour .. "You can heal everyone in line of sight for " .. amount .. " HP."
-                                else
-                                    if healing.usesParagon then
-                                        local targets = healing.playersHealableWithParagon > 1 and " allies" or " ally"
-                                        msg = msg .. healColour .. "You can heal " .. healing.playersHealableWithParagon .. targets .. " for " .. amount .. " HP."
-                                    else
-                                        msg = msg .. healColour .. "You can heal for " .. amount .. " HP."
-                                    end
-                                end
-                            else
-                                msg = msg .. COLOURS.NOTE .. "You can't heal anyone with this roll."
-                            end
-
-                            return msg
+                            return msg .. actions.toString(ACTIONS.healing, healing)
+                        end
+                    },
+                    confirm = {
+                        order = 4,
+                        type = "execute",
+                        name = "Confirm",
+                        desc = "Confirm that you perform the stated action, and consume any charges used.",
+                        hidden = function()
+                            return rolls.getHealing(options.outOfCombat).amountHealed <= 0
+                        end,
+                        func = function()
+                            consequences.confirmAction(ACTIONS.healing, rolls.getHealing(options.outOfCombat))
                         end
                     },
                     outOfCombatNote = {
-                        order = 4,
+                        order = 5,
                         type = "description",
                         name = function()
                             local msg = COLOURS.NOTE .. " |nOut of combat, you can perform "
