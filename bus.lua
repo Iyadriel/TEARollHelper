@@ -28,8 +28,10 @@ local EVENTS = {
     FEAT_CHARGES_CHANGED = "FEAT_CHARGES_CHANGED", -- featID, numCharges
     GREATER_HEAL_CHARGES_CHANGED = "GREATER_HEAL_CHARGES_CHANGED", -- numCharges
 
+    -- Actions
+    ACTION_PERFORMED = "ACTION_PERFORMED", -- actionType, action
+
     -- Character effects
-    BUFF_EXPIRED = "BUFF_EXPIRED", -- label
     DAMAGE_PREVENTED = "DAMAGE_PREVENTED", -- damagePrevented
     DAMAGE_PREVENTED_COUNTER_RESET = "DAMAGE_PREVENTED_COUNTER_RESET",
     DAMAGE_TAKEN = "DAMAGE_TAKEN", -- incomingDamage, damageTaken, overkill
@@ -42,6 +44,7 @@ local EVENTS = {
     BUFF_STACK_ADDED = "BUFF_STACK_ADDED", -- buff
     WEAKNESS_DEBUFF_ADDED = "WEAKNESS_DEBUFF_ADDED", -- weaknessID
     HEALING_OVER_TIME_BUFF_ADDED = "HEALING_OVER_TIME_BUFF_ADDED", -- label
+    BUFF_EXPIRED = "BUFF_EXPIRED", -- label
 
     -- Rolling
     ROLL_CHANGED = "ROLL_CHANGED", -- action, roll

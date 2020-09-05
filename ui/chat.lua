@@ -18,6 +18,16 @@ local function printCriticalHealth()
     end
 end
 
+-- [[ Resources ]]
+
+bus.addListener(EVENTS.FATE_POINT_USED, function()
+    TEARollHelper:Print("Using Fate Point.")
+end)
+
+-- [[ Actions ]]
+
+-- [[ Character effects ]]
+
 bus.addListener(EVENTS.DAMAGE_PREVENTED, function(damagePrevented)
     TEARollHelper:Print(COLOURS.ROLES.TANK .. "You prevented " .. damagePrevented .. " damage.")
 end)
@@ -48,10 +58,6 @@ bus.addListener(EVENTS.HEALED, function(amountHealed, netAmountHealed, overheali
 
     TEARollHelper:Print(msg)
     printCriticalHealth()
-end)
-
-bus.addListener(EVENTS.FATE_POINT_USED, function()
-    TEARollHelper:Print("Using Fate Point.")
 end)
 
 bus.addListener(EVENTS.TRAIT_ACTIVATED, function(traitID)
