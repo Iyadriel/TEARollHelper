@@ -1,11 +1,13 @@
 local _, ns = ...
 
+local actions = ns.actions
 local bus = ns.bus
 local constants = ns.constants
 local characterState = ns.state.character.state
 local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
 
+local ACTIONS = constants.ACTIONS
 local COLOURS = TEARollHelper.COLOURS
 local EVENTS = bus.EVENTS
 local TRAITS = traits.TRAITS
@@ -29,6 +31,10 @@ bus.addListener(EVENTS.GREATER_HEAL_CHARGES_USED, function(numCharges)
 end)
 
 -- [[ Actions ]]
+
+bus.addListener(EVENTS.ACTION_PERFORMED, function(actionType, action)
+    TEARollHelper:Print(actions.toString(actionType, action))
+end)
 
 -- [[ Character effects ]]
 
