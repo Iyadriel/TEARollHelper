@@ -150,17 +150,8 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                             return actions.toString(ACTIONS.attack, attack)
                         end
                     },
-                    confirmTopMargin = {
-                        order = 5,
-                        type = "description",
-                        name = " ",
-                        hidden = function()
-                            local attack = rolls.getAttack()
-                            return not (attack.numBloodHarvestSlots > 0 or attack.hasMercyFromPainProc)
-                        end,
-                    },
                     confirm = {
-                        order = 6,
+                        order = 5,
                         type = "execute",
                         name = function()
                             local colour
