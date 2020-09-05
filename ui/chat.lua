@@ -24,6 +24,10 @@ bus.addListener(EVENTS.FATE_POINT_USED, function()
     TEARollHelper:Print("Using Fate Point.")
 end)
 
+bus.addListener(EVENTS.GREATER_HEAL_CHARGES_USED, function(numCharges)
+    TEARollHelper:Print("You used " .. numCharges .. " Greater Heal charges.")
+end)
+
 -- [[ Actions ]]
 
 -- [[ Character effects ]]

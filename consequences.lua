@@ -14,6 +14,7 @@ local rules = ns.rules
 local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
 
+local ACTIONS = constants.ACTIONS
 local ENEMIES = enemies.ENEMIES
 local EVENTS = bus.EVENTS
 local FEATS = feats.FEATS
@@ -117,6 +118,10 @@ local function confirmAttackAction(attack)
     end
 end
 
+local function confirmHealAction(heal)
+    characterState.state.healing.numGreaterHealSlots.use(heal.numGreaterHealSlots)
+end
+
 local function confirmDefenceAction(defence)
     if defence.damageTaken > 0 then
         state.health.damage(defence.damageTaken)
@@ -133,6 +138,15 @@ local function confirmMeleeSaveAction(meleeSave)
     end
 end
 
+local actionFns = {
+    [ACTIONS.healing] = confirmHealAction
+}
+
+local function confirmAction(actionType, action)
+    actionFns[actionType](action)
+    bus.fire(EVENTS.ACTION_PERFORMED, actionType, action)
+end
+
 -- [[ Exports ]]
 
 consequences.useFatePoint = useFatePoint
@@ -143,3 +157,4 @@ consequences.confirmReboundRoll = confirmReboundRoll
 consequences.confirmAttackAction = confirmAttackAction
 consequences.confirmDefenceAction = confirmDefenceAction
 consequences.confirmMeleeSaveAction = confirmMeleeSaveAction
+consequences.confirmAction = confirmAction

@@ -181,9 +181,23 @@ characterState.state = {
         }
     },
     healing = {
-        numGreaterHealSlots = basicGetSet("healing", "numGreaterHealSlots", function(numCharges)
-            bus.fire(EVENTS.GREATER_HEAL_CHARGES_CHANGED, numCharges)
-        end),
+        numGreaterHealSlots = {
+            get = function()
+                return state.healing.numGreaterHealSlots
+            end,
+            set = function(numCharges)
+                if numCharges ~= state.healing.numGreaterHealSlots then
+                    state.healing.numGreaterHealSlots = numCharges
+                    bus.fire(EVENTS.GREATER_HEAL_CHARGES_CHANGED, numCharges)
+                end
+            end,
+            use = function(numCharges)
+                if numCharges > 0 then
+                    characterState.state.healing.numGreaterHealSlots.set(state.healing.numGreaterHealSlots - numCharges)
+                    bus.fire(EVENTS.GREATER_HEAL_CHARGES_USED, numCharges)
+                end
+            end,
+        },
         excess = basicGetSet("healing", "excess"),
     },
     featsAndTraits = {
