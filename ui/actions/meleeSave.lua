@@ -56,24 +56,7 @@ ui.modules.actions.modules.meleeSave.getOptions = function(options)
                         desc = "How much damage you take this turn",
                         fontSize = "medium",
                         name = function()
-                            local save = rolls.getMeleeSave()
-
-                            local msg = ""
-
-                            if save.damageTaken > 0 then
-                                if save.isBigFail then
-                                    msg = COLOURS.DAMAGE .. "Bad save! |r"
-                                end
-                                msg = msg .. "You can save your ally, |r" .. COLOURS.DAMAGE .. "but you will take " .. tostring(save.damageTaken) .. " damage."
-                            else
-                                msg = COLOURS.ROLES.TANK .. "You can save your ally without taking any damage yourself."
-                            end
-
-                            if save.hasCounterForceProc then
-                                msg = msg .. COLOURS.FEATS.GENERIC .. "\nCOUNTER-FORCE!|r You can deal "..save.counterForceDmg.." damage to your attacker!"
-                            end
-
-                            return msg
+                            return actions.toString(ACTIONS.meleeSave, rolls.getMeleeSave())
                         end
                     },
                     confirm = {
@@ -91,7 +74,7 @@ ui.modules.actions.modules.meleeSave.getOptions = function(options)
                             return meleeSave.damageTaken <= 0 and meleeSave.damagePrevented <= 0
                         end,
                         func = function()
-                            consequences.confirmMeleeSaveAction(rolls.getMeleeSave())
+                            consequences.confirmAction(ACTIONS.meleeSave, rolls.getMeleeSave())
                         end
                     }
                 }

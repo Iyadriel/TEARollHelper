@@ -72,7 +72,12 @@ local function defenceToString(defence)
     if defence.damageTaken > 0 then
         return COLOURS.DAMAGE .. "You take " .. tostring(defence.damageTaken) .. " damage."
     else
-        local msg = "Safe! You don't take damage this turn."
+        local msg
+        if defence.damagePrevented > 0 then
+            msg = COLOURS.ROLES.TANK .. "You prevent " .. defence.damagePrevented .. " damage."
+        else
+            msg = "Safe! You don't take damage this turn."
+        end
         if defence.canRetaliate then
             msg = msg .. COLOURS.CRITICAL .. "\nRETALIATE!|r You can deal "..defence.retaliateDmg.." damage to your attacker!"
         end
@@ -80,10 +85,37 @@ local function defenceToString(defence)
     end
 end
 
+local function meleeSaveToString(meleeSave)
+    local msg = ""
+
+    if meleeSave.isBigFail then
+        msg = COLOURS.DAMAGE .. "Bad save! |r"
+    end
+
+    msg = msg .. "You save your ally"
+
+    if character.hasDefenceMastery() then
+        msg = msg .. "," .. COLOURS.ROLES.TANK .. " preventing " .. meleeSave.dmgRisk .. " damage,"
+    end
+
+    if meleeSave.damageTaken > 0 then
+        msg = msg .. COLOURS.DAMAGE .. " but you take " .. meleeSave.damageTaken .. " damage.|r"
+    else
+        msg = msg .. " without taking any damage yourself."
+    end
+
+    if meleeSave.hasCounterForceProc then
+        msg = msg .. COLOURS.FEATS.GENERIC .. "|nCOUNTER-FORCE!|r You can deal "..meleeSave.counterForceDmg.." damage to your attacker!"
+    end
+
+    return msg
+end
+
 local toString = {
     [ACTIONS.attack] = attackToString,
     [ACTIONS.healing] = healingToString,
     [ACTIONS.defend] = defenceToString,
+    [ACTIONS.meleeSave] = meleeSaveToString,
 }
 
 actions.toString = function(actionType, action)

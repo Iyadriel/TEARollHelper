@@ -161,7 +161,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                             return defence.damageTaken <= 0 and defence.damagePrevented <= 0
                         end,
                         func = function()
-                            consequences.confirmDefenceAction(rolls.getDefence())
+                            consequences.confirmAction(ACTIONS.defend, rolls.getDefence())
                         end
                     }
                 }

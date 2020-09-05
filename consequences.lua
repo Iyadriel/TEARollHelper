@@ -130,7 +130,7 @@ local function confirmDefenceAction(defence)
     end
     if defence.damagePrevented > 0 then
         state.defence.damagePrevented.increment(defence.damagePrevented)
-end
+    end
 end
 
 local function confirmMeleeSaveAction(meleeSave)
@@ -139,26 +139,24 @@ local function confirmMeleeSaveAction(meleeSave)
     end
     if meleeSave.damagePrevented > 0 then
         state.defence.damagePrevented.increment(meleeSave.damagePrevented)
-end
+    end
 end
 
 local actionFns = {
     [ACTIONS.attack] = confirmAttackAction,
-    [ACTIONS.healing] = confirmHealAction
+    [ACTIONS.healing] = confirmHealAction,
+    [ACTIONS.defend] = confirmDefenceAction,
+    [ACTIONS.meleeSave] = confirmMeleeSaveAction,
 }
 
 local function confirmAction(actionType, action)
-    actionFns[actionType](action)
     bus.fire(EVENTS.ACTION_PERFORMED, actionType, action)
+    actionFns[actionType](action)
 end
 
 -- [[ Exports ]]
 
 consequences.useFatePoint = useFatePoint
 consequences.useTrait = useTrait
-
 consequences.confirmReboundRoll = confirmReboundRoll
-
-consequences.confirmDefenceAction = confirmDefenceAction
-consequences.confirmMeleeSaveAction = confirmMeleeSaveAction
 consequences.confirmAction = confirmAction

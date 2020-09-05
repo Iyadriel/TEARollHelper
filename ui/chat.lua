@@ -7,7 +7,6 @@ local characterState = ns.state.character.state
 local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
 
-local ACTIONS = constants.ACTIONS
 local COLOURS = TEARollHelper.COLOURS
 local EVENTS = bus.EVENTS
 local TRAITS = traits.TRAITS
@@ -42,23 +41,21 @@ end)
 
 -- [[ Character effects ]]
 
-bus.addListener(EVENTS.DAMAGE_PREVENTED, function(damagePrevented)
-    TEARollHelper:Print(COLOURS.ROLES.TANK .. "You prevented " .. damagePrevented .. " damage.")
-end)
-
 bus.addListener(EVENTS.DAMAGE_PREVENTED_COUNTER_RESET, function()
     TEARollHelper:Print(COLOURS.MASTERY .. "Your 'Damage prevented' counter was maxed out and has been reset.")
 end)
 
-bus.addListener(EVENTS.DAMAGE_TAKEN, function(incomingDamage, damageTaken, overkill)
-    local initialColour = damageTaken > 0 and COLOURS.DAMAGE or COLOURS.NOTE
+bus.addListener(EVENTS.DAMAGE_TAKEN, function(incomingDamage, damageTaken, overkill, hideMsg)
+    if not hideMsg then
+        local initialColour = damageTaken > 0 and COLOURS.DAMAGE or COLOURS.NOTE
 
-    local msg = initialColour .. "You took " .. damageTaken .. " damage."
-    if overkill > 0 then
-        msg = msg .. COLOURS.NOTE .. " (Incoming damage of " .. incomingDamage .. ", overkill of " .. overkill .. ")"
+        local msg = initialColour .. "You take " .. damageTaken .. " damage."
+        if overkill > 0 then
+            msg = msg .. COLOURS.NOTE .. " (Incoming damage of " .. incomingDamage .. ", overkill of " .. overkill .. ")"
+        end
+
+        TEARollHelper:Print(msg)
     end
-
-    TEARollHelper:Print(msg)
     printCriticalHealth()
 end)
 

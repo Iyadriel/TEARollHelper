@@ -36,7 +36,7 @@ local EVENTS = {
     -- Character effects
     DAMAGE_PREVENTED = "DAMAGE_PREVENTED", -- damagePrevented
     DAMAGE_PREVENTED_COUNTER_RESET = "DAMAGE_PREVENTED_COUNTER_RESET",
-    DAMAGE_TAKEN = "DAMAGE_TAKEN", -- incomingDamage, damageTaken, overkill
+    DAMAGE_TAKEN = "DAMAGE_TAKEN", -- incomingDamage, damageTaken, overkill, hideMsg
     HEALED = "HEALED", -- amountHealed, netAmountHealed, overHealing
     TRAIT_ACTIVATED = "TRAIT_ACTIVATED", -- traitID
 

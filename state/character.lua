@@ -121,10 +121,10 @@ characterState.state = {
                 bus.fire(EVENTS.CHARACTER_HEALTH, state.health)
             end
         end,
-        damage = function(dmgTaken)
+        damage = function(dmgTaken, hideMsg)
             local damage = rules.effects.calculateDamageTaken(dmgTaken, state.health)
             characterState.state.health.set(state.health - damage.damageTaken)
-            bus.fire(EVENTS.DAMAGE_TAKEN, damage.incomingDamage, damage.damageTaken, damage.overkill)
+            bus.fire(EVENTS.DAMAGE_TAKEN, damage.incomingDamage, damage.damageTaken, damage.overkill, hideMsg)
         end,
         heal = function(incomingHealAmount, source)
             TEARollHelper:Debug("Incoming heal", incomingHealAmount, source)
