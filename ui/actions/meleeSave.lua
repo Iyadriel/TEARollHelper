@@ -1,7 +1,6 @@
 local _, ns = ...
 
-local COLOURS = TEARollHelper.COLOURS
-
+local actions = ns.actions
 local character = ns.character
 local consequences = ns.consequences
 local constants = ns.constants
@@ -88,7 +87,8 @@ ui.modules.actions.modules.meleeSave.getOptions = function(options)
                             return "Apply the stated damage to your character's HP."
                         end,
                         hidden = function()
-                            return rolls.getMeleeSave().damageTaken <= 0 and not character.hasDefenceMastery()
+                            local meleeSave = rolls.getMeleeSave()
+                            return meleeSave.damageTaken <= 0 and meleeSave.damagePrevented <= 0
                         end,
                         func = function()
                             consequences.confirmMeleeSaveAction(rolls.getMeleeSave())

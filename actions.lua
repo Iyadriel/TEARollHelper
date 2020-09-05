@@ -89,11 +89,12 @@ end
 
 local function getDefence(roll, threshold, damageType, dmgRisk, defence, buff)
     local isCrit = rules.defence.isCrit(roll)
-    local defendValue, damageTaken
+    local defendValue, damageTaken, damagePrevented
     local retaliateDmg = 0
 
     defendValue = rules.defence.calculateDefendValue(roll, damageType, defence, buff)
     damageTaken = rules.defence.calculateDamageTaken(threshold, defendValue, dmgRisk)
+    damagePrevented = rules.defence.calculateDamagePrevented(dmgRisk, damageTaken)
 
     if isCrit then
         retaliateDmg = rules.defence.calculateRetaliationDamage(defence)
@@ -103,21 +104,28 @@ local function getDefence(roll, threshold, damageType, dmgRisk, defence, buff)
         defendValue = defendValue,
         dmgRisk = dmgRisk,
         damageTaken = damageTaken,
+        damagePrevented = damagePrevented,
         canRetaliate = isCrit,
         retaliateDmg = retaliateDmg
     }
 end
 
 local function getMeleeSave(roll, threshold, damageType, dmgRisk, defence, buff)
-    local meleeSaveValue = rules.meleeSave.calculateMeleeSaveValue(roll, damageType, defence, buff)
-    local damageTaken = rules.defence.calculateDamageTaken(threshold, meleeSaveValue, dmgRisk)
-    local isBigFail = rules.meleeSave.isSaveBigFail(meleeSaveValue, threshold)
+    local meleeSaveValue, damageTaken, damagePrevented
+    local isBigFail
     local hasCounterForceProc = nil
     local counterForceDmg = 0
+
+    meleeSaveValue = rules.meleeSave.calculateMeleeSaveValue(roll, damageType, defence, buff)
+    isBigFail = rules.meleeSave.isSaveBigFail(meleeSaveValue, threshold)
+
+    damageTaken = rules.defence.calculateDamageTaken(threshold, meleeSaveValue, dmgRisk)
 
     if isBigFail then
         damageTaken = rules.meleeSave.applyBigFailModifier(damageTaken)
     end
+
+    damagePrevented = rules.meleeSave.calculateDamagePrevented(dmgRisk)
 
     if rules.meleeSave.canProcCounterForce() then
         hasCounterForceProc = rules.meleeSave.hasCounterForceProc(meleeSaveValue, threshold)
@@ -130,6 +138,7 @@ local function getMeleeSave(roll, threshold, damageType, dmgRisk, defence, buff)
         meleeSaveValue = meleeSaveValue,
         dmgRisk = dmgRisk,
         damageTaken = damageTaken,
+        damagePrevented = damagePrevented,
         isBigFail = isBigFail,
         hasCounterForceProc = hasCounterForceProc,
         counterForceDmg = counterForceDmg

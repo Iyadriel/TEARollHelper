@@ -16,6 +16,12 @@ local function calculateMeleeSaveValue(roll, damageType, defence, buff)
     return value
 end
 
+local function calculateDamagePrevented(dmgRisk)
+    if character.hasDefenceMastery() then
+        return dmgRisk
+    end
+    return 0
+end
 local function canProcCounterForce()
     return character.hasFeat(FEATS.COUNTER_FORCE)
 end
@@ -52,6 +58,7 @@ end
 
 rules.meleeSave = {
     calculateMeleeSaveValue = calculateMeleeSaveValue,
+    calculateDamagePrevented = calculateDamagePrevented,
 
     canProcCounterForce = canProcCounterForce,
     hasCounterForceProc = hasCounterForceProc,

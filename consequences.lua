@@ -126,18 +126,20 @@ end
 
 local function confirmDefenceAction(defence)
     if defence.damageTaken > 0 then
-        state.health.damage(defence.damageTaken)
-    else
-        state.defence.damagePrevented.increment(defence.dmgRisk)
+        state.health.damage(defence.damageTaken, true)
     end
+    if defence.damagePrevented > 0 then
+        state.defence.damagePrevented.increment(defence.damagePrevented)
+end
 end
 
 local function confirmMeleeSaveAction(meleeSave)
     if meleeSave.damageTaken > 0 then
-        state.health.damage(meleeSave.damageTaken)
-    else
-        state.defence.damagePrevented.increment(meleeSave.dmgRisk)
+        state.health.damage(meleeSave.damageTaken, true)
     end
+    if meleeSave.damagePrevented > 0 then
+        state.defence.damagePrevented.increment(meleeSave.damagePrevented)
+end
 end
 
 local actionFns = {

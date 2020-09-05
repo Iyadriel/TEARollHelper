@@ -24,6 +24,13 @@ local function calculateDamageTaken(threshold, defendValue, dmgRisk)
     return dmgRisk
 end
 
+local function calculateDamagePrevented(dmgRisk, damageTaken)
+    if character.hasDefenceMastery() then
+        return dmgRisk - damageTaken
+    end
+    return 0
+end
+
 local function isCrit(roll)
     local critReq = rules.rolls.getCritReq(roll)
 
@@ -53,6 +60,7 @@ rules.defence = {
 
     calculateDefendValue = calculateDefendValue,
     calculateDamageTaken = calculateDamageTaken,
+    calculateDamagePrevented = calculateDamagePrevented,
     isCrit = isCrit,
     calculateRetaliationDamage = calculateRetaliationDamage,
 
