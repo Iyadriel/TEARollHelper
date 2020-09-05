@@ -260,6 +260,7 @@ end
 local function getHealing(outOfCombat)
     local spirit = character.getPlayerSpirit()
     local spiritBuff = characterState.buffs.spirit.get()
+    local remainingOutOfCombatHeals = characterState.healing.remainingOutOfCombatHeals.get()
 
     local healingDoneBuffs = characterState.buffLookup.getBuffsOfType(BUFF_TYPES.HEALING_DONE)
     local healingDoneBuff = 0
@@ -268,7 +269,7 @@ local function getHealing(outOfCombat)
     end
 
 
-    return actions.getHealing(state.healing.currentRoll, spirit, spiritBuff, healingDoneBuff, state.healing.numGreaterHealSlots, state.healing.targetIsKO, outOfCombat)
+    return actions.getHealing(state.healing.currentRoll, spirit, spiritBuff, healingDoneBuff, state.healing.numGreaterHealSlots, state.healing.targetIsKO, outOfCombat, remainingOutOfCombatHeals)
 end
 
 local function getBuff()

@@ -41,6 +41,7 @@ characterState.initState = function()
 
         healing = {
             numGreaterHealSlots = rules.healing.getMaxGreaterHealSlots(),
+            remainingOutOfCombatHeals = rules.healing.getMaxOutOfCombatHeals(),
             excess = 0,
         },
 
@@ -196,6 +197,27 @@ characterState.state = {
                     characterState.state.healing.numGreaterHealSlots.set(state.healing.numGreaterHealSlots - numCharges)
                     bus.fire(EVENTS.GREATER_HEAL_CHARGES_USED, numCharges)
                 end
+            end,
+        },
+        remainingOutOfCombatHeals = {
+            get = function()
+                return state.healing.remainingOutOfCombatHeals
+            end,
+            set = function(remainingOutOfCombatHeals)
+                if remainingOutOfCombatHeals ~= state.healing.remainingOutOfCombatHeals then
+                    state.healing.remainingOutOfCombatHeals = remainingOutOfCombatHeals
+                end
+            end,
+            spendOne = function()
+                characterState.state.healing.remainingOutOfCombatHeals.set(state.healing.remainingOutOfCombatHeals - 1)
+            end,
+            restore = function()
+                if state.healing.remainingOutOfCombatHeals < rules.healing.getMaxOutOfCombatHeals() then
+                    characterState.state.healing.remainingOutOfCombatHeals.reset()
+                end
+            end,
+            reset = function()
+                characterState.state.healing.remainingOutOfCombatHeals.set(rules.healing.getMaxOutOfCombatHeals())
             end,
         },
         excess = basicGetSet("healing", "excess"),
@@ -418,6 +440,11 @@ local function updateGreaterHealSlots(reason)
     end
 end
 
+local function resetRemainingOutOfCombatHeals(reason)
+    characterState.state.healing.remainingOutOfCombatHeals.reset()
+    TEARollHelper:Debug("Reset remaining out of combat heals because " .. reason)
+end
+
 local function removeWeaknessDebuff(weakness)
     local weaknessDebuff = characterState.state.buffLookup.getWeaknessDebuff(weakness)
     if weaknessDebuff then
@@ -448,6 +475,7 @@ end)
 
 bus.addListener(EVENTS.FEAT_CHANGED, function(featID)
     updateGreaterHealSlots("feat changed")
+    resetRemainingOutOfCombatHeals("feat changed")
 
     if featID == FEATS.BLOOD_HARVEST.id and not turnState.state.inCombat.get() then
         local numBloodHarvestSlots = characterState.state.featsAndTraits.numBloodHarvestSlots

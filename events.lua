@@ -90,7 +90,9 @@ local function restoreSecondWindCharge()
 end
 
 bus.addListener(EVENTS.COMBAT_OVER, function()
+    characterState.state.healing.remainingOutOfCombatHeals.restore()
     restoreSecondWindCharge()
+
     local debuff = characterState.state.buffLookup.getWeaknessDebuff(WEAKNESSES.CORRUPTED)
     if debuff then
         characterState.state.activeBuffs.remove(debuff)

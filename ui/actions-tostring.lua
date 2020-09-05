@@ -61,8 +61,10 @@ local function healingToString(healing)
                 msg = msg .. healColour .. "You heal for " .. amount .. " HP."
             end
         end
+    elseif not healing.canStillHeal then
+        msg = COLOURS.ERROR .. "You must use Greater Heals if you want to perform more healing out of combat."
     else
-        msg = msg .. COLOURS.NOTE .. "You can't heal anyone with this roll."
+        msg = COLOURS.NOTE .. "You can't heal anyone with this roll."
     end
 
     return msg

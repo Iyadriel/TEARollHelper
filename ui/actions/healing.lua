@@ -122,20 +122,19 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                             consequences.confirmAction(ACTIONS.healing, rolls.getHealing(options.outOfCombat))
                         end
                     },
-                    outOfCombatNote = {
+                    remainingHeals = {
                         order = 5,
                         type = "description",
                         name = function()
-                            local msg = COLOURS.NOTE .. " |nOut of combat, you can perform "
-                            if character.hasFeat(FEATS.MEDIC) then
-                                msg = msg .. COLOURS.FEATS.GENERIC .. rules.healing.calculateNumHealsAllowedOutOfCombat() .. " regular heals" .. COLOURS.NOTE
-                            else
-                                msg = msg .. rules.healing.calculateNumHealsAllowedOutOfCombat() .. " regular heals"
+                            if rolls.getHealing(options.outOfCombat).numGreaterHealSlots > 0 then
+                                return COLOURS.NOTE .. " |nUsing Greater Heals, there is no limit to how often you can heal out of combat."
                             end
-                            msg = msg .. " (refreshes after combat ends), or spend as many Greater Heal slots as you want (you can roll every time you spend slots)."
-                            return msg
+
+                            return COLOURS.NOTE .. " |nRemaining regular heals out of combat: " .. characterState.healing.remainingOutOfCombatHeals.get()
                         end,
-                        hidden = not options.outOfCombat,
+                        hidden = function()
+                            return not options.outOfCombat or rolls.getHealing(options.outOfCombat).amountHealed <= 0
+                        end,
                     },
                 }
             },

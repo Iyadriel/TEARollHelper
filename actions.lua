@@ -161,36 +161,40 @@ local function getRangedSave(roll, threshold, spirit, buff)
     }
 end
 
-local function getHealing(roll, spirit, spiritBuff, healingDoneBuff, numGreaterHealSlots, targetIsKO, outOfCombat)
+local function getHealing(roll, spirit, spiritBuff, healingDoneBuff, numGreaterHealSlots, targetIsKO, outOfCombat, remainingOutOfCombatHeals)
+    local canStillHeal = rules.healing.canStillHeal(outOfCombat, remainingOutOfCombatHeals, numGreaterHealSlots)
     local healValue
-    local amountHealed
+    local amountHealed = 0
     local isCrit = rules.healing.isCrit(roll)
     local usesParagon = rules.healing.usesParagon()
     local playersHealableWithParagon = nil
 
-    healValue = rules.healing.calculateHealValue(roll, spirit, spiritBuff)
+    if canStillHeal then
+        healValue = rules.healing.calculateHealValue(roll, spirit, spiritBuff)
 
-    amountHealed = rules.healing.calculateAmountHealed(healValue)
-    amountHealed = rules.healing.applyHealingDoneBuff(amountHealed, healingDoneBuff)
-    amountHealed = amountHealed + rules.healing.calculateGreaterHealBonus(numGreaterHealSlots)
+        amountHealed = rules.healing.calculateAmountHealed(healValue)
+        amountHealed = rules.healing.applyHealingDoneBuff(amountHealed, healingDoneBuff)
+        amountHealed = amountHealed + rules.healing.calculateGreaterHealBonus(numGreaterHealSlots)
 
-    if targetIsKO then
-        amountHealed = amountHealed + rules.healing.getTargetKOBonus()
-    end
+        if targetIsKO then
+            amountHealed = amountHealed + rules.healing.getTargetKOBonus()
+        end
 
-    if outOfCombat then
-        amountHealed = rules.healing.applyOutOfCombatBonus(amountHealed)
-    end
+        if outOfCombat then
+            amountHealed = rules.healing.applyOutOfCombatBonus(amountHealed)
+        end
 
-    if usesParagon then
-        playersHealableWithParagon = rules.healing.calculateNumPlayersHealableWithParagon()
-    end
+        if usesParagon then
+            playersHealableWithParagon = rules.healing.calculateNumPlayersHealableWithParagon()
+        end
 
-    if isCrit then
-        amountHealed = rules.healing.applyCritModifier(amountHealed)
+        if isCrit then
+            amountHealed = rules.healing.applyCritModifier(amountHealed)
+        end
     end
 
     return {
+        canStillHeal = canStillHeal,
         amountHealed = amountHealed,
         isCrit = isCrit,
         outOfCombat = outOfCombat,

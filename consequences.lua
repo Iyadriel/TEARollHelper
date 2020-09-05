@@ -122,6 +122,9 @@ end
 
 local function confirmHealAction(heal)
     characterState.state.healing.numGreaterHealSlots.use(heal.numGreaterHealSlots)
+    if heal.outOfCombat and heal.numGreaterHealSlots <= 0 then
+        characterState.state.healing.remainingOutOfCombatHeals.spendOne()
+    end
 end
 
 local function confirmDefenceAction(defence)

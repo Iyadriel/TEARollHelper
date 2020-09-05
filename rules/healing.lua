@@ -105,6 +105,10 @@ local function getMaxExcess()
     return 6
 end
 
+local function canStillHeal(outOfCombat, remainingOutOfCombatHeals, numGreaterHealSlotsUsed)
+    return not outOfCombat or remainingOutOfCombatHeals > 0 or numGreaterHealSlotsUsed > 0
+end
+
 local function calculateBaseOutOfCombatBonus()
     if character.getPlayerSpirit() >= NUM_SPIRIT_PER_GREATER_HEAL_SLOT then
         return 3
@@ -122,7 +126,7 @@ local function applyOutOfCombatBonus(amountHealed)
     return amountHealed
 end
 
-local function calculateNumHealsAllowedOutOfCombat()
+local function getMaxOutOfCombatHeals()
     return character.hasFeat(FEATS.MEDIC) and 5 or 3
 end
 
@@ -162,8 +166,9 @@ rules.healing = {
     canUseExcess = canUseExcess,
     getMaxExcess = getMaxExcess,
 
+    canStillHeal = canStillHeal,
     applyOutOfCombatBonus = applyOutOfCombatBonus,
-    calculateNumHealsAllowedOutOfCombat = calculateNumHealsAllowedOutOfCombat,
+    getMaxOutOfCombatHeals = getMaxOutOfCombatHeals,
     usesParagon = usesParagon,
     calculateNumPlayersHealableWithParagon = calculateNumPlayersHealableWithParagon,
 

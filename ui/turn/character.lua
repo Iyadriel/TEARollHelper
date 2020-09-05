@@ -4,6 +4,7 @@ local COLOURS = TEARollHelper.COLOURS
 
 local character = ns.character
 local integrations = ns.integrations
+local feats = ns.resources.feats
 local rules = ns.rules
 local traits = ns.resources.traits
 local characterState = ns.state.character
@@ -11,6 +12,7 @@ local settings = ns.settings
 local ui = ns.ui
 local utils = ns.utils
 
+local FEATS = feats.FEATS
 local TRAIT_KEYS = traits.TRAIT_KEYS
 local TRAITS = traits.TRAITS
 local state = characterState.state
@@ -152,8 +154,38 @@ ui.modules.turn.modules.character.getOptions = function(options)
                             max = rules.healing.getMaxGreaterHealSlots
                         })
                     },
-                    excess = {
+                    turn_character_remainingOutOfCombatHeals = {
                         order = 1,
+                        type = "range",
+                        name = function()
+                            if character.hasFeat(FEATS.MEDIC) then
+                                return COLOURS.FEATS.GENERIC .. "Heals out of combat"
+                            end
+                            return "Heals out of combat"
+                        end,
+                        desc = function()
+                            local msg = COLOURS.NOTE .. "Out of combat, you can perform "
+                            if character.hasFeat(FEATS.MEDIC) then
+                                msg = msg .. COLOURS.FEATS.GENERIC .. rules.healing.getMaxOutOfCombatHeals() .. " regular heals" .. COLOURS.NOTE
+                            else
+                                msg = msg .. rules.healing.getMaxOutOfCombatHeals() .. " regular heals"
+                            end
+                            msg = msg .. " (refreshes after combat ends), or spend as many Greater Heal slots as you want (you can roll every time you spend slots)."
+                            return msg
+                        end,
+                        min = 0,
+                        max = rules.healing.getMaxOutOfCombatHeals(),
+                        step = 1,
+                        get = state.healing.remainingOutOfCombatHeals.get,
+                        set = function(info, value)
+                            state.healing.remainingOutOfCombatHeals.set(value)
+                        end,
+                        dialogControl = TEARollHelper:CreateCustomSlider("turn_character_remainingOutOfCombatHeals", {
+                            max = rules.healing.getMaxOutOfCombatHeals
+                        })
+                    },
+                    excess = {
+                        order = 2,
                         type = "range",
                         name = "Excess",
                         desc = "How much Excess you have gained.|n"
