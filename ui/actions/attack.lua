@@ -2,6 +2,7 @@ local _, ns = ...
 
 local COLOURS = TEARollHelper.COLOURS
 
+local actions = ns.actions
 local character = ns.character
 local characterState = ns.state.character.state
 local consequences = ns.consequences
@@ -131,40 +132,52 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                             max = characterState.featsAndTraits.numBloodHarvestSlots.get
                         })
                     },
-                    dmg = {
+                    dmgTopMargin = {
                         order = 3,
+                        type = "description",
+                        name = " ",
+                        hidden = function()
+                            return not (rules.offence.canUseBloodHarvest() or rules.offence.canProcMercyFromPain())
+                        end,
+                    },
+                    dmg = {
+                        order = 4,
                         type = "description",
                         desc = "How much damage you can deal to a target",
                         fontSize = "medium",
                         name = function()
                             local attack = rolls.getAttack()
-                            local msg = ""
-                            local excited = false
-
-                            if attack.dmg > 0 then
-                                if attack.isCrit and attack.critType == rules.offence.CRIT_TYPES.DAMAGE then
-                                    excited = true
-                                    msg = msg .. COLOURS.CRITICAL .. "CRITICAL HIT!|r "
-                                end
-
-                                if attack.isCrit and attack.critType == rules.offence.CRIT_TYPES.REAPER then
-                                    msg = msg .. COLOURS.FEATS.REAPER .. "TIME TO REAP!|r You can deal " .. tostring(attack.dmg) .. " damage to all enemies in melee range of you or your target!"
-                                else
-                                    msg = msg .. "You can deal " .. tostring(attack.dmg) .. " damage" .. (excited and "!" or ".")
-                                end
-
-                                if attack.hasAdrenalineProc then
-                                    msg = msg .. COLOURS.FEATS.ADRENALINE .. "|nADRENALINE! You can attack the same target a second time.|r "
-                                end
-
-                                if attack.hasEntropicEmbraceProc then
-                                    msg = msg .. COLOURS.DAMAGE_TYPES.SHADOW .. "|nEntropic Embrace: You deal " .. attack.entropicEmbraceDmg .. " extra Shadow damage!"
-                                end
-                            else
-                                msg = msg .. COLOURS.NOTE .. "You can't deal any damage with this roll."
+                            return actions.toString(ACTIONS.attack, attack)
+                        end
+                    },
+                    confirmTopMargin = {
+                        order = 5,
+                        type = "description",
+                        name = " ",
+                        hidden = function()
+                            local attack = rolls.getAttack()
+                            return not (attack.numBloodHarvestSlots > 0 or attack.hasMercyFromPainProc)
+                        end,
+                    },
+                    confirm = {
+                        order = 6,
+                        type = "execute",
+                        name = function()
+                            local colour
+                            if character.hasFeat(FEATS.BLOOD_HARVEST) then
+                                colour = COLOURS.FEATS.BLOOD_HARVEST
+                            elseif character.hasFeat(FEATS.MERCY_FROM_PAIN) then
+                                colour = COLOURS.FEATS.MERCY_FROM_PAIN
                             end
-
-                            return msg
+                            return colour and colour .. "Confirm" or "Confirm"
+                        end,
+                        desc = "Confirm that you perform the stated action, and consume any charges used.",
+                        hidden = function()
+                            local attack = rolls.getAttack()
+                            return not (attack.numBloodHarvestSlots > 0 or attack.hasMercyFromPainProc)
+                        end,
+                        func = function()
+                            consequences.confirmAction(ACTIONS.attack, rolls.getAttack())
                         end
                     },
                 }
@@ -178,24 +191,10 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                     return not state.attack.currentRoll.get() or not (rolls.getAttack().dmg > 0) or not rules.offence.shouldShowPostRollUI()
                 end,
                 args = {
-                    confirmMercyFromPain = {
+                    useShatterSoul = {
                         order = 0,
                         type = "execute",
-                        name = COLOURS.FEATS.MERCY_FROM_PAIN .."Apply Mercy from Pain",
-                        desc = function()
-                            local attack = rolls.getAttack()
-                            return "Apply a buff that increases your next heal roll by +" .. attack.mercyFromPainBonusHealing .. " HP."
-                        end,
-                        hidden = function()
-                            return not rolls.getAttack().hasMercyFromPainProc
-                        end,
-                        func = function()
-                            consequences.confirmAttackAction(rolls.getAttack())
-                        end
-                    },
-                    useShatterSoul = {
-                        order = 1,
-                        type = "execute",
+                        width = "full",
                         name = COLOURS.TRAITS.SHATTER_SOUL .. "Use " .. TRAITS.SHATTER_SOUL.name,
                         desc = TRAITS.SHATTER_SOUL.desc,
                         hidden = function()
@@ -207,7 +206,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                         func = consequences.useTrait(TRAITS.SHATTER_SOUL),
                     },
                     useVindication = {
-                        order = 2,
+                        order = 1,
                         type = "execute",
                         width = "full",
                         name = function()

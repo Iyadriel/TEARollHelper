@@ -210,11 +210,12 @@ bus.addListener(EVENTS.TURN_STARTED, function()
     resetThresholds()
 end)
 
-bus.addListener(EVENTS.FEAT_CHARGES_CHANGED, function(featID, numCharges)
-    if featID == FEATS.BLOOD_HARVEST.id and numCharges < state.attack.numBloodHarvestSlots then
-        rolls.state.attack.numBloodHarvestSlot.set(numCharges)
+bus.addListener(EVENTS.BLOOD_HARVEST_CHARGES_CHANGED, function(numCharges)
+    if numCharges < state.attack.numBloodHarvestSlots then
+        rolls.state.attack.numBloodHarvestSlots.set(numCharges)
     end
 end)
+
 bus.addListener(EVENTS.GREATER_HEAL_CHARGES_CHANGED, function(numCharges)
     if numCharges < state.healing.numGreaterHealSlots then
         rolls.state.healing.numGreaterHealSlots.set(numCharges)

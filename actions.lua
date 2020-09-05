@@ -66,6 +66,7 @@ local function getAttack(roll, threshold, offence, offenceBuff, baseDmgBuffAmoun
         isCrit = isCrit,
         critType = critType,
         hasAdrenalineProc = hasAdrenalineProc,
+        numBloodHarvestSlots = numBloodHarvestSlots,
         hasMercyFromPainProc = hasMercyFromPainProc,
         mercyFromPainBonusHealing = mercyFromPainBonusHealing,
         hasEntropicEmbraceProc = hasEntropicEmbraceProc,

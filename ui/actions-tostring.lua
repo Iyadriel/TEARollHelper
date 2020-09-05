@@ -13,6 +13,37 @@ local ACTIONS = constants.ACTIONS
 local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
 
+local function attackToString(attack)
+    local msg = ""
+
+    if attack.dmg > 0 then
+        local excited = false
+
+        if attack.isCrit and attack.critType == rules.offence.CRIT_TYPES.DAMAGE then
+            excited = true
+            msg = msg .. COLOURS.CRITICAL .. "CRITICAL HIT!|r "
+        end
+
+        if attack.isCrit and attack.critType == rules.offence.CRIT_TYPES.REAPER then
+            msg = msg .. COLOURS.FEATS.REAPER .. "TIME TO REAP!|r You deal " .. tostring(attack.dmg) .. " damage to all enemies in melee range of you or your target!"
+        else
+            msg = msg .. "You deal " .. tostring(attack.dmg) .. " damage" .. (excited and "!" or ".")
+        end
+
+        if attack.hasAdrenalineProc then
+            msg = msg .. COLOURS.FEATS.ADRENALINE .. "|nADRENALINE! You attack the same target a second time.|r "
+        end
+
+        if attack.hasEntropicEmbraceProc then
+            msg = msg .. COLOURS.DAMAGE_TYPES.SHADOW .. "|nEntropic Embrace: You deal " .. attack.entropicEmbraceDmg .. " extra Shadow damage!"
+        end
+    else
+        msg = msg .. COLOURS.NOTE .. "You can't deal any damage with this roll."
+    end
+
+    return msg
+end
+
 local function healingToString(healing)
     local msg = ""
 
@@ -38,6 +69,7 @@ local function healingToString(healing)
 end
 
 local toString = {
+    [ACTIONS.attack] = attackToString,
     [ACTIONS.healing] = healingToString,
 }
 

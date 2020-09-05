@@ -201,9 +201,23 @@ characterState.state = {
         excess = basicGetSet("healing", "excess"),
     },
     featsAndTraits = {
-        numBloodHarvestSlots = basicGetSet("featsAndTraits", "numBloodHarvestSlots", function(numCharges)
-            bus.fire(EVENTS.FEAT_CHARGES_CHANGED, FEATS.BLOOD_HARVEST.id, numCharges)
-        end),
+        numBloodHarvestSlots = {
+            get = function()
+                return state.featsAndTraits.numBloodHarvestSlots
+            end,
+            set = function(numBloodHarvestSlots)
+                if numBloodHarvestSlots ~= state.featsAndTraits.numBloodHarvestSlots then
+                    state.featsAndTraits.numBloodHarvestSlots = numBloodHarvestSlots
+                    bus.fire(EVENTS.BLOOD_HARVEST_CHARGES_CHANGED, numBloodHarvestSlots)
+                end
+            end,
+            use = function(numBloodHarvestSlots)
+                if numBloodHarvestSlots > 0 then
+                    characterState.state.featsAndTraits.numBloodHarvestSlots.set(state.featsAndTraits.numBloodHarvestSlots - numBloodHarvestSlots)
+                    bus.fire(EVENTS.BLOOD_HARVEST_CHARGES_USED, numBloodHarvestSlots)
+                end
+            end,
+        },
         numTraitCharges = {
             get = function(traitID)
                 return state.featsAndTraits.numTraitCharges[traitID]

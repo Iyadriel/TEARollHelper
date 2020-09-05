@@ -113,6 +113,8 @@ end
 -- [[ Actions ]]
 
 local function confirmAttackAction(attack)
+    characterState.state.featsAndTraits.numBloodHarvestSlots.use(attack.numBloodHarvestSlots)
+
     if attack.hasMercyFromPainProc then
         buffs.addFeatBuff(FEATS.MERCY_FROM_PAIN, attack.mercyFromPainBonusHealing)
     end
@@ -139,6 +141,7 @@ local function confirmMeleeSaveAction(meleeSave)
 end
 
 local actionFns = {
+    [ACTIONS.attack] = confirmAttackAction,
     [ACTIONS.healing] = confirmHealAction
 }
 
@@ -154,7 +157,6 @@ consequences.useTrait = useTrait
 
 consequences.confirmReboundRoll = confirmReboundRoll
 
-consequences.confirmAttackAction = confirmAttackAction
 consequences.confirmDefenceAction = confirmDefenceAction
 consequences.confirmMeleeSaveAction = confirmMeleeSaveAction
 consequences.confirmAction = confirmAction
