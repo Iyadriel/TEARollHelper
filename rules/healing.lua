@@ -24,7 +24,7 @@ local function calculateHealValue(roll, spirit, buff)
     return roll + rules.common.calculateSpiritStat(spirit, buff)
 end
 
-local function calculateAmountHealed(healValue)
+local function calculateBaseAmountHealed(healValue)
     if healValue > 19 then
         return 5
     elseif healValue > 14 then
@@ -109,21 +109,19 @@ local function canStillHeal(outOfCombat, remainingOutOfCombatHeals, numGreaterHe
     return not outOfCombat or remainingOutOfCombatHeals > 0 or numGreaterHealSlotsUsed > 0
 end
 
-local function calculateBaseOutOfCombatBonus()
-    if character.getPlayerSpirit() >= NUM_SPIRIT_PER_GREATER_HEAL_SLOT then
-        return 3
-    end
-    return 0
-end
-
-local function applyOutOfCombatBonus(amountHealed)
-    amountHealed = amountHealed + calculateBaseOutOfCombatBonus()
-
+local function applyOutOfCombatBaseAmountBonus(amountHealed)
     if character.hasFeat(FEATS.MEDIC) then
         amountHealed = amountHealed * 2
     end
 
     return amountHealed
+end
+
+local function getOutOfCombatBonus()
+    if character.getPlayerSpirit() >= NUM_SPIRIT_PER_GREATER_HEAL_SLOT then
+        return 3
+    end
+    return 0
 end
 
 local function getMaxOutOfCombatHeals()
@@ -153,7 +151,7 @@ end
 rules.healing = {
     canHeal = canHeal,
     calculateHealValue = calculateHealValue,
-    calculateAmountHealed = calculateAmountHealed,
+    calculateBaseAmountHealed = calculateBaseAmountHealed,
     applyHealingDoneBuff = applyHealingDoneBuff,
     isCrit = isCrit,
     applyCritModifier = applyCritModifier,
@@ -167,7 +165,8 @@ rules.healing = {
     getMaxExcess = getMaxExcess,
 
     canStillHeal = canStillHeal,
-    applyOutOfCombatBonus = applyOutOfCombatBonus,
+    applyOutOfCombatBaseAmountBonus = applyOutOfCombatBaseAmountBonus,
+    getOutOfCombatBonus = getOutOfCombatBonus,
     getMaxOutOfCombatHeals = getMaxOutOfCombatHeals,
     usesParagon = usesParagon,
     calculateNumPlayersHealableWithParagon = calculateNumPlayersHealableWithParagon,

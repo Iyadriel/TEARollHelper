@@ -172,7 +172,12 @@ local function getHealing(roll, spirit, spiritBuff, healingDoneBuff, numGreaterH
     if canStillHeal then
         healValue = rules.healing.calculateHealValue(roll, spirit, spiritBuff)
 
-        amountHealed = rules.healing.calculateAmountHealed(healValue)
+        amountHealed = rules.healing.calculateBaseAmountHealed(healValue)
+
+        if outOfCombat then
+            amountHealed = rules.healing.applyOutOfCombatBaseAmountBonus(amountHealed)
+        end
+
         amountHealed = rules.healing.applyHealingDoneBuff(amountHealed, healingDoneBuff)
         amountHealed = amountHealed + rules.healing.calculateGreaterHealBonus(numGreaterHealSlots)
 
@@ -181,7 +186,7 @@ local function getHealing(roll, spirit, spiritBuff, healingDoneBuff, numGreaterH
         end
 
         if outOfCombat then
-            amountHealed = rules.healing.applyOutOfCombatBonus(amountHealed)
+            amountHealed = amountHealed + rules.healing.getOutOfCombatBonus()
         end
 
         if usesParagon then
