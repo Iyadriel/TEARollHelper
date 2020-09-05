@@ -68,9 +68,22 @@ local function healingToString(healing)
     return msg
 end
 
+local function defenceToString(defence)
+    if defence.damageTaken > 0 then
+        return COLOURS.DAMAGE .. "You take " .. tostring(defence.damageTaken) .. " damage."
+    else
+        local msg = "Safe! You don't take damage this turn."
+        if defence.canRetaliate then
+            msg = msg .. COLOURS.CRITICAL .. "\nRETALIATE!|r You can deal "..defence.retaliateDmg.." damage to your attacker!"
+        end
+        return msg
+    end
+end
+
 local toString = {
     [ACTIONS.attack] = attackToString,
     [ACTIONS.healing] = healingToString,
+    [ACTIONS.defend] = defenceToString,
 }
 
 actions.toString = function(actionType, action)

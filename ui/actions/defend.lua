@@ -2,6 +2,7 @@ local _, ns = ...
 
 local COLOURS = TEARollHelper.COLOURS
 
+local actions = ns.actions
 local character = ns.character
 local characterState = ns.state.character
 local consequences = ns.consequences
@@ -142,17 +143,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                         desc = "How much damage you take this turn",
                         fontSize = "medium",
                         name = function()
-                            local defence = rolls.getDefence()
-
-                            if defence.damageTaken > 0 then
-                                return COLOURS.DAMAGE .. "You take " .. tostring(defence.damageTaken) .. " damage."
-                            else
-                                local msg = "Safe! You don't take damage this turn."
-                                if defence.canRetaliate then
-                                    msg = msg .. COLOURS.CRITICAL .. "\nRETALIATE!|r You can deal "..defence.retaliateDmg.." damage to your attacker!"
-                                end
-                                return msg
-                            end
+                            return actions.toString(ACTIONS.defend, rolls.getDefence())
                         end
                     },
                     confirm = {
