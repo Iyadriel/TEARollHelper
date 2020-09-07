@@ -31,12 +31,12 @@ local EVENTS = {
     GREATER_HEAL_CHARGES_USED = "GREATER_HEAL_CHARGES_USED", -- numCharges
 
     -- Actions
-    ACTION_PERFORMED = "ACTION_PERFORMED", -- actionType, action
+    ACTION_PERFORMED = "ACTION_PERFORMED", -- actionType, action, hideMsg
 
     -- Character effects
     DAMAGE_PREVENTED = "DAMAGE_PREVENTED", -- damagePrevented
     DAMAGE_PREVENTED_COUNTER_RESET = "DAMAGE_PREVENTED_COUNTER_RESET",
-    DAMAGE_TAKEN = "DAMAGE_TAKEN", -- incomingDamage, damageTaken, overkill, hideMsg
+    DAMAGE_TAKEN = "DAMAGE_TAKEN", -- incomingDamage, damageTaken, overkill
     HEALED = "HEALED", -- amountHealed, netAmountHealed, overHealing
     TRAIT_ACTIVATED = "TRAIT_ACTIVATED", -- traitID
 

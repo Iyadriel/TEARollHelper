@@ -161,7 +161,9 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                             return defence.damageTaken <= 0 and defence.damagePrevented <= 0
                         end,
                         func = function()
-                            consequences.confirmAction(ACTIONS.defend, rolls.getDefence())
+                            local defence = rolls.getDefence()
+                            local hideMsg = defence.damageTaken > 0
+                            consequences.confirmAction(ACTIONS.defend, rolls.getDefence(), hideMsg)
                         end
                     }
                 }

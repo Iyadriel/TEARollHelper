@@ -3,7 +3,7 @@ local _, ns = ...
 local actions = ns.actions
 local bus = ns.bus
 local constants = ns.constants
-local characterState = ns.state.character.state
+local characterState = ns.state.character
 local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
 
@@ -11,13 +11,6 @@ local COLOURS = TEARollHelper.COLOURS
 local EVENTS = bus.EVENTS
 local TRAITS = traits.TRAITS
 local WEAKNESSES = weaknesses.WEAKNESSES
-
-local function printCriticalHealth()
-    local health = characterState.health.get()
-    if health <= 0 then
-        TEARollHelper:Print(COLOURS.DAMAGE .. "Critical health! You are at " .. health .. " HP.")
-    end
-end
 
 -- [[ Resources ]]
 
@@ -35,8 +28,10 @@ end)
 
 -- [[ Actions ]]
 
-bus.addListener(EVENTS.ACTION_PERFORMED, function(actionType, action)
-    TEARollHelper:Print(actions.toString(actionType, action))
+bus.addListener(EVENTS.ACTION_PERFORMED, function(actionType, action, hideMsg)
+    if not hideMsg then
+        TEARollHelper:Print(actions.toString(actionType, action))
+    end
 end)
 
 -- [[ Character effects ]]
@@ -45,18 +40,18 @@ bus.addListener(EVENTS.DAMAGE_PREVENTED_COUNTER_RESET, function()
     TEARollHelper:Print(COLOURS.MASTERY .. "Your 'Damage prevented' counter was maxed out and has been reset.")
 end)
 
-bus.addListener(EVENTS.DAMAGE_TAKEN, function(incomingDamage, damageTaken, overkill, hideMsg)
-    if not hideMsg then
-        local initialColour = damageTaken > 0 and COLOURS.DAMAGE or COLOURS.NOTE
+bus.addListener(EVENTS.DAMAGE_TAKEN, function(incomingDamage, damageTaken, overkill)
+    local initialColour = damageTaken > 0 and COLOURS.DAMAGE or COLOURS.NOTE
 
-        local msg = initialColour .. "You take " .. damageTaken .. " damage."
-        if overkill > 0 then
-            msg = msg .. COLOURS.NOTE .. " (Incoming damage of " .. incomingDamage .. ", overkill of " .. overkill .. ")"
-        end
+    local msg = initialColour .. "You take " .. damageTaken .. " damage. "
 
-        TEARollHelper:Print(msg)
+    msg = msg .. COLOURS.NOTE .. "[" .. characterState.summariseHP() .. "]"
+
+    if overkill > 0 then
+        msg = msg .. COLOURS.NOTE .. " (Incoming dmg = " .. incomingDamage .. ", overkill = " .. overkill .. ")"
     end
-    printCriticalHealth()
+
+    TEARollHelper:Print(msg)
 end)
 
 bus.addListener(EVENTS.HEALED, function(amountHealed, netAmountHealed, overhealing)
@@ -68,7 +63,6 @@ bus.addListener(EVENTS.HEALED, function(amountHealed, netAmountHealed, overheali
     end
 
     TEARollHelper:Print(msg)
-    printCriticalHealth()
 end)
 
 bus.addListener(EVENTS.TRAIT_ACTIVATED, function(traitID)
