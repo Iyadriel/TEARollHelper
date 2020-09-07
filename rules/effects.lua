@@ -9,13 +9,17 @@ local weaknesses = ns.resources.weaknesses
 local INCOMING_HEAL_SOURCES = constants.INCOMING_HEAL_SOURCES
 local WEAKNESSES = weaknesses.WEAKNESSES
 
-local function calculateDamageTaken(incomingDamage, currentHealth)
+local function calculateDamageTaken(incomingDamage, currentHealth, damageTakenBuff)
+    incomingDamage = incomingDamage + damageTakenBuff
+
     if character.hasWeakness(WEAKNESSES.WOE_UPON_THE_AFFLICTED) then
         local enemyId = environment.state.enemyId.get()
         if WEAKNESSES.WOE_UPON_THE_AFFLICTED.weakAgainstEnemies[enemyId] then
             incomingDamage = incomingDamage + 4
         end
     end
+
+    incomingDamage = max(0, incomingDamage)
 
     local overkill = max(0, incomingDamage - currentHealth)
     local damageTaken = incomingDamage - overkill

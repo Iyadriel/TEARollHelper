@@ -87,13 +87,13 @@ local function getCC(roll, offence, offenceBuff, defence, defenceBuff)
     }
 end
 
-local function getDefence(roll, threshold, damageType, dmgRisk, defence, buff)
+local function getDefence(roll, threshold, damageType, dmgRisk, defence, defenceBuff, damageTakenBuff)
     local isCrit = rules.defence.isCrit(roll)
     local defendValue, damageTaken, damagePrevented
     local retaliateDmg = 0
 
-    defendValue = rules.defence.calculateDefendValue(roll, damageType, defence, buff)
-    damageTaken = rules.defence.calculateDamageTaken(threshold, defendValue, dmgRisk)
+    defendValue = rules.defence.calculateDefendValue(roll, damageType, defence, defenceBuff)
+    damageTaken = rules.defence.calculateDamageTaken(threshold, defendValue, dmgRisk, damageTakenBuff)
     damagePrevented = rules.defence.calculateDamagePrevented(dmgRisk, damageTaken)
 
     if isCrit then
@@ -110,16 +110,16 @@ local function getDefence(roll, threshold, damageType, dmgRisk, defence, buff)
     }
 end
 
-local function getMeleeSave(roll, threshold, damageType, dmgRisk, defence, buff)
+local function getMeleeSave(roll, threshold, damageType, dmgRisk, defence, defenceBuff, damageTakenBuff)
     local meleeSaveValue, damageTaken, damagePrevented
     local isBigFail
     local hasCounterForceProc = nil
     local counterForceDmg = 0
 
-    meleeSaveValue = rules.meleeSave.calculateMeleeSaveValue(roll, damageType, defence, buff)
+    meleeSaveValue = rules.meleeSave.calculateMeleeSaveValue(roll, damageType, defence, defenceBuff)
     isBigFail = rules.meleeSave.isSaveBigFail(meleeSaveValue, threshold)
 
-    damageTaken = rules.defence.calculateDamageTaken(threshold, meleeSaveValue, dmgRisk)
+    damageTaken = rules.defence.calculateDamageTaken(threshold, meleeSaveValue, dmgRisk, damageTakenBuff)
 
     if isBigFail then
         damageTaken = rules.meleeSave.applyBigFailModifier(damageTaken)

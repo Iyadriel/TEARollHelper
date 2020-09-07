@@ -122,10 +122,20 @@ characterState.state = {
                 bus.fire(EVENTS.CHARACTER_HEALTH, state.health)
             end
         end,
-        damage = function(dmgTaken, hideMsg)
-            local damage = rules.effects.calculateDamageTaken(dmgTaken, state.health)
+        damage = function(dmgTaken, ignoreDamageTakenBuffs)
+            local damageTakenBuff = 0
+
+            -- defence and melee save pre-apply these so they can display correct action results
+            if not ignoreDamageTakenBuffs then
+                local damageTakenBuffs = characterState.state.buffLookup.getBuffsOfType(BUFF_TYPES.DAMAGE_TAKEN)
+                for _, buff in ipairs(damageTakenBuffs) do
+                    damageTakenBuff = damageTakenBuff + buff.amount
+                end
+            end
+
+            local damage = rules.effects.calculateDamageTaken(dmgTaken, state.health, damageTakenBuff)
             characterState.state.health.set(state.health - damage.damageTaken)
-            bus.fire(EVENTS.DAMAGE_TAKEN, damage.incomingDamage, damage.damageTaken, damage.overkill, hideMsg)
+            bus.fire(EVENTS.DAMAGE_TAKEN, damage.incomingDamage, damage.damageTaken, damage.overkill)
         end,
         heal = function(incomingHealAmount, source)
             TEARollHelper:Debug("Incoming heal", incomingHealAmount, source)

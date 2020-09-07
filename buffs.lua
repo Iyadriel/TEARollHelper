@@ -198,6 +198,9 @@ local function addFeatBuff(feat, providedValue)
             newBuff.amount = providedValue
         end
     end
+    if types[BUFF_TYPES.DAMAGE_TAKEN] then
+        newBuff.amount = buff.amount
+    end
 
     if buff.remainingTurns then
         if type(buff.remainingTurns) == "table" then
@@ -208,6 +211,8 @@ local function addFeatBuff(feat, providedValue)
     end
 
     addBuff(newBuff)
+
+    bus.fire(EVENTS.FEAT_BUFF_ADDED, feat.id)
 end
 
 local function addTraitBuff(trait, providedStats)

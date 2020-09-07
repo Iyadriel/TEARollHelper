@@ -283,16 +283,28 @@ end
 
 local function getDefence()
     local defence = character.getPlayerDefence()
-    local buff = characterState.buffs.defence.get()
+    local defenceBuff = characterState.buffs.defence.get()
 
-    return actions.getDefence(state.defend.currentRoll, state.defend.threshold, state.defend.damageType, state.defend.damageRisk, defence, buff)
+    local damageTakenBuff = 0
+    local damageTakenBuffs = characterState.buffLookup.getBuffsOfType(BUFF_TYPES.DAMAGE_TAKEN)
+    for _, buff in ipairs(damageTakenBuffs) do
+        damageTakenBuff = damageTakenBuff + buff.amount
+    end
+
+    return actions.getDefence(state.defend.currentRoll, state.defend.threshold, state.defend.damageType, state.defend.damageRisk, defence, defenceBuff, damageTakenBuff)
 end
 
 local function getMeleeSave()
     local defence = character.getPlayerDefence()
-    local buff = characterState.buffs.defence.get()
+    local defenceBuff = characterState.buffs.defence.get()
 
-    return actions.getMeleeSave(state.meleeSave.currentRoll, state.meleeSave.threshold, state.meleeSave.damageType, state.meleeSave.damageRisk, defence, buff)
+    local damageTakenBuff = 0
+    local damageTakenBuffs = characterState.buffLookup.getBuffsOfType(BUFF_TYPES.DAMAGE_TAKEN)
+    for _, buff in ipairs(damageTakenBuffs) do
+        damageTakenBuff = damageTakenBuff + buff.amount
+    end
+
+    return actions.getMeleeSave(state.meleeSave.currentRoll, state.meleeSave.threshold, state.meleeSave.damageType, state.meleeSave.damageRisk, defence, defenceBuff, damageTakenBuff)
 end
 
 local function getRangedSave()

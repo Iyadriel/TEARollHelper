@@ -16,12 +16,12 @@ local function calculateDefendValue(roll, damageType, defence, buff)
     return roll + rules.common.calculateDefenceStat(damageType, defence, buff)
 end
 
-local function calculateDamageTaken(threshold, defendValue, dmgRisk)
+local function calculateDamageTaken(threshold, defendValue, dmgRisk, damageTakenBuff)
     local safetyMargin = defendValue - threshold
     if safetyMargin >= 0 then
         return 0
     end
-    return dmgRisk
+    return dmgRisk + damageTakenBuff
 end
 
 local function calculateDamagePrevented(dmgRisk, damageTaken)

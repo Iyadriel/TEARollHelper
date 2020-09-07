@@ -136,9 +136,18 @@ ui.modules.buffs.getOptions = function(options)
                                 if buff.types[BUFF_TYPES.HEALING_DONE] then
                                     local amount = buff.amount
                                     if amount > 0 then
-                                    msg = msg .. "Healing done increased by " .. amount .. ". "
+                                        msg = msg .. "Healing done increased by " .. amount .. ". "
                                     else
                                         msg = msg .. "Healing done reduced by " .. abs(amount) .. ". "
+                                    end
+                                end
+
+                                if buff.types[BUFF_TYPES.DAMAGE_TAKEN] then
+                                    local amount = buff.amount
+                                    if amount > 0 then
+                                        msg = msg .. "Damage taken increased by " .. amount .. ". "
+                                    else
+                                        msg = msg .. "Damage taken reduced by " .. abs(amount) .. ". "
                                     end
                                 end
 
