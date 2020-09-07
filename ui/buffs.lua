@@ -87,7 +87,7 @@ ui.modules.buffs.getOptions = function(options)
                                         if amount > 0 then
                                             msg = msg .. STAT_LABELS[stat] .. " increased by " .. amount .. ". "
                                         else
-                                            msg = msg .. STAT_LABELS[stat] .. " decreased by " .. abs(amount) .. ". "
+                                            msg = msg .. STAT_LABELS[stat] .. " reduced by " .. abs(amount) .. ". "
                                         end
                                     end
                                 end
@@ -96,7 +96,7 @@ ui.modules.buffs.getOptions = function(options)
                                     if buff.amount > 0 then
                                         msg = msg .. "Base damage increased by " .. buff.amount .. ". "
                                     else
-                                        msg = msg .. "Base damage decreased by " .. buff.amount .. ". "
+                                        msg = msg .. "Base damage reduced by " .. buff.amount .. ". "
                                     end
                                 end
 
@@ -129,13 +129,17 @@ ui.modules.buffs.getOptions = function(options)
                                     if amount > 0 then
                                         msg = msg .. "Maximum health increased by " .. amount .. ". "
                                     else
-                                        msg = msg .. "Maximum health decreased by " .. abs(amount) .. ". "
+                                        msg = msg .. "Maximum health reduced by " .. abs(amount) .. ". "
                                     end
                                 end
 
                                 if buff.types[BUFF_TYPES.HEALING_DONE] then
                                     local amount = buff.amount
+                                    if amount > 0 then
                                     msg = msg .. "Healing done increased by " .. amount .. ". "
+                                    else
+                                        msg = msg .. "Healing done reduced by " .. abs(amount) .. ". "
+                                    end
                                 end
 
                                 if buff.remainingTurns then
