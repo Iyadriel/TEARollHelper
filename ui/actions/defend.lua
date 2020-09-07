@@ -7,6 +7,7 @@ local character = ns.character
 local characterState = ns.state.character
 local consequences = ns.consequences
 local constants = ns.constants
+local feats = ns.resources.feats
 local rolls = ns.state.rolls
 local rules = ns.rules
 local traits = ns.resources.traits
@@ -15,6 +16,7 @@ local utils = ns.utils
 
 local ACTIONS = constants.ACTIONS
 local ACTION_LABELS = constants.ACTION_LABELS
+local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
 
 local state = characterState.state
@@ -92,7 +94,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
             damageType = sharedOptions.damageType,
             damageRisk = sharedOptions.damageRisk,
             preRoll = ui.modules.turn.modules.roll.getPreRollOptions({
-                order = 2,
+                order = 3,
                 hidden = function()
                     return shouldHideRoll() or not rules.defence.shouldShowPreRollUI()
                 end,
@@ -120,16 +122,34 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                                 return not (character.hasTrait(TRAITS.BULWARK) and state.buffLookup.getTraitBuffs(TRAITS.BULWARK))
                             end,
                         },
+                        enableLivingBarricade = {
+                            order = 1,
+                            type = "execute",
+                            name = COLOURS.FEATS.GENERIC .. "Enable " .. FEATS.LIVING_BARRICADE.name,
+                            desc = FEATS.LIVING_BARRICADE.desc,
+                            hidden = function()
+                                return not character.hasFeat(FEATS.LIVING_BARRICADE) or state.buffLookup.getFeatBuff(FEATS.LIVING_BARRICADE)
+                            end,
+                            func = consequences.enableLivingBarricade,
+                        },
+                        livingBarricadeActive = {
+                            order = 1,
+                            type = "description",
+                            name = COLOURS.FEATS.GENERIC .. FEATS.LIVING_BARRICADE.name .. " is active.",
+                            hidden = function()
+                                return not (character.hasFeat(FEATS.LIVING_BARRICADE) and state.buffLookup.getFeatBuff(FEATS.LIVING_BARRICADE))
+                            end,
+                        },
                     }
                 ),
             }),
             roll = ui.modules.turn.modules.roll.getOptions({
-                order = 3,
+                order = 4,
                 action = ACTIONS.defend,
                 hidden = shouldHideRoll,
             }),
             defend = {
-                order = 4,
+                order = 5,
                 type = "group",
                 name = ACTION_LABELS.defend,
                 inline = true,

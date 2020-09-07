@@ -7,7 +7,7 @@ local BUFF_TYPES = constants.BUFF_TYPES
 local DAMAGE_TYPES = constants.DAMAGE_TYPES
 local TURN_TYPES = constants.TURN_TYPES
 
-feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "COUNTER_FORCE", "ETERNAL_SACRIFICE", "EXPANSIVE_ARSENAL", "FOREIGN_DISCIPLE", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "MONSTER_HUNTER", "ONSLAUGHT", "PARAGON", "PHALANX", "PROFESSIONAL", "REAPER", "SHEPHERD_OF_THE_WICKED", "WARDER"}
+feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "COUNTER_FORCE", "ETERNAL_SACRIFICE", "EXPANSIVE_ARSENAL", "FOREIGN_DISCIPLE", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "LIVING_BARRICADE", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "MONSTER_HUNTER", "ONSLAUGHT", "PARAGON", "PHALANX", "PROFESSIONAL", "REAPER", "SHEPHERD_OF_THE_WICKED", "WARDER"}
 
 feats.FEATS = {
     FEATLESS = {
@@ -75,6 +75,21 @@ feats.FEATS = {
         desc = "You can now buff with the Offence stat instead of the Spirit stat.",
         note = "The addon will automatically use the highest stat.",
         supported = true
+    },
+    LIVING_BARRICADE = {
+        id = "LIVING_BARRICADE",
+        name = "Living Barricade",
+        desc = "When tasked with doing multiple defense rolls in the same enemy turn (saves not included) you take 3 less damage from all sources for the duration of the enemy turn.",
+        note = "Activate manually from the Defend action tab.",
+        icon = "Interface\\Icons\\ability_warrior_shieldwall",
+        supported = true,
+        buff = {
+            type = BUFF_TYPES.DAMAGE_TAKEN,
+            amount = -3,
+            remainingTurns = {
+                [TURN_TYPES.ENEMY.id] = 0,
+            },
+        },
     },
     MEDIC = {
         id = "MEDIC",

@@ -37,6 +37,12 @@ local function useFatePoint()
     bus.fire(EVENTS.FATE_POINT_USED)
 end
 
+-- Feats
+
+local function enableLivingBarricade()
+    buffs.addFeatBuff(FEATS.LIVING_BARRICADE)
+end
+
 -- Traits
 
 local function useBulwark()
@@ -160,6 +166,7 @@ end
 -- [[ Exports ]]
 
 consequences.useFatePoint = useFatePoint
+consequences.enableLivingBarricade = enableLivingBarricade
 consequences.useTrait = useTrait
 consequences.confirmReboundRoll = confirmReboundRoll
 consequences.confirmAction = confirmAction
