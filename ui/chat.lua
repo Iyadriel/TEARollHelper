@@ -4,11 +4,13 @@ local actions = ns.actions
 local bus = ns.bus
 local constants = ns.constants
 local characterState = ns.state.character
+local feats = ns.resources.feats
 local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
 
 local COLOURS = TEARollHelper.COLOURS
 local EVENTS = bus.EVENTS
+local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
 local WEAKNESSES = weaknesses.WEAKNESSES
 
@@ -95,6 +97,10 @@ end)
 
 bus.addListener(EVENTS.HEALING_OVER_TIME_BUFF_ADDED, function(label)
     TEARollHelper:Print("Added healing over time effect:", label)
+end)
+
+bus.addListener(EVENTS.FEAT_BUFF_ADDED, function(featID)
+    TEARollHelper:Print(COLOURS.FEATS.GENERIC .. "Added Feat buff:", FEATS[featID].name)
 end)
 
 bus.addListener(EVENTS.BUFF_EXPIRED, function(label)
