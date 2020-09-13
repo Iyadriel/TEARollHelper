@@ -2,7 +2,7 @@ local _, ns = ...
 
 local rules = ns.rules
 
-local function getAttack(roll, threshold, offence, offenceBuff, baseDmgBuffAmount, enemyId, isAOE, numBloodHarvestSlots, numVindicationCharges)
+local function getAttack(roll, threshold, offence, offenceBuff, baseDmgBuff, damageDoneBuff, enemyId, isAOE, numBloodHarvestSlots, numVindicationCharges)
     local attackValue
     local dmg
     local critType = rules.offence.getCritType()
@@ -18,7 +18,7 @@ local function getAttack(roll, threshold, offence, offenceBuff, baseDmgBuffAmoun
 
     attackValue = rules.offence.calculateAttackValue(roll, offence, offenceBuff)
 
-    dmg = rules.offence.calculateAttackDmg(threshold, attackValue, baseDmgBuffAmount)
+    dmg = rules.offence.calculateAttackDmg(threshold, attackValue, baseDmgBuff, damageDoneBuff)
 
     if rules.offence.canProcAdrenaline() then
         hasAdrenalineProc = rules.offence.hasAdrenalineProc(threshold, attackValue)
@@ -91,6 +91,7 @@ local function getDefence(roll, threshold, damageType, dmgRisk, defence, defence
     local isCrit = rules.defence.isCrit(roll)
     local defendValue, damageTaken, damagePrevented
     local retaliateDmg = 0
+    local empoweredBladesEnabled = false
 
     defendValue = rules.defence.calculateDefendValue(roll, damageType, defence, defenceBuff)
     damageTaken = rules.defence.calculateDamageTaken(threshold, defendValue, dmgRisk, damageTakenBuff)
@@ -100,13 +101,18 @@ local function getDefence(roll, threshold, damageType, dmgRisk, defence, defence
         retaliateDmg = rules.defence.calculateRetaliationDamage(defence)
     end
 
+    if rules.defence.canUseEmpoweredBlades() then
+        empoweredBladesEnabled = rules.defence.empoweredBladesEnabled(damageTaken, damageType)
+    end
+
     return {
         defendValue = defendValue,
         dmgRisk = dmgRisk,
         damageTaken = damageTaken,
         damagePrevented = damagePrevented,
         canRetaliate = isCrit,
-        retaliateDmg = retaliateDmg
+        retaliateDmg = retaliateDmg,
+        empoweredBladesEnabled = empoweredBladesEnabled,
     }
 end
 

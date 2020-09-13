@@ -245,7 +245,13 @@ local function getAttack()
     local numBloodHarvestSlots = state.attack.numBloodHarvestSlots
     local numVindicationCharges = characterState.featsAndTraits.numTraitCharges.get(TRAITS.VINDICATION.id)
 
-    return actions.getAttack(state.attack.currentRoll, threshold, offence, offenceBuff, baseDmgBuffAmount, enemyId, isAOE, numBloodHarvestSlots, numVindicationCharges)
+    local damageDoneBuff = 0
+    local damageDoneBuffs = characterState.buffLookup.getBuffsOfType(BUFF_TYPES.DAMAGE_DONE)
+    for _, buff in ipairs(damageDoneBuffs) do
+        damageDoneBuff = damageDoneBuff + buff.amount
+    end
+
+    return actions.getAttack(state.attack.currentRoll, threshold, offence, offenceBuff, baseDmgBuffAmount, damageDoneBuff, enemyId, isAOE, numBloodHarvestSlots, numVindicationCharges)
 end
 
 local function getCC()

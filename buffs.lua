@@ -264,6 +264,13 @@ local function addTraitBuff(trait, providedStats)
             newBuff.amount = buff.amount
             newBuff.originalAmount = buff.amount
         end
+        if types[BUFF_TYPES.DAMAGE_DONE] then
+            if providedStats then
+                newBuff.amount = providedStats
+            else
+                newBuff.amount = buff.amount
+            end
+        end
 
         if buff.remainingTurns then
             if type(buff.remainingTurns) == "table" then

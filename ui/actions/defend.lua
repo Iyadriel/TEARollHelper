@@ -188,6 +188,33 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                     }
                 }
             },
+            postRoll = {
+                order = 6,
+                type = "group",
+                name = "After rolling",
+                inline = true,
+                hidden = function()
+                    return not rolls.state.defend.currentRoll.get() or rolls.getDefence().damageTaken > 0 or not rules.defence.shouldShowPostRollUI()
+                end,
+                args = {
+                    useEmpoweredBlades = {
+                        order = 0,
+                        type = "execute",
+                        width = "full",
+                        name = COLOURS.TRAITS.EMPOWERED_BLADES .. "Use " .. TRAITS.EMPOWERED_BLADES.name,
+                        desc = TRAITS.EMPOWERED_BLADES.desc,
+                        hidden = function()
+                            return not rolls.getDefence().empoweredBladesEnabled
+                        end,
+                        disabled = function()
+                            return state.featsAndTraits.numTraitCharges.get(TRAITS.EMPOWERED_BLADES.id) == 0
+                        end,
+                        func = function()
+                            consequences.useTrait(TRAITS.EMPOWERED_BLADES)(rolls.getDefence())
+                        end,
+                    },
+                }
+            }
         },
     }
 end

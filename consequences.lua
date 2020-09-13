@@ -53,6 +53,10 @@ local function useCalamityGambit()
     buffs.addTraitBuff(TRAITS.CALAMITY_GAMBIT)
 end
 
+local function useEmpoweredBlades(defence)
+    buffs.addTraitBuff(TRAITS.EMPOWERED_BLADES, ceil(defence.dmgRisk / 2))
+end
+
 local function useFocus()
     buffs.addTraitBuff(TRAITS.FOCUS)
 end
@@ -92,6 +96,7 @@ end
 local TRAIT_FNS = {
     [TRAITS.BULWARK.id] = useBulwark,
     [TRAITS.CALAMITY_GAMBIT.id] = useCalamityGambit,
+    [TRAITS.EMPOWERED_BLADES.id] = useEmpoweredBlades,
     [TRAITS.FOCUS.id] = useFocus,
     [TRAITS.LIFE_PULSE.id] = useLifePulse,
     [TRAITS.LIFE_WITHIN.id] = useLifeWithin,
@@ -101,10 +106,9 @@ local TRAIT_FNS = {
     [TRAITS.VINDICATION.id] = useVindication,
 }
 
-local function useTrait(trait, ...)
-    local args = {...}
-    return function()
-        TRAIT_FNS[trait.id](unpack(args))
+local function useTrait(trait)
+    return function(...)
+        TRAIT_FNS[trait.id](...)
         useTraitCharge(trait)
     end
 end

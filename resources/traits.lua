@@ -7,7 +7,7 @@ local ACTIONS = constants.ACTIONS
 local BUFF_TYPES = constants.BUFF_TYPES
 local TURN_TYPES = constants.TURN_TYPES
 
-traits.TRAIT_KEYS = {"OTHER", "BULWARK", "CALAMITY_GAMBIT", "FOCUS", "LIFE_PULSE", "LIFE_WITHIN", "FAELUNES_REGROWTH", "SECOND_WIND", "SHATTER_SOUL", "VERSATILE", "VINDICATION"}
+traits.TRAIT_KEYS = {"OTHER", "BULWARK", "CALAMITY_GAMBIT", "EMPOWERED_BLADES", "FOCUS", "LIFE_PULSE", "LIFE_WITHIN", "FAELUNES_REGROWTH", "SECOND_WIND", "SHATTER_SOUL", "VERSATILE", "VINDICATION"}
 
 traits.TRAITS = {
     OTHER = {
@@ -65,6 +65,25 @@ traits.TRAITS = {
             }
         },
     },
+    EMPOWERED_BLADES = {
+        id = "EMPOWERED_BLADES",
+        name = "Empowered Blades",
+        desc = "Activate after a successful Defence roll against a magical attack to make your next successful attack deal additional Chaos damage equal to half of the prevented damage rounded up. Can be used twice per event. Activate after rolling.",
+        icon = "Interface\\Icons\\ability_demonhunter_chaosstrike",
+        supported = true,
+        numCharges = 2,
+        buffs = {
+            {
+                type = BUFF_TYPES.DAMAGE_DONE,
+                amount = "custom",
+                remainingTurns = {
+                    [TURN_TYPES.PLAYER.id] = 1,
+                },
+            },
+        },
+        isCustom = true,
+        player = "KELANRA",
+    },
     FOCUS = {
         id = "FOCUS",
         name = "Focus",
@@ -115,7 +134,7 @@ traits.TRAITS = {
         id = "SHATTER_SOUL",
         name = "Shatter Soul",
         desc = "Activate after a successful attack to heal yourself for 6 HP. The target of your attack must not be mechanical. If the target is a demon, your Offence is also increased by +6 on the next player turn. Can be used thrice per event. Activate after rolling.",
-        icon = "Interface\\Icons\\ability_warlock_improvedsoulleech",
+        icon = "Interface\\Icons\\ability_demonhunter_shatteredsouls",
         supported = true,
         numCharges = 3,
         buffs = {

@@ -151,6 +151,15 @@ ui.modules.buffs.getOptions = function(options)
                                     end
                                 end
 
+                                if buff.types[BUFF_TYPES.DAMAGE_DONE] then
+                                    local amount = buff.amount
+                                    if amount > 0 then
+                                        msg = msg .. "Damage done increased by " .. amount .. ". "
+                                    else
+                                        msg = msg .. "Damage done reduced by " .. abs(amount) .. ". "
+                                    end
+                                end
+
                                 if buff.remainingTurns then
                                     if type(buff.remainingTurns) == "table" then
                                         local remainingPlayerTurns = buff.remainingTurns[TURN_TYPES.PLAYER.id]

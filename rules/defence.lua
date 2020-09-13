@@ -1,11 +1,13 @@
 local _, ns = ...
 
 local character = ns.character
+local constants = ns.constants
 local feats = ns.resources.feats
 local racialTraits = ns.resources.racialTraits
 local rules = ns.rules
 local traits = ns.resources.traits
 
+local DAMAGE_TYPES = constants.DAMAGE_TYPES
 local FEATS = feats.FEATS
 local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
 local TRAITS = traits.TRAITS
@@ -47,8 +49,22 @@ local function calculateRetaliationDamage(defence)
     return dmg
 end
 
+-- Trait: Empowered Blades
+
+local function canUseEmpoweredBlades()
+    return character.hasTrait(TRAITS.EMPOWERED_BLADES)
+end
+
+local function empoweredBladesEnabled(damageTaken, damageType)
+    return damageTaken <= 0 and damageType == DAMAGE_TYPES.MAGICAL
+end
+
 local function shouldShowPreRollUI()
     return character.hasFeat(FEATS.LIVING_BARRICADE) or character.hasTrait(TRAITS.BULWARK) or rules.other.shouldShowPreRollUI()
+end
+
+local function shouldShowPostRollUI()
+    return character.hasTrait(TRAITS.EMPOWERED_BLADES)
 end
 
 local function shouldShowDamageType()
@@ -64,6 +80,10 @@ rules.defence = {
     isCrit = isCrit,
     calculateRetaliationDamage = calculateRetaliationDamage,
 
+    canUseEmpoweredBlades = canUseEmpoweredBlades,
+    empoweredBladesEnabled = empoweredBladesEnabled,
+
     shouldShowPreRollUI = shouldShowPreRollUI,
+    shouldShowPostRollUI = shouldShowPostRollUI,
     shouldShowDamageType = shouldShowDamageType,
 }
