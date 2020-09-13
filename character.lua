@@ -10,8 +10,6 @@ local rules = ns.rules
 local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
 
-
-local BUFF_TYPES = constants.BUFF_TYPES
 local EVENTS = bus.EVENTS
 local FEATS = feats.FEATS
 local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
@@ -55,11 +53,7 @@ end
 
 function calculatePlayerMaxHealth()
     local staminaBuff = characterState.state.buffs.stamina.get()
-    local maxHealthBuffs = characterState.state.buffLookup.getBuffsOfType(BUFF_TYPES.MAX_HEALTH)
-    local maxHealthBuff = 0
-    for _, buff in ipairs(maxHealthBuffs) do
-        maxHealthBuff = maxHealthBuff + buff.amount
-    end
+    local maxHealthBuff = characterState.state.buffs.maxHealth.get()
 
     return rules.stats.calculateMaxHealth(getPlayerStamina(), staminaBuff, maxHealthBuff)
 end

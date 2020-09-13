@@ -6,14 +6,11 @@ local character = ns.character
 local characterState = ns.state.character.state
 local constants = ns.constants
 local environment = ns.state.environment
-local feats = ns.resources.feats
 local rolls = ns.state.rolls
 local traits = ns.resources.traits
 
 local ACTIONS = constants.ACTIONS
-local BUFF_TYPES = constants.BUFF_TYPES
 local EVENTS = bus.EVENTS
-local FEATS = feats.FEATS
 local ROLL_MODES = constants.ROLL_MODES
 local STATS = constants.STATS
 local TRAITS = traits.TRAITS
@@ -237,21 +234,15 @@ end)
 local function getAttack()
     local offence = character.getPlayerOffence()
     local offenceBuff = characterState.buffs.offence.get()
-    local baseDmgBuff = characterState.buffLookup.getPlayerBaseDmgBuff()
-    local baseDmgBuffAmount = baseDmgBuff and baseDmgBuff.amount or 0
+    local baseDmgBuff = characterState.buffs.baseDamage.get()
+    local damageDoneBuff = characterState.buffs.damageDone.get()
     local enemyId = environment.state.enemyId.get()
     local isAOE = state.attack.isAOE
     local threshold = state.attack.threshold
     local numBloodHarvestSlots = state.attack.numBloodHarvestSlots
     local numVindicationCharges = characterState.featsAndTraits.numTraitCharges.get(TRAITS.VINDICATION.id)
 
-    local damageDoneBuff = 0
-    local damageDoneBuffs = characterState.buffLookup.getBuffsOfType(BUFF_TYPES.DAMAGE_DONE)
-    for _, buff in ipairs(damageDoneBuffs) do
-        damageDoneBuff = damageDoneBuff + buff.amount
-    end
-
-    return actions.getAttack(state.attack.currentRoll, threshold, offence, offenceBuff, baseDmgBuffAmount, damageDoneBuff, enemyId, isAOE, numBloodHarvestSlots, numVindicationCharges)
+    return actions.getAttack(state.attack.currentRoll, threshold, offence, offenceBuff, baseDmgBuff, damageDoneBuff, enemyId, isAOE, numBloodHarvestSlots, numVindicationCharges)
 end
 
 local function getCC()
@@ -266,14 +257,8 @@ end
 local function getHealing(outOfCombat)
     local spirit = character.getPlayerSpirit()
     local spiritBuff = characterState.buffs.spirit.get()
+    local healingDoneBuff = characterState.buffs.healingDone.get()
     local remainingOutOfCombatHeals = characterState.healing.remainingOutOfCombatHeals.get()
-
-    local healingDoneBuffs = characterState.buffLookup.getBuffsOfType(BUFF_TYPES.HEALING_DONE)
-    local healingDoneBuff = 0
-    for _, buff in ipairs(healingDoneBuffs) do
-        healingDoneBuff = healingDoneBuff + buff.amount
-    end
-
 
     return actions.getHealing(state.healing.currentRoll, spirit, spiritBuff, healingDoneBuff, state.healing.numGreaterHealSlots, state.healing.targetIsKO, outOfCombat, remainingOutOfCombatHeals)
 end
@@ -290,12 +275,7 @@ end
 local function getDefence()
     local defence = character.getPlayerDefence()
     local defenceBuff = characterState.buffs.defence.get()
-
-    local damageTakenBuff = 0
-    local damageTakenBuffs = characterState.buffLookup.getBuffsOfType(BUFF_TYPES.DAMAGE_TAKEN)
-    for _, buff in ipairs(damageTakenBuffs) do
-        damageTakenBuff = damageTakenBuff + buff.amount
-    end
+    local damageTakenBuff = characterState.buffs.damageTaken.get()
 
     return actions.getDefence(state.defend.currentRoll, state.defend.threshold, state.defend.damageType, state.defend.damageRisk, defence, defenceBuff, damageTakenBuff)
 end
@@ -303,12 +283,7 @@ end
 local function getMeleeSave()
     local defence = character.getPlayerDefence()
     local defenceBuff = characterState.buffs.defence.get()
-
-    local damageTakenBuff = 0
-    local damageTakenBuffs = characterState.buffLookup.getBuffsOfType(BUFF_TYPES.DAMAGE_TAKEN)
-    for _, buff in ipairs(damageTakenBuffs) do
-        damageTakenBuff = damageTakenBuff + buff.amount
-    end
+    local damageTakenBuff = characterState.buffs.damageTaken.get()
 
     return actions.getMeleeSave(state.meleeSave.currentRoll, state.meleeSave.threshold, state.meleeSave.damageType, state.meleeSave.damageRisk, defence, defenceBuff, damageTakenBuff)
 end

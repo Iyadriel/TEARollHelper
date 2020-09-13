@@ -57,6 +57,12 @@ characterState.initState = function()
             defence = 0,
             spirit = 0,
             stamina = 0,
+
+            maxHealth = 0,
+            baseDamage = 0,
+            damageDone = 0,
+            damageTaken = 0,
+            healingDone = 0,
         },
 
         activeBuffs = {},
@@ -127,10 +133,7 @@ characterState.state = {
 
             -- defence and melee save pre-apply these so they can display correct action results
             if not ignoreDamageTakenBuffs then
-                local damageTakenBuffs = characterState.state.buffLookup.getBuffsOfType(BUFF_TYPES.DAMAGE_TAKEN)
-                for _, buff in ipairs(damageTakenBuffs) do
-                    damageTakenBuff = damageTakenBuff + buff.amount
-                end
+                damageTakenBuff = characterState.state.buffs.damageTaken.get()
             end
 
             local damage = rules.effects.calculateDamageTaken(dmgTaken, state.health, damageTakenBuff)
@@ -274,6 +277,12 @@ characterState.state = {
         stamina = basicGetSet("buffs", "stamina", function()
             updateMaxHealth(true)
         end),
+
+        maxHealth = basicGetSet("buffs", "maxHealth"),
+        baseDamage = basicGetSet("buffs", "baseDamage"),
+        damageDone = basicGetSet("buffs", "damageDone"),
+        damageTaken = basicGetSet("buffs", "damageTaken"),
+        healingDone = basicGetSet("buffs", "healingDone"),
     },
     activeBuffs = {
         get = function ()
@@ -293,8 +302,18 @@ characterState.state = {
                     statBuff.set(statBuff.get() + amount)
                 end
             end
+
             if buff.types[BUFF_TYPES.MAX_HEALTH] then
+                characterState.state.buffs.maxHealth.set(characterState.state.buffs.maxHealth.get() + buff.amount)
                 updateMaxHealth(false)
+            elseif buff.types[BUFF_TYPES.BASE_DMG] then
+                characterState.state.buffs.baseDamage.set(characterState.state.buffs.baseDamage.get() + buff.amount)
+            elseif buff.types[BUFF_TYPES.DAMAGE_DONE] then
+                characterState.state.buffs.damageDone.set(characterState.state.buffs.damageDone.get() + buff.amount)
+            elseif buff.types[BUFF_TYPES.DAMAGE_TAKEN] then
+                characterState.state.buffs.damageTaken.set(characterState.state.buffs.damageTaken.get() + buff.amount)
+            elseif buff.types[BUFF_TYPES.HEALING_DONE] then
+                characterState.state.buffs.healingDone.set(characterState.state.buffs.healingDone.get() + buff.amount)
             end
 
             -- reset input
@@ -327,12 +346,21 @@ characterState.state = {
                 end
             end
 
+            if buff.types[BUFF_TYPES.MAX_HEALTH] then
+                characterState.state.buffs.maxHealth.set(characterState.state.buffs.maxHealth.get() - buff.amount)
+                updateMaxHealth(false)
+            elseif buff.types[BUFF_TYPES.BASE_DMG] then
+                characterState.state.buffs.baseDamage.set(characterState.state.buffs.baseDamage.get() - buff.amount)
+            elseif buff.types[BUFF_TYPES.DAMAGE_DONE] then
+                characterState.state.buffs.damageDone.set(characterState.state.buffs.damageDone.get() - buff.amount)
+            elseif buff.types[BUFF_TYPES.DAMAGE_TAKEN] then
+                characterState.state.buffs.damageTaken.set(characterState.state.buffs.damageTaken.get() - buff.amount)
+            elseif buff.types[BUFF_TYPES.HEALING_DONE] then
+                characterState.state.buffs.healingDone.set(characterState.state.buffs.healingDone.get() - buff.amount)
+            end
+
             table.remove(state.activeBuffs, index)
             characterState.state.buffLookup.remove(buff)
-
-            if buff.types[BUFF_TYPES.MAX_HEALTH] then
-                updateMaxHealth(false)
-            end
         end,
         cancel = function(index)
             -- cancel is for buffs manually removed by the player.
@@ -342,6 +370,7 @@ characterState.state = {
             buff.stacks = buff.stacks + 1
 
             if buff.types[BUFF_TYPES.MAX_HEALTH] then
+                characterState.state.buffs.maxHealth.set(characterState.state.buffs.maxHealth.get() + buff.originalAmount)
                 buff.amount = buff.originalAmount * buff.stacks
                 updateMaxHealth(false)
             end
@@ -408,16 +437,6 @@ characterState.state = {
         end,
         getRacialBuff = function()
             return characterState.state.buffLookup.get("racial")
-        end,
-        getBuffsOfType = function(type)
-            local activeBuffs = characterState.state.activeBuffs.get()
-            local buffsOfType = {}
-            for _, buff in ipairs(activeBuffs) do
-                if buff.types[type] then
-                    table.insert(buffsOfType, buff)
-                end
-            end
-            return buffsOfType
         end,
         add = function(buff)
             state.buffLookup[buff.id] = buff
