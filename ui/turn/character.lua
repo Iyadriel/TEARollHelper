@@ -2,6 +2,7 @@ local _, ns = ...
 
 local COLOURS = TEARollHelper.COLOURS
 
+local buffsState = ns.state.buffs.state
 local character = ns.character
 local integrations = ns.integrations
 local feats = ns.resources.feats
@@ -65,13 +66,13 @@ ui.modules.turn.modules.character.getOptions = function(options)
                         name = function()
                             local out = {
                                 "Offence buff: ",
-                                state.buffs.offence.get(),
+                                buffsState.buffs.offence.get(),
                                 "|nDefence buff: ",
-                                state.buffs.defence.get(),
+                                buffsState.buffs.defence.get(),
                                 "|nSpirit buff: ",
-                                state.buffs.spirit.get(),
+                                buffsState.buffs.spirit.get(),
                                 "|nStamina buff: ",
-                                state.buffs.stamina.get(),
+                                buffsState.buffs.stamina.get(),
                             }
 
                             return table.concat(out)

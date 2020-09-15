@@ -3,6 +3,7 @@ local _, ns = ...
 local COLOURS = TEARollHelper.COLOURS
 
 local actions = ns.actions
+local buffsState = ns.state.buffs.state
 local character = ns.character
 local characterState = ns.state.character.state
 local consequences = ns.consequences
@@ -44,7 +45,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                     name = COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.CALAMITY_GAMBIT.name,
                     desc = TRAITS.CALAMITY_GAMBIT.desc,
                     hidden = function()
-                        return not character.hasTrait(TRAITS.CALAMITY_GAMBIT) or characterState.buffLookup.getTraitBuffs(TRAITS.CALAMITY_GAMBIT)
+                        return not character.hasTrait(TRAITS.CALAMITY_GAMBIT) or buffsState.buffLookup.getTraitBuffs(TRAITS.CALAMITY_GAMBIT)
                     end,
                     disabled = function()
                         return characterState.featsAndTraits.numTraitCharges.get(TRAITS.CALAMITY_GAMBIT.id) == 0
@@ -56,7 +57,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                     type = "description",
                     name = COLOURS.TRAITS.GENERIC .. TRAITS.CALAMITY_GAMBIT.name .. " is active.",
                     hidden = function()
-                        return not (character.hasTrait(TRAITS.CALAMITY_GAMBIT) and characterState.buffLookup.getTraitBuffs(TRAITS.CALAMITY_GAMBIT))
+                        return not (character.hasTrait(TRAITS.CALAMITY_GAMBIT) and buffsState.buffLookup.getTraitBuffs(TRAITS.CALAMITY_GAMBIT))
                     end,
                 },
             }

@@ -1,5 +1,6 @@
 local _, ns = ...
 
+local buffsState = ns.state.buffs
 local characterState = ns.state.character
 local consequences = ns.consequences
 local constants = ns.constants
@@ -66,7 +67,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
         local action = options.action
         local turnTypeId = turnState.state.type.get()
 
-        local buffLookup = characterState.state.buffLookup
+        local buffLookup = buffsState.state.buffLookup
         local advantageBuff = buffLookup.getAdvantageBuff(action, turnTypeId)
         local disadvantageDebuff = buffLookup.getDisadvantageDebuff(action, turnTypeId)
         local enemyId = environment.state.enemyId.get()
@@ -221,7 +222,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                         local roll = state[options.action].currentRoll.get()
                         local turnTypeId = turnState.state.type.get()
 
-                        return not (rules.rolls.hasReboundProc(roll, turnTypeId) and not characterState.state.buffLookup.getWeaknessDebuff(WEAKNESSES.REBOUND))
+                        return not (rules.rolls.hasReboundProc(roll, turnTypeId) and not buffsState.state.buffLookup.getWeaknessDebuff(WEAKNESSES.REBOUND))
                     end
                     return true
                 end,

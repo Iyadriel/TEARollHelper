@@ -1,8 +1,8 @@
 local _, ns = ...
 
+local buffsState = ns.state.buffs
 local bus = ns.bus
 local constants = ns.constants
-local characterState = ns.state.character
 local rules = ns.rules
 
 local EVENTS = bus.EVENTS
@@ -26,11 +26,11 @@ local function shallowCopy(table)
 end
 
 local function addBuff(buff)
-    characterState.state.activeBuffs.add(buff)
+    buffsState.state.activeBuffs.add(buff)
 end
 
 local function removeBuff(buff)
-    characterState.state.activeBuffs.remove(buff)
+    buffsState.state.activeBuffs.remove(buff)
 end
 
 local function getRemainingTurns(expireAfterNextTurn)
@@ -39,7 +39,7 @@ local function getRemainingTurns(expireAfterNextTurn)
 end
 
 local function addStatBuff(stat, amount, label, expireAfterNextTurn)
-    local existingBuff = characterState.state.buffLookup.getPlayerStatBuff(stat)
+    local existingBuff = buffsState.state.buffLookup.getPlayerStatBuff(stat)
 
     if existingBuff then
         removeBuff(existingBuff)
@@ -68,7 +68,7 @@ local function addStatBuff(stat, amount, label, expireAfterNextTurn)
 end
 
 local function addBaseDmgBuff(amount, label, expireAfterNextTurn)
-    local existingBuff = characterState.state.buffLookup.getPlayerBaseDmgBuff()
+    local existingBuff = buffsState.state.buffLookup.getPlayerBaseDmgBuff()
 
     if existingBuff then
         removeBuff(existingBuff)
@@ -95,7 +95,7 @@ local function addBaseDmgBuff(amount, label, expireAfterNextTurn)
 end
 
 local function addAdvantageBuff(action, label, expireAfterNextTurn)
-    local existingBuff = characterState.state.buffLookup.getPlayerAdvantageBuff(action)
+    local existingBuff = buffsState.state.buffLookup.getPlayerAdvantageBuff(action)
 
     if existingBuff then
         removeBuff(existingBuff)
@@ -120,7 +120,7 @@ local function addAdvantageBuff(action, label, expireAfterNextTurn)
 end
 
 local function addDisadvantageDebuff(action, label, expireAfterNextTurn)
-    local existingBuff = characterState.state.buffLookup.getPlayerDisadvantageDebuff(action)
+    local existingBuff = buffsState.state.buffLookup.getPlayerDisadvantageDebuff(action)
 
     if existingBuff then
         removeBuff(existingBuff)
@@ -170,7 +170,7 @@ local function addHoTBuff(label, icon, healingPerTick, remainingTurns)
 end
 
 local function addFeatBuff(feat, providedValue)
-    local existingBuff = characterState.state.buffLookup.getFeatBuff(feat)
+    local existingBuff = buffsState.state.buffLookup.getFeatBuff(feat)
     if existingBuff then
         removeBuff(existingBuff)
     end
@@ -216,7 +216,7 @@ local function addFeatBuff(feat, providedValue)
 end
 
 local function addTraitBuff(trait, providedStats)
-    local existingBuffs = characterState.state.buffLookup.getTraitBuffs(trait)
+    local existingBuffs = buffsState.state.buffLookup.getTraitBuffs(trait)
     if existingBuffs then
         for _, existingBuff in pairs(existingBuffs) do
             removeBuff(existingBuff)
@@ -290,11 +290,11 @@ end
 local function addWeaknessDebuff(weakness, addStacks)
     local debuff = weakness.debuff
     if debuff then
-        local existingBuff = characterState.state.buffLookup.getWeaknessDebuff(weakness)
+        local existingBuff = buffsState.state.buffLookup.getWeaknessDebuff(weakness)
 
         if existingBuff then
             if addStacks then
-                characterState.state.activeBuffs.addStack(existingBuff)
+                buffsState.state.activeBuffs.addStack(existingBuff)
                 return
             else
             removeBuff(existingBuff)
@@ -346,7 +346,7 @@ end
 local function addRacialBuff(racialTrait)
     local buffs = racialTrait.buffs
     if buffs and buffs.stats then
-        local existingBuff = characterState.state.buffLookup.getRacialBuff()
+        local existingBuff = buffsState.state.buffLookup.getRacialBuff()
         if existingBuff then
             removeBuff(existingBuff)
         end

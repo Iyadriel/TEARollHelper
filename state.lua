@@ -5,6 +5,7 @@ local bus = ns.bus
 local EVENTS = bus.EVENTS
 
 function TEARollHelper:InitState()
+    ns.state.buffs.initState()
     ns.state.character.initState()
     ns.state.environment.initState()
     ns.state.rolls.initState()

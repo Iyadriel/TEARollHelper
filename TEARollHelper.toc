@@ -46,6 +46,7 @@ rules/meleeSave.lua
 rules/rangedSave.lua
 rules/traits.lua
 rules/utility.lua
+state/buffs.lua
 state/character.lua
 state/environment.lua
 state/rolls.lua

@@ -3,6 +3,7 @@ local _, ns = ...
 local COLOURS = TEARollHelper.COLOURS
 
 local actions = ns.actions
+local buffsState = ns.state.buffs.state
 local character = ns.character
 local characterState = ns.state.character
 local consequences = ns.consequences
@@ -107,7 +108,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                             name = COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.BULWARK.name,
                             desc = TRAITS.BULWARK.desc,
                             hidden = function()
-                                return not character.hasTrait(TRAITS.BULWARK) or state.buffLookup.getTraitBuffs(TRAITS.BULWARK)
+                                return not character.hasTrait(TRAITS.BULWARK) or buffsState.buffLookup.getTraitBuffs(TRAITS.BULWARK)
                             end,
                             disabled = function()
                                 return state.featsAndTraits.numTraitCharges.get(TRAITS.BULWARK.id) == 0
@@ -119,7 +120,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                             type = "description",
                             name = COLOURS.TRAITS.GENERIC .. TRAITS.BULWARK.name .. " is active.",
                             hidden = function()
-                                return not (character.hasTrait(TRAITS.BULWARK) and state.buffLookup.getTraitBuffs(TRAITS.BULWARK))
+                                return not (character.hasTrait(TRAITS.BULWARK) and buffsState.buffLookup.getTraitBuffs(TRAITS.BULWARK))
                             end,
                         },
                         enableLivingBarricade = {
@@ -128,7 +129,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                             name = COLOURS.FEATS.GENERIC .. "Enable " .. FEATS.LIVING_BARRICADE.name,
                             desc = FEATS.LIVING_BARRICADE.desc,
                             hidden = function()
-                                return not character.hasFeat(FEATS.LIVING_BARRICADE) or state.buffLookup.getFeatBuff(FEATS.LIVING_BARRICADE)
+                                return not character.hasFeat(FEATS.LIVING_BARRICADE) or buffsState.buffLookup.getFeatBuff(FEATS.LIVING_BARRICADE)
                             end,
                             func = consequences.enableLivingBarricade,
                         },
@@ -137,7 +138,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                             type = "description",
                             name = COLOURS.FEATS.GENERIC .. FEATS.LIVING_BARRICADE.name .. " is active.",
                             hidden = function()
-                                return not (character.hasFeat(FEATS.LIVING_BARRICADE) and state.buffLookup.getFeatBuff(FEATS.LIVING_BARRICADE))
+                                return not (character.hasFeat(FEATS.LIVING_BARRICADE) and buffsState.buffLookup.getFeatBuff(FEATS.LIVING_BARRICADE))
                             end,
                         },
                     }

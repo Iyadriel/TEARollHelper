@@ -26,6 +26,7 @@ ns.resources = {
 ns.rules = {}
 ns.settings = {}
 ns.state = {
+    buffs = {},
     character = {},
     environment = {},
     rolls = {},

@@ -1,6 +1,7 @@
 local _, ns = ...
 
 local actions = ns.actions
+local buffsState = ns.state.buffs.state
 local bus = ns.bus
 local character = ns.character
 local characterState = ns.state.character.state
@@ -233,9 +234,9 @@ end)
 
 local function getAttack()
     local offence = character.getPlayerOffence()
-    local offenceBuff = characterState.buffs.offence.get()
-    local baseDmgBuff = characterState.buffs.baseDamage.get()
-    local damageDoneBuff = characterState.buffs.damageDone.get()
+    local offenceBuff = buffsState.buffs.offence.get()
+    local baseDmgBuff = buffsState.buffs.baseDamage.get()
+    local damageDoneBuff = buffsState.buffs.damageDone.get()
     local enemyId = environment.state.enemyId.get()
     local isAOE = state.attack.isAOE
     local threshold = state.attack.threshold
@@ -247,17 +248,17 @@ end
 
 local function getCC()
     local offence = character.getPlayerOffence()
-    local offenceBuff = characterState.buffs.offence.get()
+    local offenceBuff = buffsState.buffs.offence.get()
     local defence = character.getPlayerDefence()
-    local defenceBuff = characterState.buffs.defence.get()
+    local defenceBuff = buffsState.buffs.defence.get()
 
     return actions.getCC(state.cc.currentRoll, offence, offenceBuff, defence, defenceBuff)
 end
 
 local function getHealing(outOfCombat)
     local spirit = character.getPlayerSpirit()
-    local spiritBuff = characterState.buffs.spirit.get()
-    local healingDoneBuff = characterState.buffs.healingDone.get()
+    local spiritBuff = buffsState.buffs.spirit.get()
+    local healingDoneBuff = buffsState.buffs.healingDone.get()
     local remainingOutOfCombatHeals = characterState.healing.remainingOutOfCombatHeals.get()
 
     return actions.getHealing(state.healing.currentRoll, spirit, spiritBuff, healingDoneBuff, state.healing.numGreaterHealSlots, state.healing.targetIsKO, outOfCombat, remainingOutOfCombatHeals)
@@ -266,31 +267,31 @@ end
 local function getBuff()
     local spirit = character.getPlayerSpirit()
     local offence = character.getPlayerOffence()
-    local offenceBuff = characterState.buffs.offence.get()
-    local spiritBuff = characterState.buffs.spirit.get()
+    local offenceBuff = buffsState.buffs.offence.get()
+    local spiritBuff = buffsState.buffs.spirit.get()
 
     return actions.getBuff(state.buff.currentRoll, spirit, spiritBuff, offence, offenceBuff)
 end
 
 local function getDefence()
     local defence = character.getPlayerDefence()
-    local defenceBuff = characterState.buffs.defence.get()
-    local damageTakenBuff = characterState.buffs.damageTaken.get()
+    local defenceBuff = buffsState.buffs.defence.get()
+    local damageTakenBuff = buffsState.buffs.damageTaken.get()
 
     return actions.getDefence(state.defend.currentRoll, state.defend.threshold, state.defend.damageType, state.defend.damageRisk, defence, defenceBuff, damageTakenBuff)
 end
 
 local function getMeleeSave()
     local defence = character.getPlayerDefence()
-    local defenceBuff = characterState.buffs.defence.get()
-    local damageTakenBuff = characterState.buffs.damageTaken.get()
+    local defenceBuff = buffsState.buffs.defence.get()
+    local damageTakenBuff = buffsState.buffs.damageTaken.get()
 
     return actions.getMeleeSave(state.meleeSave.currentRoll, state.meleeSave.threshold, state.meleeSave.damageType, state.meleeSave.damageRisk, defence, defenceBuff, damageTakenBuff)
 end
 
 local function getRangedSave()
     local spirit = character.getPlayerSpirit()
-    local buff = characterState.buffs.spirit.get()
+    local buff = buffsState.buffs.spirit.get()
 
     return actions.getRangedSave(state.rangedSave.currentRoll, state.rangedSave.threshold, spirit, buff)
 end

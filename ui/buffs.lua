@@ -3,18 +3,15 @@ local _, ns = ...
 local COLOURS = TEARollHelper.COLOURS
 
 local buffs = ns.buffs
+local buffsState = ns.state.buffs.state
 local constants = ns.constants
-local characterState = ns.state.character
 local ui = ns.ui
 
 local ACTION_LABELS = constants.ACTION_LABELS
 local BUFF_TYPES = constants.BUFF_TYPES
 local MAX_BUFFS = 8
-local ROLL_MODES = constants.ROLL_MODES
 local STAT_LABELS = constants.STAT_LABELS
 local TURN_TYPES = constants.TURN_TYPES
-
-local state = characterState.state
 
 ui.modules.buffs = {}
 
@@ -41,7 +38,7 @@ ui.modules.buffs.getOptions = function(options)
                         fontSize = "medium",
                         name = COLOURS.NOTE .. "Active buffs will appear here.",
                         hidden = function()
-                            return state.activeBuffs.get()[1]
+                            return buffsState.activeBuffs.get()[1]
                         end,
                     }
 
@@ -51,15 +48,15 @@ ui.modules.buffs.getOptions = function(options)
                             type = "execute",
                             width = 0.5,
                             hidden = function()
-                                return not state.activeBuffs.get()[i]
+                                return not buffsState.activeBuffs.get()[i]
                             end,
                             image = function()
-                                local buff = state.activeBuffs.get()[i]
+                                local buff = buffsState.activeBuffs.get()[i]
                                 return buff and buff.icon or ""
                             end,
                             imageCoords = {.08, .92, .08, .92},
                             name = function()
-                                local buff = state.activeBuffs.get()[i]
+                                local buff = buffsState.activeBuffs.get()[i]
                                 if not buff then return "" end
 
                                 local msg = (buff.colour or "|cffffffff") .. buff.label
@@ -71,13 +68,13 @@ ui.modules.buffs.getOptions = function(options)
                                 return msg
                             end,
                             func = function()
-                                local buff = state.activeBuffs.get()[i]
+                                local buff = buffsState.activeBuffs.get()[i]
                                 if buff.canCancel then
-                                    state.activeBuffs.cancel(i)
+                                    buffsState.activeBuffs.cancel(i)
                                 end
                             end,
                             desc = function()
-                                local buff = state.activeBuffs.get()[i]
+                                local buff = buffsState.activeBuffs.get()[i]
                                 if not buff then return "" end
 
                                 local msg = " |n"
@@ -201,13 +198,13 @@ ui.modules.buffs.getOptions = function(options)
                         values = {
                             [BUFF_TYPES.STAT] = "Stat",
                             [BUFF_TYPES.BASE_DMG] = "Base dmg",
-                            [ROLL_MODES.DISADVANTAGE] = "Disadvantage",
-                            [ROLL_MODES.ADVANTAGE] = "Advantage"
+                            [BUFF_TYPES.DISADVANTAGE] = "Disadvantage",
+                            [BUFF_TYPES.ADVANTAGE] = "Advantage"
                         },
-                        sorting = {BUFF_TYPES.STAT, BUFF_TYPES.BASE_DMG, ROLL_MODES.ADVANTAGE, ROLL_MODES.DISADVANTAGE},
-                        get = state.newPlayerBuff.type.get,
+                        sorting = {BUFF_TYPES.STAT, BUFF_TYPES.BASE_DMG, BUFF_TYPES.ADVANTAGE, BUFF_TYPES.DISADVANTAGE},
+                        get = buffsState.newPlayerBuff.type.get,
                         set = function(info, value)
-                            state.newPlayerBuff.type.set(value)
+                            buffsState.newPlayerBuff.type.set(value)
                         end,
                     },
                     stat = {
@@ -223,11 +220,11 @@ ui.modules.buffs.getOptions = function(options)
                         },
                         sorting = constants.STATS_SORTED,
                         hidden = function()
-                            return state.newPlayerBuff.type.get() ~= BUFF_TYPES.STAT
+                            return buffsState.newPlayerBuff.type.get() ~= BUFF_TYPES.STAT
                         end,
-                        get = state.newPlayerBuff.stat.get,
+                        get = buffsState.newPlayerBuff.stat.get,
                         set = function(info, value)
-                            state.newPlayerBuff.stat.set(value)
+                            buffsState.newPlayerBuff.stat.set(value)
                         end,
                     },
                     amount = {
@@ -243,14 +240,14 @@ ui.modules.buffs.getOptions = function(options)
                             return true
                         end,
                         hidden = function()
-                            local type = state.newPlayerBuff.type.get()
+                            local type = buffsState.newPlayerBuff.type.get()
                             return type ~= BUFF_TYPES.STAT and type ~= BUFF_TYPES.BASE_DMG
                         end,
                         get = function()
-                            return tostring(state.newPlayerBuff.amount.get())
+                            return tostring(buffsState.newPlayerBuff.amount.get())
                         end,
                         set = function(info, value)
-                            state.newPlayerBuff.amount.set(tonumber(value))
+                            buffsState.newPlayerBuff.amount.set(tonumber(value))
                         end
                     },
                     action = {
@@ -260,12 +257,12 @@ ui.modules.buffs.getOptions = function(options)
                         width = 0.9,
                         values = ACTION_LABELS,
                         hidden = function()
-                            local type = state.newPlayerBuff.type.get()
+                            local type = buffsState.newPlayerBuff.type.get()
                             return not (type == BUFF_TYPES.ADVANTAGE or type == BUFF_TYPES.DISADVANTAGE)
                         end,
-                        get = state.newPlayerBuff.action.get,
+                        get = buffsState.newPlayerBuff.action.get,
                         set = function(info, value)
-                            state.newPlayerBuff.action.set(value)
+                            buffsState.newPlayerBuff.action.set(value)
                         end,
                     },
                     label = {
@@ -274,9 +271,9 @@ ui.modules.buffs.getOptions = function(options)
                         name = "Label (optional)",
                         desc = "This can be used as a reminder of where the buff came from. This is only visible to you.",
                         width = 0.5,
-                        get = state.newPlayerBuff.label.get,
+                        get = buffsState.newPlayerBuff.label.get,
                         set = function(info, value)
-                            state.newPlayerBuff.label.set(value)
+                            buffsState.newPlayerBuff.label.set(value)
                         end
                     },
                     expireAfterNextTurn = {
@@ -284,9 +281,9 @@ ui.modules.buffs.getOptions = function(options)
                         type = "toggle",
                         name = "Expire after next turn",
                         desc = "This will remove the buff after the next turn. You can always clear buffs manually by right-clicking.",
-                        get = characterState.state.newPlayerBuff.expireAfterNextTurn.get,
+                        get = buffsState.newPlayerBuff.expireAfterNextTurn.get,
                         set = function(info, value)
-                            characterState.state.newPlayerBuff.expireAfterNextTurn.set(value)
+                            buffsState.newPlayerBuff.expireAfterNextTurn.set(value)
                         end,
                     },
                     add = {
@@ -294,7 +291,7 @@ ui.modules.buffs.getOptions = function(options)
                         type = "execute",
                         name = "Add",
                         func = function()
-                            local newBuff = state.newPlayerBuff
+                            local newBuff = buffsState.newPlayerBuff
                             local buffType = newBuff.type.get()
                             local label = newBuff.label.get()
                             local expireAfterNextTurn = newBuff.expireAfterNextTurn.get()
@@ -305,10 +302,10 @@ ui.modules.buffs.getOptions = function(options)
                             elseif buffType == BUFF_TYPES.BASE_DMG then
                                 local amount = newBuff.amount.get()
                                 buffs.addBaseDmgBuff(amount, label, expireAfterNextTurn)
-                            elseif buffType == ROLL_MODES.ADVANTAGE then
+                            elseif buffType == BUFF_TYPES.ADVANTAGE then
                                 local action = newBuff.action.get()
                                 buffs.addAdvantageBuff(action, label, expireAfterNextTurn)
-                            elseif buffType == ROLL_MODES.DISADVANTAGE then
+                            elseif buffType == BUFF_TYPES.DISADVANTAGE then
                                 local action = newBuff.action.get()
                                 buffs.addDisadvantageDebuff(action, label, expireAfterNextTurn)
                             end

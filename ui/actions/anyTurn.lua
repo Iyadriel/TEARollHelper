@@ -2,6 +2,7 @@ local _, ns = ...
 
 local COLOURS = TEARollHelper.COLOURS
 
+local buffsState = ns.state.buffs.state
 local character = ns.character
 local constants = ns.constants
 local characterState = ns.state.character.state
@@ -25,7 +26,7 @@ ui.modules.actions.modules.anyTurn.getSharedPreRollOptions = function(options)
             name = COLOURS.TRAITS.GENERIC .. TRAITS.VERSATILE.name,
             inline = true,
             hidden = function()
-                return not character.hasTrait(TRAITS.VERSATILE) or characterState.buffLookup.getTraitBuffs(TRAITS.VERSATILE)
+                return not character.hasTrait(TRAITS.VERSATILE) or buffsState.buffLookup.getTraitBuffs(TRAITS.VERSATILE)
             end,
             args = {
                 stat1 = {
@@ -70,7 +71,7 @@ ui.modules.actions.modules.anyTurn.getSharedPreRollOptions = function(options)
             type = "description",
             name = COLOURS.TRAITS.GENERIC .. TRAITS.VERSATILE.name .. " is active.",
             hidden = function()
-                return not (character.hasTrait(TRAITS.VERSATILE) and characterState.buffLookup.getTraitBuffs(TRAITS.VERSATILE))
+                return not (character.hasTrait(TRAITS.VERSATILE) and buffsState.buffLookup.getTraitBuffs(TRAITS.VERSATILE))
             end,
         },
     }

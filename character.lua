@@ -1,8 +1,8 @@
 local _, ns = ...
 
+local buffsState = ns.state.buffs
 local bus = ns.bus
 local character = ns.character
-local characterState = ns.state.character
 local constants = ns.constants
 local feats = ns.resources.feats
 local racialTraits = ns.resources.racialTraits
@@ -52,8 +52,8 @@ local function getPlayerStat(stat)
 end
 
 function calculatePlayerMaxHealth()
-    local staminaBuff = characterState.state.buffs.stamina.get()
-    local maxHealthBuff = characterState.state.buffs.maxHealth.get()
+    local staminaBuff = buffsState.state.buffs.stamina.get()
+    local maxHealthBuff = buffsState.state.buffs.maxHealth.get()
 
     return rules.stats.calculateMaxHealth(getPlayerStamina(), staminaBuff, maxHealthBuff)
 end

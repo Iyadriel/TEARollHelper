@@ -2,6 +2,7 @@ local _, ns = ...
 
 local COLOURS = TEARollHelper.COLOURS
 
+local buffsState = ns.state.buffs.state
 local character = ns.character
 local characterState = ns.state.character.state
 local consequences = ns.consequences
@@ -21,7 +22,7 @@ ui.modules.actions.modules.playerTurn.getSharedPreRollOptions = function(options
             name = COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.FOCUS.name,
             desc = TRAITS.FOCUS.desc,
             hidden = function()
-                return not character.hasTrait(TRAITS.FOCUS) or characterState.buffLookup.getTraitBuffs(TRAITS.FOCUS)
+                return not character.hasTrait(TRAITS.FOCUS) or buffsState.buffLookup.getTraitBuffs(TRAITS.FOCUS)
             end,
             disabled = function()
                 return characterState.featsAndTraits.numTraitCharges.get(TRAITS.FOCUS.id) == 0
@@ -33,7 +34,7 @@ ui.modules.actions.modules.playerTurn.getSharedPreRollOptions = function(options
             type = "description",
             name = COLOURS.TRAITS.GENERIC .. TRAITS.FOCUS.name .. " is active.",
             hidden = function()
-                return not (character.hasTrait(TRAITS.FOCUS) and characterState.buffLookup.getTraitBuffs(TRAITS.FOCUS))
+                return not (character.hasTrait(TRAITS.FOCUS) and buffsState.buffLookup.getTraitBuffs(TRAITS.FOCUS))
             end,
         },
     }

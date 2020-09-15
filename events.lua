@@ -1,6 +1,7 @@
 local _, ns = ...
 
 local buffs = ns.buffs
+local buffsState = ns.state.buffs
 local bus = ns.bus
 local character = ns.character
 local characterState = ns.state.character
@@ -35,13 +36,13 @@ bus.addListener(EVENTS.DISTANCE_FROM_ENEMY_CHANGED, function(distanceFromEnemy)
         local weakness = WEAKNESSES[weaknessID]
 
         if weakness.distanceFromEnemy then
-            local debuff = characterState.state.buffLookup.getWeaknessDebuff(weakness)
+            local debuff = buffsState.state.buffLookup.getWeaknessDebuff(weakness)
             if distanceFromEnemy == weakness.distanceFromEnemy then
                 if not debuff then
                     buffs.addWeaknessDebuff(weakness)
                 end
             elseif debuff then
-                characterState.state.activeBuffs.remove(debuff)
+                buffsState.state.activeBuffs.remove(debuff)
             end
         end
     end
@@ -50,14 +51,14 @@ end)
 bus.addListener(EVENTS.ENEMY_CHANGED, function(enemyId)
     local racialTrait = character.getPlayerRacialTrait()
     if racialTrait.buffAgainstEnemies then
-        local buff = characterState.state.buffLookup.getRacialBuff()
+        local buff = buffsState.state.buffLookup.getRacialBuff()
 
         if racialTrait.buffAgainstEnemies[enemyId] then
             if not buff then
                 buffs.addRacialBuff(racialTrait)
             end
         elseif buff then
-            characterState.state.activeBuffs.remove(buff)
+            buffsState.state.activeBuffs.remove(buff)
         end
     end
 end)
@@ -65,14 +66,14 @@ end)
 bus.addListener(EVENTS.ZONE_CHANGED, function(zoneId)
     local racialTrait = character.getPlayerRacialTrait()
     if racialTrait.zones then
-        local buff = characterState.state.buffLookup.getRacialBuff()
+        local buff = buffsState.state.buffLookup.getRacialBuff()
 
         if racialTrait.zones[zoneId] then
             if not buff then
                 buffs.addRacialBuff(racialTrait)
             end
         elseif buff then
-            characterState.state.activeBuffs.remove(buff)
+            buffsState.state.activeBuffs.remove(buff)
         end
     end
 end)
@@ -93,9 +94,9 @@ bus.addListener(EVENTS.COMBAT_OVER, function()
     characterState.state.healing.remainingOutOfCombatHeals.restore()
     restoreSecondWindCharge()
 
-    local debuff = characterState.state.buffLookup.getWeaknessDebuff(WEAKNESSES.CORRUPTED)
+    local debuff = buffsState.state.buffLookup.getWeaknessDebuff(WEAKNESSES.CORRUPTED)
     if debuff then
-        characterState.state.activeBuffs.remove(debuff)
+        buffsState.state.activeBuffs.remove(debuff)
         TEARollHelper:Print("Corruption stacks removed, max health returned to normal.")
     end
 end)
@@ -109,7 +110,7 @@ local function setRemainingTurns(buff, remainingTurns, turnTypeId)
 end
 
 local function expireBuff(index, buff)
-    characterState.state.activeBuffs.removeAtIndex(index)
+    buffsState.state.activeBuffs.removeAtIndex(index)
     bus.fire(EVENTS.BUFF_EXPIRED, buff.label)
 end
 
@@ -120,7 +121,7 @@ local function applyHealTick(buff)
 end
 
 bus.addListener(EVENTS.TURN_STARTED, function(index, turnTypeID)
-    local activeBuffs = characterState.state.activeBuffs.get()
+    local activeBuffs = buffsState.state.activeBuffs.get()
 
     for i = #activeBuffs, 1, -1 do
         local buff = activeBuffs[i]
@@ -146,7 +147,7 @@ bus.addListener(EVENTS.TURN_STARTED, function(index, turnTypeID)
 end)
 
 bus.addListener(EVENTS.TURN_FINISHED, function(index, turnTypeID)
-    local activeBuffs = characterState.state.activeBuffs.get()
+    local activeBuffs = buffsState.state.activeBuffs.get()
 
     for i = #activeBuffs, 1, -1 do
         local buff = activeBuffs[i]
@@ -165,7 +166,7 @@ bus.addListener(EVENTS.TURN_FINISHED, function(index, turnTypeID)
 end)
 
 bus.addListener(EVENTS.COMBAT_OVER, function()
-    local activeBuffs = characterState.state.activeBuffs.get()
+    local activeBuffs = buffsState.state.activeBuffs.get()
 
     for i = #activeBuffs, 1, -1 do
         local buff = activeBuffs[i]
@@ -177,7 +178,7 @@ bus.addListener(EVENTS.COMBAT_OVER, function()
 end)
 
 bus.addListener(EVENTS.ROLL_CHANGED, function()
-    local activeBuffs = characterState.state.activeBuffs.get()
+    local activeBuffs = buffsState.state.activeBuffs.get()
 
     for i = #activeBuffs, 1, -1 do
         local buff = activeBuffs[i]
