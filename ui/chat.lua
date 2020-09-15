@@ -59,7 +59,10 @@ end)
 bus.addListener(EVENTS.HEALED, function(amountHealed, netAmountHealed, overhealing)
     local initialColour = netAmountHealed > 0 and COLOURS.HEALING or COLOURS.NOTE
 
-    local msg = initialColour .. "You are healed for " .. netAmountHealed .. " HP."
+    local msg = initialColour .. "You are healed for " .. netAmountHealed .. " HP. "
+
+    msg = msg .. COLOURS.NOTE .. "[" .. characterState.summariseHP() .. "]"
+
     if overhealing > 0 then
         msg = msg .. COLOURS.NOTE .. " (Heal of " .. amountHealed .. " overhealed by " .. overhealing .. ")"
     end
