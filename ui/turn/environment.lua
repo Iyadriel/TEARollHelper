@@ -15,8 +15,10 @@ ui.modules.turn.modules.environment.getOptions = function(options)
     return {
         order = options.order,
         type = "group",
-        name = "Environment",
-        inline = true,
+        name = function()
+            local zone = zones.ZONES[state.zoneId.get()]
+            return ui.iconString(zone.icon) .. "Environment"
+        end,
         hidden = function()
             return not rules.environment.shouldShowEnvironment()
         end,

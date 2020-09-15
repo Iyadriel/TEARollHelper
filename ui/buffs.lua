@@ -19,10 +19,20 @@ ui.modules.buffs = {}
     order: Number
 } ]]
 ui.modules.buffs.getOptions = function(options)
+    local nameBase = ui.iconString("Interface\\Icons\\spell_holy_wordfortitude") .. "Buffs"
+
     return {
         order = options.order,
         type = "group",
-        name = ui.iconString("Interface\\Icons\\spell_holy_wordfortitude") .. "Buff view",
+        name = function()
+            local numBuffs = #buffsState.activeBuffs.get()
+
+            if numBuffs > 0 then
+                return nameBase .. COLOURS.BUFF .. " (" .. numBuffs .. ")"
+            end
+
+            return nameBase
+        end,
         args = {
             activeBuffs = {
                 order = 0,

@@ -41,14 +41,19 @@ local function traitChargesSlider(order, trait)
     }
 end
 
+local nameStart = ui.iconString("Interface\\Icons\\petbattle_health") .. "Character" .. COLOURS.NOTE .. " ("
+
 --[[ local options = {
     order: Number
 } ]]
 ui.modules.turn.modules.character.getOptions = function(options)
     return {
         type = "group",
-        name = ui.iconString("Interface\\Icons\\petbattle_health") .. "Health and resources",
-        desc = "The current state of your character",
+        name = function()
+            local currentHealth = characterState.state.health.get()
+            local maxHealth = characterState.state.maxHealth.get()
+            return nameStart .. utils.healthColor(currentHealth, maxHealth) .. characterState.summariseHP() .. COLOURS.NOTE .. ")"
+        end,
         order = options.order,
         args = {
             debugView = {

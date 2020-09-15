@@ -29,7 +29,7 @@ ui.modules.turn.modules.effects.getOptions = function(options)
     return {
         order = options.order,
         type = "group",
-        name = ui.iconString("Interface\\Icons\\spell_magic_lesserinvisibilty") .. "Apply effect",
+        name = ui.iconString("Interface\\Icons\\spell_magic_lesserinvisibilty") .. "Effects",
         args = {
             damage = {
                 order = 0,

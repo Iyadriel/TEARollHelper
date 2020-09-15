@@ -25,12 +25,11 @@ ui.modules.turn.modules.turn.getOptions = function(options)
         args = {
             turnType = {
                 type = "select",
-                name = "Turn type",
+                name = "",
                 values = {
-                    [TURN_TYPES.PLAYER.id] = TURN_TYPES.PLAYER.name,
-                    [TURN_TYPES.ENEMY.id] = TURN_TYPES.ENEMY.name,
+                    [TURN_TYPES.PLAYER.id] = TURN_TYPES.PLAYER.name .. " turn",
+                    [TURN_TYPES.ENEMY.id] = TURN_TYPES.ENEMY.name .. " turn",
                 },
-                width = "half",
                 order = 0,
                 hidden = function()
                     return not state.inCombat.get()
@@ -43,8 +42,7 @@ ui.modules.turn.modules.turn.getOptions = function(options)
             nextTurn = {
                 type = "execute",
                 name = "Next turn",
-                --width = "full",
-                --width = "half",
+                width = 1.6,
                 order = 1,
                 hidden = function()
                     return not state.inCombat.get()
