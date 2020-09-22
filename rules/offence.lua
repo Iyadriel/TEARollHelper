@@ -41,7 +41,7 @@ end
 -- Core
 
 local function getBaseDamage()
-    return character.hasOffenceMastery() and 2 or 1
+    return character.hasOffenceMastery() and 3 or 1
 end
 
 local function calculateAttackValue(roll, offence, buff)
