@@ -47,11 +47,13 @@ local BUFF_TYPES = {
 local DAMAGE_TYPES = {
     PHYSICAL = 0,
     MAGICAL = 1,
+    MIXED = 2,
 }
 
 local DAMAGE_TYPE_LABELS = {
     PHYSICAL = "Physical",
     MAGICAL = "Magical",
+    MIXED = "Mixed",
 }
 
 local INCOMING_HEAL_SOURCES = {

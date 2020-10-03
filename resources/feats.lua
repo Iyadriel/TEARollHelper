@@ -39,6 +39,7 @@ feats.FEATS = {
         passives = {
             resistance = {
                 [DAMAGE_TYPES.MAGICAL] = 4,
+                [DAMAGE_TYPES.MIXED] = 2,
             }
         },
         supported = true,
