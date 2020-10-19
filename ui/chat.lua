@@ -70,13 +70,17 @@ bus.addListener(EVENTS.HEALED, function(amountHealed, netAmountHealed, overheali
     TEARollHelper:Print(msg)
 end)
 
-bus.addListener(EVENTS.TRAIT_ACTIVATED, function(traitID)
+bus.addListener(EVENTS.TRAIT_ACTIVATED, function(traitID, msg)
     TEARollHelper:Print("Activated trait:", TRAITS[traitID].name)
 
     if traitID == TRAITS.LIFE_PULSE.id then
         TEARollHelper:Print(COLOURS.HEALING .. "You can heal everyone in melee range of your target.")
     elseif traitID == TRAITS.VINDICATION.id then
         TEARollHelper:Print(COLOURS.HEALING .. "You may heal for the stated amount.")
+    end
+
+    if msg then
+        TEARollHelper:Print(msg)
     end
 end)
 

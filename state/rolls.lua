@@ -232,6 +232,8 @@ bus.addListener(EVENTS.REROLLED, function(action, roll)
     end
 end)
 
+-- Turn actions
+
 local function getAttack()
     local offence = character.getPlayerOffence()
     local offenceBuff = buffsState.buffs.offence.get()
@@ -296,6 +298,16 @@ local function getRangedSave()
     return actions.getRangedSave(state.rangedSave.currentRoll, state.rangedSave.threshold, spirit, buff)
 end
 
+-- Trait actions
+
+local function getShieldSlam()
+    local baseDmgBuff = buffsState.buffs.baseDamage.get()
+    local defence = character.getPlayerDefence()
+    local defenceBuff = buffsState.buffs.defence.get()
+
+    return actions.traits.getShieldSlam(baseDmgBuff, defence, defenceBuff)
+end
+
 rolls.getAttack = getAttack
 rolls.getCC = getCC
 rolls.getHealing = getHealing
@@ -303,3 +315,6 @@ rolls.getBuff = getBuff
 rolls.getDefence = getDefence
 rolls.getMeleeSave = getMeleeSave
 rolls.getRangedSave = getRangedSave
+rolls.traits = {
+    getShieldSlam = getShieldSlam,
+}

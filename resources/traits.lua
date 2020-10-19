@@ -7,7 +7,7 @@ local ACTIONS = constants.ACTIONS
 local BUFF_TYPES = constants.BUFF_TYPES
 local TURN_TYPES = constants.TURN_TYPES
 
-traits.TRAIT_KEYS = {"OTHER", "BULWARK", "CALAMITY_GAMBIT", "EMPOWERED_BLADES", "FOCUS", "LIFE_PULSE", "LIFE_WITHIN", "FAELUNES_REGROWTH", "SECOND_WIND", "SHATTER_SOUL", "VERSATILE", "VINDICATION"}
+traits.TRAIT_KEYS = {"OTHER", "BULWARK", "CALAMITY_GAMBIT", "EMPOWERED_BLADES", "FOCUS", "LIFE_PULSE", "LIFE_WITHIN", "FAELUNES_REGROWTH", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "VERSATILE", "VINDICATION"}
 
 traits.TRAITS = {
     OTHER = {
@@ -150,6 +150,13 @@ traits.TRAITS = {
         },
         isCustom = true,
         player = "KELANRA",
+    },
+    SHIELD_SLAM = {
+        id = "SHIELD_SLAM",
+        name = "Shield Slam",
+        desc = "Activate on a player turn, instead of rolling for attack you deal your base damage plus your Defence as damage to an enemy of your choice. Can be used thrice per event. Activate outside of rolling.",
+        supported = true,
+        numCharges = 3,
     },
     FAELUNES_REGROWTH = {
         id = "FAELUNES_REGROWTH",

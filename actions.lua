@@ -235,6 +235,16 @@ local function getUtility(roll, useUtilityTrait)
     return rules.utility.calculateUtilityValue(roll, useUtilityTrait)
 end
 
+-- Trait actions
+
+local function getShieldSlam(baseDmgBuff, defence, defenceBuff)
+    local dmg = rules.traits.calculateShieldSlamDmg(baseDmgBuff, defence, defenceBuff)
+
+    return {
+        dmg = dmg
+    }
+end
+
 ns.actions.getAttack = getAttack
 ns.actions.getCC = getCC
 ns.actions.getDefence = getDefence
@@ -243,3 +253,6 @@ ns.actions.getRangedSave = getRangedSave
 ns.actions.getHealing = getHealing
 ns.actions.getBuff = getBuff
 ns.actions.getUtility = getUtility
+ns.actions.traits = {
+    getShieldSlam = getShieldSlam
+}

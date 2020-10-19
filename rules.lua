@@ -12,6 +12,7 @@ local function calculateOffenceStat(offence, buff)
     return offence + buff
 end
 
+-- damageType can be nil if defence stat is being used for a non-defensive action.
 local function calculateDefenceStat(damageType, defence, buff)
     local defenceStat = defence + buff
     local feat = character.getPlayerFeat()

@@ -1,5 +1,6 @@
 local _, ns = ...
 
+local actions = ns.actions
 local buffs = ns.buffs
 local bus = ns.bus
 local character = ns.character
@@ -9,7 +10,7 @@ local constants = ns.constants
 local enemies = ns.resources.enemies
 local environmentState = ns.state.environment.state
 local feats = ns.resources.feats
-local rollState = ns.state.rolls.state
+local rollState = ns.state.rolls
 local rules = ns.rules
 local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
@@ -24,10 +25,13 @@ local WEAKNESSES = weaknesses.WEAKNESSES
 
 local state = characterState.state
 
-local function useTraitCharge(trait)
+local function useTraitCharge(trait, traitAction)
+    local msg = traitAction and actions.traitToString(trait, traitAction)
+
     local traitGetSet = state.featsAndTraits.numTraitCharges
     traitGetSet.set(trait.id, traitGetSet.get(trait.id) - 1)
-    bus.fire(EVENTS.TRAIT_ACTIVATED, trait.id)
+
+    bus.fire(EVENTS.TRAIT_ACTIVATED, trait.id, msg)
 end
 
 -- [[ Feats/Traits/Fate ]]
@@ -81,9 +85,13 @@ local function useShatterSoul()
     end
 end
 
+local function useShieldSlam()
+    return rollState.traits.getShieldSlam()
+end
+
 local function useVersatile()
-    local stat1 = rollState.shared.versatile.stat1.get()
-    local stat2 = rollState.shared.versatile.stat2.get()
+    local stat1 = rollState.state.shared.versatile.stat1.get()
+    local stat2 = rollState.state.shared.versatile.stat2.get()
     buffs.addTraitBuff(TRAITS.VERSATILE, {
         [stat1] = -character.getPlayerStat(stat1),
         [stat2] = character.getPlayerStat(stat1),
@@ -102,14 +110,16 @@ local TRAIT_FNS = {
     [TRAITS.LIFE_WITHIN.id] = useLifeWithin,
     [TRAITS.SECOND_WIND.id] = useSecondWind,
     [TRAITS.SHATTER_SOUL.id] = useShatterSoul,
+    [TRAITS.SHIELD_SLAM.id] = useShieldSlam,
     [TRAITS.VERSATILE.id] = useVersatile,
     [TRAITS.VINDICATION.id] = useVindication,
 }
 
 local function useTrait(trait)
     return function(...)
-        TRAIT_FNS[trait.id](...)
-        useTraitCharge(trait)
+        -- some traits return a traitAction object which can be passed along for printing the result of the action
+        local traitAction = TRAIT_FNS[trait.id](...)
+        useTraitCharge(trait, traitAction)
     end
 end
 

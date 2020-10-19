@@ -44,6 +44,10 @@ local function getBaseDamage()
     return character.hasOffenceMastery() and 3 or 1
 end
 
+local function getBaseDamageAfterBuffs(baseDmgBuff)
+    return getBaseDamage() + baseDmgBuff
+end
+
 local function calculateAttackValue(roll, offence, buff)
     return roll + rules.common.calculateOffenceStat(offence, buff)
 end
@@ -52,7 +56,7 @@ local function calculateAttackDmg(threshold, attackValue, baseDmgBuff, damageDon
     local overkill = attackValue - threshold
 
     if overkill >= 0 then
-        local baseDamage = getBaseDamage() + baseDmgBuff
+        local baseDamage = getBaseDamageAfterBuffs(baseDmgBuff)
 
         if character.hasFeat(FEATS.ONSLAUGHT) then
             return baseDamage + ceil(character.getPlayerOffence() / 2)
@@ -193,6 +197,7 @@ rules.offence = {
     CRIT_TYPES = CRIT_TYPES,
     getCritType = getCritType,
 
+    getBaseDamageAfterBuffs = getBaseDamageAfterBuffs,
     calculateAttackValue = calculateAttackValue,
     calculateAttackDmg = calculateAttackDmg,
     applyCritModifier = applyCritModifier,

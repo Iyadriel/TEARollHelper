@@ -38,6 +38,13 @@ local function calculateStatBuff(trait, stat)
     end
 end
 
+local function calculateShieldSlamDmg(baseDmgBuff, defence, defenceBuff)
+    local baseDmg = rules.offence.getBaseDamageAfterBuffs(baseDmgBuff)
+    local defenceStat = rules.common.calculateDefenceStat(nil, defence, defenceBuff)
+
+    return baseDmg + max(0, defenceStat)
+end
+
 rules.traits = {
     MAX_NUM_TRAITS = MAX_NUM_TRAITS,
     LIFE_WITHIN_HEAL_AMOUNT = LIFE_WITHIN_HEAL_AMOUNT,
@@ -46,4 +53,6 @@ rules.traits = {
 
     calculateMaxTraits = calculateMaxTraits,
     calculateStatBuff = calculateStatBuff,
+
+    calculateShieldSlamDmg = calculateShieldSlamDmg,
 }

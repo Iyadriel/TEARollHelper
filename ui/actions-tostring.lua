@@ -113,6 +113,12 @@ local function meleeSaveToString(meleeSave)
     return msg
 end
 
+-- Trait actions
+
+local function shieldSlamToString(shieldSlam)
+    return "You deal " .. shieldSlam.dmg .. " damage with your Shield Slam."
+end
+
 local toString = {
     [ACTIONS.attack] = attackToString,
     [ACTIONS.healing] = healingToString,
@@ -120,6 +126,14 @@ local toString = {
     [ACTIONS.meleeSave] = meleeSaveToString,
 }
 
+local traitsToString = {
+    [TRAITS.SHIELD_SLAM] = shieldSlamToString,
+}
+
 actions.toString = function(actionType, action)
     return toString[actionType](action)
+end
+
+actions.traitToString = function(trait, traitAction)
+    return traitsToString[trait](traitAction)
 end

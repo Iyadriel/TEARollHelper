@@ -4,6 +4,7 @@ local character = ns.character
 local characterState = ns.state.character
 local consequences = ns.consequences
 local constants = ns.constants
+local rolls = ns.state.rolls
 local traits = ns.resources.traits
 local turn = ns.state.turn
 local ui = ns.ui
@@ -33,19 +34,7 @@ ui.modules.actions.modules = {
     groupName: String
 } ]]
 ui.modules.actions.getOptions = function(options)
-    local lifeWithin = {
-        order = 0,
-        type = "execute",
-        name = COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.LIFE_WITHIN.name,
-        desc = TRAITS.LIFE_WITHIN.desc,
-        hidden = function()
-            return not character.hasTrait(TRAITS.LIFE_WITHIN)
-        end,
-        disabled = function()
-            return state.featsAndTraits.numTraitCharges.get(TRAITS.LIFE_WITHIN.id) == 0
-        end,
-        func = consequences.useTrait(TRAITS.LIFE_WITHIN)
-    }
+    local lifeWithin = ui.helpers.traitButton(TRAITS.LIFE_WITHIN, { order = 0 })
 
     return {
         playerTurn = {
@@ -58,15 +47,22 @@ ui.modules.actions.getOptions = function(options)
             end,
             args = {
                 lifeWithin = lifeWithin,
-                attack = ui.modules.actions.modules.attack.getOptions({ order = 1 }),
-                cc = ui.modules.actions.modules.cc.getOptions({ order = 2 }),
+                shieldSlam = ui.helpers.traitButton(TRAITS.SHIELD_SLAM, {
+                    order = 1,
+                    name = function()
+                        return COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.SHIELD_SLAM.name .. ": Deal " .. rolls.traits.getShieldSlam().dmg .. " damage"
+                    end,
+                    width = "full",
+                }),
+                attack = ui.modules.actions.modules.attack.getOptions({ order = 2 }),
+                cc = ui.modules.actions.modules.cc.getOptions({ order = 3 }),
                 heal = ui.modules.actions.modules.healing.getOptions({
-                    order = 3,
+                    order = 4,
                     outOfCombat = false,
                     turnTypeID = TURN_TYPES.PLAYER.id,
                 }),
-                buff = ui.modules.actions.modules.buff.getOptions({ order = 4 }),
-                utility = ui.modules.actions.modules.utility.getOptions({ order = 5, turnTypeID = TURN_TYPES.PLAYER.id }),
+                buff = ui.modules.actions.modules.buff.getOptions({ order = 5 }),
+                utility = ui.modules.actions.modules.utility.getOptions({ order = 6, turnTypeID = TURN_TYPES.PLAYER.id }),
             }
         },
         enemyTurn = {
