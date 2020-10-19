@@ -119,6 +119,10 @@ local function lifePulseToString()
     return COLOURS.HEALING .. "You can heal everyone in melee range of your target."
 end
 
+local function presenceOfVirtueToString()
+    return COLOURS.HEALING .. "You may heal the target for 5 HP."
+end
+
 local function shieldSlamToString(shieldSlam)
     return "You deal " .. shieldSlam.dmg .. " damage with your Shield Slam."
 end
@@ -136,6 +140,7 @@ local toString = {
 
 local traitsToString = {
     [TRAITS.LIFE_PULSE] = lifePulseToString,
+    [TRAITS.PRESENCE_OF_VIRTUE] = presenceOfVirtueToString,
     [TRAITS.SHIELD_SLAM] = shieldSlamToString,
     [TRAITS.VINDICATION] = vindicationToString,
 }

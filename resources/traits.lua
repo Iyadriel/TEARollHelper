@@ -7,7 +7,7 @@ local ACTIONS = constants.ACTIONS
 local BUFF_TYPES = constants.BUFF_TYPES
 local TURN_TYPES = constants.TURN_TYPES
 
-traits.TRAIT_KEYS = {"OTHER", "BULWARK", "CALAMITY_GAMBIT", "EMPOWERED_BLADES", "FAELUNES_REGROWTH", "FOCUS", "LIFE_PULSE", "LIFE_WITHIN", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "VERSATILE", "VINDICATION"}
+traits.TRAIT_KEYS = {"OTHER", "BULWARK", "CALAMITY_GAMBIT", "EMPOWERED_BLADES", "FAELUNES_REGROWTH", "FOCUS", "LIFE_PULSE", "LIFE_WITHIN", "PRESENCE_OF_VIRTUE", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "VERSATILE", "VINDICATION"}
 
 traits.TRAITS = {
     OTHER = {
@@ -136,6 +136,13 @@ traits.TRAITS = {
                 expireOnCombatEnd = true,
             }
         }
+    },
+    PRESENCE_OF_VIRTUE = {
+        id = "PRESENCE_OF_VIRTUE",
+        name = "Presence of Virtue",
+        desc = "Activate after performing a successful Melee save on a friendly target, you heal the target for 5 HP on Activation. Can be used five times per event.",
+        supported = true,
+        numCharges = 5,
     },
     SECOND_WIND = {
         id = "SECOND_WIND",

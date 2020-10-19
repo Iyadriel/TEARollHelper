@@ -74,6 +74,10 @@ local function useLifeWithin()
     state.health.heal(rules.traits.LIFE_WITHIN_HEAL_AMOUNT, INCOMING_HEAL_SOURCES.SELF)
 end
 
+local function usePresenceOfVirtue()
+    return {}
+end
+
 local function useSecondWind()
     state.health.heal(rules.traits.SECOND_WIND_HEAL_AMOUNT, INCOMING_HEAL_SOURCES.SELF)
 end
@@ -110,6 +114,7 @@ local TRAIT_FNS = {
     [TRAITS.FOCUS.id] = useFocus,
     [TRAITS.LIFE_PULSE.id] = useLifePulse,
     [TRAITS.LIFE_WITHIN.id] = useLifeWithin,
+    [TRAITS.PRESENCE_OF_VIRTUE.id] = usePresenceOfVirtue,
     [TRAITS.SECOND_WIND.id] = useSecondWind,
     [TRAITS.SHATTER_SOUL.id] = useShatterSoul,
     [TRAITS.SHIELD_SLAM.id] = useShieldSlam,
