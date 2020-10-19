@@ -25,9 +25,7 @@ local WEAKNESSES = weaknesses.WEAKNESSES
 
 local state = characterState.state
 
-local function useTraitCharge(trait, traitAction)
-    local msg = traitAction and actions.traitToString(trait, traitAction)
-
+local function useTraitCharge(trait, msg)
     local traitGetSet = state.featsAndTraits.numTraitCharges
     traitGetSet.set(trait.id, traitGetSet.get(trait.id) - 1)
 
@@ -66,7 +64,7 @@ local function useFocus()
 end
 
 local function useLifePulse()
-    return {} -- don't need anything for chat printout
+    return actions.traitToString(TRAITS.LIFE_PULSE)
 end
 
 local function useLifeWithin()
@@ -75,7 +73,7 @@ local function useLifeWithin()
 end
 
 local function usePresenceOfVirtue()
-    return {}
+    return actions.traitToString(TRAITS.PRESENCE_OF_VIRTUE)
 end
 
 local function useSecondWind()
@@ -91,7 +89,7 @@ local function useShatterSoul()
 end
 
 local function useShieldSlam()
-    return rollState.traits.getShieldSlam()
+    return actions.traitToString(TRAITS.SHIELD_SLAM, rollState.traits.getShieldSlam())
 end
 
 local function useVersatile()
@@ -104,7 +102,7 @@ local function useVersatile()
 end
 
 local function useVindication()
-    return {} -- don't need anything for chat printout
+    return actions.traitToString(TRAITS.VINDICATION)
 end
 
 local TRAIT_FNS = {
@@ -124,9 +122,8 @@ local TRAIT_FNS = {
 
 local function useTrait(trait)
     return function(...)
-        -- some traits return a traitAction object which can be passed along for printing the result of the action
-        local traitAction = TRAIT_FNS[trait.id](...)
-        useTraitCharge(trait, traitAction)
+        local msg = TRAIT_FNS[trait.id](...)
+        useTraitCharge(trait, msg)
     end
 end
 
