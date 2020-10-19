@@ -5,11 +5,13 @@ local COLOURS = TEARollHelper.COLOURS
 local constants = ns.constants
 local rolls = ns.state.rolls
 local rules = ns.rules
+local traits = ns.resources.traits
 local ui = ns.ui
 local utils = ns.utils
 
 local ACTIONS = constants.ACTIONS
 local ACTION_LABELS = constants.ACTION_LABELS
+local TRAITS = traits.TRAITS
 
 --[[ local options = {
     order: Number
@@ -74,6 +76,23 @@ ui.modules.actions.modules.buff.getOptions = function(options)
                             return msg
                         end
                     }
+                }
+            },
+            postRoll = {
+                order = 3,
+                type = "group",
+                name = "After rolling",
+                inline = true,
+                hidden = function()
+                    return not rolls.state.buff.currentRoll.get() or not rules.buffing.shouldShowPostRollUI() or rolls.getBuff().amountBuffed <= 0
+                end,
+                args = {
+                    useAscend = ui.helpers.traitButton(TRAITS.ASCEND, {
+                        order = 0,
+                        hidden = function()
+                            return rolls.getBuff().amountBuffed <= 0
+                        end,
+                    }),
                 }
             },
         }

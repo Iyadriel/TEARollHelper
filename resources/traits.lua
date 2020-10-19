@@ -7,13 +7,20 @@ local ACTIONS = constants.ACTIONS
 local BUFF_TYPES = constants.BUFF_TYPES
 local TURN_TYPES = constants.TURN_TYPES
 
-traits.TRAIT_KEYS = {"OTHER", "BULWARK", "CALAMITY_GAMBIT", "EMPOWERED_BLADES", "FAELUNES_REGROWTH", "FOCUS", "LIFE_PULSE", "LIFE_WITHIN", "PRESENCE_OF_VIRTUE", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "VERSATILE", "VINDICATION"}
+traits.TRAIT_KEYS = {"OTHER", "ASCEND", "BULWARK", "CALAMITY_GAMBIT", "EMPOWERED_BLADES", "FAELUNES_REGROWTH", "FOCUS", "LIFE_PULSE", "LIFE_WITHIN", "PRESENCE_OF_VIRTUE", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "VERSATILE", "VINDICATION"}
 
 traits.TRAITS = {
     OTHER = {
         id = "OTHER",
         name = "Other",
         supported = true
+    },
+    ASCEND = {
+        id = "ASCEND",
+        name = "Ascend",
+        desc = "Activate to replicate your buff roll and apply it to a secondary target. Can be used twice per event. Activate after rolling.",
+        supported = true,
+        numCharges = 2,
     },
     BULWARK = {
         id = "BULWARK",

@@ -47,6 +47,10 @@ end
 
 -- Traits
 
+local function useAscend()
+    return actions.traitToString(TRAITS.ASCEND)
+end
+
 local function useBulwark()
     buffs.addTraitBuff(TRAITS.BULWARK)
 end
@@ -106,6 +110,7 @@ local function useVindication()
 end
 
 local TRAIT_FNS = {
+    [TRAITS.ASCEND.id] = useAscend,
     [TRAITS.BULWARK.id] = useBulwark,
     [TRAITS.CALAMITY_GAMBIT.id] = useCalamityGambit,
     [TRAITS.EMPOWERED_BLADES.id] = useEmpoweredBlades,
