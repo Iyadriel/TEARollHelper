@@ -4,8 +4,6 @@ local COLOURS = TEARollHelper.COLOURS
 
 local buffsState = ns.state.buffs.state
 local character = ns.character
-local characterState = ns.state.character.state
-local consequences = ns.consequences
 local traits = ns.resources.traits
 local ui = ns.ui
 
@@ -16,19 +14,10 @@ local TRAITS = traits.TRAITS
 } ]]
 ui.modules.actions.modules.playerTurn.getSharedPreRollOptions = function(options)
     return {
-        useFocus = {
+        useFocus = ui.helpers.traitButton(TRAITS.FOCUS, {
             order = options.order,
-            type = "execute",
-            name = COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.FOCUS.name,
-            desc = TRAITS.FOCUS.desc,
-            hidden = function()
-                return not character.hasTrait(TRAITS.FOCUS) or buffsState.buffLookup.getTraitBuffs(TRAITS.FOCUS)
-            end,
-            disabled = function()
-                return characterState.featsAndTraits.numTraitCharges.get(TRAITS.FOCUS.id) == 0
-            end,
-            func = consequences.useTrait(TRAITS.FOCUS),
-        },
+            checkBuff = true,
+        }),
         focusActive = {
             order = 0,
             type = "description",

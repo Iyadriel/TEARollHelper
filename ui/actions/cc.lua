@@ -4,8 +4,6 @@ local COLOURS = TEARollHelper.COLOURS
 
 local buffsState = ns.state.buffs.state
 local character = ns.character
-local characterState = ns.state.character.state
-local consequences = ns.consequences
 local constants = ns.constants
 local rolls = ns.state.rolls
 local rules = ns.rules
@@ -32,19 +30,10 @@ ui.modules.actions.modules.cc.getOptions = function(options)
             ui.modules.actions.modules.playerTurn.getSharedPreRollOptions({ order = 1 }),
             ui.modules.actions.modules.anyTurn.getSharedPreRollOptions({ order = 2 }),
             {
-                useCalamityGambit = {
+                useCalamityGambit = ui.helpers.traitButton(TRAITS.CALAMITY_GAMBIT, {
                     order = 0,
-                    type = "execute",
-                    name = COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.CALAMITY_GAMBIT.name,
-                    desc = TRAITS.CALAMITY_GAMBIT.desc,
-                    hidden = function()
-                        return not character.hasTrait(TRAITS.CALAMITY_GAMBIT) or buffsState.buffLookup.getTraitBuffs(TRAITS.CALAMITY_GAMBIT)
-                    end,
-                    disabled = function()
-                        return characterState.featsAndTraits.numTraitCharges.get(TRAITS.CALAMITY_GAMBIT.id) == 0
-                    end,
-                    func = consequences.useTrait(TRAITS.CALAMITY_GAMBIT),
-                },
+                    checkBuff = true,
+                }),
                 calamityGambitActive = {
                     order = 0,
                     type = "description",

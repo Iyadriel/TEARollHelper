@@ -102,19 +102,10 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                 args = utils.merge(
                     ui.modules.actions.modules.anyTurn.getSharedPreRollOptions({ order = 1 }),
                     {
-                        useBulwark = {
+                        useBulwark = ui.helpers.traitButton(TRAITS.BULWARK, {
                             order = 0,
-                            type = "execute",
-                            name = COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.BULWARK.name,
-                            desc = TRAITS.BULWARK.desc,
-                            hidden = function()
-                                return not character.hasTrait(TRAITS.BULWARK) or buffsState.buffLookup.getTraitBuffs(TRAITS.BULWARK)
-                            end,
-                            disabled = function()
-                                return state.featsAndTraits.numTraitCharges.get(TRAITS.BULWARK.id) == 0
-                            end,
-                            func = consequences.useTrait(TRAITS.BULWARK),
-                        },
+                            checkBuff = true,
+                        }),
                         bulwarkActive = {
                             order = 0,
                             type = "description",

@@ -39,19 +39,10 @@ ui.modules.actions.modules.attack.getOptions = function(options)
             ui.modules.actions.modules.playerTurn.getSharedPreRollOptions({ order = 1 }),
             ui.modules.actions.modules.anyTurn.getSharedPreRollOptions({ order = 2 }),
             {
-                useCalamityGambit = {
+                useCalamityGambit = ui.helpers.traitButton(TRAITS.CALAMITY_GAMBIT, {
                     order = 0,
-                    type = "execute",
-                    name = COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.CALAMITY_GAMBIT.name,
-                    desc = TRAITS.CALAMITY_GAMBIT.desc,
-                    hidden = function()
-                        return not character.hasTrait(TRAITS.CALAMITY_GAMBIT) or buffsState.buffLookup.getTraitBuffs(TRAITS.CALAMITY_GAMBIT)
-                    end,
-                    disabled = function()
-                        return characterState.featsAndTraits.numTraitCharges.get(TRAITS.CALAMITY_GAMBIT.id) == 0
-                    end,
-                    func = consequences.useTrait(TRAITS.CALAMITY_GAMBIT),
-                },
+                    checkBuff = true,
+                }),
                 calamityGambitActive = {
                     order = 0,
                     type = "description",
@@ -183,20 +174,12 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                     return not state.attack.currentRoll.get() or not (rolls.getAttack().dmg > 0) or not rules.offence.shouldShowPostRollUI()
                 end,
                 args = {
-                    useShatterSoul = {
+                    useShatterSoul = ui.helpers.traitButton(TRAITS.SHATTER_SOUL, {
                         order = 0,
-                        type = "execute",
-                        width = "full",
-                        name = COLOURS.TRAITS.SHATTER_SOUL .. "Use " .. TRAITS.SHATTER_SOUL.name,
-                        desc = TRAITS.SHATTER_SOUL.desc,
                         hidden = function()
                             return not rolls.getAttack().shatterSoulEnabled
                         end,
-                        disabled = function()
-                            return characterState.featsAndTraits.numTraitCharges.get(TRAITS.SHATTER_SOUL.id) == 0
-                        end,
-                        func = consequences.useTrait(TRAITS.SHATTER_SOUL),
-                    },
+                    }),
                     useVindication = {
                         order = 1,
                         type = "execute",
