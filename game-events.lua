@@ -4,6 +4,7 @@ local integrations = ns.integrations
 local turns = ns.turns
 
 local PLAYER_NAME = UnitName("player")
+local TOTALRP3_NAME = "totalRP3"
 
 function TEARollHelper:CHAT_MSG_SYSTEM(event, msg)
     local author, rollResult, rollMin, rollMax = string.match(msg, "(.+) rolls (%d+) %((%d+)-(%d+)%)")
@@ -20,12 +21,17 @@ function TEARollHelper:CHAT_MSG_SYSTEM(event, msg)
 end
 
 function TEARollHelper:ADDON_LOADED(event, addon)
-    if addon == "totalRP3" then
+    if addon == TOTALRP3_NAME then
         integrations.InitTRPSync()
         self:UnregisterEvent("ADDON_LOADED")
     end
 end
-TEARollHelper:RegisterEvent("ADDON_LOADED")
+
+if IsAddOnLoaded(TOTALRP3_NAME) then
+    integrations.InitTRPSync()
+else
+    TEARollHelper:RegisterEvent("ADDON_LOADED")
+end
 
 local function listenForRolls()
     TEARollHelper:RegisterEvent("CHAT_MSG_SYSTEM")

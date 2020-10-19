@@ -25,6 +25,8 @@ resources/zones.lua
 db.lua
 settings.lua
 
+integrations/trp3.lua
+
 actions.lua
 buffs.lua
 character.lua
@@ -92,5 +94,3 @@ ui/turn/effects.lua
 ui/turn/environment.lua
 ui/turn/roll.lua
 ui/turn/turn.lua
-
-integrations/trp3.lua
