@@ -66,6 +66,7 @@ local function useFocus()
 end
 
 local function useLifePulse()
+    return {} -- don't need anything for chat printout
 end
 
 local function useLifeWithin()
@@ -99,6 +100,7 @@ local function useVersatile()
 end
 
 local function useVindication()
+    return {} -- don't need anything for chat printout
 end
 
 local TRAIT_FNS = {

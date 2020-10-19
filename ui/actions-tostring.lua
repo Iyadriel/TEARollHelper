@@ -115,8 +115,16 @@ end
 
 -- Trait actions
 
+local function lifePulseToString()
+    return COLOURS.HEALING .. "You can heal everyone in melee range of your target."
+end
+
 local function shieldSlamToString(shieldSlam)
     return "You deal " .. shieldSlam.dmg .. " damage with your Shield Slam."
+end
+
+local function vindicationToString()
+    return COLOURS.HEALING .. "You may heal for the stated amount."
 end
 
 local toString = {
@@ -127,7 +135,9 @@ local toString = {
 }
 
 local traitsToString = {
+    [TRAITS.LIFE_PULSE] = lifePulseToString,
     [TRAITS.SHIELD_SLAM] = shieldSlamToString,
+    [TRAITS.VINDICATION] = vindicationToString,
 }
 
 actions.toString = function(actionType, action)
