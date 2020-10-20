@@ -296,7 +296,7 @@ local function getMeleeSave()
     local defenceBuff = buffsState.buffs.defence.get()
     local damageTakenBuff = buffsState.buffs.damageTaken.get()
 
-    return actions.getMeleeSave(state.meleeSave.currentRoll, state.meleeSave.threshold, state.meleeSave.damageType, state.meleeSave.damageRisk, defence, defenceBuff, damageTakenBuff)
+    return actions.getMeleeSave(state.meleeSave.currentRoll, DEFENCE_TYPES.THRESHOLD, state.meleeSave.threshold, state.meleeSave.damageType, state.meleeSave.damageRisk, defence, defenceBuff, damageTakenBuff)
 end
 
 local function getRangedSave()

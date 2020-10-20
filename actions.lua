@@ -116,7 +116,7 @@ local function getDefence(roll, defenceType, threshold, damageType, dmgRisk, def
     }
 end
 
-local function getMeleeSave(roll, threshold, damageType, dmgRisk, defence, defenceBuff, damageTakenBuff)
+local function getMeleeSave(roll, defenceType, threshold, damageType, dmgRisk, defence, defenceBuff, damageTakenBuff)
     local meleeSaveValue, damageTaken, damagePrevented
     local isBigFail
     local hasCounterForceProc = nil
@@ -125,7 +125,7 @@ local function getMeleeSave(roll, threshold, damageType, dmgRisk, defence, defen
     meleeSaveValue = rules.meleeSave.calculateMeleeSaveValue(roll, damageType, defence, defenceBuff)
     isBigFail = rules.meleeSave.isSaveBigFail(meleeSaveValue, threshold)
 
-    damageTaken = rules.defence.calculateDamageTaken(threshold, meleeSaveValue, dmgRisk, damageTakenBuff)
+    damageTaken = rules.defence.calculateDamageTaken(defenceType, threshold, meleeSaveValue, dmgRisk, damageTakenBuff)
 
     if isBigFail then
         damageTaken = rules.meleeSave.applyBigFailModifier(damageTaken)
