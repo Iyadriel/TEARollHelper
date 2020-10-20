@@ -17,6 +17,8 @@ local utils = ns.utils
 
 local ACTIONS = constants.ACTIONS
 local ACTION_LABELS = constants.ACTION_LABELS
+local DEFENCE_TYPES = constants.DEFENCE_TYPES
+local DEFENCE_TYPE_LABELS = constants.DEFENCE_TYPE_LABELS
 local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
 
@@ -77,6 +79,23 @@ ui.modules.actions.modules.defend.getOptions = function(options)
         type = "group",
         order = options.order,
         args = {
+            defenceType = {
+                order = 0,
+                type = "select",
+                name = "Defence type",
+                desc = "Select 'Threshold' for regular defence rolls, or 'Damage reduction' when the damage you take is x minus the result of your defence roll.",
+                values = (function()
+                    local defenceTypeOptions = {}
+                    for key, value in pairs(DEFENCE_TYPES) do
+                        defenceTypeOptions[value] = DEFENCE_TYPE_LABELS[key]
+                    end
+                    return defenceTypeOptions
+                end)(),
+                get = rolls.state.defend.defenceType.get,
+                set = function(info, value)
+                    rolls.state.defend.defenceType.set(value)
+                end
+            },
             defendThreshold = {
                 order = 1,
                 name = "Defend threshold",
