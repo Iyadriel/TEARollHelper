@@ -63,6 +63,7 @@ rolls.initState = function()
         },
 
         [ACTIONS.meleeSave] = {
+            defenceType = DEFENCE_TYPES.THRESHOLD,
             threshold = nil,
             damageType = nil,
             damageRisk = nil,
@@ -157,6 +158,11 @@ rolls.state = {
     },
 
     [ACTIONS.meleeSave] = {
+        defenceType = basicGetSet(ACTIONS.meleeSave, "defenceType", function(defenceType)
+            if defenceType ~= DEFENCE_TYPES.THRESHOLD then
+                rolls.state[ACTIONS.meleeSave].threshold.set(0)
+            end
+        end),
         threshold = basicGetSet(ACTIONS.meleeSave, "threshold"),
         damageType = basicGetSet(ACTIONS.meleeSave, "damageType"),
         damageRisk = basicGetSet(ACTIONS.meleeSave, "damageRisk"),
@@ -193,10 +199,11 @@ local function resetRolls()
 end
 
 local function resetThresholds()
-    rolls.state.attack.threshold.set(nil)
     rolls.state.defend.defenceType.set(DEFENCE_TYPES.THRESHOLD)
+    rolls.state.attack.threshold.set(nil)
     rolls.state.defend.threshold.set(nil)
     rolls.state.defend.damageRisk.set(nil)
+    rolls.state.meleeSave.defenceType.set(DEFENCE_TYPES.THRESHOLD)
     rolls.state.meleeSave.threshold.set(nil)
     rolls.state.meleeSave.damageRisk.set(nil)
     rolls.state.rangedSave.threshold.set(nil)
@@ -296,7 +303,7 @@ local function getMeleeSave()
     local defenceBuff = buffsState.buffs.defence.get()
     local damageTakenBuff = buffsState.buffs.damageTaken.get()
 
-    return actions.getMeleeSave(state.meleeSave.currentRoll, DEFENCE_TYPES.THRESHOLD, state.meleeSave.threshold, state.meleeSave.damageType, state.meleeSave.damageRisk, defence, defenceBuff, damageTakenBuff)
+    return actions.getMeleeSave(state.meleeSave.currentRoll, state.meleeSave.defenceType, state.meleeSave.threshold, state.meleeSave.damageType, state.meleeSave.damageRisk, defence, defenceBuff, damageTakenBuff)
 end
 
 local function getRangedSave()

@@ -29,8 +29,25 @@ local state = characterState.state
 -- startOrder: Number
 ui.modules.actions.modules.defend.getSharedOptions = function(action, startOrder)
     return {
-        damageRisk = {
+        defenceType = {
             order = startOrder,
+            type = "select",
+            name = "Defence type",
+            desc = "Select 'Threshold' for regular defence rolls, or 'Damage reduction' when the damage you take is x minus the result of your defence roll.",
+            values = (function()
+                local defenceTypeOptions = {}
+                for key, value in pairs(DEFENCE_TYPES) do
+                    defenceTypeOptions[value] = DEFENCE_TYPE_LABELS[key]
+                end
+                return defenceTypeOptions
+            end)(),
+            get = rolls.state[action].defenceType.get,
+            set = function(info, value)
+                rolls.state[action].defenceType.set(value)
+            end
+        },
+        damageRisk = {
+            order = startOrder + 2,
             name = "Damage risk",
             type = "range",
             min = 1,
@@ -43,7 +60,7 @@ ui.modules.actions.modules.defend.getSharedOptions = function(action, startOrder
             end
         },
         damageType = {
-            order = startOrder + 1,
+            order = startOrder + 3,
             name = "Damage type",
             type = "select",
             values = (function()
@@ -68,7 +85,7 @@ end
     order: Number
 } ]]
 ui.modules.actions.modules.defend.getOptions = function(options)
-    local sharedOptions = ui.modules.actions.modules.defend.getSharedOptions("defend", 2)
+    local sharedOptions = ui.modules.actions.modules.defend.getSharedOptions("defend", 0)
 
     local function shouldHideRoll()
         return not (rolls.state.defend.threshold.get() and rolls.state.defend.damageRisk.get())
@@ -79,23 +96,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
         type = "group",
         order = options.order,
         args = {
-            defenceType = {
-                order = 0,
-                type = "select",
-                name = "Defence type",
-                desc = "Select 'Threshold' for regular defence rolls, or 'Damage reduction' when the damage you take is x minus the result of your defence roll.",
-                values = (function()
-                    local defenceTypeOptions = {}
-                    for key, value in pairs(DEFENCE_TYPES) do
-                        defenceTypeOptions[value] = DEFENCE_TYPE_LABELS[key]
-                    end
-                    return defenceTypeOptions
-                end)(),
-                get = rolls.state.defend.defenceType.get,
-                set = function(info, value)
-                    rolls.state.defend.defenceType.set(value)
-                end
-            },
+            defenceType = sharedOptions.defenceType,
             defendThreshold = {
                 order = 1,
                 name = "Defend threshold",
