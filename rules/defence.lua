@@ -8,6 +8,7 @@ local rules = ns.rules
 local traits = ns.resources.traits
 
 local DAMAGE_TYPES = constants.DAMAGE_TYPES
+local DEFENCE_TYPES = constants.DEFENCE_TYPES
 local FEATS = feats.FEATS
 local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
 local TRAITS = traits.TRAITS
@@ -18,12 +19,15 @@ local function calculateDefendValue(roll, damageType, defence, buff)
     return roll + rules.common.calculateDefenceStat(damageType, defence, buff)
 end
 
-local function calculateDamageTaken(threshold, defendValue, dmgRisk, damageTakenBuff)
-    local safetyMargin = defendValue - threshold
-    if safetyMargin >= 0 then
-        return 0
+local function calculateDamageTaken(defenceType, threshold, defendValue, dmgRisk, damageTakenBuff)
+    if defenceType == DEFENCE_TYPES.THRESHOLD then
+        local safetyMargin = defendValue - threshold
+        if safetyMargin >= 0 then
+            return 0
+        end
+        return dmgRisk + damageTakenBuff
     end
-    return dmgRisk + damageTakenBuff
+    return dmgRisk + damageTakenBuff - defendValue
 end
 
 local function calculateDamagePrevented(dmgRisk, damageTaken)

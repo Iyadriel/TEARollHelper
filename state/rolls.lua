@@ -11,6 +11,7 @@ local rolls = ns.state.rolls
 local traits = ns.resources.traits
 
 local ACTIONS = constants.ACTIONS
+local DEFENCE_TYPES = constants.DEFENCE_TYPES
 local EVENTS = bus.EVENTS
 local ROLL_MODES = constants.ROLL_MODES
 local STATS = constants.STATS
@@ -53,6 +54,7 @@ rolls.initState = function()
         },
 
         [ACTIONS.defend] = {
+            defenceType = DEFENCE_TYPES.THRESHOLD,
             threshold = nil,
             damageType = nil,
             damageRisk = nil,
@@ -142,6 +144,7 @@ rolls.state = {
     },
 
     [ACTIONS.defend] = {
+        defenceType = basicGetSet(ACTIONS.defend, "defenceType"),
         threshold = basicGetSet(ACTIONS.defend, "threshold"),
         damageType = basicGetSet(ACTIONS.defend, "damageType"),
         damageRisk = basicGetSet(ACTIONS.defend, "damageRisk"),
@@ -187,6 +190,7 @@ end
 
 local function resetThresholds()
     rolls.state.attack.threshold.set(nil)
+    rolls.state.defend.defenceType.set(DEFENCE_TYPES.THRESHOLD)
     rolls.state.defend.threshold.set(nil)
     rolls.state.defend.damageRisk.set(nil)
     rolls.state.meleeSave.threshold.set(nil)
@@ -280,7 +284,7 @@ local function getDefence()
     local defenceBuff = buffsState.buffs.defence.get()
     local damageTakenBuff = buffsState.buffs.damageTaken.get()
 
-    return actions.getDefence(state.defend.currentRoll, state.defend.threshold, state.defend.damageType, state.defend.damageRisk, defence, defenceBuff, damageTakenBuff)
+    return actions.getDefence(state.defend.currentRoll, state.defend.defenceType, state.defend.threshold, state.defend.damageType, state.defend.damageRisk, defence, defenceBuff, damageTakenBuff)
 end
 
 local function getMeleeSave()

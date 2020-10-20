@@ -87,14 +87,14 @@ local function getCC(roll, offence, offenceBuff, defence, defenceBuff)
     }
 end
 
-local function getDefence(roll, threshold, damageType, dmgRisk, defence, defenceBuff, damageTakenBuff)
+local function getDefence(roll, defenceType, threshold, damageType, dmgRisk, defence, defenceBuff, damageTakenBuff)
     local isCrit = rules.defence.isCrit(roll)
     local defendValue, damageTaken, damagePrevented
     local retaliateDmg = 0
     local empoweredBladesEnabled = false
 
     defendValue = rules.defence.calculateDefendValue(roll, damageType, defence, defenceBuff)
-    damageTaken = rules.defence.calculateDamageTaken(threshold, defendValue, dmgRisk, damageTakenBuff)
+    damageTaken = rules.defence.calculateDamageTaken(defenceType, threshold, defendValue, dmgRisk, damageTakenBuff)
     damagePrevented = rules.defence.calculateDamagePrevented(dmgRisk, damageTaken)
 
     if isCrit then
