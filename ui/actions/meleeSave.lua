@@ -17,7 +17,7 @@ local TRAITS = traits.TRAITS
     order: Number
 } ]]
 ui.modules.actions.modules.meleeSave.getOptions = function(options)
-    local sharedOptions = ui.modules.actions.modules.defend.getSharedOptions("meleeSave")
+    local sharedOptions = ui.modules.actions.modules.defend.getSharedOptions("meleeSave", 1)
 
     local function shouldHideRoll()
         return not (rolls.state.meleeSave.threshold.get() and rolls.state.meleeSave.damageRisk.get())
@@ -28,23 +28,36 @@ ui.modules.actions.modules.meleeSave.getOptions = function(options)
         type = "group",
         order = options.order,
         args = {
-            defendThreshold = sharedOptions.defendThreshold,
-            damageType = sharedOptions.damageType,
+            defendThreshold = {
+                order = 0,
+                name = "Defend threshold",
+                type = "range",
+                desc = "The defence threshold for the ally you're saving. If you do not meet this threshold, you can still save them, but you will take damage.",
+                min = 1,
+                softMax = 20,
+                max = 100,
+                step = 1,
+                get = rolls.state.meleeSave.threshold.get,
+                set = function(info, value)
+                    rolls.state.meleeSave.threshold.set(value)
+                end
+            },
             damageRisk = sharedOptions.damageRisk,
+            damageType = sharedOptions.damageType,
             preRoll = ui.modules.turn.modules.roll.getPreRollOptions({
-                order = 2,
+                order = 3,
                 hidden = function()
                     return shouldHideRoll() or not rules.meleeSave.shouldShowPreRollUI()
                 end,
                 args = ui.modules.actions.modules.anyTurn.getSharedPreRollOptions({ order = 0 }),
             }),
             roll = ui.modules.turn.modules.roll.getOptions({
-                order = 3,
+                order = 4,
                 action = ACTIONS.meleeSave,
                 hidden = shouldHideRoll,
             }),
             meleeSave = {
-                order = 4,
+                order = 5,
                 type = "group",
                 name = ACTION_LABELS.meleeSave,
                 inline = true,
@@ -82,7 +95,7 @@ ui.modules.actions.modules.meleeSave.getOptions = function(options)
                 }
             },
             postRoll = {
-                order = 5,
+                order = 6,
                 type = "group",
                 name = "After rolling",
                 inline = true,

@@ -14,8 +14,6 @@ local ACTION_LABELS = constants.ACTION_LABELS
     order: Number
 } ]]
 ui.modules.actions.modules.rangedSave.getOptions = function(options)
-    local sharedOptions = ui.modules.actions.modules.defend.getSharedOptions("rangedSave")
-
     local function shouldHideRoll()
         return not rolls.state.rangedSave.threshold.get()
     end
@@ -25,21 +23,34 @@ ui.modules.actions.modules.rangedSave.getOptions = function(options)
         type = "group",
         order = options.order,
         args = {
-            defendThreshold = sharedOptions.defendThreshold,
+            defendThreshold = {
+                order = 0,
+                name = "Defend threshold",
+                type = "range",
+                desc = "The defence threshold for the ally you're saving. If you do not meet this threshold, you can still reduce the damage they take.",
+                min = 1,
+                softMax = 20,
+                max = 100,
+                step = 1,
+                get = rolls.state.rangedSave.threshold.get,
+                set = function(info, value)
+                    rolls.state.rangedSave.threshold.set(value)
+                end
+            },
             preRoll = ui.modules.turn.modules.roll.getPreRollOptions({
-                order = 2,
+                order = 1,
                 hidden = function()
                     return shouldHideRoll() or not rules.meleeSave.shouldShowPreRollUI()
                 end,
                 args = ui.modules.actions.modules.anyTurn.getSharedPreRollOptions({ order = 0 }),
             }),
             roll = ui.modules.turn.modules.roll.getOptions({
-                order = 3,
+                order = 2,
                 action = ACTIONS.rangedSave,
                 hidden = shouldHideRoll,
             }),
             rangedSave = {
-                order = 4,
+                order = 3,
                 type = "group",
                 name = ACTION_LABELS.rangedSave,
                 inline = true,

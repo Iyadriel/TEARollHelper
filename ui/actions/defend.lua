@@ -22,29 +22,15 @@ local TRAITS = traits.TRAITS
 
 local state = characterState.state
 
--- shared with melee and ranged save
--- action: String (defend, meleeSave, rangedSave)
-ui.modules.actions.modules.defend.getSharedOptions = function(action)
+-- shared with melee save
+-- action: String (defend, meleeSave)
+-- startOrder: Number
+ui.modules.actions.modules.defend.getSharedOptions = function(action, startOrder)
     return {
-        defendThreshold = {
-            order = 0,
-            name = "Defend threshold",
-            type = "range",
-            desc = "The minimum required roll to not take any damage",
-            min = 1,
-            softMax = 20,
-            max = 100,
-            step = 1,
-            get = rolls.state[action].threshold.get,
-            set = function(info, value)
-                rolls.state[action].threshold.set(value)
-            end
-        },
-        damageRisk = action ~= "rangedSave" and {
-            order = 1,
+        damageRisk = {
+            order = startOrder,
             name = "Damage risk",
             type = "range",
-            desc = "How much damage is taken on a failed roll",
             min = 1,
             softMax = 20,
             max = 100,
@@ -54,8 +40,8 @@ ui.modules.actions.modules.defend.getSharedOptions = function(action)
                 rolls.state[action].damageRisk.set(value)
             end
         },
-        damageType = action ~= "rangedSave" and {
-            order = 2,
+        damageType = {
+            order = startOrder + 1,
             name = "Damage type",
             type = "select",
             values = (function()
@@ -80,7 +66,7 @@ end
     order: Number
 } ]]
 ui.modules.actions.modules.defend.getOptions = function(options)
-    local sharedOptions = ui.modules.actions.modules.defend.getSharedOptions("defend")
+    local sharedOptions = ui.modules.actions.modules.defend.getSharedOptions("defend", 2)
 
     local function shouldHideRoll()
         return not (rolls.state.defend.threshold.get() and rolls.state.defend.damageRisk.get())
@@ -91,11 +77,27 @@ ui.modules.actions.modules.defend.getOptions = function(options)
         type = "group",
         order = options.order,
         args = {
-            defendThreshold = sharedOptions.defendThreshold,
-            damageType = sharedOptions.damageType,
+            defendThreshold = {
+                order = 1,
+                name = "Defend threshold",
+                type = "range",
+                desc = "The minimum required roll to not take any damage",
+                min = 1,
+                softMax = 20,
+                max = 100,
+                step = 1,
+                disabled = function()
+                    return rolls.state.defend.defenceType.get() ~= DEFENCE_TYPES.THRESHOLD
+                end,
+                get = rolls.state.defend.threshold.get,
+                set = function(info, value)
+                    rolls.state.defend.threshold.set(value)
+                end
+            },
             damageRisk = sharedOptions.damageRisk,
+            damageType = sharedOptions.damageType,
             preRoll = ui.modules.turn.modules.roll.getPreRollOptions({
-                order = 3,
+                order = 4,
                 hidden = function()
                     return shouldHideRoll() or not rules.defence.shouldShowPreRollUI()
                 end,
@@ -136,12 +138,12 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                 ),
             }),
             roll = ui.modules.turn.modules.roll.getOptions({
-                order = 4,
+                order = 5,
                 action = ACTIONS.defend,
                 hidden = shouldHideRoll,
             }),
             defend = {
-                order = 5,
+                order = 6,
                 type = "group",
                 name = ACTION_LABELS.defend,
                 inline = true,
@@ -181,7 +183,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                 }
             },
             postRoll = {
-                order = 6,
+                order = 7,
                 type = "group",
                 name = "After rolling",
                 inline = true,
