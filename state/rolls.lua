@@ -72,6 +72,7 @@ rolls.initState = function()
         },
 
         [ACTIONS.rangedSave] = {
+            defenceType = DEFENCE_TYPES.THRESHOLD,
             threshold = nil,
             rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
@@ -171,6 +172,11 @@ rolls.state = {
     },
 
     [ACTIONS.rangedSave] = {
+        defenceType = basicGetSet(ACTIONS.rangedSave, "defenceType", function(defenceType)
+            if defenceType ~= DEFENCE_TYPES.THRESHOLD then
+                rolls.state[ACTIONS.rangedSave].threshold.set(0)
+            end
+        end),
         threshold = basicGetSet(ACTIONS.rangedSave, "threshold"),
         rollMode = basicGetSet(ACTIONS.rangedSave, "rollMode"),
         currentRoll = basicGetSet(ACTIONS.rangedSave, "currentRoll"),
@@ -206,6 +212,7 @@ local function resetThresholds()
     rolls.state.meleeSave.defenceType.set(DEFENCE_TYPES.THRESHOLD)
     rolls.state.meleeSave.threshold.set(nil)
     rolls.state.meleeSave.damageRisk.set(nil)
+    rolls.state.rangedSave.defenceType.set(DEFENCE_TYPES.THRESHOLD)
     rolls.state.rangedSave.threshold.set(nil)
 end
 
@@ -310,7 +317,7 @@ local function getRangedSave()
     local spirit = character.getPlayerSpirit()
     local buff = buffsState.buffs.spirit.get()
 
-    return actions.getRangedSave(state.rangedSave.currentRoll, state.rangedSave.threshold, spirit, buff)
+    return actions.getRangedSave(state.rangedSave.currentRoll, state.rangedSave.defenceType, state.rangedSave.threshold, spirit, buff)
 end
 
 -- Trait actions

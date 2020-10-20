@@ -25,12 +25,14 @@ local TRAITS = traits.TRAITS
 local state = characterState.state
 
 -- shared with melee save
--- action: String (defend, meleeSave)
--- startOrder: Number
-ui.modules.actions.modules.defend.getSharedOptions = function(action, startOrder)
+-- action: String (defend, meleeSave, rangedSave)
+--[[ options = {
+    thresholdLabel: String
+} ]]
+ui.modules.actions.modules.defend.getSharedOptions = function(action, options)
     return {
         defenceType = {
-            order = startOrder,
+            order = 0,
             type = "select",
             name = "Defence type",
             desc = "Select 'Threshold' for regular defence rolls, or 'Damage reduction' when the damage you take is x minus the result of your defence roll.",
@@ -46,8 +48,25 @@ ui.modules.actions.modules.defend.getSharedOptions = function(action, startOrder
                 rolls.state[action].defenceType.set(value)
             end
         },
-        damageRisk = {
-            order = startOrder + 2,
+        defendThreshold = {
+            order = 1,
+            name = "Defend threshold",
+            type = "range",
+            desc = options.thresholdLabel,
+            min = 1,
+            softMax = 20,
+            max = 100,
+            step = 1,
+            disabled = function()
+                return rolls.state[action].defenceType.get() ~= DEFENCE_TYPES.THRESHOLD
+            end,
+            get = rolls.state[action].threshold.get,
+            set = function(info, value)
+                rolls.state[action].threshold.set(value)
+            end
+        },
+        damageRisk = action ~= "rangedSave" and {
+            order = 2,
             name = "Damage risk",
             type = "range",
             min = 1,
@@ -59,8 +78,8 @@ ui.modules.actions.modules.defend.getSharedOptions = function(action, startOrder
                 rolls.state[action].damageRisk.set(value)
             end
         },
-        damageType = {
-            order = startOrder + 3,
+        damageType = action ~= "rangedSave" and {
+            order = 3,
             name = "Damage type",
             type = "select",
             values = (function()
@@ -85,7 +104,7 @@ end
     order: Number
 } ]]
 ui.modules.actions.modules.defend.getOptions = function(options)
-    local sharedOptions = ui.modules.actions.modules.defend.getSharedOptions("defend", 0)
+    local sharedOptions = ui.modules.actions.modules.defend.getSharedOptions("defend", { thresholdLabel = "The minimum required roll to not take any damage" })
 
     local function shouldHideRoll()
         return not (rolls.state.defend.threshold.get() and rolls.state.defend.damageRisk.get())
@@ -97,23 +116,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
         order = options.order,
         args = {
             defenceType = sharedOptions.defenceType,
-            defendThreshold = {
-                order = 1,
-                name = "Defend threshold",
-                type = "range",
-                desc = "The minimum required roll to not take any damage",
-                min = 1,
-                softMax = 20,
-                max = 100,
-                step = 1,
-                disabled = function()
-                    return rolls.state.defend.defenceType.get() ~= DEFENCE_TYPES.THRESHOLD
-                end,
-                get = rolls.state.defend.threshold.get,
-                set = function(info, value)
-                    rolls.state.defend.threshold.set(value)
-                end
-            },
+            defendThreshold = sharedOptions.defendThreshold,
             damageRisk = sharedOptions.damageRisk,
             damageType = sharedOptions.damageType,
             preRoll = ui.modules.turn.modules.roll.getPreRollOptions({

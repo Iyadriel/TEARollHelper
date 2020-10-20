@@ -1,10 +1,12 @@
 local _, ns = ...
 
 local character = ns.character
+local constants = ns.constants
 local feats = ns.resources.feats
 local rules = ns.rules
 
 local FEATS = feats.FEATS
+local DEFENCE_TYPES = constants.DEFENCE_TYPES
 
 local BASE_DAMAGE_REDUCTION = 2
 
@@ -12,8 +14,8 @@ local function calculateRangedSaveValue(roll, spirit, buff)
     return roll + rules.common.calculateSpiritStat(spirit, buff)
 end
 
-local function canFullyProtect(threshold, saveValue)
-    return saveValue >= threshold
+local function canFullyProtect(defenceType, threshold, saveValue)
+    return defenceType == DEFENCE_TYPES.THRESHOLD and saveValue >= threshold
 end
 
 local function calculateDamageReduction(spirit)

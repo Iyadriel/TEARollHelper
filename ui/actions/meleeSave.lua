@@ -18,7 +18,9 @@ local TRAITS = traits.TRAITS
     order: Number
 } ]]
 ui.modules.actions.modules.meleeSave.getOptions = function(options)
-    local sharedOptions = ui.modules.actions.modules.defend.getSharedOptions("meleeSave", 0)
+    local sharedOptions = ui.modules.actions.modules.defend.getSharedOptions("meleeSave", {
+        thresholdLabel = "The defence threshold for the ally you're saving. If you do not meet this threshold, you can still save them, but you will take damage."
+    })
 
     local function shouldHideRoll()
         return not (rolls.state.meleeSave.threshold.get() and rolls.state.meleeSave.damageRisk.get())
@@ -30,23 +32,7 @@ ui.modules.actions.modules.meleeSave.getOptions = function(options)
         order = options.order,
         args = {
             defenceType = sharedOptions.defenceType,
-            defendThreshold = {
-                order = 1,
-                name = "Defend threshold",
-                type = "range",
-                desc = "The defence threshold for the ally you're saving. If you do not meet this threshold, you can still save them, but you will take damage.",
-                min = 1,
-                softMax = 20,
-                max = 100,
-                step = 1,
-                disabled = function()
-                    return rolls.state.meleeSave.defenceType.get() ~= DEFENCE_TYPES.THRESHOLD
-                end,
-                get = rolls.state.meleeSave.threshold.get,
-                set = function(info, value)
-                    rolls.state.meleeSave.threshold.set(value)
-                end
-            },
+            defendThreshold = sharedOptions.defendThreshold,
             damageRisk = sharedOptions.damageRisk,
             damageType = sharedOptions.damageType,
             preRoll = ui.modules.turn.modules.roll.getPreRollOptions({

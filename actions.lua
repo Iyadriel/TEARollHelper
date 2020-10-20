@@ -151,9 +151,9 @@ local function getMeleeSave(roll, defenceType, threshold, damageType, dmgRisk, d
     }
 end
 
-local function getRangedSave(roll, threshold, spirit, buff)
+local function getRangedSave(roll, defenceType, threshold, spirit, buff)
     local saveValue = rules.rangedSave.calculateRangedSaveValue(roll, spirit, buff)
-    local canFullyProtect = rules.rangedSave.canFullyProtect(threshold, saveValue)
+    local canFullyProtect = rules.rangedSave.canFullyProtect(defenceType, threshold, saveValue)
     local damageReduction = nil
 
     if not canFullyProtect then
