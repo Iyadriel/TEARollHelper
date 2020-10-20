@@ -144,7 +144,11 @@ rolls.state = {
     },
 
     [ACTIONS.defend] = {
-        defenceType = basicGetSet(ACTIONS.defend, "defenceType"),
+        defenceType = basicGetSet(ACTIONS.defend, "defenceType", function(defenceType)
+            if defenceType ~= DEFENCE_TYPES.THRESHOLD then
+                rolls.state[ACTIONS.defend].threshold.set(0)
+            end
+        end),
         threshold = basicGetSet(ACTIONS.defend, "threshold"),
         damageType = basicGetSet(ACTIONS.defend, "damageType"),
         damageRisk = basicGetSet(ACTIONS.defend, "damageRisk"),
