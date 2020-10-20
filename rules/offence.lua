@@ -189,7 +189,7 @@ local function shouldShowPreRollUI()
 end
 
 local function shouldShowPostRollUI()
-    return character.hasFeat(FEATS.MERCY_FROM_PAIN) or character.hasTrait(TRAITS.SHATTER_SOUL) or character.hasTrait(TRAITS.VINDICATION)
+    return character.hasFeat(FEATS.MERCY_FROM_PAIN) or character.hasTrait(TRAITS.FAULTLINE) or character.hasTrait(TRAITS.SHATTER_SOUL) or character.hasTrait(TRAITS.VINDICATION)
 end
 
 rules.offence = {

@@ -174,14 +174,15 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                     return not state.attack.currentRoll.get() or not (rolls.getAttack().dmg > 0) or not rules.offence.shouldShowPostRollUI()
                 end,
                 args = {
+                    useFaultline = ui.helpers.traitButton(TRAITS.FAULTLINE, { order = 0 }),
                     useShatterSoul = ui.helpers.traitButton(TRAITS.SHATTER_SOUL, {
-                        order = 0,
+                        order = 1,
                         hidden = function()
                             return not rolls.getAttack().shatterSoulEnabled
                         end,
                     }),
                     useVindication = {
-                        order = 1,
+                        order = 2,
                         type = "execute",
                         width = "full",
                         name = function()

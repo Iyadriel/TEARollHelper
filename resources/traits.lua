@@ -7,7 +7,7 @@ local ACTIONS = constants.ACTIONS
 local BUFF_TYPES = constants.BUFF_TYPES
 local TURN_TYPES = constants.TURN_TYPES
 
-traits.TRAIT_KEYS = {"OTHER", "ASCEND", "BULWARK", "CALAMITY_GAMBIT", "EMPOWERED_BLADES", "FAELUNES_REGROWTH", "FOCUS", "LIFE_PULSE", "LIFE_WITHIN", "PRESENCE_OF_VIRTUE", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "VERSATILE", "VINDICATION"}
+traits.TRAIT_KEYS = {"OTHER", "ASCEND", "BULWARK", "CALAMITY_GAMBIT", "EMPOWERED_BLADES", "FAELUNES_REGROWTH", "FAULTLINE", "FOCUS", "LIFE_PULSE", "LIFE_WITHIN", "PRESENCE_OF_VIRTUE", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "VERSATILE", "VINDICATION"}
 
 traits.TRAITS = {
     OTHER = {
@@ -104,6 +104,13 @@ traits.TRAITS = {
                 remainingTurns = 2,
             },
         },
+    },
+    FAULTLINE = {
+        id = "FAULTLINE",
+        name = "Faultline",
+        desc = "Activate to apply the result of an Offence attack roll onto a straight line outwards from yourself. All targets within line of sight along the line are struck. Can be used twice per event. Activate after rolling.",
+        supported = true,
+        numCharges = 2,
     },
     FOCUS = {
         id = "FOCUS",

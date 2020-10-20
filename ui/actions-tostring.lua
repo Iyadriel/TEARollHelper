@@ -119,6 +119,10 @@ local function ascendToString()
     return COLOURS.BUFF .. "You can apply your buff to a second target."
 end
 
+local function faultlineToString()
+    return "You can apply your attack to all targets on a straight line outwards from yourself."
+end
+
 local function lifePulseToString()
     return COLOURS.HEALING .. "You can heal everyone in melee range of your target."
 end
@@ -144,6 +148,7 @@ local toString = {
 
 local traitsToString = {
     [TRAITS.ASCEND] = ascendToString,
+    [TRAITS.FAULTLINE] = faultlineToString,
     [TRAITS.LIFE_PULSE] = lifePulseToString,
     [TRAITS.PRESENCE_OF_VIRTUE] = presenceOfVirtueToString,
     [TRAITS.SHIELD_SLAM] = shieldSlamToString,
