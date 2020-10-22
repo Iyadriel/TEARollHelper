@@ -126,6 +126,12 @@ rolls.state = {
         isAOE = basicGetSet(ACTIONS.attack, "isAOE"),
         rollMode = basicGetSet(ACTIONS.attack, "rollMode"),
         currentRoll = basicGetSet(ACTIONS.attack, "currentRoll"),
+
+        resetSlots = function()
+            TEARollHelper:Debug("Resetting slots for attack")
+            rolls.state.attack.numBloodHarvestSlots.set(0)
+            rolls.state.attack.isAOE.set(false)
+        end,
     },
 
     [ACTIONS.cc] = {
@@ -138,6 +144,12 @@ rolls.state = {
         targetIsKO = basicGetSet(ACTIONS.healing, "targetIsKO"),
         rollMode = basicGetSet(ACTIONS.healing, "rollMode"),
         currentRoll = basicGetSet(ACTIONS.healing, "currentRoll"),
+
+        resetSlots = function()
+            TEARollHelper:Debug("Resetting slots for healing")
+            rolls.state.healing.numGreaterHealSlots.set(0)
+            rolls.state.healing.targetIsKO.set(false)
+        end,
     },
 
     [ACTIONS.buff] = {
@@ -186,15 +198,18 @@ rolls.state = {
         useUtilityTrait = basicGetSet(ACTIONS.utility, "useUtilityTrait"),
         rollMode = basicGetSet(ACTIONS.utility, "rollMode"),
         currentRoll = basicGetSet(ACTIONS.utility, "currentRoll"),
+
+        resetSlots = function()
+            TEARollHelper:Debug("Resetting slots for utility")
+            rolls.state.utility.useUtilityTrait.set(false)
+        end,
     },
 }
 
 local function resetSlots()
-    rolls.state.attack.numBloodHarvestSlots.set(0)
-    rolls.state.attack.isAOE.set(false)
-    rolls.state.healing.numGreaterHealSlots.set(0)
-    rolls.state.healing.targetIsKO.set(false)
-    rolls.state.utility.useUtilityTrait.set(false)
+    rolls.state.attack.resetSlots()
+    rolls.state.healing.resetSlots()
+    rolls.state.utility.resetSlots()
 end
 
 local function resetRolls()

@@ -189,6 +189,12 @@ local actionFns = {
 local function confirmAction(actionType, action, hideMsg)
     bus.fire(EVENTS.ACTION_PERFORMED, actionType, action, hideMsg)
     actionFns[actionType](action)
+
+    local actionState = rollState.state[actionType]
+    actionState.currentRoll.set(nil)
+    if actionState.resetSlots then
+        actionState.resetSlots()
+    end
 end
 
 -- [[ Exports ]]
