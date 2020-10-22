@@ -152,6 +152,8 @@ local function confirmAttackAction(attack)
     if attack.hasMercyFromPainProc then
         buffs.addFeatBuff(FEATS.MERCY_FROM_PAIN, attack.mercyFromPainBonusHealing)
     end
+
+    rollState.state.attack.attacks.add(attack)
 end
 
 local function confirmHealAction(heal)

@@ -29,6 +29,7 @@ rolls.initState = function()
         },
 
         [ACTIONS.attack] = {
+            attacks = {},
             threshold = nil,
             numBloodHarvestSlots = 0,
             isAOE = false,
@@ -121,6 +122,17 @@ rolls.state = {
     },
 
     [ACTIONS.attack] = {
+        attacks = {
+            get = function()
+                return state.attack.attacks
+            end,
+            add = function(attack)
+                table.insert(state.attack.attacks, attack)
+            end,
+            clear = function()
+                state.attack.attacks = {}
+            end,
+        },
         threshold = basicGetSet(ACTIONS.attack, "threshold"),
         numBloodHarvestSlots = basicGetSet(ACTIONS.attack, "numBloodHarvestSlots"),
         isAOE = basicGetSet(ACTIONS.attack, "isAOE"),
@@ -217,6 +229,7 @@ local function resetRolls()
         local actionState = rolls.state[action]
         actionState.currentRoll.set(nil)
     end
+    rolls.state.attack.attacks.clear()
 end
 
 local function resetThresholds()

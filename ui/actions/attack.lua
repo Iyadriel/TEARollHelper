@@ -198,6 +198,44 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                         func = consequences.useTrait(TRAITS.VINDICATION),
                     }
                 }
+            },
+            summary = {
+                order = 5,
+                type = "group",
+                name = "Summary",
+                inline = true,
+                hidden = function()
+                    return #rolls.state.attack.attacks.get() < 1
+                end,
+                args = {
+                    totalDamage = {
+                        order = 0,
+                        type = "description",
+                        fontSize = "medium",
+                        name = function()
+                            local msg = ""
+                            local totalDamage = 0
+
+                            for i, attack in ipairs(rolls.state.attack.attacks.get()) do
+                                msg = msg .. COLOURS.NOTE .. ">|r " .. actions.toString(ACTIONS.attack, attack) .. "|n"
+                                totalDamage = totalDamage + attack.dmg
+                            end
+
+                            msg = msg .. COLOURS.NOTE .. "|nTotal:|r " .. totalDamage .. " damage|n "
+
+                            return msg
+                        end,
+                    },
+                    reset = {
+                        order = 1,
+                        type = "execute",
+                        width = 0.75,
+                        name = "Clear",
+                        func = function()
+                            rolls.state.attack.attacks.clear()
+                        end,
+                    }
+                }
             }
         }
     }
