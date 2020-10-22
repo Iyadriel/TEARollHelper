@@ -72,7 +72,7 @@ ui.modules.config.modules.character.modules.stats.getOptions = function(options)
                     end
                     return label
                 end,
-                desc = "Mastery bonus: When you block incoming damage to yourself, or to someone else via Melee save, it counts towards your ”Damage prevented”. When that counter reaches 50 it resets back to zero and you can regain 1 charge to a trait of your choice.",
+                desc = "Mastery bonus: When you block incoming damage to yourself, or to someone else via Melee save, it counts towards your ”Damage prevented”. When that counter reaches 50 it resets back to zero and you can regain 1 fate point, or let someone else regain 1 fate point.",
                 min = STAT_MIN_VALUE,
                 max = STAT_MAX_VALUE,
                 step = 1,
