@@ -31,7 +31,7 @@ local function attackToString(attack)
         end
 
         if attack.hasAdrenalineProc then
-            msg = msg .. COLOURS.FEATS.ADRENALINE .. "|nADRENALINE! You attack the same target a second time.|r "
+            msg = msg .. COLOURS.FEATS.ADRENALINE .. "|nADRENALINE! You attack the same target a second time!|r "
         end
 
         if attack.hasEntropicEmbraceProc then
