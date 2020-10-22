@@ -2,7 +2,7 @@ local _, ns = ...
 
 local rules = ns.rules
 
-local function getAttack(roll, threshold, offence, offenceBuff, baseDmgBuff, damageDoneBuff, enemyId, isAOE, numBloodHarvestSlots, numVindicationCharges)
+local function getAttack(attackIndex, roll, threshold, offence, offenceBuff, baseDmgBuff, damageDoneBuff, enemyId, isAOE, numBloodHarvestSlots, numVindicationCharges)
     local attackValue
     local dmg
     local critType = rules.offence.getCritType()
@@ -20,7 +20,7 @@ local function getAttack(roll, threshold, offence, offenceBuff, baseDmgBuff, dam
 
     dmg = rules.offence.calculateAttackDmg(threshold, attackValue, baseDmgBuff, damageDoneBuff)
 
-    if rules.offence.canProcAdrenaline() then
+    if rules.offence.canProcAdrenaline(attackIndex) then
         hasAdrenalineProc = rules.offence.hasAdrenalineProc(threshold, attackValue)
     end
 

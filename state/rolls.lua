@@ -285,6 +285,7 @@ end)
 -- Turn actions
 
 local function getAttack()
+    local attackIndex = #state.attack.attacks + 1
     local offence = character.getPlayerOffence()
     local offenceBuff = buffsState.buffs.offence.get()
     local baseDmgBuff = buffsState.buffs.baseDamage.get()
@@ -295,7 +296,7 @@ local function getAttack()
     local numBloodHarvestSlots = state.attack.numBloodHarvestSlots
     local numVindicationCharges = characterState.featsAndTraits.numTraitCharges.get(TRAITS.VINDICATION.id)
 
-    return actions.getAttack(state.attack.currentRoll, threshold, offence, offenceBuff, baseDmgBuff, damageDoneBuff, enemyId, isAOE, numBloodHarvestSlots, numVindicationCharges)
+    return actions.getAttack(attackIndex, state.attack.currentRoll, threshold, offence, offenceBuff, baseDmgBuff, damageDoneBuff, enemyId, isAOE, numBloodHarvestSlots, numVindicationCharges)
 end
 
 local function getCC()

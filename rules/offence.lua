@@ -105,8 +105,8 @@ end
 
 -- Feat: Adrenaline
 
-local function canProcAdrenaline()
-    return character.hasFeat(FEATS.ADRENALINE)
+local function canProcAdrenaline(attackIndex)
+    return attackIndex == 1 and character.hasFeat(FEATS.ADRENALINE)
 end
 
 local function hasAdrenalineProc(threshold, attackValue)
