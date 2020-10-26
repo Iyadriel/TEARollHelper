@@ -104,6 +104,8 @@ local function getDefence(roll, defenceType, threshold, damageType, dmgRisk, def
 end
 
 local function getMeleeSave(roll, defenceType, threshold, damageType, dmgRisk, defence, defenceBuff, damageTakenBuff)
+    threshold = threshold + rules.common.SAVE_THRESHOLD_INCREASE
+
     local meleeSaveValue, damageTaken, damagePrevented
     local isBigFail
     local hasCounterForceProc = nil
@@ -139,6 +141,8 @@ local function getMeleeSave(roll, defenceType, threshold, damageType, dmgRisk, d
 end
 
 local function getRangedSave(roll, defenceType, threshold, spirit, buff)
+    threshold = threshold + rules.common.SAVE_THRESHOLD_INCREASE
+
     local saveValue = rules.rangedSave.calculateRangedSaveValue(roll, spirit, buff)
     local canFullyProtect = rules.rangedSave.canFullyProtect(defenceType, threshold, saveValue)
     local damageReduction = nil

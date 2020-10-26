@@ -8,6 +8,9 @@ local weaknesses = ns.resources.weaknesses
 local TRAITS = traits.TRAITS
 local WEAKNESSES = weaknesses.WEAKNESSES
 
+-- threshold for saving is higher than the original defence threshold
+local SAVE_THRESHOLD_INCREASE = 3
+
 local function calculateOffenceStat(offence, buff)
     return offence + buff
 end
@@ -38,6 +41,8 @@ end
 
 -- For use by other rule modules
 rules.common = {
+    SAVE_THRESHOLD_INCREASE = SAVE_THRESHOLD_INCREASE,
+
     calculateOffenceStat = calculateOffenceStat,
     calculateDefenceStat = calculateDefenceStat,
     calculateSpiritStat = calculateSpiritStat,
