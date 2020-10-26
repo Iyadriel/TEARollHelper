@@ -175,7 +175,7 @@ local function lifePulseToString()
 end
 
 local function presenceOfVirtueToString()
-    return COLOURS.HEALING .. "You may heal the target for 5 HP."
+    return COLOURS.HEALING .. "You may heal the target for 5 HP. They are also buffed for +5 on their next player turn."
 end
 
 local function shieldSlamToString(shieldSlam)

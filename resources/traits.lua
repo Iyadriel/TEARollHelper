@@ -154,9 +154,9 @@ traits.TRAITS = {
     PRESENCE_OF_VIRTUE = {
         id = "PRESENCE_OF_VIRTUE",
         name = "Presence of Virtue",
-        desc = "Activate after performing a successful Melee save on a friendly target, you heal the target for 5 HP on Activation. Can be used five times per event.",
+        desc = "Activate after performing a successful Melee save on a friendly target, on activation you heal the target for 5 HP and buff them for +5 for their next player turn. Can be used four times per event.",
         supported = true,
-        numCharges = 5,
+        numCharges = 4,
     },
     SECOND_WIND = {
         id = "SECOND_WIND",
