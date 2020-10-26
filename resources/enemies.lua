@@ -2,7 +2,7 @@ local _, ns = ...
 
 local enemies = ns.resources.enemies
 
-enemies.ENEMY_KEYS = {"OTHER", "DEMON", "ELDRITCH", "MECHANICAL", "UNDEAD", "VOID", "WARLOCK"}
+enemies.ENEMY_KEYS = {"OTHER", "DEMON", "ELDRITCH", "FEL", "MECHANICAL", "UNDEAD", "VOID"}
 
 enemies.ENEMIES = {
     OTHER = {
@@ -20,6 +20,11 @@ enemies.ENEMIES = {
         name = "Eldritch",
         icon = "Interface\\Icons\\ability_rogue_envelopingshadows",
     },
+    FEL = {
+        id = "FEL",
+        name = "Fel",
+        icon = "Interface\\Icons\\spell_fire_felflamering",
+    },
     MECHANICAL = {
         id = "MECHANICAL",
         name = "Mechanical",
@@ -34,10 +39,5 @@ enemies.ENEMIES = {
         id = "VOID",
         name = "Void",
         icon = "Interface\\Icons\\spell_shadow_summonvoidwalker",
-    },
-    WARLOCK = {
-        id = "WARLOCK",
-        name = "Warlock",
-        icon = "Interface\\Icons\\classicon_warlock",
     },
 }

@@ -56,7 +56,7 @@ local DESCRIPTIONS = {
     VICIOUSNESS = "The raw amount needed to achieve a natural 20 on Offense rolls is reduced from 20 to 19 (Becomes 18 with Keen Sense).",
     INNER_PEACE = "Gain an additional +5 to all Utility rolls that rely on the use of your senses, or sheer mental focus.",
     ENTROPIC_EMBRACE = "Gain advantage on all Utility rolls that utilize raw Void Magic, or interact with any Void spellwork not created by yourself.",
-    DEMONBANE = "Gain +2 to Offense and Defense when fighting Demons and Warlocks.",
+    DEMONBANE = "Gain +1 to Offence and Defence when fighting enemies of the following type: Fel, Undead, Void, Eldritch.",
     BRUSH_IT_OFF = "The threshold for resisting a KO is reduced to 12.",
     DUNGEON_DELVER = "Gain +1 to Offense, Defense, and Spirit while indoors or underground.",
     MASTERCRAFT = "Gain advantage on all Utility rolls that rely on the use of Tools or interacts with Mechanical parts.",
@@ -162,12 +162,15 @@ local RACIAL_TRAITS = {
         manualActivation = false,
         buffAgainstEnemies = {
             DEMON = true,
-            WARLOCK = true,
+            FEL = true,
+            ELDRITCH = true,
+            UNDEAD = true,
+            VOID = true,
         },
         buffs = {
             stats = {
-                offence = 2,
-                defence = 2,
+                offence = 1,
+                defence = 1,
             }
         },
     },
