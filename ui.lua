@@ -56,6 +56,7 @@ local function iconString(iconPath, size, crop)
 end
 
 ui.constants = constants
+ui.helpers = {}
 ui.modules = modules
 
 ui.openWindow = openWindow

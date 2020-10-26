@@ -3,6 +3,7 @@ local _, ns = ...
 local constants = ns.constants
 local feats = ns.resources.feats
 
+local ACTIONS = constants.ACTIONS
 local BUFF_TYPES = constants.BUFF_TYPES
 local DAMAGE_TYPES = constants.DAMAGE_TYPES
 local TURN_TYPES = constants.TURN_TYPES
@@ -114,6 +115,9 @@ feats.FEATS = {
             type = BUFF_TYPES.HEALING_DONE,
             remainingTurns = {
                 [TURN_TYPES.PLAYER.id] = 1,
+            },
+            expireAfterFirstAction = {
+                [ACTIONS.healing] = true,
             },
         },
     },

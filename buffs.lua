@@ -38,7 +38,7 @@ local function getRemainingTurns(expireAfterNextTurn)
     return 1
 end
 
-local function addStatBuff(stat, amount, label, expireAfterNextTurn)
+local function addStatBuff(stat, amount, label, expireAfterNextTurn, expireAfterFirstAction)
     local existingBuff = buffsState.state.buffLookup.getPlayerStatBuff(stat)
 
     if existingBuff then
@@ -62,12 +62,13 @@ local function addStatBuff(stat, amount, label, expireAfterNextTurn)
         source = BUFF_SOURCES.PLAYER,
 
         remainingTurns = getRemainingTurns(expireAfterNextTurn),
+        expireAfterFirstAction = expireAfterFirstAction,
     })
 
     bus.fire(EVENTS.STAT_BUFF_ADDED, stat, amount)
 end
 
-local function addBaseDmgBuff(amount, label, expireAfterNextTurn)
+local function addBaseDmgBuff(amount, label, expireAfterNextTurn, expireAfterFirstAction)
     local existingBuff = buffsState.state.buffLookup.getPlayerBaseDmgBuff()
 
     if existingBuff then
@@ -89,12 +90,13 @@ local function addBaseDmgBuff(amount, label, expireAfterNextTurn)
         source = BUFF_SOURCES.PLAYER,
 
         remainingTurns = getRemainingTurns(expireAfterNextTurn),
+        expireAfterFirstAction = expireAfterFirstAction,
     })
 
     bus.fire(EVENTS.BASE_DMG_BUFF_ADDED, amount)
 end
 
-local function addAdvantageBuff(action, label, expireAfterNextTurn)
+local function addAdvantageBuff(action, label, expireAfterNextTurn, expireAfterFirstAction)
     local existingBuff = buffsState.state.buffLookup.getPlayerAdvantageBuff(action)
 
     if existingBuff then
@@ -116,10 +118,11 @@ local function addAdvantageBuff(action, label, expireAfterNextTurn)
         source = BUFF_SOURCES.PLAYER,
 
         remainingTurns = getRemainingTurns(expireAfterNextTurn),
+        expireAfterFirstAction = expireAfterFirstAction,
     })
 end
 
-local function addDisadvantageDebuff(action, label, expireAfterNextTurn)
+local function addDisadvantageDebuff(action, label, expireAfterNextTurn, expireAfterFirstAction)
     local existingBuff = buffsState.state.buffLookup.getPlayerDisadvantageDebuff(action)
 
     if existingBuff then
@@ -141,6 +144,7 @@ local function addDisadvantageDebuff(action, label, expireAfterNextTurn)
         source = BUFF_SOURCES.PLAYER,
 
         remainingTurns = getRemainingTurns(expireAfterNextTurn),
+        expireAfterFirstAction = expireAfterFirstAction,
     })
 end
 
@@ -208,6 +212,9 @@ local function addFeatBuff(feat, providedValue)
         else
             newBuff.remainingTurns = buff.remainingTurns
         end
+    end
+    if buff.expireAfterFirstAction then
+        newBuff.expireAfterFirstAction = buff.expireAfterFirstAction
     end
 
     addBuff(newBuff)
@@ -281,6 +288,9 @@ local function addTraitBuff(trait, providedStats)
         end
         if buff.expireOnCombatEnd then
             newBuff.expireOnCombatEnd = buff.expireOnCombatEnd
+        end
+        if buff.expireAfterFirstAction then
+            newBuff.expireAfterFirstAction = buff.expireAfterFirstAction
         end
 
         addBuff(newBuff)

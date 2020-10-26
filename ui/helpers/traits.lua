@@ -37,6 +37,4 @@ local function traitButton(trait, options)
     }
 end
 
-ui.helpers = {
-    traitButton = traitButton,
-}
+ui.helpers.traitButton = traitButton

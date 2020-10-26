@@ -183,26 +183,15 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                             return actions.toString(ACTIONS.defend, rolls.getDefence())
                         end
                     },
-                    confirm = {
+                    confirm = ui.helpers.confirmActionButton(ACTIONS.defend, rolls.getDefence, {
                         order = 1,
-                        type = "execute",
-                        name = "Confirm",
-                        desc = function()
-                            if character.hasDefenceMastery() then
-                                return "Apply the stated damage to your character's HP, or update your 'Damage prevented' counter."
-                            end
-                            return "Apply the stated damage to your character's HP."
-                        end,
-                        hidden = function()
-                            local defence = rolls.getDefence()
-                            return defence.damageTaken <= 0 and defence.damagePrevented <= 0
-                        end,
+                        hideMsg = true,
                         func = function()
                             local defence = rolls.getDefence()
                             local hideMsg = defence.damageTaken > 0
                             consequences.confirmAction(ACTIONS.defend, rolls.getDefence(), hideMsg)
                         end
-                    }
+                    }),
                 }
             },
             postRoll = {

@@ -40,6 +40,39 @@ local function attackToString(attack)
     return msg
 end
 
+local function CCToString(cc)
+    local msg
+
+    if cc.isCrit then
+        msg = COLOURS.CRITICAL .. "CRITICAL CC!|r You are guaranteed CC of at least 1 turn."
+    else
+        msg = "The result of your CC roll is " .. cc.ccValue .. "."
+    end
+
+    return msg
+end
+
+local function buffToString(buff)
+    local msg
+
+    if buff.amountBuffed > 0 then
+        local amount = tostring(buff.amountBuffed)
+        if buff.isCrit then
+            msg = COLOURS.CRITICAL .. "BIG BUFF!|r " .. COLOURS.BUFF .. "You can buff everyone in line of sight for " .. amount .. "."
+        else
+            msg = COLOURS.BUFF .. "You can buff someone for " .. amount .. "."
+        end
+
+        if buff.usesInspiringPresence then
+            msg = msg .. COLOURS.NOTE .. "|nYour buff is active in both the current player turn and the next enemy turn."
+        end
+    else
+        msg = COLOURS.NOTE .. "You can't buff anyone with this roll."
+    end
+
+    return msg
+end
+
 local function healingToString(healing)
     local msg = ""
 
@@ -109,6 +142,24 @@ local function meleeSaveToString(meleeSave)
     return msg
 end
 
+local function rangedSaveToString(rangedSave)
+    local msg
+
+    if rangedSave.canFullyProtect then
+        msg = COLOURS.ROLES.TANK .. "You can fully protect your ally."
+    elseif rangedSave.damageReduction > 0 then
+        msg = "You can reduce the damage your ally takes by " .. rangedSave.damageReduction .. ".|n" .. COLOURS.NOTE .. "However, you cannot act during the next player turn."
+    else
+        msg = COLOURS.NOTE .. "You can't reduce the damage your ally takes with this roll."
+    end
+
+    return msg
+end
+
+local function utilityToString(utility)
+    return "Your total utility roll: " .. utility.utilityValue
+end
+
 -- Trait actions
 
 local function ascendToString()
@@ -137,9 +188,13 @@ end
 
 local toString = {
     [ACTIONS.attack] = attackToString,
+    [ACTIONS.cc] = CCToString,
+    [ACTIONS.buff] = buffToString,
     [ACTIONS.healing] = healingToString,
     [ACTIONS.defend] = defenceToString,
     [ACTIONS.meleeSave] = meleeSaveToString,
+    [ACTIONS.rangedSave] = rangedSaveToString,
+    [ACTIONS.utility] = utilityToString,
 }
 
 local traitsToString = {

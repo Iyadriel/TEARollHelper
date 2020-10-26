@@ -76,10 +76,12 @@ ui.modules.actions.modules.utility.getOptions = function(options)
                         desc = "The result of your utility roll",
                         fontSize = "medium",
                         name = function()
-                            local roll = state.utility.currentRoll.get()
-                            return "Your total utility roll: " .. actions.getUtility(roll, state.utility.useUtilityTrait.get())
+                            return actions.toString(ACTIONS.utility, rolls.getUtility())
                         end
-                    }
+                    },
+                    confirm = ui.helpers.confirmActionButton(ACTIONS.utility, rolls.getUtility, {
+                        order = 4,
+                    }),
                 }
             },
         }

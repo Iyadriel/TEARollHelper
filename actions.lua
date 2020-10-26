@@ -219,7 +219,11 @@ local function getBuff(roll, spirit, spiritBuff, offence, offenceBuff)
 end
 
 local function getUtility(roll, useUtilityTrait)
-    return rules.utility.calculateUtilityValue(roll, useUtilityTrait)
+    local utilityValue = rules.utility.calculateUtilityValue(roll, useUtilityTrait)
+
+    return {
+        utilityValue = utilityValue
+    }
 end
 
 -- Trait actions

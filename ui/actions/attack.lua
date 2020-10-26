@@ -144,37 +144,8 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                             return actions.toString(ACTIONS.attack, attack)
                         end
                     },
-                    confirm = {
-                        order = 5,
-                        type = "execute",
-                        name = function()
-                            local colour
-                            if character.hasFeat(FEATS.BLOOD_HARVEST) then
-                                colour = COLOURS.FEATS.BLOOD_HARVEST
-                            elseif character.hasFeat(FEATS.MERCY_FROM_PAIN) then
-                                colour = COLOURS.FEATS.MERCY_FROM_PAIN
-                            end
-                            return colour and colour .. "Confirm" or "Confirm"
-                        end,
-                        desc = "Confirm that you perform the stated action, and consume any charges used.",
-                        hidden = function()
-                            local attack = rolls.getAttack()
-                            local shouldShow = false
-
-                            if character.hasFeat(FEATS.ADRENALINE) then
-                                shouldShow = rolls.state.attack.attacks.count() > 0 and attack.dmg > 0
-                            else
-                                shouldShow = attack.numBloodHarvestSlots > 0 or attack.hasMercyFromPainProc
-                            end
-
-                            return not shouldShow
-                        end,
-                        func = function()
-                            consequences.confirmAction(ACTIONS.attack, rolls.getAttack())
-                        end
-                    },
                     attackAgain = {
-                        order = 6,
+                        order = 5,
                         type = "execute",
                         name = COLOURS.FEATS.ADRENALINE .. "Attack again",
                         hidden = function()
@@ -190,6 +161,31 @@ ui.modules.actions.modules.attack.getOptions = function(options)
 
                             turns.setAction(action)
                             turns.roll(rollMode, rollModeMod, false)
+                        end
+                    },
+                    confirm = {
+                        order = 6,
+                        type = "execute",
+                        name = function()
+                            local attack = rolls.getAttack()
+                            local colour
+
+                            if attack.numBloodHarvestSlots > 0 then
+                                colour = COLOURS.FEATS.BLOOD_HARVEST
+                            elseif attack.hasMercyFromPainProc then
+                                colour = COLOURS.FEATS.MERCY_FROM_PAIN
+                            end
+                            return colour and colour .. "Confirm" or "Confirm"
+                        end,
+                        desc = "Confirm that you perform the stated action, consuming any charges and buffs used.",
+                        hidden = function()
+                            local attack = rolls.getAttack()
+                            local shouldShow = attack.dmg > 0
+
+                            return not shouldShow
+                        end,
+                        func = function()
+                            consequences.confirmAction(ACTIONS.attack, rolls.getAttack())
                         end
                     },
                 }

@@ -2,6 +2,7 @@ local _, ns = ...
 
 local COLOURS = TEARollHelper.COLOURS
 
+local actions = ns.actions
 local buffsState = ns.state.buffs.state
 local character = ns.character
 local constants = ns.constants
@@ -71,18 +72,12 @@ ui.modules.actions.modules.cc.getOptions = function(options)
                         type = "description",
                         fontSize = "medium",
                         name = function()
-                            local cc = rolls.getCC()
-                            local msg
-
-                            if cc.isCrit then
-                                msg = COLOURS.CRITICAL .. "CRITICAL CC!|r You are guaranteed CC of at least 1 turn."
-                            else
-                                msg = "The result of your CC roll is " .. cc.ccValue .. "."
-                            end
-
-                            return msg
+                            return actions.toString(ACTIONS.cc, rolls.getCC())
                         end
-                    }
+                    },
+                    confirm = ui.helpers.confirmActionButton(ACTIONS.cc, rolls.getCC, {
+                        order = 1,
+                     }),
                 }
             }
         }

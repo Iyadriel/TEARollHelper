@@ -353,6 +353,10 @@ local function getRangedSave()
     return actions.getRangedSave(state.rangedSave.currentRoll, state.rangedSave.defenceType, state.rangedSave.threshold, spirit, buff)
 end
 
+local function getUtility()
+    return actions.getUtility(state.utility.currentRoll, state.utility.useUtilityTrait)
+end
+
 -- Trait actions
 
 local function getShieldSlam()
@@ -382,6 +386,7 @@ rolls.getBuff = getBuff
 rolls.getDefence = getDefence
 rolls.getMeleeSave = getMeleeSave
 rolls.getRangedSave = getRangedSave
+rolls.getUtility = getUtility
 
 rolls.traits = {
     getShieldSlam = getShieldSlam,

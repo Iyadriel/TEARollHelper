@@ -179,8 +179,14 @@ ui.modules.buffs.getOptions = function(options)
                                     else
                                         msg = msg .. COLOURS.NOTE .. "|n|nRemaining turns: " .. buff.remainingTurns
                                     end
+
+                                    if buff.expireAfterFirstAction then
+                                        msg = msg .. COLOURS.NOTE .. "|nLasts for 1 action"
+                                    end
                                 elseif buff.expireOnCombatEnd then
                                     msg = msg .. COLOURS.NOTE .. "|n|nLasts until end of combat"
+                                elseif buff.expireAfterFirstAction then -- duplicate, but this time with an extra newline!
+                                    msg = msg .. COLOURS.NOTE .. "|n|nLasts for 1 action"
                                 end
 
                                 --msg = msg .. COLOURS.NOTE .. "|n|nSource: " .. buff.source
@@ -296,8 +302,18 @@ ui.modules.buffs.getOptions = function(options)
                             buffsState.newPlayerBuff.expireAfterNextTurn.set(value)
                         end,
                     },
-                    add = {
+                    expireAfterFirstAction = {
                         order = 6,
+                        type = "toggle",
+                        name = "Expire after first action",
+                        desc = "This will remove the buff when you confirm any action in your turn. This is how most buffs work, so leave this enabled if you're not sure.",
+                        get = buffsState.newPlayerBuff.expireAfterFirstAction.get,
+                        set = function(info, value)
+                            buffsState.newPlayerBuff.expireAfterFirstAction.set(value)
+                        end,
+                    },
+                    add = {
+                        order = 7,
                         type = "execute",
                         name = "Add",
                         func = function()
@@ -305,19 +321,21 @@ ui.modules.buffs.getOptions = function(options)
                             local buffType = newBuff.type.get()
                             local label = newBuff.label.get()
                             local expireAfterNextTurn = newBuff.expireAfterNextTurn.get()
+                            local expireAfterFirstAction = newBuff.expireAfterFirstAction.get()
+
                             if buffType == BUFF_TYPES.STAT then
                                 local stat = newBuff.stat.get()
                                 local amount = newBuff.amount.get()
-                                buffs.addStatBuff(stat, amount, label, expireAfterNextTurn)
+                                buffs.addStatBuff(stat, amount, label, expireAfterNextTurn, expireAfterFirstAction)
                             elseif buffType == BUFF_TYPES.BASE_DMG then
                                 local amount = newBuff.amount.get()
-                                buffs.addBaseDmgBuff(amount, label, expireAfterNextTurn)
+                                buffs.addBaseDmgBuff(amount, label, expireAfterNextTurn, expireAfterFirstAction)
                             elseif buffType == BUFF_TYPES.ADVANTAGE then
                                 local action = newBuff.action.get()
-                                buffs.addAdvantageBuff(action, label, expireAfterNextTurn)
+                                buffs.addAdvantageBuff(action, label, expireAfterNextTurn, expireAfterFirstAction)
                             elseif buffType == BUFF_TYPES.DISADVANTAGE then
                                 local action = newBuff.action.get()
-                                buffs.addDisadvantageDebuff(action, label, expireAfterNextTurn)
+                                buffs.addDisadvantageDebuff(action, label, expireAfterNextTurn, expireAfterFirstAction)
                             end
                         end
                     },

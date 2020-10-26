@@ -1,8 +1,6 @@
 local _, ns = ...
 
 local actions = ns.actions
-local character = ns.character
-local consequences = ns.consequences
 local constants = ns.constants
 local rolls = ns.state.rolls
 local rules = ns.rules
@@ -11,7 +9,6 @@ local ui = ns.ui
 
 local ACTIONS = constants.ACTIONS
 local ACTION_LABELS = constants.ACTION_LABELS
-local DEFENCE_TYPES = constants.DEFENCE_TYPES
 local TRAITS = traits.TRAITS
 
 --[[ local options = {
@@ -65,24 +62,9 @@ ui.modules.actions.modules.meleeSave.getOptions = function(options)
                             return actions.toString(ACTIONS.meleeSave, rolls.getMeleeSave())
                         end
                     },
-                    confirm = {
+                    confirm = ui.helpers.confirmActionButton(ACTIONS.meleeSave, rolls.getMeleeSave, {
                         order = 1,
-                        type = "execute",
-                        name = "Confirm",
-                        desc = function()
-                            if character.hasDefenceMastery() then
-                                return "Apply the stated damage to your character's HP, or update your 'Damage prevented' counter."
-                            end
-                            return "Apply the stated damage to your character's HP."
-                        end,
-                        hidden = function()
-                            local meleeSave = rolls.getMeleeSave()
-                            return meleeSave.damageTaken <= 0 and meleeSave.damagePrevented <= 0
-                        end,
-                        func = function()
-                            consequences.confirmAction(ACTIONS.meleeSave, rolls.getMeleeSave())
-                        end
-                    }
+                    }),
                 }
             },
             postRoll = {

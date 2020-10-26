@@ -177,13 +177,19 @@ bus.addListener(EVENTS.COMBAT_OVER, function()
     end
 end)
 
-bus.addListener(EVENTS.ROLL_CHANGED, function()
+bus.addListener(EVENTS.ACTION_PERFORMED, function(actionType)
     local activeBuffs = buffsState.state.activeBuffs.get()
 
     for i = #activeBuffs, 1, -1 do
         local buff = activeBuffs[i]
-        if buff.expireAfterRolling then
-            expireBuff(i, buff)
+        if buff.expireAfterFirstAction then
+            if type(buff.expireAfterFirstAction) == "table" then
+                if buff.expireAfterFirstAction[actionType] then
+                    expireBuff(i, buff)
+                end
+            else
+                expireBuff(i, buff)
+            end
         end
     end
 end)
