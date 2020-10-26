@@ -33,10 +33,6 @@ local function attackToString(attack)
         if attack.hasAdrenalineProc then
             msg = msg .. COLOURS.FEATS.ADRENALINE .. "|nADRENALINE! You attack the same target a second time!|r "
         end
-
-        if attack.hasEntropicEmbraceProc then
-            msg = msg .. COLOURS.DAMAGE_TYPES.SHADOW .. "|nEntropic Embrace: You deal " .. attack.entropicEmbraceDmg .. " extra Shadow damage!"
-        end
     else
         msg = msg .. COLOURS.NOTE .. "You can't deal any damage with this roll."
     end

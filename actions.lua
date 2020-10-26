@@ -10,8 +10,6 @@ local function getAttack(attackIndex, roll, threshold, offence, offenceBuff, bas
     local hasAdrenalineProc = nil
     local hasMercyFromPainProc = nil
     local mercyFromPainBonusHealing = 0
-    local hasEntropicEmbraceProc = nil
-    local entropicEmbraceDmg = 0
     local shatterSoulEnabled = false
     local hasVindicationProc = nil
     local vindicationHealing = 0
@@ -28,17 +26,8 @@ local function getAttack(attackIndex, roll, threshold, offence, offenceBuff, bas
         dmg = dmg + rules.offence.calculateBloodHarvestBonus(numBloodHarvestSlots)
     end
 
-    if rules.offence.canProcEntropicEmbrace() then
-        hasEntropicEmbraceProc = rules.offence.hasEntropicEmbraceProc(roll, threshold)
-
-        if hasEntropicEmbraceProc then
-            entropicEmbraceDmg = rules.offence.getEntropicEmbraceDmg()
-        end
-    end
-
     if isCrit and critType == rules.offence.CRIT_TYPES.DAMAGE then
         dmg = rules.offence.applyCritModifier(dmg)
-        entropicEmbraceDmg = rules.offence.applyCritModifier(entropicEmbraceDmg)
     end
 
     if rules.offence.canUseShatterSoul() then
@@ -46,7 +35,7 @@ local function getAttack(attackIndex, roll, threshold, offence, offenceBuff, bas
     end
 
     if rules.offence.canProcMercyFromPain() then
-        hasMercyFromPainProc = rules.offence.hasMercyFromPainProc(dmg + entropicEmbraceDmg)
+        hasMercyFromPainProc = rules.offence.hasMercyFromPainProc(dmg)
     end
 
     if hasMercyFromPainProc then
@@ -69,8 +58,6 @@ local function getAttack(attackIndex, roll, threshold, offence, offenceBuff, bas
         numBloodHarvestSlots = numBloodHarvestSlots,
         hasMercyFromPainProc = hasMercyFromPainProc,
         mercyFromPainBonusHealing = mercyFromPainBonusHealing,
-        hasEntropicEmbraceProc = hasEntropicEmbraceProc,
-        entropicEmbraceDmg = entropicEmbraceDmg,
         shatterSoulEnabled = shatterSoulEnabled,
         hasVindicationProc = hasVindicationProc,
         vindicationHealing = vindicationHealing,

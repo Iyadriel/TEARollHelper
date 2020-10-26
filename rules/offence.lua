@@ -168,20 +168,6 @@ local function calculateVindicationHealing(dmgDealt)
     return ceil(dmgDealt / 2)
 end
 
--- Racial Trait: Entropic Embrace
-
-local function canProcEntropicEmbrace()
-    return character.hasRacialTrait(RACIAL_TRAITS.ENTROPIC_EMBRACE)
-end
-
-local function hasEntropicEmbraceProc(roll, threshold)
-    return roll == threshold
-end
-
-local function getEntropicEmbraceDmg()
-    return 3
-end
-
 -- Rolling
 
 local function shouldShowPreRollUI()
@@ -221,10 +207,6 @@ rules.offence = {
     canProcVindication = canProcVindication,
     hasVindicationProc = hasVindicationProc,
     calculateVindicationHealing = calculateVindicationHealing,
-
-    canProcEntropicEmbrace = canProcEntropicEmbrace,
-    hasEntropicEmbraceProc = hasEntropicEmbraceProc,
-    getEntropicEmbraceDmg = getEntropicEmbraceDmg,
 
     shouldShowPreRollUI = shouldShowPreRollUI,
     shouldShowPostRollUI = shouldShowPostRollUI,
