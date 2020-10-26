@@ -93,16 +93,16 @@ weaknesses.WEAKNESSES = {
     TIMID = {
         id = "TIMID",
         name = "Timid",
-        desc = "While in melee range of an enemy, your Offence, Defense, and Spirit stats are reduced by -3.",
+        desc = "While in melee range of an enemy, your Offence, Defense, and Spirit stats are reduced by -2.",
         icon = "Interface\\Icons\\spell_misc_emotionafraid",
         supported = true,
         distanceFromEnemy = "melee",
         debuff = {
             type = BUFF_TYPES.STAT,
             stats = {
-                offence = -3,
-                defence = -3,
-                spirit = -3
+                offence = -2,
+                defence = -2,
+                spirit = -2
             },
             canCancel = false,
         }
