@@ -8,6 +8,7 @@ local characterState = ns.state.character.state
 local constants = ns.constants
 local environment = ns.state.environment
 local rolls = ns.state.rolls
+local rules = ns.rules
 local traits = ns.resources.traits
 
 local ACTIONS = constants.ACTIONS
@@ -125,6 +126,9 @@ rolls.state = {
         attacks = {
             get = function()
                 return state.attack.attacks
+            end,
+            count = function()
+                return #state.attack.attacks
             end,
             add = function(attack)
                 table.insert(state.attack.attacks, attack)
@@ -285,7 +289,7 @@ end)
 -- Turn actions
 
 local function getAttack()
-    local attackIndex = #state.attack.attacks + 1
+    local attackIndex = rolls.state.attack.attacks.count() + 1
     local offence = character.getPlayerOffence()
     local offenceBuff = buffsState.buffs.offence.get()
     local baseDmgBuff = buffsState.buffs.baseDamage.get()
@@ -359,6 +363,18 @@ local function getShieldSlam()
     return actions.traits.getShieldSlam(baseDmgBuff, defence, defenceBuff)
 end
 
+-- Rolls
+
+local function getRollModeModifier(action, turnTypeId)
+    local advantageBuff = buffsState.buffLookup.getAdvantageBuff(action, turnTypeId)
+    local disadvantageDebuff = buffsState.buffLookup.getDisadvantageDebuff(action, turnTypeId)
+    local enemyId = environment.state.enemyId.get()
+
+    local modifier = rules.rolls.getRollModeModifier(action, advantageBuff, disadvantageDebuff, enemyId)
+
+    return modifier
+end
+
 rolls.getAttack = getAttack
 rolls.getCC = getCC
 rolls.getHealing = getHealing
@@ -366,6 +382,9 @@ rolls.getBuff = getBuff
 rolls.getDefence = getDefence
 rolls.getMeleeSave = getMeleeSave
 rolls.getRangedSave = getRangedSave
+
 rolls.traits = {
     getShieldSlam = getShieldSlam,
 }
+
+rolls.getRollModeModifier = getRollModeModifier

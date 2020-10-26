@@ -8,6 +8,7 @@ local weaknesses = ns.resources.weaknesses
 
 local ACTIONS = constants.ACTIONS
 local FEATS = feats.FEATS
+local ROLL_MODES = constants.ROLL_MODES
 local TURN_TYPES = constants.TURN_TYPES
 local WEAKNESSES = weaknesses.WEAKNESSES
 
@@ -63,6 +64,8 @@ local function getRollModeModifier(action, advantageBuff, disadvantageDebuff, en
     elseif action == ACTIONS.rangedSave then
         modifier = modifier + rules.rangedSave.getRollModeModifier()
     end
+
+    modifier = max(ROLL_MODES.DISADVANTAGE, min(ROLL_MODES.ADVANTAGE, modifier))
 
     return modifier
 end

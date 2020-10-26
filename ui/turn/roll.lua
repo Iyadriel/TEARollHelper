@@ -4,7 +4,6 @@ local buffsState = ns.state.buffs
 local characterState = ns.state.character
 local consequences = ns.consequences
 local constants = ns.constants
-local environment = ns.state.environment
 local rollState = ns.state.rolls
 local rules = ns.rules
 local settings = ns.settings
@@ -67,14 +66,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
         local action = options.action
         local turnTypeId = turnState.state.type.get()
 
-        local buffLookup = buffsState.state.buffLookup
-        local advantageBuff = buffLookup.getAdvantageBuff(action, turnTypeId)
-        local disadvantageDebuff = buffLookup.getDisadvantageDebuff(action, turnTypeId)
-        local enemyId = environment.state.enemyId.get()
-
-        local modifier = rules.rolls.getRollModeModifier(action, advantageBuff, disadvantageDebuff, enemyId)
-        modifier = max(ROLL_MODES.DISADVANTAGE, min(ROLL_MODES.ADVANTAGE, modifier))
-        return modifier
+        return rollState.getRollModeModifier(action, turnTypeId)
     end
 
     local function performRoll(isReroll)

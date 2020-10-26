@@ -12,6 +12,7 @@ local feats = ns.resources.feats
 local rolls = ns.state.rolls
 local rules = ns.rules
 local traits = ns.resources.traits
+local turns = ns.turns
 local ui = ns.ui
 local utils = ns.utils
 
@@ -19,6 +20,7 @@ local ACTIONS = constants.ACTIONS
 local ACTION_LABELS = constants.ACTION_LABELS
 local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
+local TURN_TYPES = constants.TURN_TYPES
 
 local state = rolls.state
 
@@ -157,10 +159,37 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                         desc = "Confirm that you perform the stated action, and consume any charges used.",
                         hidden = function()
                             local attack = rolls.getAttack()
-                            return not (attack.numBloodHarvestSlots > 0 or attack.hasMercyFromPainProc)
+                            local shouldShow = false
+
+                            if character.hasFeat(FEATS.ADRENALINE) then
+                                shouldShow = rolls.state.attack.attacks.count() > 0 and attack.dmg > 0
+                            else
+                                shouldShow = attack.numBloodHarvestSlots > 0 or attack.hasMercyFromPainProc
+                            end
+
+                            return not shouldShow
                         end,
                         func = function()
                             consequences.confirmAction(ACTIONS.attack, rolls.getAttack())
+                        end
+                    },
+                    attackAgain = {
+                        order = 6,
+                        type = "execute",
+                        name = COLOURS.FEATS.ADRENALINE .. "Attack again",
+                        hidden = function()
+                            return not rolls.getAttack().hasAdrenalineProc
+                        end,
+                        func = function()
+                            consequences.confirmAction(ACTIONS.attack, rolls.getAttack())
+
+                            local action = ACTIONS.attack
+
+                            local rollMode = state[action].rollMode.get()
+                            local rollModeMod = rolls.getRollModeModifier(action, TURN_TYPES.PLAYER.id)
+
+                            turns.setAction(action)
+                            turns.roll(rollMode, rollModeMod, false)
                         end
                     },
                 }
@@ -205,7 +234,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                 name = "Summary",
                 inline = true,
                 hidden = function()
-                    return #rolls.state.attack.attacks.get() < 1
+                    return rolls.state.attack.attacks.count() < 1
                 end,
                 args = {
                     totalDamage = {
