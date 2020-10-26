@@ -213,6 +213,9 @@ local function addFeatBuff(feat, providedValue)
             newBuff.remainingTurns = buff.remainingTurns
         end
     end
+    if buff.expireOnCombatEnd then
+        newBuff.expireOnCombatEnd = buff.expireOnCombatEnd
+    end
     if buff.expireAfterFirstAction then
         newBuff.expireAfterFirstAction = buff.expireAfterFirstAction
     end

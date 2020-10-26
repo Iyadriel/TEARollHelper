@@ -179,14 +179,13 @@ ui.modules.buffs.getOptions = function(options)
                                     else
                                         msg = msg .. COLOURS.NOTE .. "|n|nRemaining turns: " .. buff.remainingTurns
                                     end
+                                end
 
-                                    if buff.expireAfterFirstAction then
-                                        msg = msg .. COLOURS.NOTE .. "|nLasts for 1 action"
-                                    end
-                                elseif buff.expireOnCombatEnd then
-                                    msg = msg .. COLOURS.NOTE .. "|n|nLasts until end of combat"
-                                elseif buff.expireAfterFirstAction then -- duplicate, but this time with an extra newline!
+                                if buff.expireAfterFirstAction then
                                     msg = msg .. COLOURS.NOTE .. "|n|nLasts for 1 action"
+                                end
+                                if buff.expireOnCombatEnd then
+                                    msg = msg .. COLOURS.NOTE .. "|n|nLasts until end of combat"
                                 end
 
                                 --msg = msg .. COLOURS.NOTE .. "|n|nSource: " .. buff.source

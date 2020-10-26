@@ -113,12 +113,10 @@ feats.FEATS = {
         supported = true,
         buff = {
             type = BUFF_TYPES.HEALING_DONE,
-            remainingTurns = {
-                [TURN_TYPES.PLAYER.id] = 1,
-            },
             expireAfterFirstAction = {
                 [ACTIONS.healing] = true,
             },
+            expireOnCombatEnd = true,
         },
     },
     MONSTER_HUNTER = {
