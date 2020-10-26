@@ -87,7 +87,7 @@ weaknesses.WEAKNESSES = {
     TEMPERED_BENEVOLENCE = {
         id = "TEMPERED_BENEVOLENCE",
         name = "Tempered Benevolence",
-        desc = "You no longer gain Greater Heal Slots from your Spirit stat. Requires at least 4/6 in Spirit in order to pick. Can not be picked together with Paragon.",
+        desc = "You gain a Greater Heal slot for every 3 Spirit, rather than every 2 Spirit. You don't gain an extra slot from having +6 Spirit. Requires at least 4/6 in Spirit in order to pick. Can not be picked together with Paragon.",
         supported = true,
     },
     TIMID = {

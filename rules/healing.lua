@@ -14,8 +14,6 @@ local TRAITS = traits.TRAITS
 local TURN_TYPES = constants.TURN_TYPES
 local WEAKNESSES = weaknesses.WEAKNESSES
 
-local NUM_SPIRIT_PER_GREATER_HEAL_SLOT = 2
-
 local function canHeal()
     return not character.hasWeakness(WEAKNESSES.BRUTE)
 end
@@ -58,8 +56,8 @@ local function applyCritModifier(amountHealed)
     return amountHealed
 end
 
-local function gainsGreaterHealSlotsFromSpirit()
-    return not character.hasWeakness(WEAKNESSES.TEMPERED_BENEVOLENCE)
+local function getNumSpiritPerGreaterHealSlot()
+    return character.hasWeakness(WEAKNESSES.TEMPERED_BENEVOLENCE) and 3 or 2
 end
 
 local function getMaxGreaterHealSlots()
@@ -67,15 +65,11 @@ local function getMaxGreaterHealSlots()
         return 0
     end
 
-    local numSlots = 0
+    local spirit = character.getPlayerSpirit()
+    local numSlots = max(0, floor(spirit / getNumSpiritPerGreaterHealSlot()))
 
-    if gainsGreaterHealSlotsFromSpirit() then
-        local spirit = character.getPlayerSpirit()
-        numSlots = max(0, floor(spirit / NUM_SPIRIT_PER_GREATER_HEAL_SLOT))
-
-        if character.hasSpiritMastery() then
-            numSlots = numSlots + 1
-        end
+    if character.hasSpiritMastery() and not character.hasWeakness(WEAKNESSES.TEMPERED_BENEVOLENCE) then
+        numSlots = numSlots + 1
     end
 
     if character.hasFeat(FEATS.MENDER) then
@@ -118,7 +112,7 @@ local function applyOutOfCombatBaseAmountBonus(amountHealed)
 end
 
 local function getOutOfCombatBonus()
-    if character.getPlayerSpirit() >= NUM_SPIRIT_PER_GREATER_HEAL_SLOT then
+    if character.getPlayerSpirit() >= getNumSpiritPerGreaterHealSlot() then
         return 3
     end
     return 0
