@@ -30,6 +30,7 @@ local BUFF_SOURCES = {
     TRAIT = "Trait",
     WEAKNESS = "Weakness",
     RACIAL_TRAIT = "Racial Trait",
+    CRITICAL_WOUND = "Critical Wound",
 }
 
 local BUFF_TYPES = {

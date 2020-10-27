@@ -6,6 +6,7 @@ local buffs = ns.buffs
 local character = ns.character
 local characterState = ns.state.character
 local constants = ns.constants
+local criticalWounds = ns.resources.criticalWounds
 local traits = ns.resources.traits
 local ui = ns.ui
 local weaknesses = ns.resources.weaknesses
@@ -155,6 +156,33 @@ ui.modules.turn.modules.effects.getOptions = function(options)
                         },
                     },
                 }
+            },
+            criticalWounds = {
+                order = 2,
+                type = "group",
+                name = "Critical wounds",
+                inline = true,
+                args = (function()
+                    local toggles = {}
+
+                    for index, wound in ipairs(criticalWounds.WOUNDS) do
+                        toggles["toggle_" .. index] = {
+                            order = index,
+                            type = "toggle",
+                            name = COLOURS.NOTE .. index.. ": |r" .. wound.name,
+                            desc = wound.desc,
+                            width = "full",
+                            get = function()
+                                return wound.isActive
+                            end,
+                            set = function()
+                                wound:Toggle()
+                            end,
+                        }
+                    end
+
+                    return toggles
+                end)()
             }
         }
     }
