@@ -56,7 +56,7 @@ local wounds = {
         buff = {
             types = { [BUFF_TYPES.DAMAGE_OVER_TIME] = true },
             turnTypeID = TURN_TYPES.PLAYER.id,
-            ignoreDmgReduction = true,
+            canBeMitigated = false,
             damagePerTick = 3,
         },
     },

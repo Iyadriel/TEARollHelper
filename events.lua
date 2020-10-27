@@ -115,7 +115,7 @@ local function expireBuff(index, buff)
 end
 
 local function applyDamageTick(buff)
-    characterState.state.health.damage(buff.damagePerTick, buff.ignoreDmgReduction)
+    characterState.state.health.damage(buff.damagePerTick, { canBeMitigated = buff.canBeMitigated })
 end
 
 local function applyHealTick(buff)

@@ -104,16 +104,23 @@ characterState.state = {
                 bus.fire(EVENTS.CHARACTER_HEALTH, state.health)
             end
         end,
-        damage = function(dmgTaken, ignoreDamageTakenBuffs)
+        damage = function(dmgTaken, options)
+            options = options or {}
+            if options.ignoreDamageTakenBuffs == nil then
+                options.ignoreDamageTakenBuffs = false
+            end
+            if options.canBeMitigated == nil then
+                options.canBeMitigated = true
+            end
+
             local damageTakenBuff = 0
 
             -- defence and melee save pre-apply these so they can display correct action results
-            -- also used for damage that cannot be prevented
-            if not ignoreDamageTakenBuffs then
+            if not options.ignoreDamageTakenBuffs then
                 damageTakenBuff = buffsState.state.buffs.damageTaken.get()
             end
 
-            local damage = rules.effects.calculateDamageTaken(dmgTaken, state.health, damageTakenBuff)
+            local damage = rules.effects.calculateDamageTaken(dmgTaken, state.health, damageTakenBuff, options.canBeMitigated)
             characterState.state.health.set(state.health - damage.damageTaken)
             bus.fire(EVENTS.DAMAGE_TAKEN, damage.incomingDamage, damage.damageTaken, damage.overkill)
         end,

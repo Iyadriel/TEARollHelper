@@ -9,8 +9,10 @@ local weaknesses = ns.resources.weaknesses
 local INCOMING_HEAL_SOURCES = constants.INCOMING_HEAL_SOURCES
 local WEAKNESSES = weaknesses.WEAKNESSES
 
-local function calculateDamageTaken(incomingDamage, currentHealth, damageTakenBuff)
-    incomingDamage = incomingDamage + damageTakenBuff
+local function calculateDamageTaken(incomingDamage, currentHealth, damageTakenBuff, canBeMitigated)
+    if damageTakenBuff > 0 or canBeMitigated then
+        incomingDamage = incomingDamage + damageTakenBuff
+    end
 
     if character.hasWeakness(WEAKNESSES.WOE_UPON_THE_AFFLICTED) then
         local enemyId = environment.state.enemyId.get()
