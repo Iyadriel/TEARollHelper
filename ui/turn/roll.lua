@@ -70,16 +70,8 @@ ui.modules.turn.modules.roll.getOptions = function(options)
     end
 
     local function performRoll(isReroll)
-        local rollMode
-        local rollModeMod
-
-        if isReroll then
-            rollMode = ROLL_MODES.NORMAL
-            rollModeMod = 0
-        else
-            rollMode = state[options.action].rollMode.get()
-            rollModeMod = getRollModeModifier()
-        end
+        local rollMode = state[options.action].rollMode.get()
+        local rollModeMod = getRollModeModifier()
 
         turns.setAction(options.action)
         turns.roll(rollMode, rollModeMod, isReroll)
