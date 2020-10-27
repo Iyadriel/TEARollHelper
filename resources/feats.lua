@@ -8,7 +8,7 @@ local BUFF_TYPES = constants.BUFF_TYPES
 local DAMAGE_TYPES = constants.DAMAGE_TYPES
 local TURN_TYPES = constants.TURN_TYPES
 
-feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "COUNTER_FORCE", "ETERNAL_SACRIFICE", "EXPANSIVE_ARSENAL", "FOREIGN_DISCIPLE", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "LIVING_BARRICADE", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "MONSTER_HUNTER", "ONSLAUGHT", "PARAGON", "PHALANX", "PROFESSIONAL", "REAPER", "SHEPHERD_OF_THE_WICKED", "WARDER"}
+feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "COUNTER_FORCE", "ETERNAL_SACRIFICE", "EXPANSIVE_ARSENAL", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "LIVING_BARRICADE", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "MONSTER_HUNTER", "ONSLAUGHT", "PARAGON", "PHALANX", "PROFESSIONAL", "REAPER", "SHEPHERD_OF_THE_WICKED", "WARDER"}
 
 feats.FEATS = {
     FEATLESS = {
@@ -48,12 +48,12 @@ feats.FEATS = {
         name = "Expansive Arsenal",
         desc = "If you pick a second Weakness, you may pick a third Trait.",
     },
-    FOREIGN_DISCIPLE = {
+--[[     FOREIGN_DISCIPLE = {
         id = "FOREIGN_DISCIPLE",
         name = "Foreign Disciple",
         desc = "You can now pick a second racial trait in addition to your first. Cannot be picked with Outcast.",
         supported = false
-    },
+    }, ]]
     INSPIRING_PRESENCE = {
         id = "INSPIRING_PRESENCE",
         name = "Inspiring Presence",
