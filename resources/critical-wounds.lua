@@ -74,6 +74,17 @@ local wounds = {
         desc = "You can no longer perform Saves or Buff Rolls.",
         icon = "Interface\\Icons\\spell_holy_painsupression",
     },
+    DEEP_BRUISING = {
+        key = "DEEP_BRUISING",
+        index = 7,
+        name = "Deep Bruising",
+        desc = "You take 5 more damage from all sources except for Internal Bleeding.",
+        icon = "Interface\\Icons\\ability_warrior_trauma",
+        buff = {
+            types = { [BUFF_TYPES.DAMAGE_TAKEN] = true },
+            amount = 5,
+        },
+    },
 }
 
 criticalWounds.WOUNDS = {}

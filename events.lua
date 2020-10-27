@@ -6,8 +6,10 @@ local bus = ns.bus
 local character = ns.character
 local characterState = ns.state.character
 local constants = ns.constants
-local traits = ns.resources.traits
 local turnState = ns.state.turn
+
+local criticalWounds = ns.resources.criticalWounds
+local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
 
 local BUFF_TYPES = constants.BUFF_TYPES
@@ -115,7 +117,16 @@ local function expireBuff(index, buff)
 end
 
 local function applyDamageTick(buff)
-    characterState.state.health.damage(buff.damagePerTick, { canBeMitigated = buff.canBeMitigated })
+    local damagePerTick = buff.damagePerTick
+
+    -- Hack for "You take 5 more damage from all sources except for Internal Bleeding"
+    local criticalWoundBuffId = criticalWounds.WOUNDS.INTERNAL_BLEEDING:GetBuffID()
+    local deepBruising = criticalWounds.WOUNDS.DEEP_BRUISING
+    if buff.id == criticalWoundBuffId and buffsState.state.buffLookup.getCriticalWoundDebuff(deepBruising) then
+        damagePerTick = damagePerTick - deepBruising.buff.amount
+    end
+
+    characterState.state.health.damage(damagePerTick, { canBeMitigated = buff.canBeMitigated })
 end
 
 local function applyHealTick(buff)
