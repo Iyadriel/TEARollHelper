@@ -85,6 +85,21 @@ local wounds = {
             amount = 5,
         },
     },
+    RUPTURED_ORGANS = {
+        key = "RUPTURED_ORGANS",
+        index = 8,
+        name = "Ruptured Organs",
+        desc = "Your Offence, Defence, and Spirit stats are reduced by 3.",
+        icon = "Interface\\Icons\\ability_rogue_rupture",
+        buff = {
+            types = { [BUFF_TYPES.STAT] = true },
+            stats = {
+                offence = -3,
+                defence = -3,
+                spirit = -3,
+            },
+        },
+    },
 }
 
 criticalWounds.WOUNDS = {}

@@ -49,6 +49,7 @@ function CriticalWound:Apply()
             amount = self.buff.amount,
             damagePerTick = self.buff.damagePerTick,
             canBeMitigated = self.buff.canBeMitigated,
+            stats = self.buff.stats,
             turnTypeID = self.buff.turnTypeID,
         }
 
