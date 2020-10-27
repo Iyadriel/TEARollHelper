@@ -71,7 +71,7 @@ local wounds = {
         key = "CRIPPLING_PAIN",
         index = 6,
         name = "Crippling Pain",
-        desc = "You can no longer perform Saves or Buff Rolls.",
+        desc = "You can no longer perform Saves or Buff rolls.",
         icon = "Interface\\Icons\\spell_holy_painsupression",
     },
     DEEP_BRUISING = {
