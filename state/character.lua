@@ -43,6 +43,8 @@ characterState.initState = function()
             excess = 0,
         },
 
+        criticalWounds = {},
+
         featsAndTraits = {
             numBloodHarvestSlots = rules.offence.getMaxBloodHarvestSlots(),
             numTraitCharges = numTraitCharges,
@@ -209,6 +211,17 @@ characterState.state = {
             end,
         },
         excess = basicGetSet("healing", "excess"),
+    },
+    criticalWounds = {
+        has = function(criticalWound)
+            return state.criticalWounds[criticalWound.key]
+        end,
+        apply = function(criticalWound)
+            state.criticalWounds[criticalWound.key] = true
+        end,
+        remove = function(criticalWound)
+            state.criticalWounds[criticalWound.key] = nil
+        end,
     },
     featsAndTraits = {
         numBloodHarvestSlots = {

@@ -10,7 +10,9 @@ local BUFF_TYPES = constants.BUFF_TYPES
 local TURN_TYPES = constants.TURN_TYPES
 
 local wounds = {
-    [1] = {
+    INJURED_ARM = {
+        key = "INJURED_ARM",
+        index = 1,
         name = "Injured Arm",
         desc = "You have disadvantage on Attack rolls.",
         icon = "Interface\\Icons\\ability_warrior_bloodfrenzy",
@@ -21,7 +23,9 @@ local wounds = {
             },
         },
     },
-    [2] = {
+    INJURED_LEG = {
+        key = "INJURED_LEG",
+        index = 2,
         name = "Injured Leg",
         desc = "You have disadvantage on Defence rolls.",
         icon = "Interface\\Icons\\ability_monk_legsweep",
@@ -32,7 +36,9 @@ local wounds = {
             },
         },
     },
-    [3] = {
+    BAD_WOUNDS = {
+        key = "BAD_WOUNDS",
+        index = 3,
         name = "Bad Wounds",
         desc = "Your max HP is reduced by 8.",
         icon = "Interface\\Icons\\ability_backstab",
@@ -41,7 +47,9 @@ local wounds = {
             amount = -8,
         },
     },
-    [4] = {
+    INTERNAL_BLEEDING = {
+        key = "INTERNAL_BLEEDING",
+        index = 4,
         name = "Internal Bleeding",
         desc = "You take 3 damage at the start of every player turn. Cannot be prevented or reduced in any way.",
         icon = "Interface\\Icons\\spell_shadow_lifedrain",
@@ -52,10 +60,31 @@ local wounds = {
             damagePerTick = 3,
         },
     },
+    CONCUSSION = {
+        key = "CONCUSSION",
+        index = 5,
+        name = "Concussion",
+        desc = "You lose 2 of your Utility traits (your choice).",
+        icon = "Interface\\Icons\\spell_frost_stun",
+    },
+    CRIPPLING_PAIN = {
+        key = "CRIPPLING_PAIN",
+        index = 6,
+        name = "Crippling Pain",
+        desc = "You can no longer perform Saves or Buff Rolls.",
+        icon = "Interface\\Icons\\spell_holy_painsupression",
+    },
 }
 
 criticalWounds.WOUNDS = {}
 
-for index, wound in ipairs(wounds) do
-    criticalWounds.WOUNDS[index] = CriticalWound:New(wound, index)
+for key, wound in pairs(wounds) do
+    criticalWounds.WOUNDS[key] = CriticalWound:New(
+        wound.key,
+        wound.index,
+        wound.name,
+        wound.desc,
+        wound.icon,
+        wound.buff
+    )
 end
