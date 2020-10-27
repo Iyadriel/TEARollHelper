@@ -29,10 +29,14 @@ function CriticalWound:IsActive()
     return characterState.state.criticalWounds.has(self)
 end
 
+function CriticalWound:GetBuffID()
+    return "criticalWound_" .. self.key
+end
+
 function CriticalWound:Apply()
     if self.buff then
         local newBuff = {
-            id = "criticalWound_" .. self.key,
+            id = self:GetBuffID(),
             label = self.name,
             icon = self.icon,
 
@@ -56,7 +60,7 @@ end
 
 function CriticalWound:Remove()
     if self.buff then
-        local existingBuff = buffsState.state.buffLookup.getCriticalWoundDeBuff(self.key)
+        local existingBuff = buffsState.state.buffLookup.getCriticalWoundDebuff(self)
 
         if existingBuff then
             buffsState.state.activeBuffs.remove(existingBuff)

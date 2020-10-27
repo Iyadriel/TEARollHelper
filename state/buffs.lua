@@ -230,8 +230,8 @@ buffsState.state = {
         getRacialBuff = function()
             return buffsState.state.buffLookup.get("racial")
         end,
-        getCriticalWoundDeBuff = function(key)
-            return buffsState.state.buffLookup.get("criticalWound_" .. key)
+        getCriticalWoundDebuff = function(criticalWound)
+            return buffsState.state.buffLookup.get(criticalWound:GetBuffID())
         end,
         add = function(buff)
             state.buffLookup[buff.id] = buff
