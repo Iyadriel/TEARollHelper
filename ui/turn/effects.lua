@@ -171,7 +171,6 @@ ui.modules.turn.modules.effects.getOptions = function(options)
                             type = "toggle",
                             name = COLOURS.NOTE .. wound.index.. ": |r" .. wound.name,
                             desc = wound.desc,
-                            width = "full",
                             get = function()
                                 return wound:IsActive()
                             end,
@@ -182,7 +181,7 @@ ui.modules.turn.modules.effects.getOptions = function(options)
                     end
 
                     return toggles
-                end)()
+                end)(),
             }
         }
     }
