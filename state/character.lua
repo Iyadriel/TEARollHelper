@@ -106,6 +106,7 @@ characterState.state = {
             local damageTakenBuff = 0
 
             -- defence and melee save pre-apply these so they can display correct action results
+            -- also used for damage that cannot be prevented
             if not ignoreDamageTakenBuffs then
                 damageTakenBuff = buffsState.state.buffs.damageTaken.get()
             end

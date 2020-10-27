@@ -42,6 +42,7 @@ local BUFF_TYPES = {
     HEALING_DONE = 6,
     DAMAGE_TAKEN = 7,
     DAMAGE_DONE = 8,
+    DAMAGE_OVER_TIME = 9,
 }
 
 local DAMAGE_TYPES = {

@@ -114,14 +114,21 @@ local function expireBuff(index, buff)
     bus.fire(EVENTS.BUFF_EXPIRED, buff.label)
 end
 
+local function applyDamageTick(buff)
+    characterState.state.health.damage(buff.damagePerTick, buff.ignoreDmgReduction)
+end
+
 local function applyHealTick(buff)
-    if buff.types[BUFF_TYPES.HEALING_OVER_TIME] then
-        characterState.state.health.heal(buff.healingPerTick, INCOMING_HEAL_SOURCES.OTHER_PLAYER)
-    end
+    characterState.state.health.heal(buff.healingPerTick, INCOMING_HEAL_SOURCES.OTHER_PLAYER)
 end
 
 bus.addListener(EVENTS.TURN_STARTED, function(index, turnTypeID)
     local activeBuffs = buffsState.state.activeBuffs.get()
+
+    -- we stick these buffs in separate table to iterate them in appropriate order
+    -- (dmg taken should come first)
+    local dmgOverTimeBuffs = {}
+    local healingOverTimeBuffs = {}
 
     for i = #activeBuffs, 1, -1 do
         local buff = activeBuffs[i]
@@ -139,10 +146,25 @@ bus.addListener(EVENTS.TURN_STARTED, function(index, turnTypeID)
             if remainingTurns > 0 then
                 setRemainingTurns(buff, remainingTurns - 1, turnTypeID)
                 TEARollHelper:Debug("Decremented buff remaining turns at index " .. i)
-
-                applyHealTick(buff)
             end
         end
+
+        if buff.turnTypeID == nil or buff.turnTypeID == turnTypeID then
+            if buff.types[BUFF_TYPES.DAMAGE_OVER_TIME] then
+                table.insert(dmgOverTimeBuffs, buff)
+            end
+            if buff.types[BUFF_TYPES.HEALING_OVER_TIME] then
+                table.insert(healingOverTimeBuffs, buff)
+            end
+        end
+    end
+
+    for _, buff in ipairs(dmgOverTimeBuffs) do
+        applyDamageTick(buff)
+    end
+
+    for _, buff in ipairs(healingOverTimeBuffs) do
+        applyHealTick(buff)
     end
 end)
 
