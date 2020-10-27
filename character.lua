@@ -4,9 +4,11 @@ local buffsState = ns.state.buffs
 local bus = ns.bus
 local character = ns.character
 local constants = ns.constants
+local rules = ns.rules
+
+local criticalWounds = ns.resources.criticalWounds
 local feats = ns.resources.feats
 local racialTraits = ns.resources.racialTraits
-local rules = ns.rules
 local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
 
@@ -84,6 +86,20 @@ end
 
 local function hasStaminaMastery()
     return getPlayerStamina() >= 6
+end
+
+-- [[ Actions ]]
+
+local function canHeal()
+    return rules.healing.canHeal()
+end
+
+local function canBuff()
+    return rules.buffing.canBuff() and not criticalWounds.WOUNDS.CRIPPLING_PAIN:IsActive()
+end
+
+local function canSave()
+    return not criticalWounds.WOUNDS.CRIPPLING_PAIN:IsActive()
 end
 
 -- [[ Feats ]]
@@ -221,6 +237,10 @@ character.hasOffenceMastery = hasOffenceMastery
 character.hasDefenceMastery = hasDefenceMastery
 character.hasSpiritMastery = hasSpiritMastery
 character.hasStaminaMastery = hasStaminaMastery
+
+character.canHeal = canHeal
+character.canBuff = canBuff
+character.canSave = canSave
 
 character.getPlayerFeat = getPlayerFeat
 character.hasFeat = hasFeat

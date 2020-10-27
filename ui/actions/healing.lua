@@ -7,7 +7,6 @@ local character = ns.character
 local characterState = ns.state.character.state
 local consequences = ns.consequences
 local constants = ns.constants
-local feats = ns.resources.feats
 local rolls = ns.state.rolls
 local rules = ns.rules
 local traits = ns.resources.traits
@@ -16,7 +15,6 @@ local utils = ns.utils
 
 local ACTIONS = constants.ACTIONS
 local ACTION_LABELS = constants.ACTION_LABELS
-local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
 local TURN_TYPES = constants.TURN_TYPES
 
@@ -40,7 +38,7 @@ ui.modules.actions.modules.healing.getOptions = function(options)
         type = "group",
         order = options.order,
         hidden = function()
-            return not rules.healing.canHeal()
+            return not character.canHeal()
         end,
         args = {
             preRoll = ui.modules.turn.modules.roll.getPreRollOptions({

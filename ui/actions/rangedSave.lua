@@ -1,6 +1,7 @@
 local _, ns = ...
 
 local actions = ns.actions
+local character = ns.character
 local constants = ns.constants
 local rolls = ns.state.rolls
 local rules = ns.rules
@@ -25,6 +26,9 @@ ui.modules.actions.modules.rangedSave.getOptions = function(options)
         name = ACTION_LABELS.rangedSave,
         type = "group",
         order = options.order,
+        hidden = function()
+            return not character.canSave()
+        end,
         args = {
             defenceType = sharedOptions.defenceType,
             defendThreshold = sharedOptions.defendThreshold,

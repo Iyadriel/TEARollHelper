@@ -1,6 +1,7 @@
 local _, ns = ...
 
 local actions = ns.actions
+local character = ns.character
 local constants = ns.constants
 local rolls = ns.state.rolls
 local rules = ns.rules
@@ -21,7 +22,7 @@ ui.modules.actions.modules.buff.getOptions = function(options)
         type = "group",
         order = options.order,
         hidden = function()
-            return not rules.buffing.canBuff()
+            return not character.canBuff()
         end,
         args = {
             preRoll = ui.modules.turn.modules.roll.getPreRollOptions({
