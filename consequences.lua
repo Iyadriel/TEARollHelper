@@ -47,6 +47,10 @@ end
 
 -- Traits
 
+local function useArtisan()
+    buffs.addTraitBuff(TRAITS.ARTISAN)
+end
+
 local function useAscend()
     return actions.traitToString(TRAITS.ASCEND)
 end
@@ -114,6 +118,7 @@ local function useVindication()
 end
 
 local TRAIT_FNS = {
+    [TRAITS.ARTISAN.id] = useArtisan,
     [TRAITS.ASCEND.id] = useAscend,
     [TRAITS.BULWARK.id] = useBulwark,
     [TRAITS.CALAMITY_GAMBIT.id] = useCalamityGambit,

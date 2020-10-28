@@ -38,6 +38,12 @@ local function calculateStatBuff(trait, stat)
     end
 end
 
+local function calculateUtilityBonusBuff(trait)
+    if trait.id == TRAITS.ARTISAN.id then
+        return rules.utility.calculateBaseUtilityBonus()
+    end
+end
+
 local function calculateShieldSlamDmg(baseDmgBuff, defence, defenceBuff)
     local baseDmg = rules.offence.getBaseDamageAfterBuffs(baseDmgBuff)
     local defenceStat = rules.common.calculateDefenceStat(nil, defence, defenceBuff)
@@ -53,6 +59,7 @@ rules.traits = {
 
     calculateMaxTraits = calculateMaxTraits,
     calculateStatBuff = calculateStatBuff,
+    calculateUtilityBonusBuff = calculateUtilityBonusBuff,
 
     calculateShieldSlamDmg = calculateShieldSlamDmg,
 }

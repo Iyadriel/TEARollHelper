@@ -7,12 +7,28 @@ local ACTIONS = constants.ACTIONS
 local BUFF_TYPES = constants.BUFF_TYPES
 local TURN_TYPES = constants.TURN_TYPES
 
-traits.TRAIT_KEYS = {"OTHER", "ASCEND", "BULWARK", "CALAMITY_GAMBIT", "EMPOWERED_BLADES", "FAELUNES_REGROWTH", "FAULTLINE", "FOCUS", "LIFE_PULSE", "LIFE_WITHIN", "PRESENCE_OF_VIRTUE", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "VERSATILE", "VINDICATION"}
+traits.TRAIT_KEYS = {"OTHER", "ARTISAN", "ASCEND", "BULWARK", "CALAMITY_GAMBIT", "EMPOWERED_BLADES", "FAELUNES_REGROWTH", "FAULTLINE", "FOCUS", "LIFE_PULSE", "LIFE_WITHIN", "PRESENCE_OF_VIRTUE", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "VERSATILE", "VINDICATION"}
 
 traits.TRAITS = {
     OTHER = {
         id = "OTHER",
         name = "Other",
+    },
+    ARTISAN = {
+        id = "ARTISAN",
+        name = "Artisan",
+        desc = "Activate to double the bonuses of your Utility traits for your next Utility roll. Can be used thrice per event. Activate before rolling. Does not enhance the effects of Silamel's Ace.",
+        icon = "Interface\\Icons\\trade_engraving",
+        numCharges = 3,
+        buffs = {
+            {
+                types = { [BUFF_TYPES.UTILITY_BONUS] = true, },
+                amount = "custom",
+                expireAfterFirstAction = {
+                    [ACTIONS.utility] = true,
+                },
+            },
+        },
     },
     ASCEND = {
         id = "ASCEND",

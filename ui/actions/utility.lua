@@ -7,8 +7,11 @@ local rules = ns.rules
 local ui = ns.ui
 local utils = ns.utils
 
+local traits = ns.resources.traits
+
 local ACTIONS = constants.ACTIONS
 local ACTION_LABELS = constants.ACTION_LABELS
+local TRAITS = traits.TRAITS
 local TURN_TYPES = constants.TURN_TYPES
 
 local state = rolls.state
@@ -35,7 +38,13 @@ ui.modules.actions.modules.utility.getOptions = function(options)
                 hidden = function()
                     return not rules.utility.shouldShowPreRollUI(options.turnTypeID)
                 end,
-                args = preRollArgs,
+                args = utils.merge(preRollArgs, {
+                    useArtisan = ui.helpers.traitButton(TRAITS.ARTISAN, {
+                        order = 2,
+                        checkBuff = true,
+                    }),
+                    artisanActive = ui.helpers.traitActiveText(TRAITS.ARTISAN, 2),
+                }),
             }),
             roll = ui.modules.turn.modules.roll.getOptions({ order = 1, action = ACTIONS.utility }),
             utility = {
