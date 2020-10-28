@@ -1,16 +1,19 @@
 local _, ns = ...
 
 local character = ns.character
+local rules = ns.rules
+
 local enemies = ns.resources.enemies
 local feats = ns.resources.feats
 local racialTraits = ns.resources.racialTraits
-local rules = ns.rules
 local traits = ns.resources.traits
+local weaknesses = ns.resources.weaknesses
 
 local ENEMIES = enemies.ENEMIES
 local FEATS = feats.FEATS
-local TRAITS = traits.TRAITS
 local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
+local TRAITS = traits.TRAITS
+local WEAKNESSES = weaknesses.WEAKNESSES
 
 local NUM_OFFENCE_PER_BLOOD_HARVEST_SLOT = 2
 
@@ -57,12 +60,19 @@ local function calculateAttackDmg(threshold, attackValue, baseDmgBuff, damageDon
 
     if overkill >= 0 then
         local baseDamage = getBaseDamageAfterBuffs(baseDmgBuff)
+        local damage
 
         if character.hasFeat(FEATS.ONSLAUGHT) then
-            return baseDamage + ceil(character.getPlayerOffence() / 2)
+            damage = baseDamage + ceil(character.getPlayerOffence() / 2)
+        else
+            damage = baseDamage + floor(overkill / 2) + damageDoneBuff
         end
 
-        return baseDamage + floor(overkill / 2) + damageDoneBuff
+        if character.hasWeakness(WEAKNESSES.GLASS_CANNON) then
+            damage = damage + 2
+        end
+
+        return damage
     end
 
     return 0

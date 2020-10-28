@@ -14,6 +14,10 @@ local function calculateEffectiveIncomingDamage(incomingDamage, damageTakenBuff,
         incomingDamage = incomingDamage + damageTakenBuff
     end
 
+    if character.hasWeakness(WEAKNESSES.GLASS_CANNON) then
+        incomingDamage = incomingDamage + 4
+    end
+
     if character.hasWeakness(WEAKNESSES.WOE_UPON_THE_AFFLICTED) then
         local enemyId = environment.state.enemyId.get()
         if WEAKNESSES.WOE_UPON_THE_AFFLICTED.weakAgainstEnemies[enemyId] then
@@ -61,6 +65,7 @@ local function calculateHealingReceived(incomingHealAmount, source, currentHealt
 end
 
 rules.effects = {
+    calculateEffectiveIncomingDamage = calculateEffectiveIncomingDamage,
     calculateDamageTaken = calculateDamageTaken,
     calculateHealingReceived = calculateHealingReceived,
 }

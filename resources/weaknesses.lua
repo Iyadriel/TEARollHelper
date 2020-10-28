@@ -6,7 +6,7 @@ local weaknesses = ns.resources.weaknesses
 local BUFF_TYPES = constants.BUFF_TYPES
 local TURN_TYPES = constants.TURN_TYPES
 
-weaknesses.WEAKNESS_KEYS = {"BRUTE", "CORRUPTED", "FATELESS", "FEATLESS", "FRAGILE", "OUTCAST", "OVERFLOW", "REBOUND", "TEMPERED_BENEVOLENCE", "TEMPO", "TIMID", "WOE_UPON_THE_AFFLICTED"}
+weaknesses.WEAKNESS_KEYS = {"BRUTE", "CORRUPTED", "FATELESS", "FEATLESS", "FRAGILE", "GLASS_CANNON", "OUTCAST", "OVERFLOW", "REBOUND", "TEMPERED_BENEVOLENCE", "TEMPO", "TIMID", "WOE_UPON_THE_AFFLICTED"}
 
 weaknesses.WEAKNESSES = {
     BRUTE = {
@@ -43,6 +43,14 @@ weaknesses.WEAKNESSES = {
         name = "Fragile",
         desc = "Reduce your max HP by 8.",
         supported = true,
+    },
+    GLASS_CANNON = {
+        id = "GLASS_CANNON",
+        name = "Glass Cannon",
+        desc = "You take 4 additional damage from all sources, but you also gain +2 dmg.",
+        supported = true,
+        isCustom = true,
+        player = "CALLEAN",
     },
     OUTCAST = {
         id = "OUTCAST",

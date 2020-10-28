@@ -1,14 +1,28 @@
 local _, ns = ...
 
+local COLOURS = TEARollHelper.COLOURS
+
 local character = ns.character
-local weaknesses = ns.resources.weaknesses
+local settings = ns.settings
 local ui = ns.ui
 
-local COLOURS = TEARollHelper.COLOURS
+local players = ns.resources.players
+local weaknesses = ns.resources.weaknesses
+
+local PLAYERS = players.PLAYERS
 
 -- Update turn UI, in case it is also open
 local function updateTurnUI()
     ui.update(ui.modules.turn.name)
+end
+
+local function getWeaknessName(weakness)
+    local name = weakness.name
+    if weakness.isCustom then
+        local player = PLAYERS[weakness.player]
+        name = name.. " (|c" .. player.colour .. player.name .. "|r)"
+    end
+    return name
 end
 
 --[[ local options = {
@@ -32,6 +46,7 @@ ui.modules.config.modules.character.modules.weaknesses.getOptions = function(opt
             end,
             args = (function()
                 local weaknessOptions = {}
+
                 for i = 1, #weaknesses.WEAKNESS_KEYS do
                     local key = weaknesses.WEAKNESS_KEYS[i]
                     local weakness = weaknesses.WEAKNESSES[key]
@@ -39,16 +54,20 @@ ui.modules.config.modules.character.modules.weaknesses.getOptions = function(opt
                     weaknessOptions[key] = {
                         order = i,
                         type = "toggle",
-                        name = weakness.name,
-                        desc = function()
+                        name = getWeaknessName(weakness),
+                        hidden = function()
+                            return weakness.isCustom and not settings.showCustomFeatsTraits.get()
+                        end,
+                        desc = (function()
                             local msg = weakness.desc
                             if weakness.note then
                                 msg = msg .. "|n|n" .. COLOURS.NOTE .. weakness.note
                             end
                             return msg
-                        end,
+                        end)(),
                     }
                 end
+
                 return weaknessOptions
             end)(),
         },
