@@ -124,9 +124,11 @@ local function getDefence(roll, defenceType, threshold, damageType, dmgRisk, def
     local retaliateDmg = 0
     local empoweredBladesEnabled = false
 
+    local effectiveIncomingDamage = rules.effects.calculateEffectiveIncomingDamage(dmgRisk, damageTakenBuff, true)
+
     defendValue = rules.defence.calculateDefendValue(roll, damageType, defence, defenceBuff)
-    damageTaken = rules.defence.calculateDamageTaken(defenceType, threshold, defendValue, dmgRisk, damageTakenBuff)
-    damagePrevented = rules.defence.calculateDamagePrevented(dmgRisk, damageTaken)
+    damageTaken = rules.defence.calculateDamageTaken(defenceType, threshold, defendValue, effectiveIncomingDamage)
+    damagePrevented = rules.defence.calculateDamagePrevented(effectiveIncomingDamage, damageTaken)
 
     if isCrit then
         retaliateDmg = rules.defence.calculateRetaliationDamage(defence)
@@ -156,15 +158,20 @@ local function getMeleeSave(roll, defenceType, threshold, damageType, dmgRisk, d
     local counterForceDmg = 0
 
     meleeSaveValue = rules.meleeSave.calculateMeleeSaveValue(roll, damageType, defence, defenceBuff)
+
+    -- the damage that the ally would have taken
+    damagePrevented = rules.meleeSave.calculateDamagePrevented(dmgRisk)
+
     isBigFail = rules.meleeSave.isSaveBigFail(meleeSaveValue, threshold)
-
-    damageTaken = rules.defence.calculateDamageTaken(defenceType, threshold, meleeSaveValue, dmgRisk, damageTakenBuff)
-
+    -- in case of big fail, double incoming damage before other modifiers
     if isBigFail then
-        damageTaken = rules.meleeSave.applyBigFailModifier(damageTaken)
+        dmgRisk = rules.meleeSave.applyBigFailModifier(dmgRisk)
     end
 
-    damagePrevented = rules.meleeSave.calculateDamagePrevented(dmgRisk)
+    -- then apply modifiers
+    local effectiveIncomingDamage = rules.effects.calculateEffectiveIncomingDamage(dmgRisk, damageTakenBuff, true)
+
+    damageTaken = rules.defence.calculateDamageTaken(defenceType, threshold, meleeSaveValue, effectiveIncomingDamage)
 
     if rules.meleeSave.canProcCounterForce() then
         hasCounterForceProc = rules.meleeSave.hasCounterForceProc(meleeSaveValue, threshold)
@@ -175,7 +182,6 @@ local function getMeleeSave(roll, defenceType, threshold, damageType, dmgRisk, d
 
     return {
         meleeSaveValue = meleeSaveValue,
-        dmgRisk = dmgRisk,
         damageTaken = damageTaken,
         damagePrevented = damagePrevented,
         isBigFail = isBigFail,

@@ -174,7 +174,7 @@ end
 
 local function confirmDefenceAction(defence)
     if defence.damageTaken > 0 then
-        state.health.damage(defence.damageTaken, { ignoreDamageTakenBuffs = true })
+        state.health.applyDamage(defence.damageTaken)
     end
     if defence.damagePrevented > 0 then
         state.defence.damagePrevented.increment(defence.damagePrevented)
@@ -183,7 +183,7 @@ end
 
 local function confirmMeleeSaveAction(meleeSave)
     if meleeSave.damageTaken > 0 then
-        state.health.damage(meleeSave.damageTaken, { ignoreDamageTakenBuffs = true })
+        state.health.applyDamage(meleeSave.damageTaken)
     end
     if meleeSave.damagePrevented > 0 then
         state.defence.damagePrevented.increment(meleeSave.damagePrevented)

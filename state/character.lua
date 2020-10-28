@@ -104,25 +104,24 @@ characterState.state = {
                 bus.fire(EVENTS.CHARACTER_HEALTH, state.health)
             end
         end,
-        damage = function(dmgTaken, options)
+        -- for any kind of non defence related damage that still needs its effective damage calculated
+        -- damage from defence will use applyDamage directly
+        damage = function(incomingDamage, options)
             options = options or {}
-            if options.ignoreDamageTakenBuffs == nil then
-                options.ignoreDamageTakenBuffs = false
-            end
             if options.canBeMitigated == nil then
                 options.canBeMitigated = true
             end
 
-            local damageTakenBuff = 0
+            local damageTakenBuff = buffsState.state.buffs.damageTaken.get()
+            incomingDamage = rules.effects.calculateEffectiveIncomingDamage(incomingDamage, damageTakenBuff, options.canBeMitigated)
 
-            -- defence and melee save pre-apply these so they can display correct action results
-            if not options.ignoreDamageTakenBuffs then
-                damageTakenBuff = buffsState.state.buffs.damageTaken.get()
-            end
+            characterState.state.health.applyDamage(incomingDamage)
+        end,
+        applyDamage = function(effectiveIncomingDamage)
+            local damage = rules.effects.calculateDamageTaken(effectiveIncomingDamage, state.health)
 
-            local damage = rules.effects.calculateDamageTaken(dmgTaken, state.health, damageTakenBuff, options.canBeMitigated)
             characterState.state.health.set(state.health - damage.damageTaken)
-            bus.fire(EVENTS.DAMAGE_TAKEN, damage.incomingDamage, damage.damageTaken, damage.overkill)
+            bus.fire(EVENTS.DAMAGE_TAKEN, damage.effectiveIncomingDamage, damage.damageTaken, damage.overkill)
         end,
         heal = function(incomingHealAmount, source)
             TEARollHelper:Debug("Incoming heal", incomingHealAmount, source)

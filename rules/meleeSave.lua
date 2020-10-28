@@ -40,8 +40,8 @@ local function isSaveBigFail(defendValue, threshold)
     return (defendValue + BIG_FAIL_TREHSHOLD) <= threshold
 end
 
-local function applyBigFailModifier(damageTaken)
-    return damageTaken * 2
+local function applyBigFailModifier(dmgRisk)
+    return dmgRisk * 2
 end
 
 local function shouldShowPreRollUI()

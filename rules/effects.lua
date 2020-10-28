@@ -9,7 +9,7 @@ local weaknesses = ns.resources.weaknesses
 local INCOMING_HEAL_SOURCES = constants.INCOMING_HEAL_SOURCES
 local WEAKNESSES = weaknesses.WEAKNESSES
 
-local function calculateDamageTaken(incomingDamage, currentHealth, damageTakenBuff, canBeMitigated)
+local function calculateEffectiveIncomingDamage(incomingDamage, damageTakenBuff, canBeMitigated)
     if damageTakenBuff > 0 or canBeMitigated then
         incomingDamage = incomingDamage + damageTakenBuff
     end
@@ -23,11 +23,15 @@ local function calculateDamageTaken(incomingDamage, currentHealth, damageTakenBu
 
     incomingDamage = max(0, incomingDamage)
 
-    local overkill = max(0, incomingDamage - currentHealth)
-    local damageTaken = incomingDamage - overkill
+    return incomingDamage
+end
+
+local function calculateDamageTaken(effectiveIncomingDamage, currentHealth)
+    local overkill = max(0, effectiveIncomingDamage - currentHealth)
+    local damageTaken = effectiveIncomingDamage - overkill
 
     return {
-        incomingDamage = incomingDamage,
+        effectiveIncomingDamage = effectiveIncomingDamage,
         damageTaken = damageTaken,
         overkill = overkill
     }
