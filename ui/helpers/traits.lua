@@ -37,4 +37,16 @@ local function traitButton(trait, options)
     }
 end
 
+local function traitActiveText(trait, order)
+    return {
+        order = order,
+        type = "description",
+        name = traitColour(trait) .. trait.name .. " is active.",
+        hidden = function()
+            return not (character.hasTrait(trait) and buffsState.buffLookup.getTraitBuffs(trait))
+        end,
+    }
+end
+
 ui.helpers.traitButton = traitButton
+ui.helpers.traitActiveText = traitActiveText
