@@ -27,6 +27,7 @@ buffsState.initState = function()
             damageDone = 0,
             damageTaken = 0,
             healingDone = 0,
+            utilityBonus = 0,
         },
 
         activeBuffs = {},
@@ -74,6 +75,7 @@ buffsState.state = {
         damageDone = basicGetSet("buffs", "damageDone"),
         damageTaken = basicGetSet("buffs", "damageTaken"),
         healingDone = basicGetSet("buffs", "healingDone"),
+        utilityBonus = basicGetSet("buffs", "utilityBonus"),
     },
     activeBuffs = {
         get = function ()
@@ -105,6 +107,8 @@ buffsState.state = {
                 buffsState.state.buffs.damageTaken.set(buffsState.state.buffs.damageTaken.get() + buff.amount)
             elseif buff.types[BUFF_TYPES.HEALING_DONE] then
                 buffsState.state.buffs.healingDone.set(buffsState.state.buffs.healingDone.get() + buff.amount)
+            elseif buff.types[BUFF_TYPES.UTILITY_BONUS] then
+                buffsState.state.buffs.utilityBonus.set(buffsState.state.buffs.utilityBonus.get() + buff.amount)
             end
 
             -- reset input
@@ -149,6 +153,8 @@ buffsState.state = {
                 buffsState.state.buffs.damageTaken.set(buffsState.state.buffs.damageTaken.get() - buff.amount)
             elseif buff.types[BUFF_TYPES.HEALING_DONE] then
                 buffsState.state.buffs.healingDone.set(buffsState.state.buffs.healingDone.get() - buff.amount)
+            elseif buff.types[BUFF_TYPES.UTILITY_BONUS] then
+                buffsState.state.buffs.utilityBonus.set(buffsState.state.buffs.utilityBonus.get() - buff.amount)
             end
 
             table.remove(state.activeBuffs, index)

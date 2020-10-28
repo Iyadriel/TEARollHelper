@@ -169,6 +169,15 @@ ui.modules.buffs.getOptions = function(options)
                                     end
                                 end
 
+                                if buff.types[BUFF_TYPES.UTILITY_BONUS] then
+                                    local amount = buff.amount
+                                    if amount > 0 then
+                                        msg = msg .. "Utility trait bonus increased by " .. amount .. ". "
+                                    else
+                                        msg = msg .. "Utility trait bonus reduced by " .. abs(amount) .. ". "
+                                    end
+                                end
+
                                 if buff.remainingTurns then
                                     if type(buff.remainingTurns) == "table" then
                                         local remainingPlayerTurns = buff.remainingTurns[TURN_TYPES.PLAYER.id]

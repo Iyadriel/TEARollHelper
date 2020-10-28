@@ -281,6 +281,13 @@ local function addTraitBuff(trait, providedStats)
                 newBuff.amount = buff.amount
             end
         end
+        if types[BUFF_TYPES.UTILITY_BONUS] then
+            if buff.amount == "custom" then
+                newBuff.amount = rules.traits.calculateUtilityBonusBuff(trait)
+            else
+                newBuff.amount = buff.amount
+            end
+        end
 
         if buff.remainingTurns then
             if type(buff.remainingTurns) == "table" then

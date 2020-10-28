@@ -14,10 +14,18 @@ local function canUseUtilityTraits()
     return not character.hasWeakness(WEAKNESSES.BRUTE)
 end
 
-local function calculateUtilityValue(roll, useUtilityTrait)
+local function calculateBaseUtilityBonus()
+    return character.hasFeat(FEATS.PROFESSIONAL) and 8 or 5
+end
+
+local function calculateUtilityBonus(utilityBonusBuff)
+    return calculateBaseUtilityBonus() + utilityBonusBuff
+end
+
+local function calculateUtilityValue(roll, useUtilityTrait, utilityBonusBuff)
     local value = roll
     if useUtilityTrait then
-        local bonus = character.hasFeat(FEATS.PROFESSIONAL) and 8 or 5
+        local bonus = calculateUtilityBonus(utilityBonusBuff)
         value = value + bonus
     end
     return value
@@ -29,6 +37,7 @@ end
 
 rules.utility = {
     canUseUtilityTraits = canUseUtilityTraits,
+    calculateBaseUtilityBonus = calculateBaseUtilityBonus,
     calculateUtilityValue = calculateUtilityValue,
     shouldShowPreRollUI = shouldShowPreRollUI,
 }

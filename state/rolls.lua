@@ -354,7 +354,8 @@ local function getRangedSave()
 end
 
 local function getUtility()
-    return actions.getUtility(state.utility.currentRoll, state.utility.useUtilityTrait)
+    local utilityBonusBuff = buffsState.buffs.utilityBonus.get()
+    return actions.getUtility(state.utility.currentRoll, state.utility.useUtilityTrait, utilityBonusBuff)
 end
 
 -- Trait actions
