@@ -131,14 +131,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                             order = 0,
                             checkBuff = true,
                         }),
-                        bulwarkActive = {
-                            order = 0,
-                            type = "description",
-                            name = COLOURS.TRAITS.GENERIC .. TRAITS.BULWARK.name .. " is active.",
-                            hidden = function()
-                                return not (character.hasTrait(TRAITS.BULWARK) and buffsState.buffLookup.getTraitBuffs(TRAITS.BULWARK))
-                            end,
-                        },
+                        bulwarkActive = ui.helpers.traitActiveText(TRAITS.BULWARK, 0),
                         enableLivingBarricade = {
                             order = 1,
                             type = "execute",

@@ -66,13 +66,6 @@ ui.modules.actions.modules.anyTurn.getSharedPreRollOptions = function(options)
                 }
             },
         },
-        versatileActive = {
-            order = options.order,
-            type = "description",
-            name = COLOURS.TRAITS.GENERIC .. TRAITS.VERSATILE.name .. " is active.",
-            hidden = function()
-                return not (character.hasTrait(TRAITS.VERSATILE) and buffsState.buffLookup.getTraitBuffs(TRAITS.VERSATILE))
-            end,
-        },
+        versatileActive = ui.helpers.traitActiveText(TRAITS.VERSATILE, options.order),
     }
 end

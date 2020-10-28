@@ -3,8 +3,6 @@ local _, ns = ...
 local COLOURS = TEARollHelper.COLOURS
 
 local actions = ns.actions
-local buffsState = ns.state.buffs.state
-local character = ns.character
 local characterState = ns.state.character.state
 local consequences = ns.consequences
 local constants = ns.constants
@@ -45,14 +43,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                     order = 0,
                     checkBuff = true,
                 }),
-                calamityGambitActive = {
-                    order = 0,
-                    type = "description",
-                    name = COLOURS.TRAITS.GENERIC .. TRAITS.CALAMITY_GAMBIT.name .. " is active.",
-                    hidden = function()
-                        return not (character.hasTrait(TRAITS.CALAMITY_GAMBIT) and buffsState.buffLookup.getTraitBuffs(TRAITS.CALAMITY_GAMBIT))
-                    end,
-                },
+                calamityGambitActive = ui.helpers.traitActiveText(TRAITS.CALAMITY_GAMBIT, 0),
             }
         ),
     })

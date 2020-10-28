@@ -1,9 +1,5 @@
 local _, ns = ...
 
-local COLOURS = TEARollHelper.COLOURS
-
-local buffsState = ns.state.buffs.state
-local character = ns.character
 local traits = ns.resources.traits
 local ui = ns.ui
 
@@ -18,13 +14,6 @@ ui.modules.actions.modules.playerTurn.getSharedPreRollOptions = function(options
             order = options.order,
             checkBuff = true,
         }),
-        focusActive = {
-            order = 0,
-            type = "description",
-            name = COLOURS.TRAITS.GENERIC .. TRAITS.FOCUS.name .. " is active.",
-            hidden = function()
-                return not (character.hasTrait(TRAITS.FOCUS) and buffsState.buffLookup.getTraitBuffs(TRAITS.FOCUS))
-            end,
-        },
+        focusActive = ui.helpers.traitActiveText(TRAITS.FOCUS, 0),
     }
 end

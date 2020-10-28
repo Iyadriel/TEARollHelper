@@ -1,10 +1,6 @@
 local _, ns = ...
 
-local COLOURS = TEARollHelper.COLOURS
-
 local actions = ns.actions
-local buffsState = ns.state.buffs.state
-local character = ns.character
 local constants = ns.constants
 local rolls = ns.state.rolls
 local rules = ns.rules
@@ -35,14 +31,7 @@ ui.modules.actions.modules.cc.getOptions = function(options)
                     order = 0,
                     checkBuff = true,
                 }),
-                calamityGambitActive = {
-                    order = 0,
-                    type = "description",
-                    name = COLOURS.TRAITS.GENERIC .. TRAITS.CALAMITY_GAMBIT.name .. " is active.",
-                    hidden = function()
-                        return not (character.hasTrait(TRAITS.CALAMITY_GAMBIT) and buffsState.buffLookup.getTraitBuffs(TRAITS.CALAMITY_GAMBIT))
-                    end,
-                },
+                calamityGambitActive = ui.helpers.traitActiveText(TRAITS.CALAMITY_GAMBIT, 0),
             }
         ),
     })
