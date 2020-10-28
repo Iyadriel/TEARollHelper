@@ -4,6 +4,7 @@ local constants = ns.constants
 
 local ACTIONS = {
     attack = "attack",
+    penance = "penance",
     cc = "cc",
     healing = "healing",
     buff = "buff",
@@ -14,6 +15,18 @@ local ACTIONS = {
 }
 
 local ACTION_LABELS = {
+    attack = "Attack",
+    penance = "Penance",
+    cc = "CC",
+    healing = "Heal",
+    buff = "Buff",
+    defend = "Defend",
+    meleeSave = "Melee save",
+    rangedSave = "Ranged save",
+    utility = "Utility",
+}
+
+local ACTION_LABELS_NO_PENANCE = {
     attack = "Attack",
     cc = "CC",
     healing = "Heal",
@@ -104,6 +117,7 @@ local TURN_TYPES = {
 
 constants.ACTIONS = ACTIONS
 constants.ACTION_LABELS = ACTION_LABELS
+constants.ACTION_LABELS_NO_PENANCE = ACTION_LABELS_NO_PENANCE
 constants.BUFF_SOURCES = BUFF_SOURCES
 constants.BUFF_TYPES = BUFF_TYPES
 constants.DAMAGE_TYPES = DAMAGE_TYPES

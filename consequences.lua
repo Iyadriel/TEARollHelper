@@ -161,6 +161,10 @@ local function confirmAttackAction(attack)
     rollState.state.attack.attacks.add(attack)
 end
 
+local function confirmPenanceAction(penance)
+    characterState.state.healing.numGreaterHealSlots.use(penance.numGreaterHealSlots)
+end
+
 local function confirmHealAction(heal)
     characterState.state.healing.numGreaterHealSlots.use(heal.numGreaterHealSlots)
     if heal.outOfCombat and heal.numGreaterHealSlots <= 0 then
@@ -188,6 +192,7 @@ end
 
 local actionFns = {
     [ACTIONS.attack] = confirmAttackAction,
+    [ACTIONS.penance] = confirmPenanceAction,
     [ACTIONS.healing] = confirmHealAction,
     [ACTIONS.defend] = confirmDefenceAction,
     [ACTIONS.meleeSave] = confirmMeleeSaveAction,
@@ -202,7 +207,13 @@ local function confirmAction(actionType, action, hideMsg)
     end
 
     local actionState = rollState.state[actionType]
-    actionState.currentRoll.set(nil)
+
+    if actionType == ACTIONS.penance then
+        rollState.state[ACTIONS.attack].currentRoll.set(nil)
+    else
+        actionState.currentRoll.set(nil)
+    end
+
     if actionState.resetSlots then
         actionState.resetSlots()
     end

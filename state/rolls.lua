@@ -9,6 +9,7 @@ local constants = ns.constants
 local environment = ns.state.environment
 local rolls = ns.state.rolls
 local rules = ns.rules
+
 local traits = ns.resources.traits
 
 local ACTIONS = constants.ACTIONS
@@ -36,6 +37,11 @@ rolls.initState = function()
             isAOE = false,
             rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
+        },
+
+        [ACTIONS.penance] = {
+            numGreaterHealSlots = 1,
+            targetIsKO = false,
         },
 
         [ACTIONS.cc] = {
@@ -150,6 +156,17 @@ rolls.state = {
         end,
     },
 
+    [ACTIONS.penance] = {
+        numGreaterHealSlots = basicGetSet(ACTIONS.penance, "numGreaterHealSlots"),
+        targetIsKO = basicGetSet(ACTIONS.penance, "targetIsKO"),
+
+        resetSlots = function()
+            TEARollHelper:Debug("Resetting slots for penance")
+            rolls.state.penance.numGreaterHealSlots.set(1)
+            rolls.state.penance.targetIsKO.set(false)
+        end,
+    },
+
     [ACTIONS.cc] = {
         rollMode = basicGetSet(ACTIONS.cc, "rollMode"),
         currentRoll = basicGetSet(ACTIONS.cc, "currentRoll"),
@@ -224,6 +241,7 @@ rolls.state = {
 
 local function resetSlots()
     rolls.state.attack.resetSlots()
+    rolls.state.penance.resetSlots()
     rolls.state.healing.resetSlots()
     rolls.state.utility.resetSlots()
 end
@@ -231,14 +249,16 @@ end
 local function resetRolls()
     for _, action in pairs(ACTIONS) do
         local actionState = rolls.state[action]
-        actionState.currentRoll.set(nil)
+        if actionState.currentRoll then -- penance uses attack state for roll
+            actionState.currentRoll.set(nil)
+        end
     end
     rolls.state.attack.attacks.clear()
 end
 
 local function resetThresholds()
-    rolls.state.defend.defenceType.set(DEFENCE_TYPES.THRESHOLD)
     rolls.state.attack.threshold.set(nil)
+    rolls.state.defend.defenceType.set(DEFENCE_TYPES.THRESHOLD)
     rolls.state.defend.threshold.set(nil)
     rolls.state.defend.damageRisk.set(nil)
     rolls.state.meleeSave.defenceType.set(DEFENCE_TYPES.THRESHOLD)
@@ -272,6 +292,9 @@ bus.addListener(EVENTS.GREATER_HEAL_CHARGES_CHANGED, function(numCharges)
     if numCharges < state.healing.numGreaterHealSlots then
         rolls.state.healing.numGreaterHealSlots.set(numCharges)
     end
+    if numCharges < state.penance.numGreaterHealSlots then
+        rolls.state.penance.numGreaterHealSlots.set(max(1, numCharges))
+    end
 end)
 
 bus.addListener(EVENTS.ROLL_CHANGED, function(action, roll)
@@ -301,6 +324,17 @@ local function getAttack()
     local numVindicationCharges = characterState.featsAndTraits.numTraitCharges.get(TRAITS.VINDICATION.id)
 
     return actions.getAttack(attackIndex, state.attack.currentRoll, threshold, offence, offenceBuff, baseDmgBuff, damageDoneBuff, enemyId, isAOE, numBloodHarvestSlots, numVindicationCharges)
+end
+
+local function getPenance()
+    local spirit = character.getPlayerSpirit()
+    local spiritBuff = buffsState.buffs.spirit.get()
+    local baseDmgBuff = buffsState.buffs.baseDamage.get()
+    local damageDoneBuff = buffsState.buffs.damageDone.get()
+    local threshold = state.attack.threshold
+    local numVindicationCharges = characterState.featsAndTraits.numTraitCharges.get(TRAITS.VINDICATION.id)
+
+    return actions.getPenance(state.attack.currentRoll, threshold, spirit, spiritBuff, baseDmgBuff, damageDoneBuff, state.penance.numGreaterHealSlots, state.penance.targetIsKO, numVindicationCharges)
 end
 
 local function getCC()
@@ -381,6 +415,7 @@ local function getRollModeModifier(action, turnTypeId)
 end
 
 rolls.getAttack = getAttack
+rolls.getPenance = getPenance
 rolls.getCC = getCC
 rolls.getHealing = getHealing
 rolls.getBuff = getBuff

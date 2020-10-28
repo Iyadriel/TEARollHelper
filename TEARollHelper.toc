@@ -43,6 +43,7 @@ rules/effects.lua
 rules/environment.lua
 rules/playerTurn.lua
 rules/offence.lua
+rules/penance.lua
 rules/defence.lua
 rules/cc.lua
 rules/healing.lua
@@ -75,6 +76,7 @@ ui/actions/cc.lua
 ui/actions/defend.lua
 ui/actions/healing.lua
 ui/actions/meleeSave.lua
+ui/actions/penance.lua
 ui/actions/rangedSave.lua
 ui/actions/utility.lua
 

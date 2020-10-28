@@ -40,6 +40,29 @@ local function attackToString(attack)
     return msg
 end
 
+local function penanceToString(penance)
+    local msg = ""
+
+    if penance.dmg > 0 then
+        local excited = false
+
+        if penance.isCrit then
+            excited = true
+            msg = msg .. COLOURS.CRITICAL .. "CRITICAL HIT!|r "
+        end
+
+        msg = msg .. "You deal " .. tostring(penance.dmg) .. " damage" .. (excited and "!" or ".")
+    else
+        msg = msg .. COLOURS.NOTE .. "You can't deal any damage with this roll."
+    end
+
+    if penance.amountHealed > 0 then
+        msg = msg .. COLOURS.HEALING .. " You heal for " .. penance.amountHealed .. " HP."
+    end
+
+    return msg
+end
+
 local function CCToString(cc)
     local msg
 
@@ -188,6 +211,7 @@ end
 
 local toString = {
     [ACTIONS.attack] = attackToString,
+    [ACTIONS.penance] = penanceToString,
     [ACTIONS.cc] = CCToString,
     [ACTIONS.buff] = buffToString,
     [ACTIONS.healing] = healingToString,

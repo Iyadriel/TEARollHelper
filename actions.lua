@@ -64,6 +64,50 @@ local function getAttack(attackIndex, roll, threshold, offence, offenceBuff, bas
     }
 end
 
+local function getPenance(roll, threshold, spirit, spiritBuff, baseDmgBuff, damageDoneBuff, numGreaterHealSlots, targetIsKO, numVindicationCharges)
+    local attackValue
+    local dmg
+    local amountHealed = 0
+    local isCrit = rules.offence.isCrit(roll)
+    local hasVindicationProc = nil
+    local vindicationHealing = 0
+
+    -- Damage
+
+    attackValue = rules.penance.calculateAttackValue(roll, spirit, spiritBuff)
+
+    dmg = rules.offence.calculateAttackDmg(threshold, attackValue, baseDmgBuff, damageDoneBuff)
+
+     if isCrit then
+        dmg = rules.offence.applyCritModifier(dmg)
+    end
+
+    if rules.offence.canProcVindication() and numVindicationCharges > 0 then
+        hasVindicationProc = rules.offence.hasVindicationProc(dmg)
+        if hasVindicationProc then
+            vindicationHealing = rules.offence.calculateVindicationHealing(dmg)
+        end
+    end
+
+    -- Healing
+
+    amountHealed = rules.healing.calculateGreaterHealBonus(numGreaterHealSlots)
+
+    if targetIsKO then
+        amountHealed = amountHealed + rules.healing.getTargetKOBonus()
+    end
+
+    return {
+        attackValue = attackValue,
+        dmg = dmg,
+        isCrit = isCrit,
+        amountHealed = amountHealed,
+        numGreaterHealSlots = numGreaterHealSlots,
+        hasVindicationProc = hasVindicationProc,
+        vindicationHealing = vindicationHealing,
+    }
+end
+
 local function getCC(roll, offence, offenceBuff, defence, defenceBuff)
     local ccValue = rules.cc.calculateCCValue(roll, offence, offenceBuff, defence, defenceBuff)
     local isCrit = rules.cc.isCrit(roll)
@@ -241,6 +285,7 @@ local function getShieldSlam(baseDmgBuff, defence, defenceBuff)
 end
 
 ns.actions.getAttack = getAttack
+ns.actions.getPenance = getPenance
 ns.actions.getCC = getCC
 ns.actions.getDefence = getDefence
 ns.actions.getMeleeSave = getMeleeSave

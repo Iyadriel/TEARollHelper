@@ -8,6 +8,7 @@ local constants = ns.constants
 local ui = ns.ui
 
 local ACTION_LABELS = constants.ACTION_LABELS
+local ACTION_LABELS_NO_PENANCE = constants.ACTION_LABELS_NO_PENANCE
 local BUFF_TYPES = constants.BUFF_TYPES
 local MAX_BUFFS = 8
 local STAT_LABELS = constants.STAT_LABELS
@@ -281,7 +282,7 @@ ui.modules.buffs.getOptions = function(options)
                         type = "select",
                         name = "Action",
                         width = 0.9,
-                        values = ACTION_LABELS,
+                        values = ACTION_LABELS_NO_PENANCE,
                         hidden = function()
                             local type = buffsState.newPlayerBuff.type.get()
                             return not (type == BUFF_TYPES.ADVANTAGE or type == BUFF_TYPES.DISADVANTAGE)
