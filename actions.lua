@@ -236,7 +236,7 @@ local function getRangedSave(roll, defenceType, threshold, spirit, buff)
     }
 end
 
-local function getHealing(roll, spirit, spiritBuff, healingDoneBuff, numGreaterHealSlots, targetIsKO, outOfCombat, remainingOutOfCombatHeals)
+local function getHealing(roll, spirit, spiritBuff, healingDoneBuff, numGreaterHealSlots, targetIsKO, outOfCombat, remainingOutOfCombatHeals, activeTraits)
     local canStillHeal = rules.healing.canStillHeal(outOfCombat, remainingOutOfCombatHeals, numGreaterHealSlots)
     local healValue
     local amountHealed = 0
@@ -281,6 +281,12 @@ local function getHealing(roll, spirit, spiritBuff, healingDoneBuff, numGreaterH
         numGreaterHealSlots = numGreaterHealSlots,
         usesParagon = usesParagon,
         playersHealableWithParagon = playersHealableWithParagon,
+        traits = {
+            [TRAITS.LIFE_PULSE.id] = {
+                canUse = amountHealed > 0,
+                active = activeTraits[TRAITS.LIFE_PULSE.id],
+            },
+        },
     }
 end
 

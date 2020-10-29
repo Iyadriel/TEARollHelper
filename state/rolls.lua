@@ -53,6 +53,7 @@ rolls.initState = function()
             targetIsKO = false,
             rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
+            activeTraits = {},
         },
 
         [ACTIONS.buff] = {
@@ -210,11 +211,27 @@ rolls.state = {
         targetIsKO = basicGetSet(ACTIONS.healing, "targetIsKO"),
         rollMode = basicGetSet(ACTIONS.healing, "rollMode"),
         currentRoll = basicGetSet(ACTIONS.healing, "currentRoll"),
+        activeTraits = {
+            get = function(trait)
+                return state.healing.activeTraits[trait.id]
+            end,
+            toggle = function(trait)
+                if state.healing.activeTraits[trait.id] then
+                    state.healing.activeTraits[trait.id] = false
+                else
+                    state.healing.activeTraits[trait.id] = true
+                end
+            end,
+            reset = function()
+                state.healing.activeTraits = {}
+            end,
+        },
 
         resetSlots = function()
             TEARollHelper:Debug("Resetting slots for healing")
             rolls.state.healing.numGreaterHealSlots.set(0)
             rolls.state.healing.targetIsKO.set(false)
+            rolls.state.healing.activeTraits.reset()
         end,
     },
 
@@ -426,8 +443,9 @@ local function getHealing(outOfCombat)
     local spiritBuff = buffsState.buffs.spirit.get()
     local healingDoneBuff = buffsState.buffs.healingDone.get()
     local remainingOutOfCombatHeals = characterState.healing.remainingOutOfCombatHeals.get()
+    local activeTraits = state.healing.activeTraits
 
-    return actions.getHealing(state.healing.currentRoll, spirit, spiritBuff, healingDoneBuff, state.healing.numGreaterHealSlots, state.healing.targetIsKO, outOfCombat, remainingOutOfCombatHeals)
+    return actions.getHealing(state.healing.currentRoll, spirit, spiritBuff, healingDoneBuff, state.healing.numGreaterHealSlots, state.healing.targetIsKO, outOfCombat, remainingOutOfCombatHeals, activeTraits)
 end
 
 local function getBuff()

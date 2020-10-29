@@ -5,12 +5,10 @@ local constants = ns.constants
 local feats = ns.resources.feats
 local racialTraits = ns.resources.racialTraits
 local rules = ns.rules
-local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
 
 local FEATS = feats.FEATS
 local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
-local TRAITS = traits.TRAITS
 local TURN_TYPES = constants.TURN_TYPES
 local WEAKNESSES = weaknesses.WEAKNESSES
 
@@ -138,9 +136,6 @@ end
 local function shouldShowPreRollUI(turnTypeID)
     return rules.other.shouldShowPreRollUI() or (turnTypeID == TURN_TYPES.PLAYER.id and rules.playerTurn.shouldShowPreRollUI())
 end
-local function shouldShowPostRollUI()
-    return character.hasTrait(TRAITS.LIFE_PULSE)
-end
 
 rules.healing = {
     canHeal = canHeal,
@@ -166,5 +161,4 @@ rules.healing = {
     calculateNumPlayersHealableWithParagon = calculateNumPlayersHealableWithParagon,
 
     shouldShowPreRollUI = shouldShowPreRollUI,
-    shouldShowPostRollUI = shouldShowPostRollUI,
 }

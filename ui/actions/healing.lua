@@ -108,8 +108,17 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                             return msg .. actions.toString(ACTIONS.healing, healing)
                         end
                     },
+                    useLifePulse = ui.helpers.traitToggle(
+                        ACTIONS.healing,
+                        function()
+                            return rolls.getHealing(options.outOfCombat)
+                        end,
+                        TRAITS.LIFE_PULSE, {
+                            order = 4,
+                        }
+                    ),
                     confirm = {
-                        order = 4,
+                        order = 5,
                         type = "execute",
                         name = "Confirm",
                         desc = "Confirm that you perform the stated action, and consume any charges used.",
@@ -121,7 +130,7 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                         end
                     },
                     remainingHeals = {
-                        order = 5,
+                        order = 6,
                         type = "description",
                         name = function()
                             if rolls.getHealing(options.outOfCombat).numGreaterHealSlots > 0 then
@@ -134,30 +143,6 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                             return not options.outOfCombat or rolls.getHealing(options.outOfCombat).amountHealed <= 0
                         end,
                     },
-                }
-            },
-            postRoll = {
-                order = 3,
-                type = "group",
-                name = "After rolling",
-                inline = true,
-                hidden = function()
-                    return not state.healing.currentRoll.get() or not (rolls.getHealing(options.outOfCombat).amountHealed > 0) or not rules.healing.shouldShowPostRollUI()
-                end,
-                args = {
-                    useLifePulse = {
-                        order = 2,
-                        type = "execute",
-                        width = "full",
-                        name = function()
-                            return COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.LIFE_PULSE.name ..  ": " .. COLOURS.HEALING .. "Heal everyone in melee range of your target"
-                        end,
-                        desc = TRAITS.LIFE_PULSE.desc,
-                        disabled = function()
-                            return characterState.featsAndTraits.numTraitCharges.get(TRAITS.LIFE_PULSE.id) == 0
-                        end,
-                        func = consequences.useTrait(TRAITS.LIFE_PULSE),
-                    }
                 }
             },
         }
