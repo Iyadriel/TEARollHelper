@@ -171,7 +171,7 @@ local function getDefence(roll, defenceType, threshold, damageType, dmgRisk, def
     }
 end
 
-local function getMeleeSave(roll, defenceType, threshold, damageType, dmgRisk, defence, defenceBuff, damageTakenBuff)
+local function getMeleeSave(roll, defenceType, threshold, damageType, dmgRisk, defence, defenceBuff, damageTakenBuff, activeTraits)
     threshold = threshold + rules.common.SAVE_THRESHOLD_INCREASE
 
     local meleeSaveValue, damageTaken, damagePrevented
@@ -208,7 +208,13 @@ local function getMeleeSave(roll, defenceType, threshold, damageType, dmgRisk, d
         damagePrevented = damagePrevented,
         isBigFail = isBigFail,
         hasCounterForceProc = hasCounterForceProc,
-        counterForceDmg = counterForceDmg
+        counterForceDmg = counterForceDmg,
+        traits = {
+            [TRAITS.PRESENCE_OF_VIRTUE.id] = {
+                canUse = damageTaken <= 0,
+                active = activeTraits[TRAITS.PRESENCE_OF_VIRTUE.id],
+            },
+        },
     }
 end
 

@@ -66,25 +66,11 @@ ui.modules.actions.modules.meleeSave.getOptions = function(options)
                             return actions.toString(ACTIONS.meleeSave, rolls.getMeleeSave())
                         end
                     },
-                    confirm = ui.helpers.confirmActionButton(ACTIONS.meleeSave, rolls.getMeleeSave, {
+                    usePresenceOfVirtue = ui.helpers.traitToggle(ACTIONS.meleeSave, rolls.getMeleeSave, TRAITS.PRESENCE_OF_VIRTUE, {
                         order = 1,
                     }),
-                }
-            },
-            postRoll = {
-                order = 7,
-                type = "group",
-                name = "After rolling",
-                inline = true,
-                hidden = function()
-                    return not rolls.state.meleeSave.currentRoll.get() or not rules.meleeSave.shouldShowPostRollUI() or rolls.getMeleeSave().damageTaken > 0
-                end,
-                args = {
-                    usePresenceOfVirtue = ui.helpers.traitButton(TRAITS.PRESENCE_OF_VIRTUE, {
-                        order = 0,
-                        hidden = function()
-                            return rolls.getMeleeSave().damageTaken > 0
-                        end,
+                    confirm = ui.helpers.confirmActionButton(ACTIONS.meleeSave, rolls.getMeleeSave, {
+                        order = 2,
                     }),
                 }
             },

@@ -21,6 +21,10 @@ local function faultlineToString()
     return " You apply your attack to all targets on a straight line outwards from yourself."
 end
 
+local function presenceOfVirtueToString()
+    return COLOURS.HEALING .. " You heal the target for 5 HP. They are also buffed for +5 on their next player turn.|r"
+end
+
 local function vindicationToString(vindication)
     return COLOURS.HEALING .. " You heal for " .. vindication.healingDone .. " HP.|r"
 end
@@ -28,6 +32,7 @@ end
 local traitActionToString = {
     [TRAITS.ASCEND.id] = ascendToString,
     [TRAITS.FAULTLINE.id] = faultlineToString,
+    [TRAITS.PRESENCE_OF_VIRTUE.id] = presenceOfVirtueToString,
     [TRAITS.VINDICATION.id] = vindicationToString,
 }
 
@@ -198,6 +203,8 @@ local function meleeSaveToString(meleeSave)
         msg = msg .. COLOURS.FEATS.GENERIC .. "|nCOUNTER-FORCE!|r You can deal "..meleeSave.counterForceDmg.." damage to your attacker!"
     end
 
+    msg = msg .. getTraitMessages(meleeSave)
+
     return msg
 end
 
@@ -225,10 +232,6 @@ local function lifePulseToString()
     return COLOURS.HEALING .. "You can heal everyone in melee range of your target."
 end
 
-local function presenceOfVirtueToString()
-    return COLOURS.HEALING .. "You may heal the target for 5 HP. They are also buffed for +5 on their next player turn."
-end
-
 local function shieldSlamToString(shieldSlam)
     return "You deal " .. shieldSlam.dmg .. " damage with your Shield Slam."
 end
@@ -247,7 +250,6 @@ local toString = {
 
 local traitsToString = {
     [TRAITS.LIFE_PULSE] = lifePulseToString,
-    [TRAITS.PRESENCE_OF_VIRTUE] = presenceOfVirtueToString,
     [TRAITS.SHIELD_SLAM] = shieldSlamToString,
 }
 

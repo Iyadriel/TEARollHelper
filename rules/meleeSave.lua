@@ -3,10 +3,8 @@ local _, ns = ...
 local character = ns.character
 local feats = ns.resources.feats
 local rules = ns.rules
-local traits = ns.resources.traits
 
 local FEATS = feats.FEATS
-local TRAITS = traits.TRAITS
 
 local BIG_FAIL_TREHSHOLD = 5
 
@@ -48,10 +46,6 @@ local function shouldShowPreRollUI()
     return rules.other.shouldShowPreRollUI()
 end
 
-local function shouldShowPostRollUI()
-    return character.hasTrait(TRAITS.PRESENCE_OF_VIRTUE)
-end
-
 local function getRollModeModifier()
     local modifier = 0
 
@@ -74,7 +68,6 @@ rules.meleeSave = {
     applyBigFailModifier = applyBigFailModifier,
 
     shouldShowPreRollUI = shouldShowPreRollUI,
-    shouldShowPostRollUI = shouldShowPostRollUI,
 
     getRollModeModifier = getRollModeModifier,
 }
