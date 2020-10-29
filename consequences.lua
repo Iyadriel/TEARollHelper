@@ -70,10 +70,6 @@ local function useEmpoweredBlades(defence)
     buffs.addTraitBuff(TRAITS.EMPOWERED_BLADES, ceil(defence.dmgRisk / 2))
 end
 
-local function useFaultline()
-    return actions.traitToString(TRAITS.FAULTLINE)
-end
-
 local function useFocus()
     buffs.addTraitBuff(TRAITS.FOCUS)
 end
@@ -122,7 +118,6 @@ local TRAIT_FNS = {
     [TRAITS.BULWARK.id] = useBulwark,
     [TRAITS.CALAMITY_GAMBIT.id] = useCalamityGambit,
     [TRAITS.EMPOWERED_BLADES.id] = useEmpoweredBlades,
-    [TRAITS.FAULTLINE.id] = useFaultline,
     [TRAITS.FOCUS.id] = useFocus,
     [TRAITS.LIFE_PULSE.id] = useLifePulse,
     [TRAITS.LIFE_WITHIN.id] = useLifeWithin,

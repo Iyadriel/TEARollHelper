@@ -6,7 +6,7 @@ local traits = ns.resources.traits
 
 local TRAITS = traits.TRAITS
 
-local function getAttack(attackIndex, roll, threshold, offence, offenceBuff, baseDmgBuff, damageDoneBuff, enemyId, isAOE, numBloodHarvestSlots, numVindicationCharges, activeTraits)
+local function getAttack(attackIndex, roll, threshold, offence, offenceBuff, baseDmgBuff, damageDoneBuff, enemyId, isAOE, numBloodHarvestSlots, activeTraits)
     local attackValue
     local dmg
     local critType = rules.offence.getCritType()
@@ -46,7 +46,7 @@ local function getAttack(attackIndex, roll, threshold, offence, offenceBuff, bas
         mercyFromPainBonusHealing = rules.offence.calculateMercyFromPainBonusHealing(isAOE)
     end
 
-    if rules.offence.canProcVindication() and numVindicationCharges > 0 then
+    if rules.offence.canProcVindication() then
         hasVindicationProc = rules.offence.hasVindicationProc(dmg)
         if hasVindicationProc then
             vindicationHealing = rules.offence.calculateVindicationHealing(dmg)
@@ -64,8 +64,12 @@ local function getAttack(attackIndex, roll, threshold, offence, offenceBuff, bas
         mercyFromPainBonusHealing = mercyFromPainBonusHealing,
         shatterSoulEnabled = shatterSoulEnabled,
         traits = {
+            [TRAITS.FAULTLINE.id] = {
+                canUse = dmg > 0,
+                active = activeTraits[TRAITS.FAULTLINE.id],
+            },
             [TRAITS.VINDICATION.id] = {
-                proc = hasVindicationProc,
+                canUse = hasVindicationProc,
                 healingDone = vindicationHealing,
                 active = activeTraits[TRAITS.VINDICATION.id],
             }
@@ -73,7 +77,7 @@ local function getAttack(attackIndex, roll, threshold, offence, offenceBuff, bas
     }
 end
 
-local function getPenance(roll, threshold, spirit, spiritBuff, baseDmgBuff, damageDoneBuff, numGreaterHealSlots, targetIsKO, numVindicationCharges, activeTraits)
+local function getPenance(roll, threshold, spirit, spiritBuff, baseDmgBuff, damageDoneBuff, numGreaterHealSlots, targetIsKO, activeTraits)
     local attackValue
     local dmg
     local amountHealed = 0
@@ -91,7 +95,7 @@ local function getPenance(roll, threshold, spirit, spiritBuff, baseDmgBuff, dama
         dmg = rules.offence.applyCritModifier(dmg)
     end
 
-    if rules.offence.canProcVindication() and numVindicationCharges > 0 then
+    if rules.offence.canProcVindication() then
         hasVindicationProc = rules.offence.hasVindicationProc(dmg)
         if hasVindicationProc then
             vindicationHealing = rules.offence.calculateVindicationHealing(dmg)
@@ -113,8 +117,12 @@ local function getPenance(roll, threshold, spirit, spiritBuff, baseDmgBuff, dama
         amountHealed = amountHealed,
         numGreaterHealSlots = numGreaterHealSlots,
         traits = {
+            [TRAITS.FAULTLINE.id] = {
+                canUse = dmg > 0,
+                active = activeTraits[TRAITS.FAULTLINE.id],
+            },
             [TRAITS.VINDICATION.id] = {
-                proc = hasVindicationProc,
+                canUse = hasVindicationProc,
                 healingDone = vindicationHealing,
                 active = activeTraits[TRAITS.VINDICATION.id],
             }

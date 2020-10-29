@@ -185,7 +185,7 @@ local function shouldShowPreRollUI()
 end
 
 local function shouldShowPostRollUI()
-    return character.hasTrait(TRAITS.FAULTLINE) or character.hasTrait(TRAITS.SHATTER_SOUL)
+    return character.hasTrait(TRAITS.SHATTER_SOUL)
 end
 
 rules.offence = {

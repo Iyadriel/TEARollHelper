@@ -4,6 +4,7 @@ local buffsState = ns.state.buffs.state
 local character = ns.character
 local characterState = ns.state.character
 local consequences = ns.consequences
+local rolls = ns.state.rolls
 local ui = ns.ui
 
 local COLOURS = TEARollHelper.COLOURS
@@ -48,5 +49,32 @@ local function traitActiveText(trait, order)
     }
 end
 
+--[[ local options = {
+    order: Number,
+    name: Function?,
+} ]]
+local function traitToggle(actionType, getAction, trait, options)
+    return {
+        order = options.order,
+        type = "toggle",
+        width = "full",
+        name = options.name or function()
+            return traitColour(trait) .. "Use " .. trait.name
+        end,
+        desc = trait.desc,
+        hidden = function()
+            local numCharges = state.featsAndTraits.numTraitCharges.get(trait.id)
+            return numCharges <= 0 or not getAction().traits[trait.id].canUse
+        end,
+        get = function()
+            return rolls.state[actionType].activeTraits.get(trait)
+        end,
+        set = function()
+            rolls.state[actionType].activeTraits.toggle(trait)
+        end,
+    }
+end
+
 ui.helpers.traitButton = traitButton
 ui.helpers.traitActiveText = traitActiveText
+ui.helpers.traitToggle = traitToggle

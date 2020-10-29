@@ -13,12 +13,32 @@ local ACTIONS = constants.ACTIONS
 local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
 
+local function faultlineToString()
+    return " You apply your attack to all targets on a straight line outwards from yourself."
+end
+
 local function vindicationToString(vindication)
     return COLOURS.HEALING .. " You heal for " .. vindication.healingDone .. " HP.|r"
 end
 
+local traitActionToString = {
+    [TRAITS.FAULTLINE.id] = faultlineToString,
+    [TRAITS.VINDICATION.id] = vindicationToString,
+}
+
+local function getTraitMessages(action)
+    local msg = ""
+
+    for traitID, traitAction in pairs(action.traits) do
+        if traitAction.canUse and traitAction.active then
+            msg = msg .. traitActionToString[traitID](traitAction)
+        end
+    end
+
+    return msg
+end
+
 local function attackToString(attack)
-    local vindication = attack.traits[TRAITS.VINDICATION.id]
     local msg = ""
 
     if attack.dmg > 0 then
@@ -42,15 +62,12 @@ local function attackToString(attack)
         msg = msg .. COLOURS.NOTE .. "You can't deal any damage with this roll."
     end
 
-    if vindication.active then
-        msg = msg .. vindicationToString(vindication)
-    end
+    msg = msg .. getTraitMessages(attack)
 
     return msg
 end
 
 local function penanceToString(penance)
-    local vindication = penance.traits[TRAITS.VINDICATION.id]
     local msg = ""
 
     if penance.dmg > 0 then
@@ -67,12 +84,10 @@ local function penanceToString(penance)
     end
 
     if penance.amountHealed > 0 then
-        msg = msg .. COLOURS.HEALING .. " You heal for " .. penance.amountHealed .. " HP."
+        msg = msg .. COLOURS.HEALING .. " You heal for " .. penance.amountHealed .. " HP.|r"
     end
 
-    if vindication.active then
-        msg = msg .. vindicationToString(vindication)
-    end
+    msg = msg .. getTraitMessages(penance)
 
     return msg
 end
@@ -203,10 +218,6 @@ local function ascendToString()
     return COLOURS.BUFF .. "You can apply your buff to a second target."
 end
 
-local function faultlineToString()
-    return "You can apply your attack to all targets on a straight line outwards from yourself."
-end
-
 local function lifePulseToString()
     return COLOURS.HEALING .. "You can heal everyone in melee range of your target."
 end
@@ -233,7 +244,6 @@ local toString = {
 
 local traitsToString = {
     [TRAITS.ASCEND] = ascendToString,
-    [TRAITS.FAULTLINE] = faultlineToString,
     [TRAITS.LIFE_PULSE] = lifePulseToString,
     [TRAITS.PRESENCE_OF_VIRTUE] = presenceOfVirtueToString,
     [TRAITS.SHIELD_SLAM] = shieldSlamToString,

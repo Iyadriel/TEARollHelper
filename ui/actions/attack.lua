@@ -154,26 +154,17 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                             turns.roll(rollMode, rollModeMod, false)
                         end
                     },
-                    useVindication = {
+                    useFaultline = ui.helpers.traitToggle(ACTIONS.attack, rolls.getAttack, TRAITS.FAULTLINE, {
                         order = 6,
-                        type = "toggle",
-                        width = "full",
+                    }),
+                    useVindication = ui.helpers.traitToggle(ACTIONS.attack, rolls.getAttack, TRAITS.VINDICATION, {
+                        order = 7,
                         name = function()
                             return COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.VINDICATION.name ..  ": " .. COLOURS.HEALING .. "Heal for " .. rolls.getAttack().traits[TRAITS.VINDICATION.id].healingDone .. " HP"
                         end,
-                        desc = TRAITS.VINDICATION.desc,
-                        hidden = function()
-                            return not rolls.getAttack().traits[TRAITS.VINDICATION.id].proc
-                        end,
-                        get = function()
-                            return rolls.state.attack.activeTraits.get(TRAITS.VINDICATION)
-                        end,
-                        set = function()
-                            rolls.state.attack.activeTraits.toggle(TRAITS.VINDICATION)
-                        end,
-                    },
+                    }),
                     confirm = {
-                        order = 7,
+                        order = 8,
                         type = "execute",
                         name = function()
                             local attack = rolls.getAttack()
@@ -208,9 +199,8 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                     return not state.attack.currentRoll.get() or not (rolls.getAttack().dmg > 0) or not rules.offence.shouldShowPostRollUI()
                 end,
                 args = {
-                    useFaultline = ui.helpers.traitButton(TRAITS.FAULTLINE, { order = 0 }),
                     useShatterSoul = ui.helpers.traitButton(TRAITS.SHATTER_SOUL, {
-                        order = 1,
+                        order = 0,
                         hidden = function()
                             return not rolls.getAttack().shatterSoulEnabled
                         end,

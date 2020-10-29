@@ -6,7 +6,6 @@ local actions = ns.actions
 local characterState = ns.state.character.state
 local consequences = ns.consequences
 local constants = ns.constants
-local feats = ns.resources.feats
 local rolls = ns.state.rolls
 local rules = ns.rules
 local traits = ns.resources.traits
@@ -122,26 +121,17 @@ ui.modules.actions.modules.penance.getOptions = function(options)
                             return actions.toString(ACTIONS.penance, penance)
                         end
                     },
-                    useVindication = {
+                    useFaultline = ui.helpers.traitToggle(ACTIONS.penance, rolls.getPenance, TRAITS.FAULTLINE, {
                         order = 3,
-                        type = "toggle",
-                        width = "full",
+                    }),
+                    useVindication = ui.helpers.traitToggle(ACTIONS.penance, rolls.getPenance, TRAITS.VINDICATION, {
+                        order = 4,
                         name = function()
                             return COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.VINDICATION.name ..  ": " .. COLOURS.HEALING .. "Heal for " .. rolls.getPenance().traits[TRAITS.VINDICATION.id].healingDone .. " HP"
                         end,
-                        desc = TRAITS.VINDICATION.desc,
-                        hidden = function()
-                            return not rolls.getPenance().traits[TRAITS.VINDICATION.id].proc
-                        end,
-                        get = function()
-                            return rolls.state.attack.activeTraits.get(TRAITS.VINDICATION)
-                        end,
-                        set = function()
-                            rolls.state.attack.activeTraits.toggle(TRAITS.VINDICATION)
-                        end,
-                    },
+                    }),
                     confirm = {
-                        order = 4,
+                        order = 5,
                         type = "execute",
                         name = "Confirm",
                         desc = "Confirm that you perform the stated action, consuming any charges and buffs used.",
@@ -155,18 +145,6 @@ ui.modules.actions.modules.penance.getOptions = function(options)
                             consequences.confirmAction(ACTIONS.penance, rolls.getPenance())
                         end
                     },
-                }
-            },
-            postRoll = {
-                order = 4,
-                type = "group",
-                name = "After rolling",
-                inline = true,
-                hidden = function()
-                    return not state.attack.currentRoll.get() or not (rolls.getPenance().dmg > 0) or not rules.penance.shouldShowPostRollUI()
-                end,
-                args = {
-                    useFaultline = ui.helpers.traitButton(TRAITS.FAULTLINE, { order = 0 }),
                 }
             },
         }

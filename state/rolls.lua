@@ -43,6 +43,7 @@ rolls.initState = function()
         [ACTIONS.penance] = {
             numGreaterHealSlots = 1,
             targetIsKO = false,
+            activeTraits = {},
         },
 
         [ACTIONS.cc] = {
@@ -176,11 +177,27 @@ rolls.state = {
     [ACTIONS.penance] = {
         numGreaterHealSlots = basicGetSet(ACTIONS.penance, "numGreaterHealSlots"),
         targetIsKO = basicGetSet(ACTIONS.penance, "targetIsKO"),
+        activeTraits = {
+            get = function(trait)
+                return state.penance.activeTraits[trait.id]
+            end,
+            toggle = function(trait)
+                if state.penance.activeTraits[trait.id] then
+                    state.penance.activeTraits[trait.id] = false
+                else
+                    state.penance.activeTraits[trait.id] = true
+                end
+            end,
+            reset = function()
+                state.penance.activeTraits = {}
+            end,
+        },
 
         resetSlots = function()
             TEARollHelper:Debug("Resetting slots for penance")
             rolls.state.penance.numGreaterHealSlots.set(1)
             rolls.state.penance.targetIsKO.set(false)
+            rolls.state.penance.activeTraits.reset()
         end,
     },
 
@@ -338,10 +355,9 @@ local function getAttack()
     local isAOE = state.attack.isAOE
     local threshold = state.attack.threshold
     local numBloodHarvestSlots = state.attack.numBloodHarvestSlots
-    local numVindicationCharges = characterState.featsAndTraits.numTraitCharges.get(TRAITS.VINDICATION.id)
     local activeTraits = state.attack.activeTraits
 
-    return actions.getAttack(attackIndex, state.attack.currentRoll, threshold, offence, offenceBuff, baseDmgBuff, damageDoneBuff, enemyId, isAOE, numBloodHarvestSlots, numVindicationCharges, activeTraits)
+    return actions.getAttack(attackIndex, state.attack.currentRoll, threshold, offence, offenceBuff, baseDmgBuff, damageDoneBuff, enemyId, isAOE, numBloodHarvestSlots, activeTraits)
 end
 
 local function getPenance()
@@ -350,10 +366,9 @@ local function getPenance()
     local baseDmgBuff = buffsState.buffs.baseDamage.get()
     local damageDoneBuff = buffsState.buffs.damageDone.get()
     local threshold = state.attack.threshold
-    local numVindicationCharges = characterState.featsAndTraits.numTraitCharges.get(TRAITS.VINDICATION.id)
-    local activeTraits = state.attack.activeTraits
+    local activeTraits = state.penance.activeTraits
 
-    return actions.getPenance(state.attack.currentRoll, threshold, spirit, spiritBuff, baseDmgBuff, damageDoneBuff, state.penance.numGreaterHealSlots, state.penance.targetIsKO, numVindicationCharges, activeTraits)
+    return actions.getPenance(state.attack.currentRoll, threshold, spirit, spiritBuff, baseDmgBuff, damageDoneBuff, state.penance.numGreaterHealSlots, state.penance.targetIsKO, activeTraits)
 end
 
 local function getCC()
