@@ -59,31 +59,17 @@ ui.modules.actions.modules.buff.getOptions = function(options)
                             return actions.toString(ACTIONS.buff, buff)
                         end
                     },
+                    useAscend = ui.helpers.traitToggle(ACTIONS.buff, rolls.getBuff, TRAITS.ASCEND, {
+                        order = 1,
+                    }),
                     confirm = ui.helpers.confirmActionButton(ACTIONS.buff, rolls.getBuff, {
-                       order = 1,
+                       order = 2,
                        hidden = function()
                             local buff = rolls.getBuff()
                             local shouldShow = buff.amountBuffed > 0
 
                             return not shouldShow
                         end
-                    }),
-                }
-            },
-            postRoll = {
-                order = 3,
-                type = "group",
-                name = "After rolling",
-                inline = true,
-                hidden = function()
-                    return not rolls.state.buff.currentRoll.get() or not rules.buffing.shouldShowPostRollUI() or rolls.getBuff().amountBuffed <= 0
-                end,
-                args = {
-                    useAscend = ui.helpers.traitButton(TRAITS.ASCEND, {
-                        order = 0,
-                        hidden = function()
-                            return rolls.getBuff().amountBuffed <= 0
-                        end,
                     }),
                 }
             },

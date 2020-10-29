@@ -10,14 +10,11 @@ local environment = ns.state.environment
 local rolls = ns.state.rolls
 local rules = ns.rules
 
-local traits = ns.resources.traits
-
 local ACTIONS = constants.ACTIONS
 local DEFENCE_TYPES = constants.DEFENCE_TYPES
 local EVENTS = bus.EVENTS
 local ROLL_MODES = constants.ROLL_MODES
 local STATS = constants.STATS
-local TRAITS = traits.TRAITS
 
 local state
 
@@ -61,6 +58,7 @@ rolls.initState = function()
         [ACTIONS.buff] = {
             rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
+            activeTraits = {},
         },
 
         [ACTIONS.defend] = {
@@ -222,6 +220,26 @@ rolls.state = {
     [ACTIONS.buff] = {
         rollMode = basicGetSet(ACTIONS.buff, "rollMode"),
         currentRoll = basicGetSet(ACTIONS.buff, "currentRoll"),
+        activeTraits = {
+            get = function(trait)
+                return state.buff.activeTraits[trait.id]
+            end,
+            toggle = function(trait)
+                if state.buff.activeTraits[trait.id] then
+                    state.buff.activeTraits[trait.id] = false
+                else
+                    state.buff.activeTraits[trait.id] = true
+                end
+            end,
+            reset = function()
+                state.buff.activeTraits = {}
+            end,
+        },
+
+        resetSlots = function()
+            TEARollHelper:Debug("Resetting slots for buffing")
+            rolls.state.buff.activeTraits.reset()
+        end,
     },
 
     [ACTIONS.defend] = {
@@ -277,6 +295,7 @@ local function resetSlots()
     rolls.state.attack.resetSlots()
     rolls.state.penance.resetSlots()
     rolls.state.healing.resetSlots()
+    rolls.state.buff.resetSlots()
     rolls.state.utility.resetSlots()
 end
 
@@ -394,8 +413,9 @@ local function getBuff()
     local offence = character.getPlayerOffence()
     local offenceBuff = buffsState.buffs.offence.get()
     local spiritBuff = buffsState.buffs.spirit.get()
+    local activeTraits = state.buff.activeTraits
 
-    return actions.getBuff(state.buff.currentRoll, spirit, spiritBuff, offence, offenceBuff)
+    return actions.getBuff(state.buff.currentRoll, spirit, spiritBuff, offence, offenceBuff, activeTraits)
 end
 
 local function getDefence()

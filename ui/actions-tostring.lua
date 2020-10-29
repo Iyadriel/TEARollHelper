@@ -13,6 +13,10 @@ local ACTIONS = constants.ACTIONS
 local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
 
+local function ascendToString()
+    return COLOURS.BUFF .. " You apply your buff to a second target.|r"
+end
+
 local function faultlineToString()
     return " You apply your attack to all targets on a straight line outwards from yourself."
 end
@@ -22,6 +26,7 @@ local function vindicationToString(vindication)
 end
 
 local traitActionToString = {
+    [TRAITS.ASCEND.id] = ascendToString,
     [TRAITS.FAULTLINE.id] = faultlineToString,
     [TRAITS.VINDICATION.id] = vindicationToString,
 }
@@ -122,6 +127,8 @@ local function buffToString(buff)
         msg = COLOURS.NOTE .. "You can't buff anyone with this roll."
     end
 
+    msg = msg .. getTraitMessages(buff)
+
     return msg
 end
 
@@ -214,10 +221,6 @@ end
 
 -- Trait actions
 
-local function ascendToString()
-    return COLOURS.BUFF .. "You can apply your buff to a second target."
-end
-
 local function lifePulseToString()
     return COLOURS.HEALING .. "You can heal everyone in melee range of your target."
 end
@@ -243,7 +246,6 @@ local toString = {
 }
 
 local traitsToString = {
-    [TRAITS.ASCEND] = ascendToString,
     [TRAITS.LIFE_PULSE] = lifePulseToString,
     [TRAITS.PRESENCE_OF_VIRTUE] = presenceOfVirtueToString,
     [TRAITS.SHIELD_SLAM] = shieldSlamToString,

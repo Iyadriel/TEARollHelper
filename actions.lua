@@ -278,7 +278,7 @@ local function getHealing(roll, spirit, spiritBuff, healingDoneBuff, numGreaterH
     }
 end
 
-local function getBuff(roll, spirit, spiritBuff, offence, offenceBuff)
+local function getBuff(roll, spirit, spiritBuff, offence, offenceBuff, activeTraits)
     local buffValue
     local amountBuffed
     local isCrit = rules.buffing.isCrit(roll)
@@ -290,7 +290,13 @@ local function getBuff(roll, spirit, spiritBuff, offence, offenceBuff)
     return {
         amountBuffed = amountBuffed,
         isCrit = isCrit,
-        usesInspiringPresence = rules.buffing.usesInspiringPresence()
+        usesInspiringPresence = rules.buffing.usesInspiringPresence(),
+        traits = {
+            [TRAITS.ASCEND.id] = {
+                canUse = amountBuffed > 0,
+                active = activeTraits[TRAITS.ASCEND.id],
+            },
+        },
     }
 end
 
