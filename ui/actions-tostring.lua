@@ -13,7 +13,12 @@ local ACTIONS = constants.ACTIONS
 local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
 
+local function vindicationToString(vindication)
+    return COLOURS.HEALING .. " You heal for " .. vindication.healingDone .. " HP.|r"
+end
+
 local function attackToString(attack)
+    local vindication = attack.traits[TRAITS.VINDICATION.id]
     local msg = ""
 
     if attack.dmg > 0 then
@@ -37,10 +42,15 @@ local function attackToString(attack)
         msg = msg .. COLOURS.NOTE .. "You can't deal any damage with this roll."
     end
 
+    if vindication.active then
+        msg = msg .. vindicationToString(vindication)
+    end
+
     return msg
 end
 
 local function penanceToString(penance)
+    local vindication = penance.traits[TRAITS.VINDICATION.id]
     local msg = ""
 
     if penance.dmg > 0 then
@@ -58,6 +68,10 @@ local function penanceToString(penance)
 
     if penance.amountHealed > 0 then
         msg = msg .. COLOURS.HEALING .. " You heal for " .. penance.amountHealed .. " HP."
+    end
+
+    if vindication.active then
+        msg = msg .. vindicationToString(vindication)
     end
 
     return msg
@@ -205,10 +219,6 @@ local function shieldSlamToString(shieldSlam)
     return "You deal " .. shieldSlam.dmg .. " damage with your Shield Slam."
 end
 
-local function vindicationToString()
-    return COLOURS.HEALING .. "You may heal for the stated amount."
-end
-
 local toString = {
     [ACTIONS.attack] = attackToString,
     [ACTIONS.penance] = penanceToString,
@@ -227,7 +237,6 @@ local traitsToString = {
     [TRAITS.LIFE_PULSE] = lifePulseToString,
     [TRAITS.PRESENCE_OF_VIRTUE] = presenceOfVirtueToString,
     [TRAITS.SHIELD_SLAM] = shieldSlamToString,
-    [TRAITS.VINDICATION] = vindicationToString,
 }
 
 actions.toString = function(actionType, action)

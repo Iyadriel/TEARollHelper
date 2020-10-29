@@ -122,8 +122,26 @@ ui.modules.actions.modules.penance.getOptions = function(options)
                             return actions.toString(ACTIONS.penance, penance)
                         end
                     },
-                    confirm = {
+                    useVindication = {
                         order = 3,
+                        type = "toggle",
+                        width = "full",
+                        name = function()
+                            return COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.VINDICATION.name ..  ": " .. COLOURS.HEALING .. "Heal for " .. rolls.getPenance().traits[TRAITS.VINDICATION.id].healingDone .. " HP"
+                        end,
+                        desc = TRAITS.VINDICATION.desc,
+                        hidden = function()
+                            return not rolls.getPenance().traits[TRAITS.VINDICATION.id].proc
+                        end,
+                        get = function()
+                            return rolls.state.attack.activeTraits.get(TRAITS.VINDICATION)
+                        end,
+                        set = function()
+                            rolls.state.attack.activeTraits.toggle(TRAITS.VINDICATION)
+                        end,
+                    },
+                    confirm = {
+                        order = 4,
                         type = "execute",
                         name = "Confirm",
                         desc = "Confirm that you perform the stated action, consuming any charges and buffs used.",
@@ -149,22 +167,6 @@ ui.modules.actions.modules.penance.getOptions = function(options)
                 end,
                 args = {
                     useFaultline = ui.helpers.traitButton(TRAITS.FAULTLINE, { order = 0 }),
-                    useVindication = {
-                        order = 2,
-                        type = "execute",
-                        width = "full",
-                        name = function()
-                            return COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.VINDICATION.name ..  ": " .. COLOURS.HEALING .. "Heal for " .. rolls.getPenance().vindicationHealing .. " HP"
-                        end,
-                        desc = TRAITS.VINDICATION.desc,
-                        hidden = function()
-                            return not rolls.getPenance().hasVindicationProc
-                        end,
-                        disabled = function()
-                            return characterState.featsAndTraits.numTraitCharges.get(TRAITS.VINDICATION.id) == 0
-                        end,
-                        func = consequences.useTrait(TRAITS.VINDICATION),
-                    }
                 }
             },
         }

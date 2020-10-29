@@ -2,7 +2,11 @@ local _, ns = ...
 
 local rules = ns.rules
 
-local function getAttack(attackIndex, roll, threshold, offence, offenceBuff, baseDmgBuff, damageDoneBuff, enemyId, isAOE, numBloodHarvestSlots, numVindicationCharges)
+local traits = ns.resources.traits
+
+local TRAITS = traits.TRAITS
+
+local function getAttack(attackIndex, roll, threshold, offence, offenceBuff, baseDmgBuff, damageDoneBuff, enemyId, isAOE, numBloodHarvestSlots, numVindicationCharges, activeTraits)
     local attackValue
     local dmg
     local critType = rules.offence.getCritType()
@@ -59,12 +63,17 @@ local function getAttack(attackIndex, roll, threshold, offence, offenceBuff, bas
         hasMercyFromPainProc = hasMercyFromPainProc,
         mercyFromPainBonusHealing = mercyFromPainBonusHealing,
         shatterSoulEnabled = shatterSoulEnabled,
-        hasVindicationProc = hasVindicationProc,
-        vindicationHealing = vindicationHealing,
+        traits = {
+            [TRAITS.VINDICATION.id] = {
+                proc = hasVindicationProc,
+                healingDone = vindicationHealing,
+                active = activeTraits[TRAITS.VINDICATION.id],
+            }
+        },
     }
 end
 
-local function getPenance(roll, threshold, spirit, spiritBuff, baseDmgBuff, damageDoneBuff, numGreaterHealSlots, targetIsKO, numVindicationCharges)
+local function getPenance(roll, threshold, spirit, spiritBuff, baseDmgBuff, damageDoneBuff, numGreaterHealSlots, targetIsKO, numVindicationCharges, activeTraits)
     local attackValue
     local dmg
     local amountHealed = 0
@@ -103,8 +112,13 @@ local function getPenance(roll, threshold, spirit, spiritBuff, baseDmgBuff, dama
         isCrit = isCrit,
         amountHealed = amountHealed,
         numGreaterHealSlots = numGreaterHealSlots,
-        hasVindicationProc = hasVindicationProc,
-        vindicationHealing = vindicationHealing,
+        traits = {
+            [TRAITS.VINDICATION.id] = {
+                proc = hasVindicationProc,
+                healingDone = vindicationHealing,
+                active = activeTraits[TRAITS.VINDICATION.id],
+            }
+        },
     }
 end
 

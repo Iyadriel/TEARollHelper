@@ -28,7 +28,10 @@ local state = characterState.state
 local function useTraitCharge(trait, msg)
     local traitGetSet = state.featsAndTraits.numTraitCharges
     traitGetSet.set(trait.id, traitGetSet.get(trait.id) - 1)
+end
 
+local function useTraitChargeWithMsg(trait, msg)
+    useTraitCharge(trait)
     bus.fire(EVENTS.TRAIT_ACTIVATED, trait.id, msg)
 end
 
@@ -113,10 +116,6 @@ local function useVersatile()
     })
 end
 
-local function useVindication()
-    return actions.traitToString(TRAITS.VINDICATION)
-end
-
 local TRAIT_FNS = {
     [TRAITS.ARTISAN.id] = useArtisan,
     [TRAITS.ASCEND.id] = useAscend,
@@ -132,13 +131,12 @@ local TRAIT_FNS = {
     [TRAITS.SHATTER_SOUL.id] = useShatterSoul,
     [TRAITS.SHIELD_SLAM.id] = useShieldSlam,
     [TRAITS.VERSATILE.id] = useVersatile,
-    [TRAITS.VINDICATION.id] = useVindication,
 }
 
 local function useTrait(trait)
     return function(...)
         local msg = TRAIT_FNS[trait.id](...)
-        useTraitCharge(trait, msg)
+        useTraitChargeWithMsg(trait, msg)
     end
 end
 
@@ -204,6 +202,14 @@ local function confirmAction(actionType, action, hideMsg)
     -- not every action has specific effects yet
     if actionFns[actionType] then
         actionFns[actionType](action)
+    end
+
+    if action.traits then
+        for traitID, traitAction in pairs(action.traits) do
+            if traitAction.active then
+                useTraitCharge(TRAITS[traitID])
+            end
+        end
     end
 
     local actionState = rollState.state[actionType]

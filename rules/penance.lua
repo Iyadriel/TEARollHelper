@@ -24,7 +24,7 @@ local function shouldShowPreRollUI()
 end
 
 local function shouldShowPostRollUI()
-    return character.hasTrait(TRAITS.FAULTLINE) or character.hasTrait(TRAITS.VINDICATION)
+    return character.hasTrait(TRAITS.FAULTLINE)
 end
 
 rules.penance = {

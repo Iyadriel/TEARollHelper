@@ -154,8 +154,26 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                             turns.roll(rollMode, rollModeMod, false)
                         end
                     },
-                    confirm = {
+                    useVindication = {
                         order = 6,
+                        type = "toggle",
+                        width = "full",
+                        name = function()
+                            return COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.VINDICATION.name ..  ": " .. COLOURS.HEALING .. "Heal for " .. rolls.getAttack().traits[TRAITS.VINDICATION.id].healingDone .. " HP"
+                        end,
+                        desc = TRAITS.VINDICATION.desc,
+                        hidden = function()
+                            return not rolls.getAttack().traits[TRAITS.VINDICATION.id].proc
+                        end,
+                        get = function()
+                            return rolls.state.attack.activeTraits.get(TRAITS.VINDICATION)
+                        end,
+                        set = function()
+                            rolls.state.attack.activeTraits.toggle(TRAITS.VINDICATION)
+                        end,
+                    },
+                    confirm = {
+                        order = 7,
                         type = "execute",
                         name = function()
                             local attack = rolls.getAttack()
@@ -197,22 +215,6 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                             return not rolls.getAttack().shatterSoulEnabled
                         end,
                     }),
-                    useVindication = {
-                        order = 2,
-                        type = "execute",
-                        width = "full",
-                        name = function()
-                            return COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.VINDICATION.name ..  ": " .. COLOURS.HEALING .. "Heal for " .. rolls.getAttack().vindicationHealing .. " HP"
-                        end,
-                        desc = TRAITS.VINDICATION.desc,
-                        hidden = function()
-                            return not rolls.getAttack().hasVindicationProc
-                        end,
-                        disabled = function()
-                            return characterState.featsAndTraits.numTraitCharges.get(TRAITS.VINDICATION.id) == 0
-                        end,
-                        func = consequences.useTrait(TRAITS.VINDICATION),
-                    }
                 }
             },
             summary = {
@@ -233,7 +235,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                             local totalDamage = 0
 
                             for i, attack in ipairs(rolls.state.attack.attacks.get()) do
-                                msg = msg .. COLOURS.NOTE .. ">|r " .. actions.toString(ACTIONS.attack, attack) .. "|n"
+                                msg = msg .. COLOURS.NOTE .. ">|r " .. actions.toString(ACTIONS.attack, attack) .. "|r|n"
                                 totalDamage = totalDamage + attack.dmg
                             end
 
