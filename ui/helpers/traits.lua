@@ -63,8 +63,11 @@ local function traitToggle(actionType, getAction, trait, options)
         end,
         desc = trait.desc,
         hidden = function()
-            local numCharges = state.featsAndTraits.numTraitCharges.get(trait.id)
-            return numCharges <= 0 or not getAction().traits[trait.id].canUse
+            if character.hasTrait(trait) then
+                local numCharges = state.featsAndTraits.numTraitCharges.get(trait.id)
+                return numCharges <= 0 or not getAction().traits[trait.id].canUse
+            end
+            return true
         end,
         get = function()
             return rolls.state[actionType].activeTraits.get(trait)
