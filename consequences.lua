@@ -176,6 +176,8 @@ local function confirmDefenceAction(defence)
     if empoweredBlades.active then
         useEmpoweredBlades(defence)
     end
+
+    rollState.state.defend.defences.add(defence)
 end
 
 local function confirmMeleeSaveAction(meleeSave)

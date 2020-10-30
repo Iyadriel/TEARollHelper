@@ -187,8 +187,56 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                     }),
                 }
             },
---[[             postRoll = {
+            summary = {
                 order = 7,
+                type = "group",
+                name = "Summary",
+                inline = true,
+                hidden = function()
+                    return rolls.state.defend.defences.count() < 1
+                end,
+                args = {
+                    totalDamage = {
+                        order = 0,
+                        type = "description",
+                        fontSize = "medium",
+                        name = function()
+                            local msg = ""
+                            local totalDamageTaken = 0
+                            local totalDamagePrevented = 0
+
+                            for i, defence in ipairs(rolls.state.defend.defences.get()) do
+                                msg = msg .. COLOURS.NOTE .. ">|r " .. actions.toString(ACTIONS.defend, defence) .. "|r|n"
+                                totalDamageTaken = totalDamageTaken + defence.damageTaken
+                                totalDamagePrevented = totalDamagePrevented + defence.damagePrevented
+                            end
+
+                            if totalDamageTaken > 0 or totalDamagePrevented > 0 then
+                                msg = msg .. COLOURS.NOTE .. "|nTotal:|r " .. totalDamageTaken .. " damage taken"
+
+                                if totalDamagePrevented > 0 then
+                                    msg = msg .. ", " .. totalDamagePrevented .. " damage prevented"
+                                end
+
+                                msg = msg .. "|n "
+                            end
+
+                            return msg
+                        end,
+                    },
+                    reset = {
+                        order = 1,
+                        type = "execute",
+                        width = 0.75,
+                        name = "Clear",
+                        func = function()
+                            rolls.state.defend.defences.clear()
+                        end,
+                    }
+                }
+            },
+--[[             postRoll = {
+                order = 8,
                 type = "group",
                 name = "After rolling",
                 inline = true,

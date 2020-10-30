@@ -64,6 +64,7 @@ rolls.initState = function()
         },
 
         [ACTIONS.defend] = {
+            defences = {},
             defenceType = DEFENCE_TYPES.THRESHOLD,
             threshold = nil,
             damageType = nil,
@@ -277,6 +278,20 @@ rolls.state = {
     },
 
     [ACTIONS.defend] = {
+        defences = {
+            get = function()
+                return state.defend.defences
+            end,
+            count = function()
+                return #state.defend.defences
+            end,
+            add = function(defence)
+                table.insert(state.defend.defences, defence)
+            end,
+            clear = function()
+                state.defend.defences = {}
+            end,
+        },
         defenceType = basicGetSet(ACTIONS.defend, "defenceType", function(defenceType)
             if defenceType ~= DEFENCE_TYPES.THRESHOLD then
                 rolls.state[ACTIONS.defend].threshold.set(0)
@@ -383,6 +398,7 @@ local function resetRolls()
         end
     end
     rolls.state.attack.attacks.clear()
+    rolls.state.defend.defences.clear()
     rolls.state.healing.heals.clear()
 end
 
