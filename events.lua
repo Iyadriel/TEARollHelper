@@ -198,11 +198,22 @@ bus.addListener(EVENTS.TURN_FINISHED, function(index, turnTypeID)
     end
 end)
 
+local function applyRemainingHealAmount(regrowth)
+    local remainingHealAmount = regrowth.remainingTurns * regrowth.healingPerTick
+    if remainingHealAmount > 0 then
+        characterState.state.health.heal(remainingHealAmount, INCOMING_HEAL_SOURCES.OTHER_PLAYER)
+    end
+end
+
 bus.addListener(EVENTS.COMBAT_OVER, function()
     local activeBuffs = buffsState.state.activeBuffs.get()
 
     for i = #activeBuffs, 1, -1 do
         local buff = activeBuffs[i]
+
+        if buff.id == "HoT_" .. TRAITS.FAELUNES_REGROWTH.name then
+            applyRemainingHealAmount(buff)
+        end
 
         if buff.expireOnCombatEnd then
             expireBuff(i, buff)

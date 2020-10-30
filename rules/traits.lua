@@ -44,6 +44,10 @@ local function calculateUtilityBonusBuff(trait)
     end
 end
 
+local function calculateRegrowthHealingPerTick(initialHealAmount)
+    return ceil(initialHealAmount / 2)
+end
+
 local function calculateShieldSlamDmg(baseDmgBuff, defence, defenceBuff)
     local baseDmg = rules.offence.getBaseDamageAfterBuffs(baseDmgBuff)
     local defenceStat = rules.common.calculateDefenceStat(nil, defence, defenceBuff)
@@ -61,5 +65,6 @@ rules.traits = {
     calculateStatBuff = calculateStatBuff,
     calculateUtilityBonusBuff = calculateUtilityBonusBuff,
 
+    calculateRegrowthHealingPerTick = calculateRegrowthHealingPerTick,
     calculateShieldSlamDmg = calculateShieldSlamDmg,
 }

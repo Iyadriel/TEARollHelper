@@ -168,6 +168,7 @@ local function addHoTBuff(label, icon, healingPerTick, remainingTurns)
         source = BUFF_SOURCES.OTHER_PLAYER,
 
         remainingTurns = remainingTurns,
+        expireOnCombatEnd = true,
     })
 
     bus.fire(EVENTS.HEALING_OVER_TIME_BUFF_ADDED, label)

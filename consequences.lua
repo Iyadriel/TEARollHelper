@@ -35,6 +35,16 @@ local function useTraitChargeWithMsg(trait, msg)
     bus.fire(EVENTS.TRAIT_ACTIVATED, trait.id, msg)
 end
 
+-- [[ Effects ]]
+
+local function applyFaelunesRegrowth(initialHealAmount)
+    local FAELUNES_REGROWTH = TRAITS.FAELUNES_REGROWTH
+
+    characterState.state.health.heal(initialHealAmount, INCOMING_HEAL_SOURCES.OTHER_PLAYER)
+    local healingPerTick = rules.traits.calculateRegrowthHealingPerTick(initialHealAmount)
+    buffs.addHoTBuff(FAELUNES_REGROWTH.name, FAELUNES_REGROWTH.icon, healingPerTick, FAELUNES_REGROWTH.buffs[1].remainingTurns)
+end
+
 -- [[ Feats/Traits/Fate ]]
 
 local function useFatePoint()
@@ -209,6 +219,7 @@ end
 
 -- [[ Exports ]]
 
+consequences.applyFaelunesRegrowth = applyFaelunesRegrowth
 consequences.useFatePoint = useFatePoint
 consequences.enableLivingBarricade = enableLivingBarricade
 consequences.useTrait = useTrait
