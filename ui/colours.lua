@@ -23,7 +23,7 @@ TEARollHelper.COLOURS = {
         ADRENALINE = '|cffff6b6b',
         BLOOD_HARVEST = '|cffff6b6b',
         MERCY_FROM_PAIN = '|cffebe8bb',
-        REAPER = '|cffc41f3b'
+        REAPER = '|cffc41f3b',
     },
 
     TRAITS = {
@@ -31,6 +31,7 @@ TEARollHelper.COLOURS = {
 
         EMPOWERED_BLADES = '|cff9de851',
         FAELUNES_REGROWTH = '|cff02752a',
+        REAP = '|cffc41f3b',
         SHATTER_SOUL = '|cffa22fc8',
     },
 

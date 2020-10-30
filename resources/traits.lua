@@ -7,7 +7,7 @@ local ACTIONS = constants.ACTIONS
 local BUFF_TYPES = constants.BUFF_TYPES
 local TURN_TYPES = constants.TURN_TYPES
 
-traits.TRAIT_KEYS = {"OTHER", "ARTISAN", "ASCEND", "BULWARK", "CALAMITY_GAMBIT", "EMPOWERED_BLADES", "FAELUNES_REGROWTH", "FAULTLINE", "FOCUS", "LIFE_PULSE", "LIFE_WITHIN", "PRESENCE_OF_VIRTUE", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "VERSATILE", "VINDICATION"}
+traits.TRAIT_KEYS = {"OTHER", "ARTISAN", "ASCEND", "BULWARK", "CALAMITY_GAMBIT", "EMPOWERED_BLADES", "FAELUNES_REGROWTH", "FAULTLINE", "FOCUS", "LIFE_PULSE", "LIFE_WITHIN", "PRESENCE_OF_VIRTUE", "REAP", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "VERSATILE", "VINDICATION"}
 
 traits.TRAITS = {
     OTHER = {
@@ -162,6 +162,12 @@ traits.TRAITS = {
         name = "Presence of Virtue",
         desc = "Activate after performing a successful Melee save on a friendly target, on activation you heal the target for 5 HP and buff them for +5 for their next player turn. Can be used four times per event.",
         numCharges = 4,
+    },
+    REAP = {
+        id = "REAP",
+        name = "Reap",
+        desc = "Activate to apply the result of an Offence roll to all enemies in melee range around you, or in melee range around your target. Can be used once per event. Activate after rolling.",
+        numCharges = 1,
     },
     SECOND_WIND = {
         id = "SECOND_WIND",

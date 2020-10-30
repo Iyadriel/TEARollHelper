@@ -29,6 +29,10 @@ local function presenceOfVirtueToString()
     return COLOURS.HEALING .. " You heal the target for 5 HP. They are also buffed for +5 on their next player turn.|r"
 end
 
+local function reapToString()
+    return COLOURS.TRAITS.REAP .. " You damage all enemies in melee range of you or your target!|r"
+end
+
 local function vindicationToString(vindication)
     return COLOURS.HEALING .. " You heal for " .. vindication.healingDone .. " HP.|r"
 end
@@ -38,6 +42,7 @@ local traitActionToString = {
     [TRAITS.FAULTLINE.id] = faultlineToString,
     [TRAITS.LIFE_PULSE.id] = lifePulseToString,
     [TRAITS.PRESENCE_OF_VIRTUE.id] = presenceOfVirtueToString,
+    [TRAITS.REAP.id] = reapToString,
     [TRAITS.VINDICATION.id] = vindicationToString,
 }
 

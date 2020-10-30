@@ -157,14 +157,17 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                     useFaultline = ui.helpers.traitToggle(ACTIONS.attack, rolls.getAttack, TRAITS.FAULTLINE, {
                         order = 6,
                     }),
-                    useVindication = ui.helpers.traitToggle(ACTIONS.attack, rolls.getAttack, TRAITS.VINDICATION, {
+                    useReap = ui.helpers.traitToggle(ACTIONS.attack, rolls.getAttack, TRAITS.REAP, {
                         order = 7,
+                    }),
+                    useVindication = ui.helpers.traitToggle(ACTIONS.attack, rolls.getAttack, TRAITS.VINDICATION, {
+                        order = 8,
                         name = function()
                             return COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.VINDICATION.name ..  ": " .. COLOURS.HEALING .. "Heal for " .. rolls.getAttack().traits[TRAITS.VINDICATION.id].healingDone .. " HP"
                         end,
                     }),
                     confirm = {
-                        order = 8,
+                        order = 9,
                         type = "execute",
                         name = function()
                             local attack = rolls.getAttack()

@@ -68,6 +68,10 @@ local function getAttack(attackIndex, roll, threshold, offence, offenceBuff, bas
                 canUse = dmg > 0,
                 active = activeTraits[TRAITS.FAULTLINE.id],
             },
+            [TRAITS.REAP.id] = {
+                canUse = dmg > 0,
+                active = activeTraits[TRAITS.REAP.id],
+            },
             [TRAITS.VINDICATION.id] = {
                 canUse = hasVindicationProc,
                 healingDone = vindicationHealing,
