@@ -63,7 +63,6 @@ local function getAttack(attackIndex, roll, threshold, offence, offenceBuff, bas
         numBloodHarvestSlots = numBloodHarvestSlots,
         hasMercyFromPainProc = hasMercyFromPainProc,
         mercyFromPainBonusHealing = mercyFromPainBonusHealing,
-        shatterSoulEnabled = shatterSoulEnabled,
         traits = {
             [TRAITS.FAULTLINE.id] = {
                 canUse = dmg > 0,
@@ -72,6 +71,10 @@ local function getAttack(attackIndex, roll, threshold, offence, offenceBuff, bas
             [TRAITS.REAP.id] = {
                 canUse = dmg > 0,
                 active = dmg > 0 and activeTraits[TRAITS.REAP.id],
+            },
+            [TRAITS.SHATTER_SOUL.id] = {
+                canUse = shatterSoulEnabled,
+                active = shatterSoulEnabled and activeTraits[TRAITS.SHATTER_SOUL.id],
             },
             [TRAITS.VINDICATION.id] = {
                 canUse = hasVindicationProc,

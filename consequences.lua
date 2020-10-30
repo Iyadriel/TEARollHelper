@@ -8,7 +8,6 @@ local characterState = ns.state.character
 local consequences = ns.consequences
 local constants = ns.constants
 local enemies = ns.resources.enemies
-local environmentState = ns.state.environment.state
 local feats = ns.resources.feats
 local rollState = ns.state.rolls
 local rules = ns.rules
@@ -89,10 +88,10 @@ local function useSecondWind()
     state.health.heal(rules.traits.SECOND_WIND_HEAL_AMOUNT, INCOMING_HEAL_SOURCES.SELF)
 end
 
-local function useShatterSoul()
+local function useShatterSoul(attack)
     state.health.heal(rules.traits.SHATTER_SOUL_HEAL_AMOUNT, INCOMING_HEAL_SOURCES.SELF)
 
-    if environmentState.enemyId.get() == ENEMIES.DEMON.id then
+    if attack.enemyId == ENEMIES.DEMON.id then
         buffs.addTraitBuff(TRAITS.SHATTER_SOUL)
     end
 end
@@ -118,7 +117,6 @@ local TRAIT_FNS = {
     [TRAITS.FOCUS.id] = useFocus,
     [TRAITS.LIFE_WITHIN.id] = useLifeWithin,
     [TRAITS.SECOND_WIND.id] = useSecondWind,
-    [TRAITS.SHATTER_SOUL.id] = useShatterSoul,
     [TRAITS.SHIELD_SLAM.id] = useShieldSlam,
     [TRAITS.VERSATILE.id] = useVersatile,
 }
@@ -144,6 +142,11 @@ local function confirmAttackAction(attack)
 
     if attack.hasMercyFromPainProc then
         buffs.addFeatBuff(FEATS.MERCY_FROM_PAIN, attack.mercyFromPainBonusHealing)
+    end
+
+    local shatterSoul = attack.traits[TRAITS.SHATTER_SOUL.id]
+    if shatterSoul.active then
+        useShatterSoul(attack)
     end
 
     rollState.state.attack.attacks.add(attack)

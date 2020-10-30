@@ -160,14 +160,17 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                     useReap = ui.helpers.traitToggle(ACTIONS.attack, rolls.getAttack, TRAITS.REAP, {
                         order = 7,
                     }),
-                    useVindication = ui.helpers.traitToggle(ACTIONS.attack, rolls.getAttack, TRAITS.VINDICATION, {
+                    useShatterSoul = ui.helpers.traitToggle(ACTIONS.attack, rolls.getAttack, TRAITS.SHATTER_SOUL, {
                         order = 8,
+                    }),
+                    useVindication = ui.helpers.traitToggle(ACTIONS.attack, rolls.getAttack, TRAITS.VINDICATION, {
+                        order = 9,
                         name = function()
                             return COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.VINDICATION.name ..  ": " .. COLOURS.HEALING .. "Heal for " .. rolls.getAttack().traits[TRAITS.VINDICATION.id].healingDone .. " HP"
                         end,
                     }),
                     confirm = {
-                        order = 9,
+                        order = 10,
                         type = "execute",
                         name = function()
                             local attack = rolls.getAttack()
@@ -193,7 +196,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                     },
                 }
             },
-            postRoll = {
+--[[             postRoll = {
                 order = 4,
                 type = "group",
                 name = "After rolling",
@@ -202,16 +205,10 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                     return not state.attack.currentRoll.get() or not (rolls.getAttack().dmg > 0) or not rules.offence.shouldShowPostRollUI()
                 end,
                 args = {
-                    useShatterSoul = ui.helpers.traitButton(TRAITS.SHATTER_SOUL, {
-                        order = 0,
-                        hidden = function()
-                            return not rolls.getAttack().shatterSoulEnabled
-                        end,
-                    }),
                 }
-            },
+            }, ]]
             summary = {
-                order = 5,
+                order = 4,
                 type = "group",
                 name = "Summary",
                 inline = true,

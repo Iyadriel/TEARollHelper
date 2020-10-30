@@ -184,10 +184,6 @@ local function shouldShowPreRollUI()
     return character.hasTrait(TRAITS.CALAMITY_GAMBIT) or rules.playerTurn.shouldShowPreRollUI() or rules.other.shouldShowPreRollUI()
 end
 
-local function shouldShowPostRollUI()
-    return character.hasTrait(TRAITS.SHATTER_SOUL)
-end
-
 rules.offence = {
     isCrit = isCrit,
     CRIT_TYPES = CRIT_TYPES,
@@ -219,5 +215,4 @@ rules.offence = {
     calculateVindicationHealing = calculateVindicationHealing,
 
     shouldShowPreRollUI = shouldShowPreRollUI,
-    shouldShowPostRollUI = shouldShowPostRollUI,
 }
