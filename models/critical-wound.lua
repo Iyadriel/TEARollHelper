@@ -1,11 +1,13 @@
 local _, ns = ...
 
 local buffsState = ns.state.buffs
+local bus = ns.bus
 local characterState = ns.state.character
 local constants = ns.constants
 local models = ns.models
 
 local BUFF_SOURCES = constants.BUFF_SOURCES
+local EVENTS = bus.EVENTS
 
 local CriticalWound = {}
 
@@ -57,6 +59,7 @@ function CriticalWound:Apply()
     end
 
     characterState.state.criticalWounds.apply(self)
+    bus.fire(EVENTS.CRITICAL_WOUND_TOGGLED, self.id)
 end
 
 function CriticalWound:Remove()
@@ -69,6 +72,7 @@ function CriticalWound:Remove()
     end
 
     characterState.state.criticalWounds.remove(self)
+    bus.fire(EVENTS.CRITICAL_WOUND_TOGGLED, self.id)
 end
 
 function CriticalWound:Toggle()
