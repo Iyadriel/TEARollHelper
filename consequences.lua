@@ -148,6 +148,8 @@ local function confirmHealAction(heal)
     if heal.outOfCombat and heal.numGreaterHealSlots <= 0 then
         characterState.state.healing.remainingOutOfCombatHeals.spendOne()
     end
+
+    rollState.state.healing.heals.add(heal)
 end
 
 local function confirmDefenceAction(defence)

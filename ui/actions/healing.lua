@@ -145,6 +145,44 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                     },
                 }
             },
+            summary = {
+                order = 3,
+                type = "group",
+                name = "Summary",
+                inline = true,
+                hidden = function()
+                    return rolls.state.healing.heals.count() < 1
+                end,
+                args = {
+                    totalHealing = {
+                        order = 0,
+                        type = "description",
+                        fontSize = "medium",
+                        name = function()
+                            local msg = ""
+                            local totalHealing = 0
+
+                            for _, heal in ipairs(rolls.state.healing.heals.get()) do
+                                msg = msg .. COLOURS.NOTE .. ">|r " .. actions.toString(ACTIONS.healing, heal) .. "|r|n"
+                                totalHealing = totalHealing + heal.amountHealed
+                            end
+
+                            msg = msg .. COLOURS.NOTE .. "|nTotal:|r " .. totalHealing .. " healing|n "
+
+                            return msg
+                        end,
+                    },
+                    reset = {
+                        order = 1,
+                        type = "execute",
+                        width = 0.75,
+                        name = "Clear",
+                        func = function()
+                            rolls.state.healing.heals.clear()
+                        end,
+                    }
+                }
+            },
         }
     }
 end

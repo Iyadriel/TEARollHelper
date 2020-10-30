@@ -49,6 +49,7 @@ rolls.initState = function()
         },
 
         [ACTIONS.healing] = {
+            heals = {},
             numGreaterHealSlots = 0,
             targetIsKO = false,
             rollMode = ROLL_MODES.NORMAL,
@@ -207,6 +208,20 @@ rolls.state = {
     },
 
     [ACTIONS.healing] = {
+        heals = {
+            get = function()
+                return state.healing.heals
+            end,
+            count = function()
+                return #state.healing.heals
+            end,
+            add = function(healing)
+                table.insert(state.healing.heals, healing)
+            end,
+            clear = function()
+                state.healing.heals = {}
+            end,
+        },
         numGreaterHealSlots = basicGetSet(ACTIONS.healing, "numGreaterHealSlots"),
         targetIsKO = basicGetSet(ACTIONS.healing, "targetIsKO"),
         rollMode = basicGetSet(ACTIONS.healing, "rollMode"),
@@ -346,6 +361,7 @@ local function resetRolls()
         end
     end
     rolls.state.attack.attacks.clear()
+    rolls.state.healing.heals.clear()
 end
 
 local function resetThresholds()
