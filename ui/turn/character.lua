@@ -2,7 +2,6 @@ local _, ns = ...
 
 local COLOURS = TEARollHelper.COLOURS
 
-local buffsState = ns.state.buffs.state
 local character = ns.character
 local integrations = ns.integrations
 local feats = ns.resources.feats
@@ -56,35 +55,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
         end,
         order = options.order,
         args = {
-            debugView = {
-                order = 0,
-                type = "group",
-                name = "Debug",
-                inline = true,
-                hidden = function()
-                    return not settings.debug.get()
-                end,
-                args = {
-                    statBuffs = {
-                        order = 1,
-                        type = "description",
-                        name = function()
-                            local out = {
-                                "Offence buff: ",
-                                buffsState.buffs.offence.get(),
-                                "|nDefence buff: ",
-                                buffsState.buffs.defence.get(),
-                                "|nSpirit buff: ",
-                                buffsState.buffs.spirit.get(),
-                                "|nStamina buff: ",
-                                buffsState.buffs.stamina.get(),
-                            }
-
-                            return table.concat(out)
-                        end,
-                    }
-                }
-            },
+            debugView = ui.helpers.debugView(),
             health = {
                 order = 1,
                 type = "group",

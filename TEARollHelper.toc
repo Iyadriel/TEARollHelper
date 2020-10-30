@@ -64,6 +64,7 @@ ui/widgets/buff_button.lua
 ui/widgets/slider.lua
 
 ui/colours.lua
+ui/helpers/debug-view.lua
 ui/helpers/confirm-action.lua
 ui/helpers/traits.lua
 
