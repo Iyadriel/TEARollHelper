@@ -11,7 +11,7 @@ local TURN_TYPES = constants.TURN_TYPES
 
 local wounds = {
     INJURED_ARM = {
-        key = "INJURED_ARM",
+        id = "INJURED_ARM",
         index = 1,
         name = "Injured Arm",
         desc = "You have disadvantage on Attack rolls.",
@@ -24,7 +24,7 @@ local wounds = {
         },
     },
     INJURED_LEG = {
-        key = "INJURED_LEG",
+        id = "INJURED_LEG",
         index = 2,
         name = "Injured Leg",
         desc = "You have disadvantage on Defence rolls.",
@@ -37,7 +37,7 @@ local wounds = {
         },
     },
     BAD_WOUNDS = {
-        key = "BAD_WOUNDS",
+        id = "BAD_WOUNDS",
         index = 3,
         name = "Bad Wounds",
         desc = "Your max HP is reduced by 8.",
@@ -48,7 +48,7 @@ local wounds = {
         },
     },
     INTERNAL_BLEEDING = {
-        key = "INTERNAL_BLEEDING",
+        id = "INTERNAL_BLEEDING",
         index = 4,
         name = "Internal Bleeding",
         desc = "You take 3 damage at the start of every player turn. Cannot be prevented or reduced in any way.",
@@ -61,21 +61,21 @@ local wounds = {
         },
     },
     CONCUSSION = {
-        key = "CONCUSSION",
+        id = "CONCUSSION",
         index = 5,
         name = "Concussion",
         desc = "You lose 2 of your Utility traits (your choice).",
         icon = "Interface\\Icons\\spell_frost_stun",
     },
     CRIPPLING_PAIN = {
-        key = "CRIPPLING_PAIN",
+        id = "CRIPPLING_PAIN",
         index = 6,
         name = "Crippling Pain",
         desc = "You can no longer perform Saves or Buff rolls.",
         icon = "Interface\\Icons\\spell_holy_painsupression",
     },
     DEEP_BRUISING = {
-        key = "DEEP_BRUISING",
+        id = "DEEP_BRUISING",
         index = 7,
         name = "Deep Bruising",
         desc = "You take 5 more damage from all sources except for Internal Bleeding.",
@@ -86,7 +86,7 @@ local wounds = {
         },
     },
     RUPTURED_ORGANS = {
-        key = "RUPTURED_ORGANS",
+        id = "RUPTURED_ORGANS",
         index = 8,
         name = "Ruptured Organs",
         desc = "Your Offence, Defence, and Spirit stats are reduced by 3.",
@@ -104,9 +104,9 @@ local wounds = {
 
 criticalWounds.WOUNDS = {}
 
-for key, wound in pairs(wounds) do
-    criticalWounds.WOUNDS[key] = CriticalWound:New(
-        wound.key,
+for id, wound in pairs(wounds) do
+    criticalWounds.WOUNDS[id] = CriticalWound:New(
+        wound.id,
         wound.index,
         wound.name,
         wound.desc,

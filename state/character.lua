@@ -220,13 +220,13 @@ characterState.state = {
     },
     criticalWounds = {
         has = function(criticalWound)
-            return state.criticalWounds[criticalWound.key]
+            return state.criticalWounds[criticalWound.id]
         end,
         apply = function(criticalWound)
-            state.criticalWounds[criticalWound.key] = true
+            state.criticalWounds[criticalWound.id] = true
         end,
         remove = function(criticalWound)
-            state.criticalWounds[criticalWound.key] = nil
+            state.criticalWounds[criticalWound.id] = nil
         end,
     },
     featsAndTraits = {

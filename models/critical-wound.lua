@@ -9,9 +9,9 @@ local BUFF_SOURCES = constants.BUFF_SOURCES
 
 local CriticalWound = {}
 
-function CriticalWound:New(key, index, name, desc, icon, buff)
+function CriticalWound:New(id, index, name, desc, icon, buff)
     local wound = {
-        key = key,
+        id = id,
         index = index,
         name = name,
         desc = desc,
@@ -30,7 +30,7 @@ function CriticalWound:IsActive()
 end
 
 function CriticalWound:GetBuffID()
-    return "criticalWound_" .. self.key
+    return "criticalWound_" .. self.id
 end
 
 function CriticalWound:Apply()

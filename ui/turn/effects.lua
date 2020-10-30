@@ -165,8 +165,8 @@ ui.modules.turn.modules.effects.getOptions = function(options)
                 args = (function()
                     local toggles = {}
 
-                    for key, wound in pairs(criticalWounds.WOUNDS) do
-                        toggles[key] = {
+                    for id, wound in pairs(criticalWounds.WOUNDS) do
+                        toggles[id] = {
                             order = wound.index,
                             type = "toggle",
                             name = COLOURS.NOTE .. wound.index.. ": |r" .. wound.name,
