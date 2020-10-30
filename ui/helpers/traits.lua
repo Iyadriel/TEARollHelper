@@ -14,6 +14,14 @@ local function traitColour(trait)
     return COLOURS.TRAITS[trait.id] or COLOURS.TRAITS.GENERIC
 end
 
+local function traitDescription(trait)
+    if trait and trait.desc then
+        local chargeText = trait.numCharges > 1 and  " charges)|r" or  " charge)|r"
+        return trait.desc .. COLOURS.NOTE .. " (" .. trait.numCharges .. chargeText
+    end
+    return ""
+end
+
 --[[ local options = {
     order: Number,
     width: Any,
@@ -27,7 +35,7 @@ local function traitButton(trait, options)
         type = "execute",
         width = options.width,
         name = options.name or traitColour(trait) .. "Use " .. trait.name,
-        desc = trait.desc,
+        desc = traitDescription(trait),
         hidden = options.hidden or function()
             return not character.hasTrait(trait) or (options.checkBuff and buffsState.buffLookup.getTraitBuffs(trait))
         end,
@@ -61,7 +69,7 @@ local function traitToggle(actionType, getAction, trait, options)
         name = options.name or function()
             return traitColour(trait) .. "Use " .. trait.name
         end,
-        desc = trait.desc,
+        desc = traitDescription(trait),
         hidden = function()
             if character.hasTrait(trait) then
                 local numCharges = state.featsAndTraits.numTraitCharges.get(trait.id)
@@ -78,6 +86,7 @@ local function traitToggle(actionType, getAction, trait, options)
     }
 end
 
+ui.helpers.traitDescription = traitDescription
 ui.helpers.traitButton = traitButton
 ui.helpers.traitActiveText = traitActiveText
 ui.helpers.traitToggle = traitToggle

@@ -90,7 +90,7 @@ ui.modules.config.modules.character.modules.traits.getOptions = function(options
             type = "description",
             name = function()
                 local trait = character.getPlayerTraitAtSlot(slotIndex)
-                return trait and trait.desc
+                return ui.helpers.traitDescription(trait)
             end,
             fontSize = "medium",
             hidden = shouldHide,
