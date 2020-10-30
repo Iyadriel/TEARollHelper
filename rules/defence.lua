@@ -68,10 +68,6 @@ local function shouldShowPreRollUI()
     return character.hasFeat(FEATS.LIVING_BARRICADE) or character.hasTrait(TRAITS.BULWARK) or rules.other.shouldShowPreRollUI()
 end
 
-local function shouldShowPostRollUI()
-    return character.hasTrait(TRAITS.EMPOWERED_BLADES)
-end
-
 local function shouldShowDamageType()
     return character.hasFeat(FEATS.ETERNAL_SACRIFICE)
 end
@@ -89,6 +85,5 @@ rules.defence = {
     empoweredBladesEnabled = empoweredBladesEnabled,
 
     shouldShowPreRollUI = shouldShowPreRollUI,
-    shouldShowPostRollUI = shouldShowPostRollUI,
     shouldShowDamageType = shouldShowDamageType,
 }

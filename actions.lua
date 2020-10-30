@@ -148,7 +148,7 @@ local function getCC(roll, offence, offenceBuff, defence, defenceBuff)
     }
 end
 
-local function getDefence(roll, defenceType, threshold, damageType, dmgRisk, defence, defenceBuff, damageTakenBuff)
+local function getDefence(roll, defenceType, threshold, damageType, dmgRisk, defence, defenceBuff, damageTakenBuff, activeTraits)
     local isCrit = rules.defence.isCrit(roll)
     local defendValue, damageTaken, damagePrevented
     local retaliateDmg = 0
@@ -176,6 +176,12 @@ local function getDefence(roll, defenceType, threshold, damageType, dmgRisk, def
         canRetaliate = isCrit,
         retaliateDmg = retaliateDmg,
         empoweredBladesEnabled = empoweredBladesEnabled,
+        traits = {
+            [TRAITS.EMPOWERED_BLADES.id] = {
+                canUse = empoweredBladesEnabled,
+                active = empoweredBladesEnabled and activeTraits[TRAITS.EMPOWERED_BLADES.id],
+            },
+        },
     }
 end
 

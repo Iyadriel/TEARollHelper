@@ -70,6 +70,7 @@ rolls.initState = function()
             damageRisk = nil,
             rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
+            activeTraits = {},
         },
 
         [ACTIONS.meleeSave] = {
@@ -286,6 +287,26 @@ rolls.state = {
         damageRisk = basicGetSet(ACTIONS.defend, "damageRisk"),
         rollMode = basicGetSet(ACTIONS.defend, "rollMode"),
         currentRoll = basicGetSet(ACTIONS.defend, "currentRoll"),
+        activeTraits = {
+            get = function(trait)
+                return state.defend.activeTraits[trait.id]
+            end,
+            toggle = function(trait)
+                if state.defend.activeTraits[trait.id] then
+                    state.defend.activeTraits[trait.id] = false
+                else
+                    state.defend.activeTraits[trait.id] = true
+                end
+            end,
+            reset = function()
+                state.defend.activeTraits = {}
+            end,
+        },
+
+        resetSlots = function()
+            TEARollHelper:Debug("Resetting slots for defend")
+            rolls.state.defend.activeTraits.reset()
+        end,
     },
 
     [ACTIONS.meleeSave] = {
@@ -349,6 +370,7 @@ local function resetSlots()
     rolls.state.penance.resetSlots()
     rolls.state.healing.resetSlots()
     rolls.state.buff.resetSlots()
+    rolls.state.defend.resetSlots()
     rolls.state.meleeSave.resetSlots()
     rolls.state.utility.resetSlots()
 end
@@ -478,8 +500,9 @@ local function getDefence()
     local defence = character.getPlayerDefence()
     local defenceBuff = buffsState.buffs.defence.get()
     local damageTakenBuff = buffsState.buffs.damageTaken.get()
+    local activeTraits = state.defend.activeTraits
 
-    return actions.getDefence(state.defend.currentRoll, state.defend.defenceType, state.defend.threshold, state.defend.damageType, state.defend.damageRisk, defence, defenceBuff, damageTakenBuff)
+    return actions.getDefence(state.defend.currentRoll, state.defend.defenceType, state.defend.threshold, state.defend.damageType, state.defend.damageRisk, defence, defenceBuff, damageTakenBuff, activeTraits)
 end
 
 local function getMeleeSave()

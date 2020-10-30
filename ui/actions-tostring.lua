@@ -17,6 +17,10 @@ local function ascendToString()
     return COLOURS.BUFF .. " You apply your buff to a second target.|r"
 end
 
+local function empoweredBladesToString()
+    return COLOURS.TRAITS.EMPOWERED_BLADES .. " Your warglaives absorb the energy of the attack!|r"
+end
+
 local function faultlineToString()
     return " You apply your attack to all targets on a straight line outwards from yourself."
 end
@@ -43,6 +47,7 @@ end
 
 local traitActionToString = {
     [TRAITS.ASCEND.id] = ascendToString,
+    [TRAITS.EMPOWERED_BLADES.id] = empoweredBladesToString,
     [TRAITS.FAULTLINE.id] = faultlineToString,
     [TRAITS.LIFE_PULSE.id] = lifePulseToString,
     [TRAITS.PRESENCE_OF_VIRTUE.id] = presenceOfVirtueToString,
@@ -181,20 +186,25 @@ local function healingToString(healing)
 end
 
 local function defenceToString(defence)
+    local msg
+
     if defence.damageTaken > 0 then
-        return COLOURS.DAMAGE .. "You take " .. tostring(defence.damageTaken) .. " damage."
+        msg = COLOURS.DAMAGE .. "You take " .. tostring(defence.damageTaken) .. " damage."
     else
-        local msg
         if defence.damagePrevented > 0 then
             msg = COLOURS.ROLES.TANK .. "You prevent " .. defence.damagePrevented .. " damage."
         else
             msg = "Safe! You don't take damage this turn."
         end
+
         if defence.canRetaliate then
             msg = msg .. COLOURS.CRITICAL .. "\nRETALIATE!|r You can deal "..defence.retaliateDmg.." damage to your attacker!"
         end
-        return msg
     end
+
+    msg = msg .. getTraitMessages(defence)
+
+    return msg
 end
 
 local function meleeSaveToString(meleeSave)

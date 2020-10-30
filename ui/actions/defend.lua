@@ -5,7 +5,6 @@ local COLOURS = TEARollHelper.COLOURS
 local actions = ns.actions
 local buffsState = ns.state.buffs.state
 local character = ns.character
-local characterState = ns.state.character
 local consequences = ns.consequences
 local constants = ns.constants
 local feats = ns.resources.feats
@@ -21,8 +20,6 @@ local DEFENCE_TYPES = constants.DEFENCE_TYPES
 local DEFENCE_TYPE_LABELS = constants.DEFENCE_TYPE_LABELS
 local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
-
-local state = characterState.state
 
 -- shared with melee save
 -- action: String (defend, meleeSave, rangedSave)
@@ -176,8 +173,11 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                             return actions.toString(ACTIONS.defend, rolls.getDefence())
                         end
                     },
-                    confirm = ui.helpers.confirmActionButton(ACTIONS.defend, rolls.getDefence, {
+                    useEmpoweredBlades = ui.helpers.traitToggle(ACTIONS.defend, rolls.getDefence, TRAITS.EMPOWERED_BLADES, {
                         order = 1,
+                    }),
+                    confirm = ui.helpers.confirmActionButton(ACTIONS.defend, rolls.getDefence, {
+                        order = 2,
                         hideMsg = true,
                         func = function()
                             local defence = rolls.getDefence()
@@ -187,7 +187,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                     }),
                 }
             },
-            postRoll = {
+--[[             postRoll = {
                 order = 7,
                 type = "group",
                 name = "After rolling",
@@ -195,25 +195,8 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                 hidden = function()
                     return not rolls.state.defend.currentRoll.get() or rolls.getDefence().damageTaken > 0 or not rules.defence.shouldShowPostRollUI()
                 end,
-                args = {
-                    useEmpoweredBlades = {
-                        order = 0,
-                        type = "execute",
-                        width = "full",
-                        name = COLOURS.TRAITS.EMPOWERED_BLADES .. "Use " .. TRAITS.EMPOWERED_BLADES.name,
-                        desc = TRAITS.EMPOWERED_BLADES.desc,
-                        hidden = function()
-                            return not rolls.getDefence().empoweredBladesEnabled
-                        end,
-                        disabled = function()
-                            return state.featsAndTraits.numTraitCharges.get(TRAITS.EMPOWERED_BLADES.id) == 0
-                        end,
-                        func = function()
-                            consequences.useTrait(TRAITS.EMPOWERED_BLADES)(rolls.getDefence())
-                        end,
-                    },
-                }
-            }
+                args = {}
+            } ]]
         },
     }
 end

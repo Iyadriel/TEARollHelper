@@ -113,7 +113,6 @@ local TRAIT_FNS = {
     [TRAITS.ARTISAN.id] = useArtisan,
     [TRAITS.BULWARK.id] = useBulwark,
     [TRAITS.CALAMITY_GAMBIT.id] = useCalamityGambit,
-    [TRAITS.EMPOWERED_BLADES.id] = useEmpoweredBlades,
     [TRAITS.FOCUS.id] = useFocus,
     [TRAITS.LIFE_WITHIN.id] = useLifeWithin,
     [TRAITS.SECOND_WIND.id] = useSecondWind,
@@ -171,6 +170,11 @@ local function confirmDefenceAction(defence)
     end
     if defence.damagePrevented > 0 then
         state.defence.damagePrevented.increment(defence.damagePrevented)
+    end
+
+    local empoweredBlades = defence.traits[TRAITS.EMPOWERED_BLADES.id]
+    if empoweredBlades.active then
+        useEmpoweredBlades(defence)
     end
 end
 
