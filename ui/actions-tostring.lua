@@ -50,7 +50,7 @@ local function getTraitMessages(action)
     local msg = ""
 
     for traitID, traitAction in pairs(action.traits) do
-        if traitAction.canUse and traitAction.active then
+        if traitAction.active then
             msg = msg .. traitActionToString[traitID](traitAction)
         end
     end

@@ -58,6 +58,7 @@ local function getAttack(attackIndex, roll, threshold, offence, offenceBuff, bas
         dmg = dmg,
         isCrit = isCrit,
         critType = critType,
+        enemyId = enemyId,
         hasAdrenalineProc = hasAdrenalineProc,
         numBloodHarvestSlots = numBloodHarvestSlots,
         hasMercyFromPainProc = hasMercyFromPainProc,
@@ -66,16 +67,16 @@ local function getAttack(attackIndex, roll, threshold, offence, offenceBuff, bas
         traits = {
             [TRAITS.FAULTLINE.id] = {
                 canUse = dmg > 0,
-                active = activeTraits[TRAITS.FAULTLINE.id],
+                active = dmg > 0 and activeTraits[TRAITS.FAULTLINE.id],
             },
             [TRAITS.REAP.id] = {
                 canUse = dmg > 0,
-                active = activeTraits[TRAITS.REAP.id],
+                active = dmg > 0 and activeTraits[TRAITS.REAP.id],
             },
             [TRAITS.VINDICATION.id] = {
                 canUse = hasVindicationProc,
                 healingDone = vindicationHealing,
-                active = activeTraits[TRAITS.VINDICATION.id],
+                active = hasVindicationProc and activeTraits[TRAITS.VINDICATION.id],
             }
         },
     }
@@ -123,12 +124,12 @@ local function getPenance(roll, threshold, spirit, spiritBuff, baseDmgBuff, dama
         traits = {
             [TRAITS.FAULTLINE.id] = {
                 canUse = dmg > 0,
-                active = activeTraits[TRAITS.FAULTLINE.id],
+                active = dmg > 0 and activeTraits[TRAITS.FAULTLINE.id],
             },
             [TRAITS.VINDICATION.id] = {
                 canUse = hasVindicationProc,
                 healingDone = vindicationHealing,
-                active = activeTraits[TRAITS.VINDICATION.id],
+                active = hasVindicationProc and activeTraits[TRAITS.VINDICATION.id],
             }
         },
     }
@@ -216,7 +217,7 @@ local function getMeleeSave(roll, defenceType, threshold, damageType, dmgRisk, d
         traits = {
             [TRAITS.PRESENCE_OF_VIRTUE.id] = {
                 canUse = damageTaken <= 0,
-                active = activeTraits[TRAITS.PRESENCE_OF_VIRTUE.id],
+                active = damageTaken <= 0 and activeTraits[TRAITS.PRESENCE_OF_VIRTUE.id],
             },
         },
     }
@@ -288,7 +289,7 @@ local function getHealing(roll, spirit, spiritBuff, healingDoneBuff, numGreaterH
         traits = {
             [TRAITS.LIFE_PULSE.id] = {
                 canUse = amountHealed > 0,
-                active = activeTraits[TRAITS.LIFE_PULSE.id],
+                active = amountHealed > 0 and activeTraits[TRAITS.LIFE_PULSE.id],
             },
         },
     }
@@ -310,7 +311,7 @@ local function getBuff(roll, spirit, spiritBuff, offence, offenceBuff, activeTra
         traits = {
             [TRAITS.ASCEND.id] = {
                 canUse = amountBuffed > 0,
-                active = activeTraits[TRAITS.ASCEND.id],
+                active = amountBuffed > 0 and activeTraits[TRAITS.ASCEND.id],
             },
         },
     }
