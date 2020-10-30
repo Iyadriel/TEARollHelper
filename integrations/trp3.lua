@@ -53,6 +53,7 @@ function integrations.InitTRPSync()
 
     bus.addListener(EVENTS.CHARACTER_HEALTH, autoUpdateCurrently)
     bus.addListener(EVENTS.CHARACTER_MAX_HEALTH, autoUpdateCurrently)
+    bus.addListener(EVENTS.CRITICAL_WOUND_TOGGLED, autoUpdateCurrently)
 
     integrations.TRP = {
         updateCurrently = updateCurrently

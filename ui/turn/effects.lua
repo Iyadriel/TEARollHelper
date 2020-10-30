@@ -182,7 +182,9 @@ ui.modules.turn.modules.effects.getOptions = function(options)
 
                     return toggles
                 end)(),
-            }
+            },
+            updateTRPButton = ui.helpers.updateTRPButton({ order = 3 }),
+            autoUpdateTRPNote = ui.helpers.autoUpdateTRPNote({ order = 4 }),
         }
     }
 end

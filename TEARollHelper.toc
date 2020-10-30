@@ -67,6 +67,7 @@ ui/colours.lua
 ui/helpers/debug-view.lua
 ui/helpers/confirm-action.lua
 ui/helpers/traits.lua
+ui/helpers/trp3.lua
 
 ui/actions.lua
 ui/actions/anyTurn.lua

@@ -3,11 +3,13 @@ local _, ns = ...
 local buffsState = ns.state.buffs
 local bus = ns.bus
 local character = ns.character
-local feats = ns.resources.feats
 local rules = ns.rules
-local traits = ns.resources.traits
 local characterState = ns.state.character
 local turnState = ns.state.turn
+
+local criticalWounds = ns.resources.criticalWounds
+local feats = ns.resources.feats
+local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
 
 local EVENTS = bus.EVENTS
@@ -77,14 +79,34 @@ local function summariseHP()
     return table.concat(out)
 end
 
+local function summariseCriticalWounds()
+    local out = {}
+
+    for id, active in pairs(state.criticalWounds) do
+        if active then
+            if #out > 0 then
+                table.insert(out, ", ")
+            end
+            table.insert(out, criticalWounds.WOUNDS[id].name)
+        end
+    end
+
+    if #out > 0 then
+        table.insert(out, 1, "CW: ")
+    end
+
+    return out
+end
+
 local function summariseState()
-    --[[         "|n|n|nFeat: ",
-            character.getPlayerFeat().name,
-            "|n|n|nGreater Heal slots: ",
-            state.healing.numGreaterHealSlots.get(),
-            "/",
-            rules.healing.getMaxGreaterHealSlots() ]]
-    return summariseHP()
+    local msg = summariseHP()
+    local cw = summariseCriticalWounds()
+
+    if #cw > 0 then
+        msg = msg .. "|n|n" .. table.concat(cw)
+    end
+
+    return msg
 end
 
 local function updateMaxHealth(shouldRestoreMissingHealth)
