@@ -14,7 +14,9 @@ bus.lua
 state.lua
 ui.lua
 
+models/character-status.lua
 models/critical-wound.lua
+models/party-member.lua
 
 resources/critical-wounds.lua
 resources/enemies.lua
@@ -33,6 +35,8 @@ integrations/trp3.lua
 actions.lua
 buffs.lua
 character.lua
+comms.lua
+comms-events.lua
 events.lua
 game-events.lua
 launchers.lua
@@ -55,6 +59,7 @@ rules/utility.lua
 state/buffs.lua
 state/character.lua
 state/environment.lua
+state/party.lua
 state/rolls.lua
 state/turn.lua
 consequences.lua
@@ -100,5 +105,6 @@ ui/turn.lua
 ui/turn/character.lua
 ui/turn/effects.lua
 ui/turn/environment.lua
+ui/turn/party.lua
 ui/turn/roll.lua
 ui/turn/turn.lua

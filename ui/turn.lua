@@ -7,6 +7,7 @@ ui.modules.turn.modules = {
     character = {},
     effects = {},
     environment = {},
+    party = {},
     roll = {},
     turn = {},
 }
@@ -30,6 +31,7 @@ ui.modules.turn.getOptions = function()
             buffs = ui.modules.buffs.getOptions({ order = 3 }),
             character = ui.modules.turn.modules.character.getOptions({ order = 4 }),
             environment = ui.modules.turn.modules.environment.getOptions({ order = 5 }),
+            party = ui.modules.turn.modules.party.getOptions({ order = 6 }),
         }
     }
 end

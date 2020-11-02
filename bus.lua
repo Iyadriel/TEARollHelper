@@ -59,13 +59,17 @@ local EVENTS = {
     COMBAT_OVER = "COMBAT_OVER",
     TURN_STARTED = "TURN_STARTED", -- index, turnTypeID
     TURN_FINISHED = "TURN_FINISHED", -- index, turnTypeID
+
+    -- Comms
+    COMMS_STATUS_RECEIVED = "COMMS_STATUS_RECEIVED", -- player, CharacterStatus
+    COMMS_STATUS_REQUEST_RECEIVED = "COMMS_STATUS_REQUEST_RECEIVED", -- player
 }
 
 local listeners = {}
 
 local function addListener(event, callback)
     if not EVENTS[event] then
-        TEARollHelper:Print("Attempted to add listener to invalid event:", event)
+        TEARollHelper:Print("[bus] Attempted to add listener to invalid event:", event)
         return
     end
     if not listeners[event] then
@@ -75,7 +79,7 @@ local function addListener(event, callback)
 end
 
 local function fire(event, ...)
-    TEARollHelper:Debug("Fired", event, ...)
+    TEARollHelper:Debug("[bus] Fired", event, ...)
     if not listeners[event] then return end
     for _, callback in ipairs(listeners[event]) do
         callback(...)

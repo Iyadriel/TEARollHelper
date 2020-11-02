@@ -7,6 +7,7 @@ ns.actions = {}
 ns.buffs = {}
 ns.bus = {}
 ns.character = {}
+ns.comms = {}
 ns.consequences = {}
 ns.constants = {}
 ns.db = {}
@@ -31,6 +32,7 @@ ns.state = {
     buffs = {},
     character = {},
     environment = {},
+    party = {},
     rolls = {},
     turn = {}
 }
@@ -38,7 +40,7 @@ ns.turns = {}
 ns.ui = {}
 ns.utils = {}
 
-TEARollHelper = LibStub("AceAddon-3.0"):NewAddon("TEARollHelper", "AceConsole-3.0", "AceEvent-3.0")
+TEARollHelper = LibStub("AceAddon-3.0"):NewAddon("TEARollHelper", "AceComm-3.0", "AceConsole-3.0", "AceEvent-3.0", "AceSerializer-3.0")
 
 function TEARollHelper:Debug(...)
     if ns.settings.debug.get() then
@@ -60,4 +62,6 @@ function TEARollHelper:OnInitialize()
     AceConfigDialog:SetDefaultSize(turn.name, 630, 720)
 
     ns.launchers.initLaunchers()
+
+    ns.comms.registerComms()
 end
