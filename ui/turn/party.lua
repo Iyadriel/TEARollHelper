@@ -9,6 +9,7 @@ local utils = ns.utils
 local state = party.state
 
 local selected = {}
+local numSelected = 0
 local nameStart = ui.iconString("Interface\\Icons\\achievement_guildperk_everybodysfriend") .. "Party" .. COLOURS.NOTE .. " ("
 
 --[[ local options = {
@@ -65,8 +66,10 @@ ui.modules.turn.modules.party.getOptions = function(options)
                 set = function(info, name, value)
                     if value then
                         selected[name] = true
+                        numSelected = numSelected + 1
                     else
                         selected[name] = nil
+                        numSelected = numSelected - 1
                     end
                 end
             },
@@ -75,11 +78,12 @@ ui.modules.turn.modules.party.getOptions = function(options)
                 type = "execute",
                 name = "Remove",
                 hidden = function()
-                    return party.state.numMembers.get() == 0
+                    return numSelected == 0 or party.state.numMembers.get() == 0
                 end,
                 func = function()
                     state.partyMembers.removeMultiple(selected)
                     selected = {}
+                    numSelected = 0
                 end
             },
             emptyState = {
