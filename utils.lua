@@ -50,5 +50,17 @@ local function healthColor(currentHP, maxHP)
     return "|cff" .. RGBPercToHex(RGBColorGradient(currentHP, maxHP, 1, 0, 0, 0, 1, 0))
 end
 
+local function formatHealth(currentHealth, maxHealth)
+	local out = {
+        currentHealth,
+        "/",
+        maxHealth,
+        " HP",
+    }
+
+    return table.concat(out)
+end
+
 utils.merge = merge
 utils.healthColor = healthColor
+utils.formatHealth = formatHealth

@@ -1,6 +1,7 @@
 local _, ns = ...
 
 local models = ns.models
+local utils = ns.utils
 
 local PartyMember = {}
 
@@ -26,7 +27,8 @@ function PartyMember:UpdateHealth(currentHealth, maxHealth)
 end
 
 function PartyMember:ToString()
-    return self.name .. ": " ..     self.characterState.health .. "/" .. self.characterState.maxHealth
+    local cur, max = self.characterState.health, self.characterState.maxHealth
+    return self.name .. ": " .. utils.healthColor(cur, max) .. utils.formatHealth(cur, max)
 end
 
 models.PartyMember = PartyMember

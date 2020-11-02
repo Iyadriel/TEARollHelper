@@ -6,6 +6,7 @@ local character = ns.character
 local rules = ns.rules
 local characterState = ns.state.character
 local turnState = ns.state.turn
+local utils = ns.utils
 
 local criticalWounds = ns.resources.criticalWounds
 local feats = ns.resources.feats
@@ -69,14 +70,7 @@ local function basicGetSet(section, key, callback)
 end
 
 local function summariseHP()
-    local out = {
-        characterState.state.health.get(),
-        "/",
-        characterState.state.maxHealth.get(),
-        " HP",
-    }
-
-    return table.concat(out)
+    return utils.formatHealth(characterState.state.health.get(), characterState.state.maxHealth.get())
 end
 
 local function summariseCriticalWounds()
