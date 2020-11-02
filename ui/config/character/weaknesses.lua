@@ -5,6 +5,7 @@ local COLOURS = TEARollHelper.COLOURS
 local character = ns.character
 local settings = ns.settings
 local ui = ns.ui
+local utils = ns.utils
 
 local players = ns.resources.players
 local weaknesses = ns.resources.weaknesses
@@ -20,7 +21,7 @@ local function getWeaknessName(weakness)
     local name = weakness.name
     if weakness.isCustom then
         local player = PLAYERS[weakness.player]
-        name = name.. " (|c" .. player.colour .. player.name .. "|r)"
+        name = name.. " (" .. utils.playerColor(player.name) .. ")"
     end
     return name
 end
@@ -54,7 +55,9 @@ ui.modules.config.modules.character.modules.weaknesses.getOptions = function(opt
                     weaknessOptions[key] = {
                         order = i,
                         type = "toggle",
-                        name = getWeaknessName(weakness),
+                        name = function()
+                            return getWeaknessName(weakness)
+                        end,
                         hidden = function()
                             return weakness.isCustom and not settings.showCustomFeatsTraits.get()
                         end,

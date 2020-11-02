@@ -30,7 +30,6 @@ local function inGroupOrRaid()
     return inGroup, inRaid
 end
 
--- TODO use bucket
 local function broadcastStatus()
     TEARollHelper:Debug("[comms] Broadcasting status if in group... (1/2)")
 

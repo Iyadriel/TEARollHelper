@@ -1,5 +1,6 @@
 local _, ns = ...
 
+local integrations = ns.integrations
 local utils = ns.utils
 
 local function merge(t1, t2, t3)
@@ -61,6 +62,17 @@ local function formatHealth(currentHealth, maxHealth)
     return table.concat(out)
 end
 
+local function playerColor(playerName)
+    if integrations.TRP then
+        local colorObj = integrations.TRP.getPlayerColor(playerName)
+        if colorObj then
+            return colorObj:WrapTextInColorCode(playerName)
+        end
+    end
+    return playerName
+end
+
 utils.merge = merge
 utils.healthColor = healthColor
 utils.formatHealth = formatHealth
+utils.playerColor = playerColor

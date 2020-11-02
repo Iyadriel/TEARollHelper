@@ -8,6 +8,7 @@ local rules = ns.rules
 local settings = ns.settings
 local traits = ns.resources.traits
 local ui = ns.ui
+local utils = ns.utils
 
 local PLAYERS = players.PLAYERS
 
@@ -31,7 +32,7 @@ local BASE_TRAITS = (function()
     return traitOptions
 end)()
 
-local ALL_TRAITS = (function()
+local ALL_TRAITS = function()
     local traitOptions = {}
 
     for i = 1, #traits.TRAIT_KEYS do
@@ -42,14 +43,14 @@ local ALL_TRAITS = (function()
 
         if trait.isCustom then
             local player = PLAYERS[trait.player]
-            name = name.. " (|c" .. player.colour .. player.name .. "|r)"
+            name = name.. " (" .. utils.playerColor(player.name) .. ")"
         end
 
         traitOptions[key] = name
     end
 
     return traitOptions
-end)()
+end
 
 --[[ local options = {
     order: Number,
@@ -73,7 +74,7 @@ ui.modules.config.modules.character.modules.traits.getOptions = function(options
             order = options.order,
             values = function()
                 if settings.showCustomFeatsTraits.get() then
-                    return ALL_TRAITS
+                    return ALL_TRAITS()
                 end
                 return BASE_TRAITS
             end,

@@ -28,7 +28,7 @@ end
 
 function PartyMember:ToString()
     local cur, max = self.characterState.health, self.characterState.maxHealth
-    return self.name .. ": " .. utils.healthColor(cur, max) .. utils.formatHealth(cur, max)
+    return utils.playerColor(self.name) .. ": " .. utils.healthColor(cur, max) .. utils.formatHealth(cur, max)
 end
 
 models.PartyMember = PartyMember

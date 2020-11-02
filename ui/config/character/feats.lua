@@ -8,6 +8,7 @@ local players = ns.resources.players
 local rules = ns.rules
 local settings = ns.settings
 local ui = ns.ui
+local utils = ns.utils
 local weaknesses = ns.resources.weaknesses
 
 local FEATS = feats.FEATS
@@ -33,7 +34,7 @@ local BASE_FEATS = (function()
     return featOptions
 end)()
 
-local ALL_FEATS = (function()
+local ALL_FEATS = function()
     local featOptions = {}
 
     for i = 1, #FEAT_KEYS do
@@ -44,13 +45,13 @@ local ALL_FEATS = (function()
 
         if feat.isCustom then
             local player = PLAYERS[feat.player]
-            name = name.. " (|c" .. player.colour .. player.name .. "|r)"
+            name = name.. " (" .. utils.playerColor(player.name) .. ")"
         end
 
         featOptions[key] = name
     end
     return featOptions
-end)()
+end
 
 --[[ local options = {
     order: Number,
@@ -67,7 +68,7 @@ ui.modules.config.modules.character.modules.feats.getOptions = function(options)
             end,
             values = function()
                 if settings.showCustomFeatsTraits.get() then
-                    return ALL_FEATS
+                    return ALL_FEATS()
                 end
                 return BASE_FEATS
             end,
