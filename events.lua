@@ -6,7 +6,9 @@ local bus = ns.bus
 local character = ns.character
 local characterState = ns.state.character
 local constants = ns.constants
+local settings = ns.settings
 local turnState = ns.state.turn
+local ui = ns.ui
 
 local criticalWounds = ns.resources.criticalWounds
 local traits = ns.resources.traits
@@ -237,3 +239,14 @@ bus.addListener(EVENTS.ACTION_PERFORMED, function(actionType)
         end
     end
 end)
+
+-- [[ Party ]]
+
+-- TODO find a way to update only the party tab
+local function updateTurnUI()
+    if settings.refreshOnPartyUpdate.get() then
+        ui.update(ui.modules.turn.name)
+    end
+end
+bus.addListener(EVENTS.PARTY_MEMBER_ADDED, updateTurnUI)
+bus.addListener(EVENTS.PARTY_MEMBER_UPDATED, updateTurnUI)

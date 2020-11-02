@@ -23,6 +23,7 @@ for _, setting in ipairs({
     "autoUpdateTRP",
     "debug",
     --"minimapIcon", -- managed by ldb
+    "refreshOnPartyUpdate",
     "showCustomFeatsTraits",
     "suggestFatePoints",
 }) do

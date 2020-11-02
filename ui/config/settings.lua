@@ -56,17 +56,6 @@ ui.modules.config.modules.settings.getOptions = function()
                             return false
                         end
                     },
-                    debugMode = {
-                        order = 1,
-                        type = "toggle",
-                        name = "Debug mode",
-                        desc = "Don't touch this! I said don't.",
-                        width = "full",
-                        get = settings.debug.get,
-                        set = function(info, value)
-                            settings.debug.set(value)
-                        end,
-                    },
                     showCustomFeatsTraits = {
                         order = 1,
                         type = "toggle",
@@ -94,6 +83,36 @@ ui.modules.config.modules.settings.getOptions = function()
                     },
                 }
             },
+            advanced = {
+                order = 2,
+                type = "group",
+                name = "Advanced",
+                inline = true,
+                args = {
+                    debugMode = {
+                        order = 0,
+                        type = "toggle",
+                        name = "Debug mode",
+                        desc = "Don't touch this! I said don't.",
+                        width = "full",
+                        get = settings.debug.get,
+                        set = function(info, value)
+                            settings.debug.set(value)
+                        end,
+                    },
+                    refreshOnPartyUpdate = {
+                        order = 1,
+                        type = "toggle",
+                        name = "Refresh UI on party update",
+                        desc = "Automatically update the UI when the addon receives an update from a party member. This is best left enabled unless it's causing issues.",
+                        width = "full",
+                        get = settings.refreshOnPartyUpdate.get,
+                        set = function(info, value)
+                            settings.refreshOnPartyUpdate.set(value)
+                        end,
+                    },
+                }
+            }
         }
     }
 end
