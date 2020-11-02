@@ -64,6 +64,10 @@ local EVENTS = {
     COMMS_READY = "COMMS_READY",
     COMMS_STATUS_RECEIVED = "COMMS_STATUS_RECEIVED", -- player, CharacterStatus
     COMMS_STATUS_REQUEST_RECEIVED = "COMMS_STATUS_REQUEST_RECEIVED", -- player
+
+    -- Party
+    PARTY_MEMBER_ADDED = "PARTY_MEMBER_ADDED", -- player
+    PARTY_MEMBER_UPDATED = "PARTY_MEMBER_UPDATED", -- player
 }
 
 local listeners = {}

@@ -3,6 +3,7 @@ local _, ns = ...
 local bus = ns.bus
 local models = ns.models
 local party = ns.state.party
+local ui = ns.ui
 
 local PartyMember = models.PartyMember
 
@@ -33,6 +34,8 @@ party.state = {
             local currentHealth, maxHealth = initialCharacterStatus.currentHealth, initialCharacterStatus.maxHealth
 
             state.partyMembers[name] = PartyMember:New(name, currentHealth, maxHealth)
+
+            bus.fire(EVENTS.PARTY_MEMBER_ADDED, name)
         end,
         addOrUpdate = function(name, characterStatus)
             TEARollHelper:Debug("party.addOrUpdate", name, characterStatus:ToString())
@@ -42,6 +45,7 @@ party.state = {
                 party.state.partyMembers.add(name, characterStatus)
             else
                 partyMember:UpdateHealth(characterStatus.currentHealth, characterStatus.maxHealth)
+                bus.fire(EVENTS.PARTY_MEMBER_UPDATED, name)
             end
         end,
     },
