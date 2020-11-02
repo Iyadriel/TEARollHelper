@@ -63,10 +63,11 @@ end
 
 local function handleGameEvent(event)
     TEARollHelper:Debug("[comms]", event)
-    if event == "PLAYER_LOGIN" or event == "GROUP_JOINED" then
-        -- Request that people send you their status when you join a group.
-        requestGroupStatus()
 
+    -- Request that people send you their status when you join a group or log in/reload UI.
+    requestGroupStatus()
+
+    if event == "GROUP_JOINED" then
         -- Let them know your status, too.
         broadcastStatus()
     end
