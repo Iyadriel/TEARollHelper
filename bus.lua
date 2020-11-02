@@ -61,6 +61,7 @@ local EVENTS = {
     TURN_FINISHED = "TURN_FINISHED", -- index, turnTypeID
 
     -- Comms
+    COMMS_READY = "COMMS_READY",
     COMMS_STATUS_RECEIVED = "COMMS_STATUS_RECEIVED", -- player, CharacterStatus
     COMMS_STATUS_REQUEST_RECEIVED = "COMMS_STATUS_REQUEST_RECEIVED", -- player
 }

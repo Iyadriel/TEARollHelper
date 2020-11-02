@@ -40,7 +40,7 @@ ns.turns = {}
 ns.ui = {}
 ns.utils = {}
 
-TEARollHelper = LibStub("AceAddon-3.0"):NewAddon("TEARollHelper", "AceComm-3.0", "AceConsole-3.0", "AceEvent-3.0", "AceSerializer-3.0")
+TEARollHelper = LibStub("AceAddon-3.0"):NewAddon("TEARollHelper", "AceBucket-3.0", "AceComm-3.0", "AceConsole-3.0", "AceEvent-3.0", "AceSerializer-3.0")
 
 function TEARollHelper:Debug(...)
     if ns.settings.debug.get() then

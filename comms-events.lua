@@ -10,6 +10,8 @@ local EVENTS = bus.EVENTS
 
 local CharacterStatus = models.CharacterStatus
 
+local BUCKET_MSG = "TEA_BUCKET_STATUS_BROADCAST"
+
 local function getStatus()
     local name = UnitName("player")
     local currentHP = characterState.state.health.get()
@@ -54,12 +56,12 @@ local function sendCharacterStatusToPlayer(targetPlayerName)
     comms.sendCharacterStatusToPlayer(characterStatus, targetPlayerName)
 end
 
-bus.addListener(EVENTS.CHARACTER_HEALTH, broadcastStatus)
-bus.addListener(EVENTS.CHARACTER_MAX_HEALTH, broadcastStatus)
-bus.addListener(EVENTS.CRITICAL_WOUND_TOGGLED, broadcastStatus)
+-- character health events can be spammy, so use a bucket to make sure we don't send too many.
+local function bucketBroadcast()
+    TEARollHelper:SendMessage(BUCKET_MSG)
+end
 
--- see comms.lua for registered events
-function TEARollHelper:COMMS_HANDLE_GAME_EVENT(event)
+local function handleGameEvent(event)
     TEARollHelper:Debug("[comms]", event)
     if event == "PLAYER_LOGIN" or event == "GROUP_JOINED" then
         -- Request that people send you their status when you join a group.
@@ -69,6 +71,16 @@ function TEARollHelper:COMMS_HANDLE_GAME_EVENT(event)
         broadcastStatus()
     end
 end
+
+bus.addListener(EVENTS.COMMS_READY, function()
+    TEARollHelper:RegisterEvent("PLAYER_LOGIN", handleGameEvent)
+    TEARollHelper:RegisterEvent("GROUP_JOINED", handleGameEvent)
+
+    TEARollHelper:RegisterBucketMessage(BUCKET_MSG, 2, broadcastStatus)
+    bus.addListener(EVENTS.CHARACTER_HEALTH, bucketBroadcast)
+    bus.addListener(EVENTS.CHARACTER_MAX_HEALTH, bucketBroadcast)
+    bus.addListener(EVENTS.CRITICAL_WOUND_TOGGLED, bucketBroadcast)
+end)
 
 -- a player has requested your status.
 bus.addListener(EVENTS.COMMS_STATUS_REQUEST_RECEIVED, sendCharacterStatusToPlayer)

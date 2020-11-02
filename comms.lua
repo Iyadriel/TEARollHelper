@@ -15,7 +15,6 @@ local MSG_TYPES = {
     CHARACTER_STATUS_UPDATE = "CHARACTER_STATUS_UPDATE", -- an update from someone else's character.
     GROUP_STATUS_REQUEST = "GROUP_STATUS_REQUEST", -- someone requesting that group members send them their status.
 }
-local GAME_EVENT_HANDLER = "COMMS_HANDLE_GAME_EVENT"
 
 local function validateStatus(payload)
     return payload.currentHealth ~= nil and payload.maxHealth ~= nil
@@ -59,10 +58,7 @@ end
 local function registerComms()
     TEARollHelper:Debug("[comms] Registering comms")
     TEARollHelper:RegisterComm(PREFIX)
-
-    -- See comms-events for handler
-    TEARollHelper:RegisterEvent("PLAYER_LOGIN", GAME_EVENT_HANDLER)
-    TEARollHelper:RegisterEvent("GROUP_JOINED", GAME_EVENT_HANDLER)
+    bus.fire(EVENTS.COMMS_READY)
 end
 
 local function getBroadcastChannel(inRaid)
