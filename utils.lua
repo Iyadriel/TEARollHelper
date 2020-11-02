@@ -62,17 +62,15 @@ local function formatHealth(currentHealth, maxHealth)
     return table.concat(out)
 end
 
-local function playerColor(playerName)
+local function formatPlayerName(playerName)
+    local fancyName
     if integrations.TRP then
-        local colorObj = integrations.TRP.getPlayerColor(playerName)
-        if colorObj then
-            return colorObj:WrapTextInColorCode(playerName)
-        end
+        fancyName = integrations.TRP.getRPNameAndColor(playerName)
     end
-    return playerName
+    return fancyName or playerName
 end
 
 utils.merge = merge
 utils.healthColor = healthColor
 utils.formatHealth = formatHealth
-utils.playerColor = playerColor
+utils.formatPlayerName = formatPlayerName

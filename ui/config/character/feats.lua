@@ -45,7 +45,7 @@ local ALL_FEATS = function()
 
         if feat.isCustom then
             local player = PLAYERS[feat.player]
-            name = name.. " (" .. utils.playerColor(player.name) .. ")"
+            name = name.. " (" .. utils.formatPlayerName(player.name) .. ")"
         end
 
         featOptions[key] = name

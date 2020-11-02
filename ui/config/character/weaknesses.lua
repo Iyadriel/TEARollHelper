@@ -21,7 +21,7 @@ local function getWeaknessName(weakness)
     local name = weakness.name
     if weakness.isCustom then
         local player = PLAYERS[weakness.player]
-        name = name.. " (" .. utils.playerColor(player.name) .. ")"
+        name = name.. " (" .. utils.formatPlayerName(player.name) .. ")"
     end
     return name
 end

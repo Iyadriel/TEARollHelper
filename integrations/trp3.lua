@@ -52,15 +52,33 @@ function integrations.InitTRPSync()
 
     --TEARollHelper.TRP_CONNECTED = true
 
-    local function getPlayerColor(playerName)
+    local function getPlayer(playerName)
         if AddOn_TotalRP3 then
             local realmName = GetNormalizedRealmName()
             local player = AddOn_TotalRP3.Player.static.CreateFromNameAndRealm(playerName, realmName)
-            if player then
-                return player:GetCustomColorForDisplay()
-            end
+            return player
         end
         return nil
+    end
+
+    local function getNameToUse(player, playerName)
+        local firstName = player:GetFirstName()
+        return firstName or playerName
+    end
+
+    local function getRPNameAndColor(playerName)
+        local player = getPlayer(playerName)
+
+        if player then
+            local name = getNameToUse(player, playerName)
+            local color = player:GetCustomColorForDisplay()
+
+            if color then
+                return color:WrapTextInColorCode(name)
+            end
+            return name
+        end
+        return playerName
     end
 
     bus.addListener(EVENTS.CHARACTER_HEALTH, autoUpdateCurrently)
@@ -69,6 +87,6 @@ function integrations.InitTRPSync()
 
     integrations.TRP = {
         updateCurrently = updateCurrently,
-        getPlayerColor = getPlayerColor,
+        getRPNameAndColor = getRPNameAndColor,
     }
 end

@@ -43,7 +43,7 @@ local ALL_TRAITS = function()
 
         if trait.isCustom then
             local player = PLAYERS[trait.player]
-            name = name.. " (" .. utils.playerColor(player.name) .. ")"
+            name = name.. " (" .. utils.formatPlayerName(player.name) .. ")"
         end
 
         traitOptions[key] = name
