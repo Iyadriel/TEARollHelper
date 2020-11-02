@@ -1,7 +1,7 @@
 ## Interface: 90001
 ## Title: The Evernight Aegis Roll Helper
 ## Author: Iyadriel
-## Version: 1.2.0
+## Version: 1.2.1
 ## Notes: RP roll utilities for The Evernight Aegis guild
 ## SavedVariables: TeaRollHelperDB
 
