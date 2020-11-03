@@ -44,11 +44,16 @@ local function applyFaelunesRegrowth(initialHealAmount)
     buffs.addHoTBuff(FAELUNES_REGROWTH.name, FAELUNES_REGROWTH.icon, healingPerTick, FAELUNES_REGROWTH.buffs[1].remainingTurns)
 end
 
--- [[ Feats/Traits/Fate ]]
+-- [[ Resources ]]
 
 local function useFatePoint()
     state.numFatePoints.set(state.numFatePoints.get() - 1)
     bus.fire(EVENTS.FATE_POINT_USED)
+end
+
+local function restoreGreaterHealSlotWithExcess()
+    state.healing.excess.spend(rules.healing.NUM_EXCESS_TO_RESTORE_GREATER_HEAL_SLOT)
+    state.healing.numGreaterHealSlots.restore(1)
 end
 
 -- Feats
@@ -230,6 +235,7 @@ end
 
 consequences.applyFaelunesRegrowth = applyFaelunesRegrowth
 consequences.useFatePoint = useFatePoint
+consequences.restoreGreaterHealSlotWithExcess = restoreGreaterHealSlotWithExcess
 consequences.enableLivingBarricade = enableLivingBarricade
 consequences.useTrait = useTrait
 consequences.confirmReboundRoll = confirmReboundRoll

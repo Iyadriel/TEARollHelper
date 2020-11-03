@@ -210,6 +210,11 @@ characterState.state = {
                     bus.fire(EVENTS.GREATER_HEAL_CHARGES_USED, numCharges)
                 end
             end,
+            restore = function(numCharges)
+                if numCharges > 0 then
+                    characterState.state.healing.numGreaterHealSlots.set(state.healing.numGreaterHealSlots + numCharges)
+                end
+            end,
         },
         remainingOutOfCombatHeals = {
             get = function()
@@ -232,7 +237,21 @@ characterState.state = {
                 characterState.state.healing.remainingOutOfCombatHeals.set(rules.healing.getMaxOutOfCombatHeals())
             end,
         },
-        excess = basicGetSet("healing", "excess"),
+        excess = {
+            get = function()
+                return state.healing.excess
+            end,
+            set = function(excess)
+                if excess ~= state.healing.excess then
+                    state.healing.excess = excess
+                end
+            end,
+            spend = function(excess)
+                if excess > 0 then
+                    characterState.state.healing.excess.set(state.healing.excess - excess)
+                end
+            end,
+        },
     },
     criticalWounds = {
         has = function(criticalWound)

@@ -3,6 +3,7 @@ local _, ns = ...
 local COLOURS = TEARollHelper.COLOURS
 
 local character = ns.character
+local consequences = ns.consequences
 local feats = ns.resources.feats
 local rules = ns.rules
 local traits = ns.resources.traits
@@ -182,6 +183,21 @@ ui.modules.turn.modules.character.getOptions = function(options)
                             state.healing.excess.set(value)
                         end
                     },
+                    restoreGreaterHealSlot = {
+                        order = 3,
+                        type = "execute",
+                        name = "Restore Greater Heal slot",
+                        desc = "Spend " .. rules.healing.NUM_EXCESS_TO_RESTORE_GREATER_HEAL_SLOT .. " excess to restore a Greater Heal slot.",
+                        hidden = function()
+                            return not rules.healing.canUseExcess() or rules.healing.getMaxGreaterHealSlots() == 0 or state.healing.numGreaterHealSlots.get() == rules.healing.getMaxGreaterHealSlots()
+                        end,
+                        disabled = function()
+                            return state.healing.excess.get() < rules.healing.NUM_EXCESS_TO_RESTORE_GREATER_HEAL_SLOT
+                        end,
+                        func = function()
+                            consequences.restoreGreaterHealSlotWithExcess()
+                        end,
+                    }
                 }
             },
             featsAndTraits = {

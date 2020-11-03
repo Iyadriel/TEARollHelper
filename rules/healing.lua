@@ -12,6 +12,8 @@ local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
 local TURN_TYPES = constants.TURN_TYPES
 local WEAKNESSES = weaknesses.WEAKNESSES
 
+local NUM_EXCESS_TO_RESTORE_GREATER_HEAL_SLOT = 3
+
 local function canHealInCombat()
     return not character.hasFeat(FEATS.DIVINE_PURPOSE)
 end
@@ -142,6 +144,8 @@ local function shouldShowPreRollUI(turnTypeID)
 end
 
 rules.healing = {
+    NUM_EXCESS_TO_RESTORE_GREATER_HEAL_SLOT = NUM_EXCESS_TO_RESTORE_GREATER_HEAL_SLOT,
+
     canHeal = canHeal,
     calculateHealValue = calculateHealValue,
     calculateBaseAmountHealed = calculateBaseAmountHealed,
