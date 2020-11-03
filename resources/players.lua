@@ -6,6 +6,9 @@ players.PLAYERS = {
     CALLEAN = {
         name = "Callean",
     },
+    IYADRIEL = {
+        name = "Iyadriel",
+    },
     KELANRA = {
         name = "Kelanra",
     },

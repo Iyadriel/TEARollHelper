@@ -12,8 +12,12 @@ local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
 local TURN_TYPES = constants.TURN_TYPES
 local WEAKNESSES = weaknesses.WEAKNESSES
 
-local function canHeal()
-    return not character.hasWeakness(WEAKNESSES.BRUTE)
+local function canHealInCombat()
+    return not character.hasFeat(FEATS.DIVINE_PURPOSE)
+end
+
+local function canHeal(outOfCombat)
+    return not character.hasWeakness(WEAKNESSES.BRUTE) and (outOfCombat or canHealInCombat())
 end
 
 local function calculateHealValue(roll, spirit, buff)

@@ -91,8 +91,8 @@ end
 
 -- [[ Actions ]]
 
-local function canHeal()
-    return rules.healing.canHeal()
+local function canHeal(outOfCombat)
+    return rules.healing.canHeal(outOfCombat)
 end
 
 local function canBuff()

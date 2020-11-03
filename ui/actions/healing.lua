@@ -38,7 +38,7 @@ ui.modules.actions.modules.healing.getOptions = function(options)
         type = "group",
         order = options.order,
         hidden = function()
-            return not character.canHeal()
+            return not character.canHeal(options.outOfCombat)
         end,
         args = {
             preRoll = ui.modules.turn.modules.roll.getPreRollOptions({
