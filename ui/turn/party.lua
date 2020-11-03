@@ -2,12 +2,14 @@ local _, ns = ...
 
 local COLOURS = TEARollHelper.COLOURS
 
+local bus = ns.bus
 local party = ns.state.party
 local ui = ns.ui
 local utils = ns.utils
 
 local state = party.state
 
+local EVENTS = bus.EVENTS
 local selected = {}
 local numSelected = 0
 local nameStart = ui.iconString("Interface\\Icons\\achievement_guildperk_everybodysfriend") .. "Party" .. COLOURS.NOTE .. " ("
@@ -73,8 +75,20 @@ ui.modules.turn.modules.party.getOptions = function(options)
                     end
                 end
             },
-            remove = {
+            forceRefresh = {
                 order = 1,
+                type = "execute",
+                name = "Request update",
+                desc = "Ask everyone to send you their status. This should not be necessary, but can help in case of a de-sync.",
+                hidden = function()
+                    return party.state.numMembers.get() == 0
+                end,
+                func = function()
+                    bus.fire(EVENTS.COMMS_FORCE_REFRESH)
+                end
+            },
+            remove = {
+                order = 2,
                 type = "execute",
                 name = "Remove",
                 hidden = function()
@@ -87,7 +101,7 @@ ui.modules.turn.modules.party.getOptions = function(options)
                 end
             },
             emptyState = {
-                order = 2,
+                order = 3,
                 type = "description",
                 name = "Your party is empty.",
                 hidden = function()

@@ -76,6 +76,8 @@ bus.addListener(EVENTS.COMMS_READY, function()
     bus.addListener(EVENTS.CHARACTER_HEALTH, bucketBroadcast)
     bus.addListener(EVENTS.CHARACTER_MAX_HEALTH, bucketBroadcast)
     bus.addListener(EVENTS.CRITICAL_WOUND_TOGGLED, bucketBroadcast)
+
+    bus.addListener(EVENTS.COMMS_FORCE_REFRESH, requestGroupStatus)
 end)
 
 -- a player has requested your status.
