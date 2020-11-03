@@ -26,6 +26,14 @@ local ACTION_LABELS = {
     utility = "Utility",
 }
 
+local SPECIAL_ACTIONS = {
+    save = "save",
+}
+
+local SPECIAL_ACTION_LABELS = {
+    save = "Save",
+}
+
 local ACTION_LABELS_NO_PENANCE = {
     attack = "Attack",
     cc = "CC",
@@ -116,7 +124,9 @@ local TURN_TYPES = {
 }
 
 constants.ACTIONS = ACTIONS
+constants.SPECIAL_ACTIONS = SPECIAL_ACTIONS
 constants.ACTION_LABELS = ACTION_LABELS
+constants.SPECIAL_ACTION_LABELS = SPECIAL_ACTION_LABELS
 constants.ACTION_LABELS_NO_PENANCE = ACTION_LABELS_NO_PENANCE
 constants.BUFF_SOURCES = BUFF_SOURCES
 constants.BUFF_TYPES = BUFF_TYPES

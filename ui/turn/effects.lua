@@ -7,11 +7,15 @@ local character = ns.character
 local characterState = ns.state.character
 local consequences = ns.consequences
 local constants = ns.constants
+local ui = ns.ui
+local utils = ns.utils
+
 local criticalWounds = ns.resources.criticalWounds
 local traits = ns.resources.traits
-local ui = ns.ui
 local weaknesses = ns.resources.weaknesses
 
+local ACTIONS, SPECIAL_ACTIONS = constants.ACTIONS, constants.SPECIAL_ACTIONS
+local ACTION_LABELS, SPECIAL_ACTION_LABELS = constants.ACTION_LABELS, constants.SPECIAL_ACTION_LABELS
 local INCOMING_HEAL_SOURCES = constants.INCOMING_HEAL_SOURCES
 local TRAITS = traits.TRAITS
 local WEAKNESSES = weaknesses.WEAKNESSES
@@ -161,26 +165,50 @@ ui.modules.turn.modules.effects.getOptions = function(options)
                 type = "group",
                 name = "Critical wounds",
                 inline = true,
-                args = (function()
-                    local toggles = {}
+                args = utils.merge(
+                    (function()
+                        local toggles = {}
 
-                    for id, wound in pairs(criticalWounds.WOUNDS) do
-                        toggles[id] = {
-                            order = wound.index,
-                            type = "toggle",
-                            name = COLOURS.NOTE .. wound.index.. ": |r" .. wound.name,
-                            desc = wound.desc,
-                            get = function()
-                                return wound:IsActive()
+                        for id, wound in pairs(criticalWounds.WOUNDS) do
+                            toggles[id] = {
+                                order = wound.index,
+                                type = "toggle",
+                                name = COLOURS.NOTE .. wound.index.. ": |r" .. wound.name,
+                                desc = wound.desc,
+                                get = function()
+                                    return wound:IsActive()
+                                end,
+                                set = function()
+                                    wound:Toggle()
+                                end,
+                            }
+                        end
+
+                        return toggles
+                    end)(),
+                    {
+                        unavailableAction = {
+                            order = 9,
+                            type = "select",
+                            width = 0.7,
+                            name = "Unavailable action",
+                            hidden = function()
+                                return not criticalWounds.WOUNDS.CRIPPLING_PAIN:IsActive()
                             end,
-                            set = function()
-                                wound:Toggle()
+                            values = {
+                                [ACTIONS.buff] = ACTION_LABELS.buff,
+                                [SPECIAL_ACTIONS.save] = SPECIAL_ACTION_LABELS.save,
+
+                            },
+                            get = function()
+                                return criticalWounds.WOUNDS.CRIPPLING_PAIN:GetUnavailableAction()
+                            end,
+                            set = function(info, value)
+                                criticalWounds.WOUNDS.CRIPPLING_PAIN:SetUnavailableAction(value)
                             end,
                         }
-                    end
-
-                    return toggles
-                end)(),
+                    }
+                )
             },
             updateTRPButton = ui.helpers.updateTRPButton({ order = 3 }),
             autoUpdateTRPNote = ui.helpers.autoUpdateTRPNote({ order = 4 }),

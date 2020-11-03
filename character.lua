@@ -12,6 +12,7 @@ local racialTraits = ns.resources.racialTraits
 local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
 
+local ACTIONS, SPECIAL_ACTIONS = constants.ACTIONS, constants.SPECIAL_ACTIONS
 local EVENTS = bus.EVENTS
 local FEATS = feats.FEATS
 local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
@@ -95,11 +96,13 @@ local function canHeal()
 end
 
 local function canBuff()
-    return rules.buffing.canBuff() and not criticalWounds.WOUNDS.CRIPPLING_PAIN:IsActive()
+    local cw = criticalWounds.WOUNDS.CRIPPLING_PAIN
+    return rules.buffing.canBuff() and not (cw:IsActive() and cw:GetUnavailableAction() == ACTIONS.buff)
 end
 
 local function canSave()
-    return not criticalWounds.WOUNDS.CRIPPLING_PAIN:IsActive()
+    local cw = criticalWounds.WOUNDS.CRIPPLING_PAIN
+    return not (cw:IsActive() and cw:GetUnavailableAction() == SPECIAL_ACTIONS.save)
 end
 
 -- [[ Feats ]]

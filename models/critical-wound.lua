@@ -11,6 +11,15 @@ local EVENTS = bus.EVENTS
 
 local CriticalWound = {}
 
+function CriticalWound:NewFromObj(obj)
+    local wound = obj
+
+    setmetatable(wound, self)
+    self.__index = self
+
+    return wound
+end
+
 function CriticalWound:New(id, index, name, desc, icon, buff)
     local wound = {
         id = id,
@@ -21,10 +30,7 @@ function CriticalWound:New(id, index, name, desc, icon, buff)
         buff = buff
     }
 
-    setmetatable(wound, self)
-    self.__index = self
-
-    return wound
+    return CriticalWound:NewFromObj(wound)
 end
 
 function CriticalWound:IsActive()

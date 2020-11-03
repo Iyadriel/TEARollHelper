@@ -4,6 +4,7 @@ local constants = ns.constants
 local criticalWounds = ns.resources.criticalWounds
 
 local CriticalWound = ns.models.CriticalWound
+local CriticalWoundCripplingPain = ns.models.CriticalWoundCripplingPain
 
 local ACTIONS = constants.ACTIONS
 local BUFF_TYPES = constants.BUFF_TYPES
@@ -68,11 +69,20 @@ local wounds = {
         icon = "Interface\\Icons\\spell_frost_stun",
     },
     CRIPPLING_PAIN = {
+        model = CriticalWoundCripplingPain,
         id = "CRIPPLING_PAIN",
         index = 6,
         name = "Crippling Pain",
-        desc = "You can no longer perform Saves or Buff rolls.",
+        desc = "You have disadvantage on one of the following, and cannot perform the other one at all (your choice) - Saves, Buff Rolls.",
         icon = "Interface\\Icons\\spell_holy_painsupression",
+        buff = {
+            types = { [BUFF_TYPES.DISADVANTAGE] = true },
+            actions = {
+                [ACTIONS.buff] = true,
+                [ACTIONS.meleeSave] = true,
+                [ACTIONS.rangedSave] = true,
+            },
+        },
     },
     DEEP_BRUISING = {
         id = "DEEP_BRUISING",
@@ -105,7 +115,11 @@ local wounds = {
 criticalWounds.WOUNDS = {}
 
 for id, wound in pairs(wounds) do
-    criticalWounds.WOUNDS[id] = CriticalWound:New(
+    if not wound.model then
+        wound.model = CriticalWound
+    end
+
+    criticalWounds.WOUNDS[id] = wound.model:New(
         wound.id,
         wound.index,
         wound.name,
