@@ -28,6 +28,13 @@ local function calculateMaxTraits()
     return maxTraits
 end
 
+local function getMaxTraitCharges(trait)
+    if trait.id == TRAITS.VINDICATION.id and character.hasFeat(FEATS.DIVINE_PURPOSE) then
+        return 4
+    end
+    return trait.numCharges
+end
+
 local function calculateStatBuff(trait, stat)
     if trait.id == TRAITS.CALAMITY_GAMBIT.id then
         if stat == "offence" then
@@ -62,6 +69,7 @@ rules.traits = {
     SHATTER_SOUL_HEAL_AMOUNT = SHATTER_SOUL_HEAL_AMOUNT,
 
     calculateMaxTraits = calculateMaxTraits,
+    getMaxTraitCharges = getMaxTraitCharges,
     calculateStatBuff = calculateStatBuff,
     calculateUtilityBonusBuff = calculateUtilityBonusBuff,
 

@@ -5,6 +5,7 @@ local character = ns.character
 local characterState = ns.state.character
 local consequences = ns.consequences
 local rolls = ns.state.rolls
+local rules = ns.rules
 local ui = ns.ui
 
 local COLOURS = TEARollHelper.COLOURS
@@ -16,8 +17,9 @@ end
 
 local function traitDescription(trait)
     if trait and trait.desc then
-        local chargeText = trait.numCharges > 1 and  " charges)|r" or  " charge)|r"
-        return trait.desc .. COLOURS.NOTE .. " (" .. trait.numCharges .. chargeText
+        local numCharges = rules.traits.getMaxTraitCharges(trait)
+        local chargeText = numCharges > 1 and  " charges)|r" or  " charge)|r"
+        return trait.desc .. COLOURS.NOTE .. " (" .. numCharges .. chargeText
     end
     return ""
 end

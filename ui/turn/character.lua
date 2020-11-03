@@ -24,7 +24,7 @@ local function traitChargesSlider(order, trait)
         name = colour .. trait.name .. " charges",
         desc = trait.desc,
         min = 0,
-        max = trait.numCharges,
+        max = rules.traits.getMaxTraitCharges(trait),
         step = 1,
         get = function()
             return state.featsAndTraits.numTraitCharges.get(trait.id)
@@ -35,6 +35,11 @@ local function traitChargesSlider(order, trait)
         hidden = function()
             return not character.hasTrait(trait)
         end,
+        dialogControl = TEARollHelper:CreateCustomSlider("turn_character_numCharges_" .. trait.id, {
+            max = function()
+                return rules.traits.getMaxTraitCharges(trait)
+            end
+        })
     }
 end
 
@@ -213,7 +218,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                     for i, traitID in ipairs(TRAIT_KEYS) do
                         local trait = TRAITS[traitID]
                         if trait.numCharges then
-                            sliders[traitID] = traitChargesSlider(i, trait)
+                            sliders["turn_character_numCharges_" .. traitID] = traitChargesSlider(i, trait)
                         end
                     end
 

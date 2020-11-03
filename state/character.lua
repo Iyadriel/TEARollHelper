@@ -19,17 +19,17 @@ local TRAITS = traits.TRAITS
 local WEAKNESSES = weaknesses.WEAKNESSES
 local state
 
-local numTraitCharges = (function()
+local numTraitCharges = function()
     local numCharges = {}
 
     for traitID, trait in pairs(TRAITS) do
         if trait.numCharges then
-            numCharges[traitID] = trait.numCharges
+            numCharges[traitID] = rules.traits.getMaxTraitCharges(trait)
         end
     end
 
     return numCharges
-end)()
+end
 
 characterState.initState = function()
     state = {
@@ -50,7 +50,7 @@ characterState.initState = function()
 
         featsAndTraits = {
             numBloodHarvestSlots = rules.offence.getMaxBloodHarvestSlots(),
-            numTraitCharges = numTraitCharges,
+            numTraitCharges = numTraitCharges(),
         },
 
         numFatePoints = rules.rolls.getMaxFatePoints(),
@@ -337,7 +337,7 @@ bus.addListener(EVENTS.TRAIT_REMOVED, function(traitID)
     if not turnState.state.inCombat.get() then
         local trait = TRAITS[traitID]
         if trait.numCharges then
-            characterState.state.featsAndTraits.numTraitCharges.set(traitID, trait.numCharges)
+            characterState.state.featsAndTraits.numTraitCharges.set(traitID, rules.traits.getMaxTraitCharges(trait))
         end
     end
 end)
