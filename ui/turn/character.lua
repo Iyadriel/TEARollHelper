@@ -165,7 +165,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                         name = "Excess",
                         desc = "How much Excess you have gained.|n"
                                 .. "You can spend Excess to increase your own spirit or offense stat for a player turn (1 point per 1 Excess spent).|n"
-                                .. "Spending Excess does not grant you more Greater Heal Slots, but if you wish you can spend all 6 points of Excess without buffing yourself in order to restore 1 Greater Heal Slot.",
+                                .. "Spending Excess does not grant you more Greater Heal Slots, but if you wish you can spend all 3 points of Excess without buffing yourself in order to restore 1 Greater Heal Slot.",
                         min = 0,
                         max = rules.healing.getMaxExcess(),
                         step = 1,
