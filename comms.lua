@@ -68,7 +68,7 @@ end
 -- Broadcast your own status so that people can update you in their party state.
 local function broadcastCharacterStatus(characterStatus, inRaid)
     local channel = getBroadcastChannel(inRaid)
-    TEARollHelper:Debug("[comms] Broadcasting status to", channel, "(2/2)")
+    TEARollHelper:Debug("[comms] Broadcasting status to", channel)
     local msg = TEARollHelper:Serialize(MSG_TYPES.CHARACTER_STATUS_UPDATE, characterStatus)
 
     TEARollHelper:SendCommMessage(PREFIX, msg, channel)
@@ -77,7 +77,7 @@ end
 -- Request that people send you their status.
 local function broadcastGroupStatusRequest(inRaid)
     local channel = getBroadcastChannel(inRaid)
-    TEARollHelper:Debug("[comms] Requesting status from group members in channel", channel, "(2/2)")
+    TEARollHelper:Debug("[comms] Requesting status from group members in channel", channel)
     local msg = TEARollHelper:Serialize(MSG_TYPES.GROUP_STATUS_REQUEST)
 
     TEARollHelper:SendCommMessage(PREFIX, msg, channel)

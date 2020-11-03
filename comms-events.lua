@@ -31,8 +31,6 @@ local function inGroupOrRaid()
 end
 
 local function broadcastStatus()
-    TEARollHelper:Debug("[comms] Broadcasting status if in group... (1/2)")
-
     local inGroup, inRaid = inGroupOrRaid()
     if inGroup then
         local characterStatus = getStatus()
@@ -41,8 +39,6 @@ local function broadcastStatus()
 end
 
 local function requestGroupStatus()
-    TEARollHelper:Debug("[comms] Requesting group status if in group... (1/2)")
-
     local inGroup, inRaid = inGroupOrRaid()
     if inGroup then
         comms.broadcastGroupStatusRequest(inRaid)
