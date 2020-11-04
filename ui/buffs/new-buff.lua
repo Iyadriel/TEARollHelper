@@ -8,6 +8,7 @@ local ui = ns.ui
 local ACTION_LABELS_NO_PENANCE = constants.ACTION_LABELS_NO_PENANCE
 local BUFF_TYPES = constants.BUFF_TYPES
 local STAT_LABELS = constants.STAT_LABELS
+local TURN_TYPES = constants.TURN_TYPES
 
 --[[ local options = {
     order: Number
@@ -25,19 +26,38 @@ ui.modules.buffs.modules.newBuff.getOptions = function(options)
                 name = "Type",
                 width = 0.55,
                 values = {
+                    [BUFF_TYPES.ROLL] = "Roll",
                     [BUFF_TYPES.STAT] = "Stat",
                     [BUFF_TYPES.BASE_DMG] = "Base dmg",
                     [BUFF_TYPES.DISADVANTAGE] = "Disadvantage",
                     [BUFF_TYPES.ADVANTAGE] = "Advantage"
                 },
-                sorting = {BUFF_TYPES.STAT, BUFF_TYPES.BASE_DMG, BUFF_TYPES.ADVANTAGE, BUFF_TYPES.DISADVANTAGE},
+                sorting = {BUFF_TYPES.ROLL, BUFF_TYPES.STAT, BUFF_TYPES.BASE_DMG, BUFF_TYPES.ADVANTAGE, BUFF_TYPES.DISADVANTAGE},
                 get = buffsState.newPlayerBuff.type.get,
                 set = function(info, value)
                     buffsState.newPlayerBuff.type.set(value)
                 end,
             },
-            stat = {
+            turn = {
                 order = 1,
+                type = "select",
+                name = "Turn",
+                width = 0.5,
+                values = {
+                    [TURN_TYPES.PLAYER.id] = TURN_TYPES.PLAYER.name,
+                    [TURN_TYPES.ENEMY.id] = TURN_TYPES.ENEMY.name,
+                },
+                sorting = {TURN_TYPES.PLAYER.id, TURN_TYPES.ENEMY.id},
+                hidden = function()
+                    return buffsState.newPlayerBuff.type.get() ~= BUFF_TYPES.ROLL
+                end,
+                get = buffsState.newPlayerBuff.turnTypeID.get,
+                set = function(info, value)
+                    buffsState.newPlayerBuff.turnTypeID.set(value)
+                end,
+            },
+            stat = {
+                order = 2,
                 type = "select",
                 name = "Stat",
                 width = 0.5,
@@ -57,7 +77,7 @@ ui.modules.buffs.modules.newBuff.getOptions = function(options)
                 end,
             },
             amount = {
-                order = 2,
+                order = 3,
                 type = "input",
                 name = "Amount",
                 desc = "How much to increase or decrease the stat by.",
@@ -70,7 +90,7 @@ ui.modules.buffs.modules.newBuff.getOptions = function(options)
                 end,
                 hidden = function()
                     local type = buffsState.newPlayerBuff.type.get()
-                    return type ~= BUFF_TYPES.STAT and type ~= BUFF_TYPES.BASE_DMG
+                    return type ~= BUFF_TYPES.ROLL and type ~= BUFF_TYPES.STAT and type ~= BUFF_TYPES.BASE_DMG
                 end,
                 get = function()
                     return tostring(buffsState.newPlayerBuff.amount.get())
@@ -80,7 +100,7 @@ ui.modules.buffs.modules.newBuff.getOptions = function(options)
                 end
             },
             action = {
-                order = 3,
+                order = 4,
                 type = "select",
                 name = "Action",
                 width = 0.9,
@@ -95,7 +115,7 @@ ui.modules.buffs.modules.newBuff.getOptions = function(options)
                 end,
             },
             label = {
-                order = 4,
+                order = 5,
                 type = "input",
                 name = "Label (optional)",
                 desc = "This can be used as a reminder of where the buff came from. This is only visible to you.",
@@ -106,27 +126,33 @@ ui.modules.buffs.modules.newBuff.getOptions = function(options)
                 end
             },
             expireAfterNextTurn = {
-                order = 5,
+                order = 6,
                 type = "toggle",
                 name = "Expire after next turn",
                 desc = "This will remove the buff after the next turn. You can always clear buffs manually by right-clicking.",
+                hidden = function()
+                    return buffsState.newPlayerBuff.type.get() == BUFF_TYPES.ROLL
+                end,
                 get = buffsState.newPlayerBuff.expireAfterNextTurn.get,
                 set = function(info, value)
                     buffsState.newPlayerBuff.expireAfterNextTurn.set(value)
                 end,
             },
             expireAfterFirstAction = {
-                order = 6,
+                order = 7,
                 type = "toggle",
                 name = "Expire after first action",
                 desc = "This will remove the buff when you confirm any action in your turn. This is how most buffs work, so leave this enabled if you're not sure.",
+                hidden = function()
+                    return buffsState.newPlayerBuff.type.get() == BUFF_TYPES.ROLL
+                end,
                 get = buffsState.newPlayerBuff.expireAfterFirstAction.get,
                 set = function(info, value)
                     buffsState.newPlayerBuff.expireAfterFirstAction.set(value)
                 end,
             },
             add = {
-                order = 7,
+                order = 8,
                 type = "execute",
                 name = "Add",
                 func = function()
@@ -136,7 +162,11 @@ ui.modules.buffs.modules.newBuff.getOptions = function(options)
                     local expireAfterNextTurn = newBuff.expireAfterNextTurn.get()
                     local expireAfterFirstAction = newBuff.expireAfterFirstAction.get()
 
-                    if buffType == BUFF_TYPES.STAT then
+                    if buffType == BUFF_TYPES.ROLL then
+                        local turnTypeID = newBuff.turnTypeID.get()
+                        local amount = newBuff.amount.get()
+                        buffs.addRollBuff(turnTypeID, amount, label)
+                    elseif buffType == BUFF_TYPES.STAT then
                         local stat = newBuff.stat.get()
                         local amount = newBuff.amount.get()
                         buffs.addStatBuff(stat, amount, label, expireAfterNextTurn, expireAfterFirstAction)

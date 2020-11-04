@@ -80,6 +80,10 @@ end)
 
 -- [[ Buffs ]]
 
+bus.addListener(EVENTS.ROLL_BUFF_ADDED, function(turnTypeID, amount)
+    TEARollHelper:Print("You are buffed for " .. amount .. ".")
+end)
+
 bus.addListener(EVENTS.STAT_BUFF_ADDED, function(stat, amount)
     TEARollHelper:Print("Your " .. constants.STAT_LABELS[stat] .. " stat has been buffed by " .. amount .. ".")
 end)

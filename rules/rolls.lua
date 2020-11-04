@@ -15,6 +15,10 @@ local WEAKNESSES = weaknesses.WEAKNESSES
 local MIN_ROLL = 1
 local MAX_ROLL = 20
 
+local function calculateRoll(roll, rollBuff)
+    return roll + rollBuff
+end
+
 local function getCritReq()
     local critReq = MAX_ROLL
     if character.hasFeat(FEATS.KEEN_SENSE) then
@@ -85,6 +89,8 @@ end
 rules.rolls = {
     MIN_ROLL = MIN_ROLL,
     MAX_ROLL = MAX_ROLL,
+
+    calculateRoll = calculateRoll,
 
     getCritReq = getCritReq,
 

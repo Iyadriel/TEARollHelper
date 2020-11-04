@@ -9,12 +9,18 @@ local EVENTS = bus.EVENTS
 local BUFF_SOURCES = constants.BUFF_SOURCES
 local BUFF_TYPES = constants.BUFF_TYPES
 local STAT_LABELS = constants.STAT_LABELS
+local TURN_TYPES = constants.TURN_TYPES
 
 local STAT_TYPE_ICONS = {
     offence = "Interface\\Icons\\spell_holy_greaterblessingofkings",
     defence = "Interface\\Icons\\spell_magic_greaterblessingofkings",
     spirit = "Interface\\Icons\\spell_holy_greaterblessingofwisdom",
     stamina = "Interface\\Icons\\spell_holy_wordfortitude",
+}
+
+local TURN_TYPE_ICONS = {
+    [TURN_TYPES.PLAYER.id] = "Interface\\Icons\\spell_nature_lightning",
+    [TURN_TYPES.ENEMY.id] = "Interface\\Icons\\spell_holy_powerwordbarrier",
 }
 
 local function shallowCopy(table)
@@ -36,6 +42,36 @@ end
 local function getRemainingTurns(expireAfterNextTurn)
     if not expireAfterNextTurn then return nil end
     return 1
+end
+
+local function addRollBuff(turnTypeID, amount, label)
+    local existingBuff = buffsState.state.buffLookup.getPlayerRollBuff(turnTypeID)
+
+    if existingBuff then
+        removeBuff(existingBuff)
+    end
+
+    if label:trim() == "" then
+        label = "Buff"
+    end
+
+    addBuff({
+        id = "player_roll_" .. turnTypeID,
+        types = { [BUFF_TYPES.ROLL] = true },
+        label = label,
+        icon = TURN_TYPE_ICONS[turnTypeID],
+
+        amount = amount,
+
+        source = BUFF_SOURCES.PLAYER,
+
+        remainingTurns = {
+            [turnTypeID] = 0
+        },
+        expireAfterFirstAction = true,
+    })
+
+    bus.fire(EVENTS.ROLL_BUFF_ADDED, turnTypeID, amount)
 end
 
 local function addStatBuff(stat, amount, label, expireAfterNextTurn, expireAfterFirstAction)
@@ -388,6 +424,7 @@ local function addRacialBuff(racialTrait)
     end
 end
 
+ns.buffs.addRollBuff = addRollBuff
 ns.buffs.addStatBuff = addStatBuff
 ns.buffs.addBaseDmgBuff = addBaseDmgBuff
 ns.buffs.addAdvantageBuff = addAdvantageBuff

@@ -28,6 +28,10 @@ end
 local function buffDesc(buff)
     local msg = " |n"
 
+    if buff.types[BUFF_TYPES.ROLL] then
+        msg = msg .. valueIncDecText("Roll", buff.amount)
+    end
+
     if buff.types[BUFF_TYPES.STAT] then
         for stat, amount in pairs(buff.stats) do
             msg = msg .. valueIncDecText(STAT_LABELS[stat], amount)

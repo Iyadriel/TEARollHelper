@@ -66,6 +66,7 @@ local BUFF_TYPES = {
     DAMAGE_DONE = 8,
     DAMAGE_OVER_TIME = 9,
     UTILITY_BONUS = 10,
+    ROLL = 11,
 }
 
 local DAMAGE_TYPES = {

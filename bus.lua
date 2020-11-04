@@ -42,6 +42,7 @@ local EVENTS = {
     TRAIT_ACTIVATED = "TRAIT_ACTIVATED", -- traitID, msg?
 
     -- Buffs
+    ROLL_BUFF_ADDED = "ROLL_BUFF_ADDED", -- turnTypeID, amount
     STAT_BUFF_ADDED = "STAT_BUFF_ADDED", -- stat, amount
     BASE_DMG_BUFF_ADDED = "BASE_DMG_BUFF_ADDED", -- amount
     BUFF_STACK_ADDED = "BUFF_STACK_ADDED", -- buff

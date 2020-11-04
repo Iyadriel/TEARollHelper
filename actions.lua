@@ -6,7 +6,7 @@ local traits = ns.resources.traits
 
 local TRAITS = traits.TRAITS
 
-local function getAttack(attackIndex, roll, threshold, offence, offenceBuff, baseDmgBuff, damageDoneBuff, enemyId, isAOE, numBloodHarvestSlots, activeTraits)
+local function getAttack(attackIndex, roll, rollBuff, threshold, offence, offenceBuff, baseDmgBuff, damageDoneBuff, enemyId, isAOE, numBloodHarvestSlots, activeTraits)
     local attackValue
     local dmg
     local critType = rules.offence.getCritType()
@@ -18,8 +18,8 @@ local function getAttack(attackIndex, roll, threshold, offence, offenceBuff, bas
     local hasVindicationProc = nil
     local vindicationHealing = 0
 
+    roll = rules.rolls.calculateRoll(roll, rollBuff)
     attackValue = rules.offence.calculateAttackValue(roll, offence, offenceBuff)
-
     dmg = rules.offence.calculateAttackDmg(threshold, attackValue, baseDmgBuff, damageDoneBuff)
 
     if rules.offence.canProcAdrenaline(attackIndex) then
@@ -85,13 +85,15 @@ local function getAttack(attackIndex, roll, threshold, offence, offenceBuff, bas
     }
 end
 
-local function getPenance(roll, threshold, spirit, spiritBuff, baseDmgBuff, damageDoneBuff, numGreaterHealSlots, targetIsKO, activeTraits)
+local function getPenance(roll, rollBuff, threshold, spirit, spiritBuff, baseDmgBuff, damageDoneBuff, numGreaterHealSlots, targetIsKO, activeTraits)
     local attackValue
     local dmg
     local amountHealed = 0
     local isCrit = rules.offence.isCrit(roll)
     local hasVindicationProc = nil
     local vindicationHealing = 0
+
+    roll = rules.rolls.calculateRoll(roll, rollBuff)
 
     -- Damage
 
@@ -138,9 +140,10 @@ local function getPenance(roll, threshold, spirit, spiritBuff, baseDmgBuff, dama
     }
 end
 
-local function getCC(roll, offence, offenceBuff, defence, defenceBuff)
-    local ccValue = rules.cc.calculateCCValue(roll, offence, offenceBuff, defence, defenceBuff)
+local function getCC(roll, rollBuff, offence, offenceBuff, defence, defenceBuff)
     local isCrit = rules.cc.isCrit(roll)
+    roll = rules.rolls.calculateRoll(roll, rollBuff)
+    local ccValue = rules.cc.calculateCCValue(roll, offence, offenceBuff, defence, defenceBuff)
 
     return {
         ccValue = ccValue,
@@ -148,7 +151,7 @@ local function getCC(roll, offence, offenceBuff, defence, defenceBuff)
     }
 end
 
-local function getDefence(roll, defenceType, threshold, damageType, dmgRisk, defence, defenceBuff, damageTakenBuff, activeTraits)
+local function getDefence(roll, rollBuff, defenceType, threshold, damageType, dmgRisk, defence, defenceBuff, damageTakenBuff, activeTraits)
     local isCrit = rules.defence.isCrit(roll)
     local defendValue, damageTaken, damagePrevented
     local retaliateDmg = 0
@@ -156,6 +159,7 @@ local function getDefence(roll, defenceType, threshold, damageType, dmgRisk, def
 
     local effectiveIncomingDamage = rules.effects.calculateEffectiveIncomingDamage(dmgRisk, damageTakenBuff, true)
 
+    roll = rules.rolls.calculateRoll(roll, rollBuff)
     defendValue = rules.defence.calculateDefendValue(roll, damageType, defence, defenceBuff)
     damageTaken = rules.defence.calculateDamageTaken(defenceType, threshold, defendValue, effectiveIncomingDamage)
     damagePrevented = rules.defence.calculateDamagePrevented(effectiveIncomingDamage, damageTaken)
@@ -185,7 +189,7 @@ local function getDefence(roll, defenceType, threshold, damageType, dmgRisk, def
     }
 end
 
-local function getMeleeSave(roll, defenceType, threshold, damageType, dmgRisk, defence, defenceBuff, damageTakenBuff, activeTraits)
+local function getMeleeSave(roll, rollBuff, defenceType, threshold, damageType, dmgRisk, defence, defenceBuff, damageTakenBuff, activeTraits)
     threshold = threshold + rules.common.SAVE_THRESHOLD_INCREASE
 
     local meleeSaveValue, damageTaken, damagePrevented
@@ -193,6 +197,7 @@ local function getMeleeSave(roll, defenceType, threshold, damageType, dmgRisk, d
     local hasCounterForceProc = nil
     local counterForceDmg = 0
 
+    roll = rules.rolls.calculateRoll(roll, rollBuff)
     meleeSaveValue = rules.meleeSave.calculateMeleeSaveValue(roll, damageType, defence, defenceBuff)
 
     -- the damage that the ally would have taken
@@ -232,9 +237,10 @@ local function getMeleeSave(roll, defenceType, threshold, damageType, dmgRisk, d
     }
 end
 
-local function getRangedSave(roll, defenceType, threshold, spirit, buff)
+local function getRangedSave(roll, rollBuff, defenceType, threshold, spirit, buff)
     threshold = threshold + rules.common.SAVE_THRESHOLD_INCREASE
 
+    roll = rules.rolls.calculateRoll(roll, rollBuff)
     local saveValue = rules.rangedSave.calculateRangedSaveValue(roll, spirit, buff)
     local canFullyProtect = rules.rangedSave.canFullyProtect(defenceType, threshold, saveValue)
     local damageReduction = nil
@@ -250,13 +256,15 @@ local function getRangedSave(roll, defenceType, threshold, spirit, buff)
     }
 end
 
-local function getHealing(roll, spirit, spiritBuff, healingDoneBuff, numGreaterHealSlots, targetIsKO, outOfCombat, remainingOutOfCombatHeals, activeTraits)
+local function getHealing(roll, rollBuff, spirit, spiritBuff, healingDoneBuff, numGreaterHealSlots, targetIsKO, outOfCombat, remainingOutOfCombatHeals, activeTraits)
     local canStillHeal = rules.healing.canStillHeal(outOfCombat, remainingOutOfCombatHeals, numGreaterHealSlots)
     local healValue
     local amountHealed = 0
     local isCrit = rules.healing.isCrit(roll)
     local usesParagon = rules.healing.usesParagon()
     local playersHealableWithParagon = nil
+
+    roll = rules.rolls.calculateRoll(roll, rollBuff)
 
     if canStillHeal then
         healValue = rules.healing.calculateHealValue(roll, spirit, spiritBuff)
@@ -304,11 +312,12 @@ local function getHealing(roll, spirit, spiritBuff, healingDoneBuff, numGreaterH
     }
 end
 
-local function getBuff(roll, spirit, spiritBuff, offence, offenceBuff, activeTraits)
+local function getBuff(roll, rollBuff, spirit, spiritBuff, offence, offenceBuff, activeTraits)
     local buffValue
     local amountBuffed
     local isCrit = rules.buffing.isCrit(roll)
 
+    roll = rules.rolls.calculateRoll(roll, rollBuff)
     buffValue = rules.buffing.calculateBuffValue(roll, spirit, spiritBuff, offence, offenceBuff)
 
     amountBuffed = rules.buffing.calculateBuffAmount(buffValue)
@@ -326,7 +335,8 @@ local function getBuff(roll, spirit, spiritBuff, offence, offenceBuff, activeTra
     }
 end
 
-local function getUtility(roll, useUtilityTrait, utilityBonusBuff)
+local function getUtility(roll, rollBuff, useUtilityTrait, utilityBonusBuff)
+    roll = rules.rolls.calculateRoll(roll, rollBuff)
     local utilityValue = rules.utility.calculateUtilityValue(roll, useUtilityTrait, utilityBonusBuff)
 
     return {

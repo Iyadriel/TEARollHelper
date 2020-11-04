@@ -4,13 +4,16 @@ local buffsState = ns.state.buffs
 local bus = ns.bus
 local characterState = ns.state.character
 local constants = ns.constants
+
 local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
 
 local ACTIONS = constants.ACTIONS
 local BUFF_TYPES = constants.BUFF_TYPES
 local EVENTS = bus.EVENTS
+local STATS = constants.STATS
 local TRAITS = traits.TRAITS
+local TURN_TYPES = constants.TURN_TYPES
 local WEAKNESSES = weaknesses.WEAKNESSES
 local state
 
@@ -22,6 +25,7 @@ buffsState.initState = function()
             spirit = 0,
             stamina = 0,
 
+            roll = 0,
             maxHealth = 0,
             baseDamage = 0,
             damageDone = 0,
@@ -34,8 +38,9 @@ buffsState.initState = function()
         buffLookup = {},
 
         newPlayerBuff = {
-            type = BUFF_TYPES.STAT,
-            stat = "offence",
+            type = BUFF_TYPES.ROLL,
+            turnTypeID = TURN_TYPES.PLAYER.id,
+            stat = STATS.offence,
             amount = 1,
             action = ACTIONS.attack,
             label = "",
@@ -63,13 +68,14 @@ end
 
 buffsState.state = {
     buffs = {
-        offence = basicGetSet("buffs", "offence"),
-        defence = basicGetSet("buffs", "defence"),
-        spirit = basicGetSet("buffs", "spirit"),
-        stamina = basicGetSet("buffs", "stamina", function()
+        [STATS.offence] = basicGetSet("buffs", STATS.offence),
+        [STATS.defence] = basicGetSet("buffs", STATS.defence),
+        [STATS.spirit] = basicGetSet("buffs", STATS.spirit),
+        [STATS.stamina] = basicGetSet("buffs", STATS.stamina, function()
             updateMaxHealth(true)
         end),
 
+        roll = basicGetSet("buffs", "roll"),
         maxHealth = basicGetSet("buffs", "maxHealth"),
         baseDamage = basicGetSet("buffs", "baseDamage"),
         damageDone = basicGetSet("buffs", "damageDone"),
@@ -96,6 +102,10 @@ buffsState.state = {
                 end
             end
 
+            if buff.types[BUFF_TYPES.ROLL] then
+                buffsState.state.buffs.roll.set(buffsState.state.buffs.roll.get() + buff.amount)
+            end
+
             if buff.types[BUFF_TYPES.MAX_HEALTH] then
                 buffsState.state.buffs.maxHealth.set(buffsState.state.buffs.maxHealth.get() + buff.amount)
                 updateMaxHealth(false)
@@ -112,6 +122,9 @@ buffsState.state = {
             end
 
             -- reset input
+            buffsState.state.newPlayerBuff.type.set(BUFF_TYPES.ROLL)
+            buffsState.state.newPlayerBuff.turnTypeID.set(TURN_TYPES.PLAYER.id)
+            buffsState.state.newPlayerBuff.stat.set(STATS.offence)
             buffsState.state.newPlayerBuff.amount.set(1)
             buffsState.state.newPlayerBuff.label.set("")
             buffsState.state.newPlayerBuff.expireAfterNextTurn.set(true)
@@ -140,6 +153,10 @@ buffsState.state = {
                     local statBuff = buffsState.state.buffs[stat]
                     statBuff.set(statBuff.get() - amount)
                 end
+            end
+
+            if buff.types[BUFF_TYPES.ROLL] then
+                buffsState.state.buffs.roll.set(buffsState.state.buffs.roll.get() - buff.amount)
             end
 
             if buff.types[BUFF_TYPES.MAX_HEALTH] then
@@ -179,6 +196,9 @@ buffsState.state = {
     buffLookup = {
         get = function(id)
             return state.buffLookup[id]
+        end,
+        getPlayerRollBuff = function(turnTypeID)
+            return buffsState.state.buffLookup.get("player_roll_" .. turnTypeID)
         end,
         getPlayerStatBuff = function(stat)
             return buffsState.state.buffLookup.get("player_" .. stat)
@@ -250,6 +270,7 @@ buffsState.state = {
     },
     newPlayerBuff = {
         type = basicGetSet("newPlayerBuff", "type"),
+        turnTypeID = basicGetSet("newPlayerBuff", "turnTypeID"),
         stat = basicGetSet("newPlayerBuff", "stat"),
         amount = basicGetSet("newPlayerBuff", "amount"),
         action = basicGetSet("newPlayerBuff", "action"),
