@@ -30,6 +30,7 @@ ui.modules.turn.modules.turn.getOptions = function(options)
                     [TURN_TYPES.PLAYER.id] = TURN_TYPES.PLAYER.name .. " turn",
                     [TURN_TYPES.ENEMY.id] = TURN_TYPES.ENEMY.name .. " turn",
                 },
+                sorting = {TURN_TYPES.PLAYER.id, TURN_TYPES.ENEMY.id},
                 order = 0,
                 hidden = function()
                     return not state.inCombat.get()
