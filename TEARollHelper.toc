@@ -91,6 +91,8 @@ ui/actions/utility.lua
 ui/actions-tostring.lua
 
 ui/buffs.lua
+ui/buffs/buff-button.lua
+ui/buffs/new-buff.lua
 ui/chat.lua
 
 ui/config.lua

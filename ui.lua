@@ -11,6 +11,7 @@ local constants = {
 
 local modules = {
     actions = {},
+    buffs = {},
     config = {
         name = "TEARollHelper",
         friendlyName = constants.FRIENDLY_ADDON_NAME,
