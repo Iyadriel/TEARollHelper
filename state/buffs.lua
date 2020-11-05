@@ -28,6 +28,7 @@ buffsState.initState = function()
             roll = {
                 [TURN_TYPES.PLAYER.id] = 0,
                 [TURN_TYPES.ENEMY.id] = 0,
+                [TURN_TYPES.OUT_OF_COMBAT.id] = 0, -- unused, but simplifies some logic
             },
             maxHealth = 0,
             baseDamage = 0,
