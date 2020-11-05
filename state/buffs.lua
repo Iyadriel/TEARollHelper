@@ -66,17 +66,14 @@ local function basicGetSet(section, key, callback)
     }
 end
 
-local function updateMaxHealth(shouldRestoreMissingHealth)
-    characterState.state.maxHealth.update(shouldRestoreMissingHealth)
-end
-
 buffsState.state = {
     buffs = {
         [STATS.offence] = basicGetSet("buffs", STATS.offence),
         [STATS.defence] = basicGetSet("buffs", STATS.defence),
         [STATS.spirit] = basicGetSet("buffs", STATS.spirit),
         [STATS.stamina] = basicGetSet("buffs", STATS.stamina, function()
-            updateMaxHealth(true)
+            local shouldRestoreMissingHealth = true
+            characterState.state.maxHealth.update(shouldRestoreMissingHealth)
         end),
 
         roll = {
@@ -99,39 +96,8 @@ buffsState.state = {
             return state.activeBuffs
         end,
         add = function(buff)
-            if buff.canCancel == nil then
-                buff.canCancel = true
-            end
-
             table.insert(state.activeBuffs, buff)
             buffsState.state.buffLookup.add(buff)
-
-            if buff.types[BUFF_TYPES.STAT] then
-                for stat, amount in pairs(buff.stats) do
-                    local statBuff = buffsState.state.buffs[stat]
-                    statBuff.set(statBuff.get() + amount)
-                end
-            end
-
-            if buff.types[BUFF_TYPES.ROLL] then
-                local newAmount = buffsState.state.buffs.roll.get(buff.turnTypeID) + buff.amount
-                buffsState.state.buffs.roll.set(buff.turnTypeID, newAmount)
-            end
-
-            if buff.types[BUFF_TYPES.MAX_HEALTH] then
-                buffsState.state.buffs.maxHealth.set(buffsState.state.buffs.maxHealth.get() + buff.amount)
-                updateMaxHealth(false)
-            elseif buff.types[BUFF_TYPES.BASE_DMG] then
-                buffsState.state.buffs.baseDamage.set(buffsState.state.buffs.baseDamage.get() + buff.amount)
-            elseif buff.types[BUFF_TYPES.DAMAGE_DONE] then
-                buffsState.state.buffs.damageDone.set(buffsState.state.buffs.damageDone.get() + buff.amount)
-            elseif buff.types[BUFF_TYPES.DAMAGE_TAKEN] then
-                buffsState.state.buffs.damageTaken.set(buffsState.state.buffs.damageTaken.get() + buff.amount)
-            elseif buff.types[BUFF_TYPES.HEALING_DONE] then
-                buffsState.state.buffs.healingDone.set(buffsState.state.buffs.healingDone.get() + buff.amount)
-            elseif buff.types[BUFF_TYPES.UTILITY_BONUS] then
-                buffsState.state.buffs.utilityBonus.set(buffsState.state.buffs.utilityBonus.get() + buff.amount)
-            end
 
             -- reset input
             buffsState.state.newPlayerBuff.type.set(BUFF_TYPES.ROLL)
@@ -160,50 +126,12 @@ buffsState.state = {
         removeAtIndex = function(index)
             local buff = state.activeBuffs[index]
 
-            if buff.types[BUFF_TYPES.STAT] then
-                for stat, amount in pairs(buff.stats) do
-                    local statBuff = buffsState.state.buffs[stat]
-                    statBuff.set(statBuff.get() - amount)
-                end
-            end
-
-            if buff.types[BUFF_TYPES.ROLL] then
-                local newAmount = buffsState.state.buffs.roll.get(buff.turnTypeID) - buff.amount
-                buffsState.state.buffs.roll.set(buff.turnTypeID, newAmount)
-            end
-
-            if buff.types[BUFF_TYPES.MAX_HEALTH] then
-                buffsState.state.buffs.maxHealth.set(buffsState.state.buffs.maxHealth.get() - buff.amount)
-                updateMaxHealth(false)
-            elseif buff.types[BUFF_TYPES.BASE_DMG] then
-                buffsState.state.buffs.baseDamage.set(buffsState.state.buffs.baseDamage.get() - buff.amount)
-            elseif buff.types[BUFF_TYPES.DAMAGE_DONE] then
-                buffsState.state.buffs.damageDone.set(buffsState.state.buffs.damageDone.get() - buff.amount)
-            elseif buff.types[BUFF_TYPES.DAMAGE_TAKEN] then
-                buffsState.state.buffs.damageTaken.set(buffsState.state.buffs.damageTaken.get() - buff.amount)
-            elseif buff.types[BUFF_TYPES.HEALING_DONE] then
-                buffsState.state.buffs.healingDone.set(buffsState.state.buffs.healingDone.get() - buff.amount)
-            elseif buff.types[BUFF_TYPES.UTILITY_BONUS] then
-                buffsState.state.buffs.utilityBonus.set(buffsState.state.buffs.utilityBonus.get() - buff.amount)
-            end
-
             table.remove(state.activeBuffs, index)
             buffsState.state.buffLookup.remove(buff)
         end,
         cancel = function(index)
             -- cancel is for buffs manually removed by the player.
             buffsState.state.activeBuffs.removeAtIndex(index)
-        end,
-        addStack = function(buff)
-            buff.stacks = buff.stacks + 1
-
-            if buff.types[BUFF_TYPES.MAX_HEALTH] then
-                buffsState.state.buffs.maxHealth.set(buffsState.state.buffs.maxHealth.get() + buff.originalAmount)
-                buff.amount = buff.originalAmount * buff.stacks
-                updateMaxHealth(false)
-            end
-
-            bus.fire(EVENTS.BUFF_STACK_ADDED, buff)
         end,
     },
     buffLookup = {

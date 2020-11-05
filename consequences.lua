@@ -7,18 +7,26 @@ local character = ns.character
 local characterState = ns.state.character
 local consequences = ns.consequences
 local constants = ns.constants
-local enemies = ns.resources.enemies
-local feats = ns.resources.feats
+local models = ns.models
 local rollState = ns.state.rolls
 local rules = ns.rules
+
+local enemies = ns.resources.enemies
+local feats = ns.resources.feats
 local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
+
+local BuffEffectDamageDone = models.BuffEffectDamageDone
+local BuffEffectHealingOverTime = models.BuffEffectHealingOverTime
+local BuffEffectStat = models.BuffEffectStat
+local BuffEffectUtilityBonus = models.BuffEffectUtilityBonus
 
 local ACTIONS = constants.ACTIONS
 local ENEMIES = enemies.ENEMIES
 local EVENTS = bus.EVENTS
 local FEATS = feats.FEATS
 local INCOMING_HEAL_SOURCES = constants.INCOMING_HEAL_SOURCES
+local STATS = constants.STATS
 local TRAITS = traits.TRAITS
 local WEAKNESSES = weaknesses.WEAKNESSES
 
@@ -37,11 +45,10 @@ end
 -- [[ Effects ]]
 
 local function applyFaelunesRegrowth(initialHealAmount)
-    local FAELUNES_REGROWTH = TRAITS.FAELUNES_REGROWTH
-
     characterState.state.health.heal(initialHealAmount, INCOMING_HEAL_SOURCES.OTHER_PLAYER)
     local healingPerTick = rules.traits.calculateRegrowthHealingPerTick(initialHealAmount)
-    buffs.addHoTBuff(FAELUNES_REGROWTH.name, FAELUNES_REGROWTH.icon, healingPerTick, FAELUNES_REGROWTH.buffs[1].remainingTurns)
+    buffs.addTraitBuff(TRAITS.FAELUNES_REGROWTH, { BuffEffectHealingOverTime:New(healingPerTick) })
+    --buffs.addHoTBuff(FAELUNES_REGROWTH.name, FAELUNES_REGROWTH.icon, healingPerTick, FAELUNES_REGROWTH.buffs[1].remainingTurns)
 end
 
 -- [[ Resources ]]
@@ -65,7 +72,7 @@ end
 -- Traits
 
 local function useArtisan()
-    buffs.addTraitBuff(TRAITS.ARTISAN)
+    buffs.addTraitBuff(TRAITS.ARTISAN, { BuffEffectUtilityBonus:New(rules.utility.calculateBaseUtilityBonus()) })
 end
 
 local function useBulwark()
@@ -73,11 +80,14 @@ local function useBulwark()
 end
 
 local function useCalamityGambit()
-    buffs.addTraitBuff(TRAITS.CALAMITY_GAMBIT)
+    buffs.addTraitBuff(TRAITS.CALAMITY_GAMBIT, {
+        BuffEffectStat:New(STATS.offence, character.getPlayerOffence()),
+        BuffEffectStat:New(STATS.defence, -character.getPlayerOffence()),
+    })
 end
 
 local function useEmpoweredBlades(defence)
-    buffs.addTraitBuff(TRAITS.EMPOWERED_BLADES, ceil(defence.dmgRisk / 2))
+    buffs.addTraitBuff(TRAITS.EMPOWERED_BLADES, { BuffEffectDamageDone:New(ceil(defence.dmgRisk / 2)) })
 end
 
 local function useFocus()
@@ -109,8 +119,8 @@ local function useVersatile()
     local stat1 = rollState.state.shared.versatile.stat1.get()
     local stat2 = rollState.state.shared.versatile.stat2.get()
     buffs.addTraitBuff(TRAITS.VERSATILE, {
-        [stat1] = -character.getPlayerStat(stat1),
-        [stat2] = character.getPlayerStat(stat1),
+        BuffEffectStat:New(stat1, -character.getPlayerStat(stat1)),
+        BuffEffectStat:New(stat2, character.getPlayerStat(stat2)),
     })
 end
 

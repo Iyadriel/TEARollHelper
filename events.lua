@@ -21,6 +21,13 @@ local TRAITS = traits.TRAITS
 local TURN_TYPES = constants.TURN_TYPES
 local WEAKNESSES = weaknesses.WEAKNESSES
 
+-- [[ Buff effects ]]
+
+bus.addListener(EVENTS.MAX_HEALTH_EFFECT, function()
+    local shouldRestoreMissingHealth = false
+    characterState.state.maxHealth.update(shouldRestoreMissingHealth)
+end)
+
 -- [[ Combat ]]
 
 bus.addListener(EVENTS.DAMAGE_TAKEN, function()
@@ -106,10 +113,10 @@ bus.addListener(EVENTS.COMBAT_OVER, function()
 end)
 
 local function setRemainingTurns(buff, remainingTurns, turnTypeId)
-    if type(buff.remainingTurns) == "table" then
-        buff.remainingTurns[turnTypeId] = remainingTurns
+    if type(buff.duration.remainingTurns) == "table" then
+        buff.duration.remainingTurns[turnTypeId] = remainingTurns
     else
-        buff.remainingTurns = remainingTurns
+        buff.duration.remainingTurns = remainingTurns
     end
 end
 
@@ -147,10 +154,10 @@ bus.addListener(EVENTS.TURN_STARTED, function(index, turnTypeID)
         local buff = activeBuffs[i]
 
         local remainingTurns
-        if type(buff.remainingTurns) == "table" then
-            remainingTurns = buff.remainingTurns[turnTypeID]
+        if type(buff.duration.remainingTurns) == "table" then
+            remainingTurns = buff.duration.remainingTurns[turnTypeID]
         else
-            remainingTurns = buff.remainingTurns
+            remainingTurns = buff.duration.remainingTurns
         end
 
         if remainingTurns then
@@ -188,10 +195,10 @@ bus.addListener(EVENTS.TURN_FINISHED, function(index, turnTypeID)
         local buff = activeBuffs[i]
 
         local remainingTurns
-        if type(buff.remainingTurns) == "table" then
-            remainingTurns = buff.remainingTurns[turnTypeID]
+        if type(buff.duration.remainingTurns) == "table" then
+            remainingTurns = buff.duration.remainingTurns[turnTypeID]
         else
-            remainingTurns = buff.remainingTurns
+            remainingTurns = buff.duration.remainingTurns
         end
 
         if remainingTurns and remainingTurns <= 0 then
@@ -201,7 +208,7 @@ bus.addListener(EVENTS.TURN_FINISHED, function(index, turnTypeID)
 end)
 
 local function applyRemainingHealAmount(regrowth)
-    local remainingHealAmount = regrowth.remainingTurns * regrowth.healingPerTick
+    local remainingHealAmount = regrowth.duration.remainingTurns * regrowth.healingPerTick
     if remainingHealAmount > 0 then
         characterState.state.health.heal(remainingHealAmount, INCOMING_HEAL_SOURCES.OTHER_PLAYER)
     end
@@ -217,7 +224,7 @@ bus.addListener(EVENTS.COMBAT_OVER, function()
             applyRemainingHealAmount(buff)
         end
 
-        if buff.expireOnCombatEnd then
+        if buff.duration.expireOnCombatEnd then
             expireBuff(i, buff)
         end
     end
@@ -228,9 +235,10 @@ bus.addListener(EVENTS.ACTION_PERFORMED, function(actionType)
 
     for i = #activeBuffs, 1, -1 do
         local buff = activeBuffs[i]
-        if buff.expireAfterFirstAction then
-            if type(buff.expireAfterFirstAction) == "table" then
-                if buff.expireAfterFirstAction[actionType] then
+        local expireAfterFirstAction = buff.duration.expireAfterFirstAction
+        if expireAfterFirstAction then
+            if type(expireAfterFirstAction) == "table" then
+                if expireAfterFirstAction[actionType] then
                     expireBuff(i, buff)
                 end
             else

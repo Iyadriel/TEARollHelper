@@ -35,22 +35,6 @@ local function getMaxTraitCharges(trait)
     return trait.numCharges
 end
 
-local function calculateStatBuff(trait, stat)
-    if trait.id == TRAITS.CALAMITY_GAMBIT.id then
-        if stat == "offence" then
-            return character.getPlayerOffence() -- double the stat
-        else
-            return -character.getPlayerOffence() -- reduce defence by regular offence stat
-        end
-    end
-end
-
-local function calculateUtilityBonusBuff(trait)
-    if trait.id == TRAITS.ARTISAN.id then
-        return rules.utility.calculateBaseUtilityBonus()
-    end
-end
-
 local function calculateRegrowthHealingPerTick(initialHealAmount)
     return ceil(initialHealAmount / 2)
 end
@@ -70,8 +54,6 @@ rules.traits = {
 
     calculateMaxTraits = calculateMaxTraits,
     getMaxTraitCharges = getMaxTraitCharges,
-    calculateStatBuff = calculateStatBuff,
-    calculateUtilityBonusBuff = calculateUtilityBonusBuff,
 
     calculateRegrowthHealingPerTick = calculateRegrowthHealingPerTick,
     calculateShieldSlamDmg = calculateShieldSlamDmg,

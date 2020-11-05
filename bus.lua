@@ -51,6 +51,9 @@ local EVENTS = {
     FEAT_BUFF_ADDED = "FEAT_BUFF_ADDED", -- featID
     BUFF_EXPIRED = "BUFF_EXPIRED", -- label
 
+    -- Buff effects
+    MAX_HEALTH_EFFECT = "MAX_HEALTH_EFFECT",
+
     -- Rolling
     ROLL_CHANGED = "ROLL_CHANGED", -- action, roll
     REROLLED = "REROLLED", -- action, roll

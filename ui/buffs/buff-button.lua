@@ -26,87 +26,95 @@ local function valueIncDecText(msgStart, value)
 end
 
 local function buffDesc(buff)
-    local msg = " |n"
+    local msg
 
-    if buff.types[BUFF_TYPES.ROLL] then
-        msg = msg .. valueIncDecText("Roll", buff.amount)
-    end
+    if buff.GetTooltip then
+        msg = buff:GetTooltip()
+    else -- TODO remove legacy
+        msg = " |n"
 
-    if buff.types[BUFF_TYPES.STAT] then
-        for stat, amount in pairs(buff.stats) do
-            msg = msg .. valueIncDecText(STAT_LABELS[stat], amount)
+        if buff.types[BUFF_TYPES.ROLL] then
+            msg = msg .. valueIncDecText("Roll", buff.amount)
+        end
+
+        if buff.types[BUFF_TYPES.STAT] then
+            for stat, amount in pairs(buff.stats) do
+                msg = msg .. valueIncDecText(STAT_LABELS[stat], amount)
+            end
+        end
+
+        if buff.types[BUFF_TYPES.BASE_DMG] then
+            msg = msg .. valueIncDecText("Base damage", buff.amount)
+        end
+
+        if buff.types[BUFF_TYPES.ADVANTAGE] then
+            msg = msg .. "Your rolls have advantage.|nApplies to: "
+            if buff.turnTypeId then
+                msg = msg .. TURN_TYPES[buff.turnTypeId].name .. " turn, "
+            end
+            for action in pairs(buff.actions) do
+                msg = msg ..  ACTION_LABELS[action] .. ", "
+            end
+            msg = string.sub(msg, 0, -3)
+        elseif buff.types[BUFF_TYPES.DISADVANTAGE] then
+            msg = msg .. "Your rolls have disadvantage.|nApplies to: "
+            if buff.turnTypeId then
+                msg = msg .. TURN_TYPES[buff.turnTypeId].name .. " turn, "
+            end
+            for action in pairs(buff.actions) do
+                msg = msg ..  ACTION_LABELS[action] .. ", "
+            end
+            msg = string.sub(msg, 0, -3)
+        end
+
+        if buff.types[BUFF_TYPES.HEALING_OVER_TIME] then
+            msg = msg .. "Healing for " .. buff.healingPerTick .. " at the start of every turn."
+        elseif buff.types[BUFF_TYPES.DAMAGE_OVER_TIME] then
+            msg = msg .. "Taking " .. buff.damagePerTick .. " damage at the start of every turn."
+        end
+
+        if buff.types[BUFF_TYPES.MAX_HEALTH] then
+            msg = msg .. valueIncDecText("Maximum health", buff.amount)
+        end
+
+        if buff.types[BUFF_TYPES.HEALING_DONE] then
+            msg = msg .. valueIncDecText("Healing done", buff.amount)
+        end
+
+        if buff.types[BUFF_TYPES.DAMAGE_TAKEN] then
+            msg = msg .. valueIncDecText("Damage taken", buff.amount)
+        end
+
+        if buff.types[BUFF_TYPES.DAMAGE_DONE] then
+            msg = msg .. valueIncDecText("Damage done", buff.amount)
+        end
+
+        if buff.types[BUFF_TYPES.UTILITY_BONUS] then
+            msg = msg .. valueIncDecText("Utility trait", buff.amount)
         end
     end
 
-    if buff.types[BUFF_TYPES.BASE_DMG] then
-        msg = msg .. valueIncDecText("Base damage", buff.amount)
-    end
+    local duration = buff.duration
 
-    if buff.types[BUFF_TYPES.ADVANTAGE] then
-        msg = msg .. "Your rolls have advantage.|nApplies to: "
-        if buff.turnTypeId then
-            msg = msg .. TURN_TYPES[buff.turnTypeId].name .. " turn, "
-        end
-        for action in pairs(buff.actions) do
-            msg = msg ..  ACTION_LABELS[action] .. ", "
-        end
-        msg = string.sub(msg, 0, -3)
-    elseif buff.types[BUFF_TYPES.DISADVANTAGE] then
-        msg = msg .. "Your rolls have disadvantage.|nApplies to: "
-        if buff.turnTypeId then
-            msg = msg .. TURN_TYPES[buff.turnTypeId].name .. " turn, "
-        end
-        for action in pairs(buff.actions) do
-            msg = msg ..  ACTION_LABELS[action] .. ", "
-        end
-        msg = string.sub(msg, 0, -3)
-    end
-
-    if buff.types[BUFF_TYPES.HEALING_OVER_TIME] then
-        msg = msg .. "Healing for " .. buff.healingPerTick .. " at the start of every turn."
-    elseif buff.types[BUFF_TYPES.DAMAGE_OVER_TIME] then
-        msg = msg .. "Taking " .. buff.damagePerTick .. " damage at the start of every turn."
-    end
-
-    if buff.types[BUFF_TYPES.MAX_HEALTH] then
-        msg = msg .. valueIncDecText("Maximum health", buff.amount)
-    end
-
-    if buff.types[BUFF_TYPES.HEALING_DONE] then
-        msg = msg .. valueIncDecText("Healing done", buff.amount)
-    end
-
-    if buff.types[BUFF_TYPES.DAMAGE_TAKEN] then
-        msg = msg .. valueIncDecText("Damage taken", buff.amount)
-    end
-
-    if buff.types[BUFF_TYPES.DAMAGE_DONE] then
-        msg = msg .. valueIncDecText("Damage done", buff.amount)
-    end
-
-    if buff.types[BUFF_TYPES.UTILITY_BONUS] then
-        msg = msg .. valueIncDecText("Utility trait", buff.amount)
-    end
-
-    if buff.remainingTurns then
-        if type(buff.remainingTurns) == "table" then
-            local remainingPlayerTurns = buff.remainingTurns[TURN_TYPES.PLAYER.id]
-            local remainingEnemyTurns = buff.remainingTurns[TURN_TYPES.ENEMY.id]
+    if duration.remainingTurns then
+        if type(duration.remainingTurns) == "table" then
+            local remainingPlayerTurns = duration.remainingTurns[TURN_TYPES.PLAYER.id]
+            local remainingEnemyTurns = duration.remainingTurns[TURN_TYPES.ENEMY.id]
             if remainingPlayerTurns then
-                msg = msg .. COLOURS.NOTE .. "|n|nRemaining " .. TURN_TYPES.PLAYER.name .. " turns: " .. remainingPlayerTurns
+                msg = msg .. COLOURS.NOTE .. "|nRemaining " .. TURN_TYPES.PLAYER.name .. " turns: " .. remainingPlayerTurns
             elseif remainingEnemyTurns then
-                msg = msg .. COLOURS.NOTE .. "|n|nRemaining " .. TURN_TYPES.ENEMY.name .. " turns: " .. remainingEnemyTurns
+                msg = msg .. COLOURS.NOTE .. "|nRemaining " .. TURN_TYPES.ENEMY.name .. " turns: " .. remainingEnemyTurns
             end
         else
-            msg = msg .. COLOURS.NOTE .. "|n|nRemaining turns: " .. buff.remainingTurns
+            msg = msg .. COLOURS.NOTE .. "|nRemaining turns: " .. duration.remainingTurns
         end
     end
 
-    if buff.expireAfterFirstAction then
-        msg = msg .. COLOURS.NOTE .. "|n|nLasts for 1 action"
+    if duration.expireAfterFirstAction then
+        msg = msg .. COLOURS.NOTE .. "|nLasts for 1 action"
     end
-    if buff.expireOnCombatEnd then
-        msg = msg .. COLOURS.NOTE .. "|n|nLasts until end of combat"
+    if duration.expireOnCombatEnd then
+        msg = msg .. COLOURS.NOTE .. "|nLasts until end of combat"
     end
 
     --msg = msg .. COLOURS.NOTE .. "|n|nSource: " .. buff.source
@@ -133,8 +141,9 @@ ui.modules.buffs.modules.buffButton.getOption = function(index)
 
             local msg = (buff.colour or "|cffffffff") .. buff.label
 
-            if buff.stacks and buff.stacks > 1 then
-                msg = msg .. " (" .. buff.stacks .. ")"
+            -- TODO: all new buffs have numStacks
+            if buff.numStacks and buff.numStacks > 1 then
+                msg = msg .. " (" .. buff.numStacks .. ")"
             end
 
             return msg
@@ -142,7 +151,7 @@ ui.modules.buffs.modules.buffButton.getOption = function(index)
         func = function()
             local buff = getBuff(index)
             if buff.canCancel then
-                buffsState.activeBuffs.cancel(index)
+                buff:Cancel()
             end
         end,
         desc = function()

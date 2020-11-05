@@ -14,6 +14,19 @@ bus.lua
 state.lua
 ui.lua
 
+models/buff.lua
+models/buff/trait-buff.lua
+models/buff-effect.lua
+models/buff-effect/buff-effect-advantage.lua
+models/buff-effect/buff-effect-base-damage.lua
+models/buff-effect/buff-effect-damage-done.lua
+models/buff-effect/buff-effect-damage-taken.lua
+models/buff-effect/buff-effect-healing-done.lua
+models/buff-effect/buff-effect-hot.lua
+models/buff-effect/buff-effect-max-health.lua
+models/buff-effect/buff-effect-roll.lua
+models/buff-effect/buff-effect-stat.lua
+models/buff-effect/buff-effect-utility-bonus.lua
 models/character-status.lua
 models/critical-wound.lua
 models/critical-wound-crippling-pain.lua

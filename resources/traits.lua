@@ -1,15 +1,20 @@
 local _, ns = ...
 
 local constants = ns.constants
+local models = ns.models
 local traits = ns.resources.traits
 
+local BuffEffectAdvantage = models.BuffEffectAdvantage
+local BuffEffectMaxHealth = models.BuffEffectMaxHealth
+local BuffEffectStat = models.BuffEffectStat
+
 local ACTIONS = constants.ACTIONS
-local BUFF_TYPES = constants.BUFF_TYPES
+local STATS = constants.STATS
 local TURN_TYPES = constants.TURN_TYPES
 
 traits.TRAIT_KEYS = {"OTHER", "ARTISAN", "ASCEND", "BULWARK", "CALAMITY_GAMBIT", "EMPOWERED_BLADES", "FAELUNES_REGROWTH", "FAULTLINE", "FOCUS", "LIFE_PULSE", "LIFE_WITHIN", "PRESENCE_OF_VIRTUE", "REAP", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "VERSATILE", "VINDICATION"}
 
-traits.TRAITS = {
+local TRAITS = {
     OTHER = {
         id = "OTHER",
         name = "Other",
@@ -20,15 +25,6 @@ traits.TRAITS = {
         desc = "Activate to double the bonuses of your Utility traits for your next Utility roll. Activate before rolling. Does not enhance the effects of Silamel's Ace.",
         icon = "Interface\\Icons\\trade_engraving",
         numCharges = 3,
-        buffs = {
-            {
-                types = { [BUFF_TYPES.UTILITY_BONUS] = true, },
-                amount = "custom",
-                expireAfterFirstAction = {
-                    [ACTIONS.utility] = true,
-                },
-            },
-        },
     },
     ASCEND = {
         id = "ASCEND",
@@ -42,20 +38,6 @@ traits.TRAITS = {
         desc = "Activate to gain +3 to defense as well as advantage on all defense rolls for the current or next enemy turn. Activate and then roll.",
         icon = "Interface\\Icons\\spell_holy_greaterblessingofsanctuary",
         numCharges = 2,
-        buffs = {
-            {
-                types = { [BUFF_TYPES.STAT] = true, [BUFF_TYPES.ADVANTAGE] = true },
-                actions = {
-                    [ACTIONS.defend] = true,
-                },
-                stats = {
-                    defence = 3,
-                },
-                remainingTurns = {
-                    [TURN_TYPES.ENEMY.id] = 0,
-                },
-            },
-        },
     },
     CALAMITY_GAMBIT = {
         id = "CALAMITY_GAMBIT",
@@ -63,26 +45,6 @@ traits.TRAITS = {
         desc = "Activate to double your Offence stat for the current and the next player turn. However, your defence stat is reduced by an amount equal to your regular offense stat for the next two enemy turns. Activate and then roll.",
         icon = "Interface\\Icons\\spell_shadow_unstableaffliction_3",
         numCharges = 1,
-        buffs = {
-            {
-                type = BUFF_TYPES.STAT,
-                stats = {
-                    offence = "custom"
-                },
-                remainingTurns = {
-                    [TURN_TYPES.PLAYER.id] = 1,
-                },
-            },
-            {
-                type = BUFF_TYPES.STAT,
-                stats = {
-                    defence = "custom"
-                },
-                remainingTurns = {
-                    [TURN_TYPES.ENEMY.id] = 2,
-                },
-            }
-        },
     },
     EMPOWERED_BLADES = {
         id = "EMPOWERED_BLADES",
@@ -90,15 +52,6 @@ traits.TRAITS = {
         desc = "Activate after a successful Defence roll against a magical attack to make your next successful attack deal additional Chaos damage equal to half of the prevented damage rounded up. Activate after rolling.",
         icon = "Interface\\Icons\\ability_demonhunter_chaosstrike",
         numCharges = 2,
-        buffs = {
-            {
-                type = BUFF_TYPES.DAMAGE_DONE,
-                amount = "custom",
-                expireAfterFirstAction = {
-                    [ACTIONS.attack] = true,
-                },
-            },
-        },
         isCustom = true,
         player = "KELANRA",
     },
@@ -108,12 +61,6 @@ traits.TRAITS = {
         desc = "Activate to have your Healing roll replicate half of its healing amount rounded up for the next enemy turn, and the following player turn in addition to the full healing on the current player turn. Activate after rolling.",
         icon = "Interface\\Icons\\ability_druid_nourish",
         numCharges = 3,
-        buffs = {
-            {
-                type = BUFF_TYPES.HEALING_OVER_TIME,
-                remainingTurns = 2,
-            },
-        },
     },
     FAULTLINE = {
         id = "FAULTLINE",
@@ -127,15 +74,6 @@ traits.TRAITS = {
         desc = "Activate to gain advantage to all of your rolls during the current player turn. Activate and then roll.",
         icon = "Interface\\Icons\\spell_nature_focusedmind",
         numCharges = 2,
-        buffs = {
-            {
-                type = BUFF_TYPES.ADVANTAGE,
-                turnTypeId = TURN_TYPES.PLAYER.id,
-                remainingTurns = {
-                    [TURN_TYPES.PLAYER.id] = 0,
-                },
-            },
-        },
     },
     LIFE_PULSE = {
         id = "LIFE_PULSE",
@@ -149,13 +87,6 @@ traits.TRAITS = {
         desc = "Activate to increase your current and max HP by 10. Lasts until end of combat. Activate outside of rolling on either a player or enemy turn.",
         icon = "Interface\\Icons\\ability_druid_flourish",
         numCharges = 1,
-        buffs = {
-            {
-                type = BUFF_TYPES.MAX_HEALTH,
-                amount = 10,
-                expireOnCombatEnd = true,
-            }
-        }
     },
     PRESENCE_OF_VIRTUE = {
         id = "PRESENCE_OF_VIRTUE",
@@ -181,17 +112,6 @@ traits.TRAITS = {
         desc = "Activate after a successful attack to heal yourself for 6 HP. The target of your attack must not be mechanical. If the target is a demon, your Offence is also increased by +6 on the next player turn. Activate after rolling.",
         icon = "Interface\\Icons\\ability_demonhunter_shatteredsouls",
         numCharges = 3,
-        buffs = {
-            {
-                type = BUFF_TYPES.STAT,
-                stats = {
-                    offence = 6,
-                },
-                remainingTurns = {
-                    [TURN_TYPES.PLAYER.id] = 1,
-                },
-            },
-        },
         isCustom = true,
         player = "KELANRA",
     },
@@ -207,13 +127,6 @@ traits.TRAITS = {
         desc = "Activate to choose one stat, and transfer its value to another stat of your choice for the duration of your next roll. Activate before rolling. Does not grant additional Greater Heal Slots. If you use Versatile to gain HP, and then have that amount or less HP left total by the end of your turn, you go down to 1 HP rather than 0 HP.",
         icon = "Interface\\Icons\\spell_arcane_arcanetactics",
         numCharges = 2,
-        buffs = {
-            {
-                type = BUFF_TYPES.STAT,
-                remainingTurns = 0,
-                expireAfterFirstAction = true,
-            },
-        },
     },
     VINDICATION = {
         id = "VINDICATION",
@@ -222,3 +135,113 @@ traits.TRAITS = {
         numCharges = 2,
     },
 }
+
+local TRAIT_BUFF_SPECS = {
+    [TRAITS.ARTISAN.id] = {
+        {
+            duration = {
+                expireAfterFirstAction = {
+                    [ACTIONS.utility] = true,
+                }
+            },
+            -- effects provided in consequences.lua
+        },
+    },
+    [TRAITS.BULWARK.id] = {
+        {
+            duration = {
+                remainingTurns = {
+                    [TURN_TYPES.ENEMY.id] = 0,
+                },
+            },
+            effects = {
+                BuffEffectAdvantage:New({
+                    [ACTIONS.defend] = true,
+                }),
+                BuffEffectStat:New(STATS.defence, 3),
+            },
+        },
+    },
+    [TRAITS.CALAMITY_GAMBIT.id] = {
+        {
+            duration = {
+                remainingTurns = {
+                    [TURN_TYPES.PLAYER.id] = 1,
+                },
+            },
+            -- effects provided in consequences.lua
+        },
+        {
+            duration = {
+                remainingTurns = {
+                    [TURN_TYPES.ENEMY.id] = 2,
+                },
+            },
+            -- effects provided in consequences.lua
+        },
+    },
+    [TRAITS.EMPOWERED_BLADES.id] = {
+        {
+            duration = {
+                expireAfterFirstAction = {
+                    [ACTIONS.attack] = true,
+                },
+            },
+            -- effects provided in consequences.lua
+        },
+    },
+    [TRAITS.FAELUNES_REGROWTH.id] = {
+        {
+            duration = {
+                remainingTurns = 2,
+            },
+            -- effects provided in consequences.lua
+        },
+    },
+    [TRAITS.FOCUS.id] = {
+        {
+            duration = {
+                remainingTurns = {
+                    [TURN_TYPES.PLAYER.id] = 0,
+                },
+            },
+            effects = {
+                BuffEffectAdvantage:New(nil, TURN_TYPES.PLAYER.id),
+            },
+        }
+    },
+    [TRAITS.LIFE_WITHIN.id] = {
+        {
+            duration = {
+                expireOnCombatEnd = true,
+            },
+            effects = {
+                BuffEffectMaxHealth:New(10)
+            },
+        },
+    },
+    [TRAITS.SHATTER_SOUL.id] = {
+        {
+            duration = {
+                remainingTurns = {
+                    [TURN_TYPES.PLAYER.id] = 1,
+                },
+            },
+            effects = {
+                BuffEffectStat:New(STATS.offence, 6)
+            },
+        },
+    },
+    [TRAITS.VERSATILE.id] = {
+        {
+            duration = {
+                remainingTurns = 0,
+                expireAfterFirstAction = true,
+            },
+            -- effects provided in consequences.lua
+        }
+    },
+}
+
+traits.TRAITS = TRAITS
+traits.TRAIT_BUFF_SPECS = TRAIT_BUFF_SPECS

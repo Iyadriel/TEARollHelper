@@ -93,7 +93,7 @@ bus.addListener(EVENTS.BASE_DMG_BUFF_ADDED, function(amount)
 end)
 
 bus.addListener(EVENTS.BUFF_STACK_ADDED, function(buff)
-    TEARollHelper:Print("Added a stack to buff: " .. buff.label .. ". (" .. buff.stacks .. ")")
+    TEARollHelper:Print("Added a stack to buff: " .. buff.label .. ". (" .. buff.numStacks .. ")")
 end)
 
 bus.addListener(EVENTS.WEAKNESS_DEBUFF_ADDED, function(weaknessID)

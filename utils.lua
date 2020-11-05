@@ -19,6 +19,14 @@ local function merge(t1, t2, t3)
     return t4
 end
 
+local function shallowCopy(table)
+    local copy = {}
+    for k, v in pairs(table) do
+        copy[k] = v
+    end
+    return copy
+end
+
 local function colorsAndPercent(a, b, ...)
 	if(a <= 0 or b == 0) then
 		return nil, ...
@@ -71,6 +79,7 @@ local function formatPlayerName(playerName)
 end
 
 utils.merge = merge
+utils.shallowCopy = shallowCopy
 utils.healthColor = healthColor
 utils.formatHealth = formatHealth
 utils.formatPlayerName = formatPlayerName

@@ -3,13 +3,27 @@ local _, ns = ...
 local buffsState = ns.state.buffs
 local bus = ns.bus
 local constants = ns.constants
+local models = ns.models
 local rules = ns.rules
+local traits = ns.resources.traits
+local utils = ns.utils
 
 local EVENTS = bus.EVENTS
 local BUFF_SOURCES = constants.BUFF_SOURCES
 local BUFF_TYPES = constants.BUFF_TYPES
+local STATS = constants.STATS
 local STAT_LABELS = constants.STAT_LABELS
+local TRAIT_BUFF_SPECS = traits.TRAIT_BUFF_SPECS
 local TURN_TYPES = constants.TURN_TYPES
+
+local TraitBuff = models.TraitBuff
+local Buff, BuffEffectRoll, BuffEffectStat = models.Buff, models.BuffEffectRoll, models.BuffEffectStat
+local BuffEffectBaseDamage = models.BuffEffectBaseDamage
+local BuffEffectDamageDone = models.BuffEffectDamageDone
+local BuffEffectDamageTaken = models.BuffEffectDamageTaken
+local BuffEffectMaxHealth = models.BuffEffectMaxHealth
+local BuffEffectHealingDone = models.BuffEffectHealingDone
+local BuffEffectUtilityBonus = models.BuffEffectUtilityBonus
 
 local STAT_TYPE_ICONS = {
     offence = "Interface\\Icons\\spell_holy_greaterblessingofkings",
@@ -22,14 +36,6 @@ local TURN_TYPE_ICONS = {
     [TURN_TYPES.PLAYER.id] = "Interface\\Icons\\spell_nature_lightning",
     [TURN_TYPES.ENEMY.id] = "Interface\\Icons\\spell_holy_powerwordbarrier",
 }
-
-local function shallowCopy(table)
-    local copy = {}
-    for k, v in pairs(table) do
-        copy[k] = v
-    end
-    return copy
-end
 
 local function addBuff(buff)
     buffsState.state.activeBuffs.add(buff)
@@ -44,34 +50,59 @@ local function getRemainingTurns(expireAfterNextTurn)
     return 1
 end
 
+local function addTestBuff()
+    local buff1 = Buff:New({
+        id = "test",
+        label = "Test buff",
+        icon = "Interface\\Icons\\trade_engineering",
+        effects = {
+            --BuffEffectBaseDamage:New(100),
+            --BuffEffectRoll:New(TURN_TYPES.PLAYER.id, 5),
+            --BuffEffectStat:New(STATS.spirit, 4),
+            --BuffEffectDamageDone:New(100),
+            --BuffEffectDamageTaken:New(50),
+            BuffEffectUtilityBonus:New(-5),
+        }
+    })
+
+--[[     local buff2 = Buff:New({
+        id = "maxHealthTest",
+        label = "Max Health",
+        icon = "Interface\\Icons\\trade_engineering",
+        effects = {
+            BuffEffectMaxHealth:New(-5),
+        }
+    }) ]]
+
+    addBuff(buff1)
+
+    --buff1:AddStack()
+end
+
 local function addRollBuff(turnTypeID, amount, label)
     local existingBuff = buffsState.state.buffLookup.getPlayerRollBuff(turnTypeID)
 
     if existingBuff then
-        removeBuff(existingBuff)
+        existingBuff:Remove()
     end
 
-    if label:trim() == "" then
-        label = "Buff"
-    end
-
-    addBuff({
-        id = "player_roll_" .. turnTypeID,
-        types = { [BUFF_TYPES.ROLL] = true },
-        label = label,
-        icon = TURN_TYPE_ICONS[turnTypeID],
-
-        turnTypeID = turnTypeID,
-        amount = amount,
-
-        source = BUFF_SOURCES.PLAYER,
-
-        remainingTurns = {
-            [turnTypeID] = 0
+    local buff = Buff:New(
+        "player_roll_" .. turnTypeID,
+        label,
+        TURN_TYPE_ICONS[turnTypeID],
+        {
+            remainingTurns = {
+                [turnTypeID] = 0
+            },
+            expireAfterFirstAction = true,
         },
-        expireAfterFirstAction = true,
-    })
+        true,
+        { BuffEffectRoll:New(turnTypeID, amount) }
+    )
 
+    buff:Apply()
+
+    -- TODO use effect in model instead
     bus.fire(EVENTS.ROLL_BUFF_ADDED, turnTypeID, amount)
 end
 
@@ -79,28 +110,28 @@ local function addStatBuff(stat, amount, label, expireAfterNextTurn, expireAfter
     local existingBuff = buffsState.state.buffLookup.getPlayerStatBuff(stat)
 
     if existingBuff then
-        removeBuff(existingBuff)
+        existingBuff:Remove()
     end
 
     if label:trim() == "" then
         label = STAT_LABELS[stat]
     end
 
-    addBuff({
-        id = "player_" .. stat,
-        types = { [BUFF_TYPES.STAT] = true },
-        label = label,
-        icon = STAT_TYPE_ICONS[stat],
-
-        stats = {
-            [stat] = amount
-        },
-
-        source = BUFF_SOURCES.PLAYER,
-
+    local duration = {
         remainingTurns = getRemainingTurns(expireAfterNextTurn),
         expireAfterFirstAction = expireAfterFirstAction,
-    })
+    }
+
+    local buff = Buff:New(
+        "player_" .. stat,
+        label,
+        STAT_TYPE_ICONS[stat],
+        duration,
+        true,
+        { BuffEffectStat:New(stat, amount) }
+    )
+
+    buff:Apply()
 
     bus.fire(EVENTS.STAT_BUFF_ADDED, stat, amount)
 end
@@ -109,27 +140,30 @@ local function addBaseDmgBuff(amount, label, expireAfterNextTurn, expireAfterFir
     local existingBuff = buffsState.state.buffLookup.getPlayerBaseDmgBuff()
 
     if existingBuff then
-        removeBuff(existingBuff)
+        existingBuff:Remove()
     end
 
     if label:trim() == "" then
         label = "Base damage"
     end
 
-    addBuff({
-        id = "player_baseDmg",
-        types = { [BUFF_TYPES.BASE_DMG] = true },
-        label = label,
-        icon = "Interface\\Icons\\ability_warrior_victoryrush",
-
-        amount = amount,
-
-        source = BUFF_SOURCES.PLAYER,
-
+    local duration = {
         remainingTurns = getRemainingTurns(expireAfterNextTurn),
         expireAfterFirstAction = expireAfterFirstAction,
-    })
+    }
 
+    local buff = Buff:New(
+        "player_baseDmg",
+        label,
+        "Interface\\Icons\\ability_warrior_victoryrush",
+        duration,
+        true,
+        { BuffEffectBaseDamage:New(amount) }
+    )
+
+    buff:Apply()
+
+    -- TODO use effect in model instead
     bus.fire(EVENTS.BASE_DMG_BUFF_ADDED, amount)
 end
 
@@ -191,7 +225,7 @@ local function addHoTBuff(label, icon, healingPerTick, remainingTurns)
     end
 
     if type(remainingTurns) == "table" then
-        remainingTurns = shallowCopy(remainingTurns)
+        remainingTurns = utils.shallowCopy(remainingTurns)
     end
 
     addBuff({
@@ -246,7 +280,7 @@ local function addFeatBuff(feat, providedValue)
 
     if buff.remainingTurns then
         if type(buff.remainingTurns) == "table" then
-            newBuff.remainingTurns = shallowCopy(buff.remainingTurns)
+            newBuff.remainingTurns = utils.shallowCopy(buff.remainingTurns)
         else
             newBuff.remainingTurns = buff.remainingTurns
         end
@@ -263,85 +297,26 @@ local function addFeatBuff(feat, providedValue)
     bus.fire(EVENTS.FEAT_BUFF_ADDED, feat.id)
 end
 
-local function addTraitBuff(trait, providedStats)
+local function addTraitBuff(trait, providedEffects)
     local existingBuffs = buffsState.state.buffLookup.getTraitBuffs(trait)
     if existingBuffs then
         for _, existingBuff in pairs(existingBuffs) do
-            removeBuff(existingBuff)
+            existingBuff:Remove()
         end
     end
 
-    for i, buff in ipairs(trait.buffs) do
-        local types = buff.types or {
-            [buff.type] = true
-        }
+    for i, buffSpec in ipairs(TRAIT_BUFF_SPECS[trait.id]) do
+        -- TODO put providedEffects per buff, not for the whole function
+        local effects = providedEffects or buffSpec.effects
 
-        local newBuff = {
-            id = "trait_" .. trait.id .. "_" .. i,
-            types = types,
-            label = trait.name,
-            icon = trait.icon,
+        local newBuff = TraitBuff:New(
+            trait,
+            buffSpec.duration,
+            effects,
+            i
+        )
 
-            source = BUFF_SOURCES.TRAIT,
-            traitID = trait.id,
-
-            canCancel = true
-        }
-
-        if types[BUFF_TYPES.STAT] then
-            if providedStats then
-                newBuff.stats = providedStats
-            else
-                newBuff.stats = {}
-                for stat, value in pairs(buff.stats) do
-                    if value == "custom" then
-                        newBuff.stats[stat] = rules.traits.calculateStatBuff(trait, stat)
-                    else
-                        newBuff.stats[stat] = value
-                    end
-                end
-            end
-        end
-        if types[BUFF_TYPES.ADVANTAGE] then
-            newBuff.actions = buff.actions or {}
-            if buff.turnTypeId then
-                newBuff.turnTypeId = buff.turnTypeId
-            end
-        end
-        if types[BUFF_TYPES.MAX_HEALTH] then
-            newBuff.amount = buff.amount
-            newBuff.originalAmount = buff.amount
-        end
-        if types[BUFF_TYPES.DAMAGE_DONE] then
-            if providedStats then
-                newBuff.amount = providedStats
-            else
-                newBuff.amount = buff.amount
-            end
-        end
-        if types[BUFF_TYPES.UTILITY_BONUS] then
-            if buff.amount == "custom" then
-                newBuff.amount = rules.traits.calculateUtilityBonusBuff(trait)
-            else
-                newBuff.amount = buff.amount
-            end
-        end
-
-        if buff.remainingTurns then
-            if type(buff.remainingTurns) == "table" then
-                newBuff.remainingTurns = shallowCopy(buff.remainingTurns)
-            else
-                newBuff.remainingTurns = buff.remainingTurns
-            end
-        end
-        if buff.expireOnCombatEnd then
-            newBuff.expireOnCombatEnd = buff.expireOnCombatEnd
-        end
-        if buff.expireAfterFirstAction then
-            newBuff.expireAfterFirstAction = buff.expireAfterFirstAction
-        end
-
-        addBuff(newBuff)
+        newBuff:Apply()
     end
 end
 
@@ -352,7 +327,7 @@ local function addWeaknessDebuff(weakness, addStacks)
 
         if existingBuff then
             if addStacks then
-                buffsState.state.activeBuffs.addStack(existingBuff)
+                existingBuff:AddStack()
                 return
             else
             removeBuff(existingBuff)
@@ -392,7 +367,7 @@ local function addWeaknessDebuff(weakness, addStacks)
         end
 
         if debuff.remainingTurns then
-            buff.remainingTurns = shallowCopy(debuff.remainingTurns)
+            buff.remainingTurns = utils.shallowCopy(debuff.remainingTurns)
         end
 
         addBuff(buff)
