@@ -6,6 +6,7 @@ local bus = ns.bus
 local character = ns.character
 local characterState = ns.state.character
 local constants = ns.constants
+local models = ns.models
 local settings = ns.settings
 local turnState = ns.state.turn
 local ui = ns.ui
@@ -13,6 +14,8 @@ local ui = ns.ui
 local criticalWounds = ns.resources.criticalWounds
 local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
+
+local BuffEffectHealingOverTime = models.BuffEffectHealingOverTime
 
 local BUFF_TYPES = constants.BUFF_TYPES
 local EVENTS = bus.EVENTS
@@ -53,7 +56,7 @@ bus.addListener(EVENTS.DISTANCE_FROM_ENEMY_CHANGED, function(distanceFromEnemy)
                     buffs.addWeaknessDebuff(weakness)
                 end
             elseif debuff then
-                buffsState.state.activeBuffs.remove(debuff)
+                debuff:Remove()
             end
         end
     end
@@ -69,7 +72,7 @@ bus.addListener(EVENTS.ENEMY_CHANGED, function(enemyId)
                 buffs.addRacialBuff(racialTrait)
             end
         elseif buff then
-            buffsState.state.activeBuffs.remove(buff)
+            buff:Remove()
         end
     end
 end)
@@ -84,7 +87,7 @@ bus.addListener(EVENTS.ZONE_CHANGED, function(zoneId)
                 buffs.addRacialBuff(racialTrait)
             end
         elseif buff then
-            buffsState.state.activeBuffs.remove(buff)
+            buff:Remove()
         end
     end
 end)
@@ -107,7 +110,7 @@ bus.addListener(EVENTS.COMBAT_OVER, function()
 
     local debuff = buffsState.state.buffLookup.getWeaknessDebuff(WEAKNESSES.CORRUPTED)
     if debuff then
-        buffsState.state.activeBuffs.remove(debuff)
+        debuff:Remove()
         TEARollHelper:Print("Corruption stacks removed, max health returned to normal.")
     end
 end)
@@ -120,8 +123,8 @@ local function setRemainingTurns(buff, remainingTurns, turnTypeId)
     end
 end
 
-local function expireBuff(index, buff)
-    buffsState.state.activeBuffs.removeAtIndex(index)
+local function expireBuff(buff)
+    buff:Remove()
     bus.fire(EVENTS.BUFF_EXPIRED, buff.label)
 end
 
@@ -138,8 +141,8 @@ local function applyDamageTick(buff)
     characterState.state.health.damage(damagePerTick, { canBeMitigated = buff.canBeMitigated })
 end
 
-local function applyHealTick(buff)
-    characterState.state.health.heal(buff.healingPerTick, INCOMING_HEAL_SOURCES.OTHER_PLAYER)
+local function applyHealTick(effect)
+    characterState.state.health.heal(effect.healingPerTick, INCOMING_HEAL_SOURCES.OTHER_PLAYER)
 end
 
 bus.addListener(EVENTS.TURN_STARTED, function(index, turnTypeID)
@@ -148,7 +151,7 @@ bus.addListener(EVENTS.TURN_STARTED, function(index, turnTypeID)
     -- we stick these buffs in separate table to iterate them in appropriate order
     -- (dmg taken should come first)
     local dmgOverTimeBuffs = {}
-    local healingOverTimeBuffs = {}
+    local healingOverTimeEffects = {}
 
     for i = #activeBuffs, 1, -1 do
         local buff = activeBuffs[i]
@@ -173,8 +176,9 @@ bus.addListener(EVENTS.TURN_STARTED, function(index, turnTypeID)
             if buff.types[BUFF_TYPES.DAMAGE_OVER_TIME] then
                 table.insert(dmgOverTimeBuffs, buff)
             end
-            if buff.types[BUFF_TYPES.HEALING_OVER_TIME] then
-                table.insert(healingOverTimeBuffs, buff)
+            local hotEffect = buff:GetEffectOfType(BuffEffectHealingOverTime)
+            if buff:GetEffectOfType(BuffEffectHealingOverTime) then
+                table.insert(healingOverTimeEffects, hotEffect)
             end
         end
     end
@@ -183,8 +187,8 @@ bus.addListener(EVENTS.TURN_STARTED, function(index, turnTypeID)
         applyDamageTick(buff)
     end
 
-    for _, buff in ipairs(healingOverTimeBuffs) do
-        applyHealTick(buff)
+    for _, effect in ipairs(healingOverTimeEffects) do
+        applyHealTick(effect)
     end
 end)
 
@@ -202,13 +206,14 @@ bus.addListener(EVENTS.TURN_FINISHED, function(index, turnTypeID)
         end
 
         if remainingTurns and remainingTurns <= 0 then
-            expireBuff(i, buff)
+            expireBuff(buff)
         end
     end
 end)
 
+-- TODO why is this not working
 local function applyRemainingHealAmount(regrowth)
-    local remainingHealAmount = regrowth.duration.remainingTurns * regrowth.healingPerTick
+    local remainingHealAmount = regrowth.duration.remainingTurns * regrowth.effects[0].healingPerTick
     if remainingHealAmount > 0 then
         characterState.state.health.heal(remainingHealAmount, INCOMING_HEAL_SOURCES.OTHER_PLAYER)
     end
@@ -220,12 +225,12 @@ bus.addListener(EVENTS.COMBAT_OVER, function()
     for i = #activeBuffs, 1, -1 do
         local buff = activeBuffs[i]
 
-        if buff.id == "HoT_" .. TRAITS.FAELUNES_REGROWTH.name then
+        if buff.traitID == TRAITS.FAELUNES_REGROWTH.id then
             applyRemainingHealAmount(buff)
         end
 
         if buff.duration.expireOnCombatEnd then
-            expireBuff(i, buff)
+            expireBuff(buff)
         end
     end
 end)
@@ -239,10 +244,10 @@ bus.addListener(EVENTS.ACTION_PERFORMED, function(actionType)
         if expireAfterFirstAction then
             if type(expireAfterFirstAction) == "table" then
                 if expireAfterFirstAction[actionType] then
-                    expireBuff(i, buff)
+                    expireBuff(buff)
                 end
             else
-                expireBuff(i, buff)
+                expireBuff(buff)
             end
         end
     end

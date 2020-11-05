@@ -297,27 +297,30 @@ local function addFeatBuff(feat, providedValue)
     bus.fire(EVENTS.FEAT_BUFF_ADDED, feat.id)
 end
 
-local function addTraitBuff(trait, providedEffects)
-    local existingBuffs = buffsState.state.buffLookup.getTraitBuffs(trait)
-    if existingBuffs then
-        for _, existingBuff in pairs(existingBuffs) do
-            existingBuff:Remove()
+local function addTraitBuff(trait, providedEffects, index)
+    if not index then index = 1 end -- most traits only have 1 buff to add
+
+    -- when adding more than one buff, don't remove the previous ones
+    if index == 1 then
+        local existingBuffs = buffsState.state.buffLookup.getTraitBuffs(trait)
+        if existingBuffs then
+            for _, existingBuff in pairs(existingBuffs) do
+                existingBuff:Remove()
+            end
         end
     end
 
-    for i, buffSpec in ipairs(TRAIT_BUFF_SPECS[trait.id]) do
-        -- TODO put providedEffects per buff, not for the whole function
-        local effects = providedEffects or buffSpec.effects
+    local buffSpec = TRAIT_BUFF_SPECS[trait.id][index]
+    local effects = providedEffects or buffSpec.effects
 
-        local newBuff = TraitBuff:New(
-            trait,
-            buffSpec.duration,
-            effects,
-            i
-        )
+    local newBuff = TraitBuff:New(
+        trait,
+        buffSpec.duration,
+        effects,
+        index
+    )
 
-        newBuff:Apply()
-    end
+    newBuff:Apply()
 end
 
 local function addWeaknessDebuff(weakness, addStacks)

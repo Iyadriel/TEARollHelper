@@ -53,6 +53,15 @@ function Buff:New(id, label, icon, duration, canCancel, effects)
     return Buff:NewFromObj(buff)
 end
 
+function Buff:GetEffectOfType(BuffEffect)
+    for _, effect in ipairs(self.effects) do
+        if effect:Is(BuffEffect) then
+            return effect
+        end
+    end
+    return nil
+end
+
 function Buff:Apply()
     for _, effect in ipairs(self.effects) do
         effect:Apply()
@@ -80,11 +89,14 @@ function Buff:AddStack()
 end
 
 function Buff:GetTooltip()
-    local msg = {}
+    local msg = {"|n"}
 
-    for _, effect in ipairs(self.effects) do
-        table.insert(msg, "|n")
+    for i, effect in ipairs(self.effects) do
         table.insert(msg, effect:GetTooltipText())
+        table.insert(msg, "|n")
+        if i < #self.effects then
+            table.insert(msg, "|n") -- extra line between effects, but not at the end
+        end
     end
 
     return table.concat(msg)

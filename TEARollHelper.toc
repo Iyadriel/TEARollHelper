@@ -21,6 +21,7 @@ models/buff-effect/buff-effect-advantage.lua
 models/buff-effect/buff-effect-base-damage.lua
 models/buff-effect/buff-effect-damage-done.lua
 models/buff-effect/buff-effect-damage-taken.lua
+models/buff-effect/buff-effect-disadvantage.lua
 models/buff-effect/buff-effect-healing-done.lua
 models/buff-effect/buff-effect-hot.lua
 models/buff-effect/buff-effect-max-health.lua

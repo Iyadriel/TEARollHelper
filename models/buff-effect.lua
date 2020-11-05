@@ -39,6 +39,11 @@ function BuffEffect:AddStack()
 
 end
 
+-- Check if a a BuffEffect is of a certain type (eg BuffEffectAdvantage)
+function BuffEffect:Is(buffEffectType)
+    return self.__index == buffEffectType
+end
+
 --[[ function BuffEffect:IsActive()
     local turnTypeID = turnState.state.type.get()
     return self.appliesToTurns[turnTypeID]

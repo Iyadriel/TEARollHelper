@@ -82,8 +82,10 @@ end
 local function useCalamityGambit()
     buffs.addTraitBuff(TRAITS.CALAMITY_GAMBIT, {
         BuffEffectStat:New(STATS.offence, character.getPlayerOffence()),
+    }, 1)
+    buffs.addTraitBuff(TRAITS.CALAMITY_GAMBIT, {
         BuffEffectStat:New(STATS.defence, -character.getPlayerOffence()),
-    })
+    }, 2)
 end
 
 local function useEmpoweredBlades(defence)

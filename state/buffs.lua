@@ -4,9 +4,13 @@ local buffsState = ns.state.buffs
 local bus = ns.bus
 local characterState = ns.state.character
 local constants = ns.constants
+local models = ns.models
 
 local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
+
+local BuffEffectAdvantage = models.BuffEffectAdvantage
+local BuffEffectDisadvantage = models.BuffEffectDisadvantage
 
 local ACTIONS = constants.ACTIONS
 local BUFF_TYPES = constants.BUFF_TYPES
@@ -156,8 +160,9 @@ buffsState.state = {
         getAdvantageBuff = function(action, turnTypeId)
             local activeBuffs = buffsState.state.activeBuffs.get()
             for _, buff in ipairs(activeBuffs) do
-                if buff.types[BUFF_TYPES.ADVANTAGE] then
-                    if (action and buff.actions[action]) or (turnTypeId and buff.turnTypeId == turnTypeId) then
+                local effect = buff:GetEffectOfType(BuffEffectAdvantage)
+                if effect then
+                    if (action and effect.actions[action]) or (turnTypeId and effect.turnTypeId == turnTypeId) then
                         return buff
                     end
                 end
@@ -167,8 +172,9 @@ buffsState.state = {
         getDisadvantageDebuff = function(action, turnTypeId)
             local activeBuffs = buffsState.state.activeBuffs.get()
             for _, buff in ipairs(activeBuffs) do
-                if buff.types[BUFF_TYPES.DISADVANTAGE] then
-                    if (action and buff.actions[action]) or (turnTypeId and buff.turnTypeId == turnTypeId) then
+                local effect = buff:GetEffectOfType(BuffEffectDisadvantage)
+                if effect then
+                    if (action and effect.actions[action]) or (turnTypeId and effect.turnTypeId == turnTypeId) then
                         return buff
                     end
                 end
