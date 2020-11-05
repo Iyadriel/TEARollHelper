@@ -9,6 +9,7 @@ local constants = ns.constants
 local environment = ns.state.environment
 local rolls = ns.state.rolls
 local rules = ns.rules
+local turnState = ns.state.turn
 
 local ACTIONS = constants.ACTIONS
 local DEFENCE_TYPES = constants.DEFENCE_TYPES
@@ -457,9 +458,13 @@ end)
 
 -- Turn actions
 
+local function getRollBuff()
+    return buffsState.buffs.roll.get(turnState.state.type.get())
+end
+
 local function getAttack()
     local attackIndex = rolls.state.attack.attacks.count() + 1
-    local rollBuff = buffsState.buffs.roll.get()
+    local rollBuff = getRollBuff()
     local offence = character.getPlayerOffence()
     local offenceBuff = buffsState.buffs.offence.get()
     local baseDmgBuff = buffsState.buffs.baseDamage.get()
@@ -474,7 +479,7 @@ local function getAttack()
 end
 
 local function getPenance()
-    local rollBuff = buffsState.buffs.roll.get()
+    local rollBuff = getRollBuff()
     local spirit = character.getPlayerSpirit()
     local spiritBuff = buffsState.buffs.spirit.get()
     local baseDmgBuff = buffsState.buffs.baseDamage.get()
@@ -486,7 +491,7 @@ local function getPenance()
 end
 
 local function getCC()
-    local rollBuff = buffsState.buffs.roll.get()
+    local rollBuff = getRollBuff()
     local offence = character.getPlayerOffence()
     local offenceBuff = buffsState.buffs.offence.get()
     local defence = character.getPlayerDefence()
@@ -496,7 +501,7 @@ local function getCC()
 end
 
 local function getHealing(outOfCombat)
-    local rollBuff = buffsState.buffs.roll.get()
+    local rollBuff = getRollBuff()
     local spirit = character.getPlayerSpirit()
     local spiritBuff = buffsState.buffs.spirit.get()
     local healingDoneBuff = buffsState.buffs.healingDone.get()
@@ -507,7 +512,7 @@ local function getHealing(outOfCombat)
 end
 
 local function getBuff()
-    local rollBuff = buffsState.buffs.roll.get()
+    local rollBuff = getRollBuff()
     local spirit = character.getPlayerSpirit()
     local offence = character.getPlayerOffence()
     local offenceBuff = buffsState.buffs.offence.get()
@@ -518,7 +523,7 @@ local function getBuff()
 end
 
 local function getDefence()
-    local rollBuff = buffsState.buffs.roll.get()
+    local rollBuff = getRollBuff()
     local defence = character.getPlayerDefence()
     local defenceBuff = buffsState.buffs.defence.get()
     local damageTakenBuff = buffsState.buffs.damageTaken.get()
@@ -528,7 +533,7 @@ local function getDefence()
 end
 
 local function getMeleeSave()
-    local rollBuff = buffsState.buffs.roll.get()
+    local rollBuff = getRollBuff()
     local defence = character.getPlayerDefence()
     local defenceBuff = buffsState.buffs.defence.get()
     local damageTakenBuff = buffsState.buffs.damageTaken.get()
@@ -538,7 +543,7 @@ local function getMeleeSave()
 end
 
 local function getRangedSave()
-    local rollBuff = buffsState.buffs.roll.get()
+    local rollBuff = getRollBuff()
     local spirit = character.getPlayerSpirit()
     local buff = buffsState.buffs.spirit.get()
 
@@ -546,7 +551,7 @@ local function getRangedSave()
 end
 
 local function getUtility()
-    local rollBuff = buffsState.buffs.roll.get()
+    local rollBuff = getRollBuff()
     local utilityBonusBuff = buffsState.buffs.utilityBonus.get()
     return actions.getUtility(state.utility.currentRoll, rollBuff, state.utility.useUtilityTrait, utilityBonusBuff)
 end

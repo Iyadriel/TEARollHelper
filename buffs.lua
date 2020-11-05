@@ -61,6 +61,7 @@ local function addRollBuff(turnTypeID, amount, label)
         label = label,
         icon = TURN_TYPE_ICONS[turnTypeID],
 
+        turnTypeID = turnTypeID,
         amount = amount,
 
         source = BUFF_SOURCES.PLAYER,

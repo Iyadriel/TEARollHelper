@@ -25,7 +25,10 @@ buffsState.initState = function()
             spirit = 0,
             stamina = 0,
 
-            roll = 0,
+            roll = {
+                [TURN_TYPES.PLAYER.id] = 0,
+                [TURN_TYPES.ENEMY.id] = 0,
+            },
             maxHealth = 0,
             baseDamage = 0,
             damageDone = 0,
@@ -75,7 +78,14 @@ buffsState.state = {
             updateMaxHealth(true)
         end),
 
-        roll = basicGetSet("buffs", "roll"),
+        roll = {
+            get = function(turnTypeID)
+                return state.buffs.roll[turnTypeID]
+            end,
+            set = function(turnTypeID, value)
+                state.buffs.roll[turnTypeID] = value
+            end,
+        },
         maxHealth = basicGetSet("buffs", "maxHealth"),
         baseDamage = basicGetSet("buffs", "baseDamage"),
         damageDone = basicGetSet("buffs", "damageDone"),
@@ -103,7 +113,8 @@ buffsState.state = {
             end
 
             if buff.types[BUFF_TYPES.ROLL] then
-                buffsState.state.buffs.roll.set(buffsState.state.buffs.roll.get() + buff.amount)
+                local newAmount = buffsState.state.buffs.roll.get(buff.turnTypeID) + buff.amount
+                buffsState.state.buffs.roll.set(buff.turnTypeID, newAmount)
             end
 
             if buff.types[BUFF_TYPES.MAX_HEALTH] then
@@ -156,7 +167,8 @@ buffsState.state = {
             end
 
             if buff.types[BUFF_TYPES.ROLL] then
-                buffsState.state.buffs.roll.set(buffsState.state.buffs.roll.get() - buff.amount)
+                local newAmount = buffsState.state.buffs.roll.get(buff.turnTypeID) - buff.amount
+                buffsState.state.buffs.roll.set(buff.turnTypeID, newAmount)
             end
 
             if buff.types[BUFF_TYPES.MAX_HEALTH] then
