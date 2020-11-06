@@ -213,7 +213,7 @@ end)
 
 -- TODO why is this not working
 local function applyRemainingHealAmount(regrowth)
-    local remainingHealAmount = regrowth.duration.remainingTurns * regrowth.effects[0].healingPerTick
+    local remainingHealAmount = regrowth.duration.remainingTurns * regrowth.effects[1].healingPerTick
     if remainingHealAmount > 0 then
         characterState.state.health.heal(remainingHealAmount, INCOMING_HEAL_SOURCES.OTHER_PLAYER)
     end
