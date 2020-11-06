@@ -22,7 +22,7 @@ function BuffEffectAdvantage:New(actions, turnTypeID)
 end
 
 function BuffEffectAdvantage:GetTooltipText()
-    local msg = "Your rolls have advantage.|nApplies to: "
+    local msg = "Your rolls have advantage. Applies to: "
 
     if self.turnTypeID then
         msg = msg .. TURN_TYPES[self.turnTypeID].name .. " turn, "
@@ -32,7 +32,7 @@ function BuffEffectAdvantage:GetTooltipText()
         msg = msg ..  ACTION_LABELS[action] .. ", "
     end
 
-    msg = string.sub(msg, 0, -3)
+    msg = string.sub(msg, 0, -3) .. " "
 
     return msg
 end

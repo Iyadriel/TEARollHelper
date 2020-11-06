@@ -94,9 +94,6 @@ function Buff:GetTooltip()
     for i, effect in ipairs(self.effects) do
         table.insert(msg, effect:GetTooltipText())
         table.insert(msg, "|n")
-        if i < #self.effects then
-            table.insert(msg, "|n") -- extra line between effects, but not at the end
-        end
     end
 
     return table.concat(msg)
