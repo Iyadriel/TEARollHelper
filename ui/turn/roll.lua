@@ -64,9 +64,9 @@ end
 ui.modules.turn.modules.roll.getOptions = function(options)
     local function getRollModeModifier()
         local action = options.action
-        local turnTypeId = turnState.state.type.get()
+        local turnTypeID = turnState.state.type.get()
 
-        return rollState.getRollModeModifier(action, turnTypeId)
+        return rollState.getRollModeModifier(action, turnTypeID)
     end
 
     local function performRoll(isReroll)
@@ -204,9 +204,9 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 hidden = function()
                     if rules.rolls.canProcRebound() then
                         local roll = state[options.action].currentRoll.get()
-                        local turnTypeId = turnState.state.type.get()
+                        local turnTypeID = turnState.state.type.get()
 
-                        return not (rules.rolls.hasReboundProc(roll, turnTypeId) and not buffsState.state.buffLookup.getWeaknessDebuff(WEAKNESSES.REBOUND))
+                        return not (rules.rolls.hasReboundProc(roll, turnTypeID) and not buffsState.state.buffLookup.getWeaknessDebuff(WEAKNESSES.REBOUND))
                     end
                     return true
                 end,

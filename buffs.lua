@@ -360,8 +360,8 @@ local function addWeaknessDebuff(weakness, addStacks)
         end
         if types[BUFF_TYPES.DISADVANTAGE] then
             buff.actions = debuff.actions or {}
-            if debuff.turnTypeId then
-                buff.turnTypeId = debuff.turnTypeId
+            if debuff.turnTypeID then
+                buff.turnTypeID = debuff.turnTypeID
             end
         end
         if types[BUFF_TYPES.MAX_HEALTH] then

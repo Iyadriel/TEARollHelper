@@ -72,7 +72,7 @@ weaknesses.WEAKNESSES = {
         supported = true,
         debuff = {
             type = BUFF_TYPES.DISADVANTAGE,
-            turnTypeId = TURN_TYPES.ENEMY.id,
+            turnTypeID = TURN_TYPES.ENEMY.id,
             remainingTurns = {
                 [TURN_TYPES.ENEMY.id] = 1,
             },
@@ -86,7 +86,7 @@ weaknesses.WEAKNESSES = {
         supported = true,
         debuff = {
             type = BUFF_TYPES.DISADVANTAGE,
-            turnTypeId = TURN_TYPES.PLAYER.id,
+            turnTypeID = TURN_TYPES.PLAYER.id,
             remainingTurns = {
                 [TURN_TYPES.PLAYER.id] = 1,
             },

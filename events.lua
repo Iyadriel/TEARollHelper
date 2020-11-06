@@ -35,8 +35,8 @@ end)
 
 bus.addListener(EVENTS.DAMAGE_TAKEN, function()
     if character.hasWeakness(WEAKNESSES.TEMPO) then
-        local turnTypeId = turnState.state.type.get()
-        if turnTypeId == TURN_TYPES.ENEMY.id then
+        local turnTypeID = turnState.state.type.get()
+        if turnTypeID == TURN_TYPES.ENEMY.id then
             buffs.addWeaknessDebuff(WEAKNESSES.TEMPO)
         end
     end
@@ -115,9 +115,9 @@ bus.addListener(EVENTS.COMBAT_OVER, function()
     end
 end)
 
-local function setRemainingTurns(buff, remainingTurns, turnTypeId)
+local function setRemainingTurns(buff, remainingTurns, turnTypeID)
     if type(buff.duration.remainingTurns) == "table" then
-        buff.duration.remainingTurns[turnTypeId] = remainingTurns
+        buff.duration.remainingTurns[turnTypeID] = remainingTurns
     else
         buff.duration.remainingTurns = remainingTurns
     end
@@ -211,7 +211,6 @@ bus.addListener(EVENTS.TURN_FINISHED, function(index, turnTypeID)
     end
 end)
 
--- TODO why is this not working
 local function applyRemainingHealAmount(regrowth)
     local remainingHealAmount = regrowth.duration.remainingTurns * regrowth.effects[1].healingPerTick
     if remainingHealAmount > 0 then

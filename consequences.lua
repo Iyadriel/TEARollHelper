@@ -48,7 +48,6 @@ local function applyFaelunesRegrowth(initialHealAmount)
     characterState.state.health.heal(initialHealAmount, INCOMING_HEAL_SOURCES.OTHER_PLAYER)
     local healingPerTick = rules.traits.calculateRegrowthHealingPerTick(initialHealAmount)
     buffs.addTraitBuff(TRAITS.FAELUNES_REGROWTH, { BuffEffectHealingOverTime:New(healingPerTick) })
-    --buffs.addHoTBuff(FAELUNES_REGROWTH.name, FAELUNES_REGROWTH.icon, healingPerTick, FAELUNES_REGROWTH.buffs[1].remainingTurns)
 end
 
 -- [[ Resources ]]

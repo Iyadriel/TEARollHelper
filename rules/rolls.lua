@@ -78,8 +78,8 @@ local function canProcRebound()
     return character.hasWeakness(WEAKNESSES.REBOUND)
 end
 
-local function hasReboundProc(roll, turnTypeId)
-    return turnTypeId == TURN_TYPES.PLAYER.id and roll == MIN_ROLL
+local function hasReboundProc(roll, turnTypeID)
+    return turnTypeID == TURN_TYPES.PLAYER.id and roll == MIN_ROLL
 end
 
 local function calculateReboundDamage()

@@ -49,8 +49,8 @@ local function buffDesc(buff)
 
         if buff.types[BUFF_TYPES.ADVANTAGE] then
             table.insert(msg, "Your rolls have advantage.|nApplies to: ")
-            if buff.turnTypeId then
-                table.insert(msg, TURN_TYPES[buff.turnTypeId].name .. " turn, ")
+            if buff.turnTypeID then
+                table.insert(msg, TURN_TYPES[buff.turnTypeID].name .. " turn, ")
             end
             for action in pairs(buff.actions) do
                 table.insert(msg,  ACTION_LABELS[action] .. ", ")
@@ -58,8 +58,8 @@ local function buffDesc(buff)
             msg = string.sub(msg, 0, -3)
         elseif buff.types[BUFF_TYPES.DISADVANTAGE] then
             table.insert(msg, "Your rolls have disadvantage.|nApplies to: ")
-            if buff.turnTypeId then
-                table.insert(msg, TURN_TYPES[buff.turnTypeId].name .. " turn, ")
+            if buff.turnTypeID then
+                table.insert(msg, TURN_TYPES[buff.turnTypeID].name .. " turn, ")
             end
             for action in pairs(buff.actions) do
                 table.insert(msg,  ACTION_LABELS[action] .. ", ")
