@@ -26,6 +26,7 @@ ns.resources = {
     weaknesses = {},
     zones = {},
 }
+ns.rollHandler = {}
 ns.rules = {}
 ns.settings = {}
 ns.state = {
@@ -36,7 +37,6 @@ ns.state = {
     rolls = {},
     turn = {}
 }
-ns.turns = {}
 ns.ui = {}
 ns.utils = {}
 

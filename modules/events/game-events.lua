@@ -1,7 +1,7 @@
 local _, ns = ...
 
 local integrations = ns.integrations
-local turns = ns.turns
+local rollHandler = ns.rollHandler
 
 local PLAYER_NAME = UnitName("player")
 local TOTALRP3_NAME = "totalRP3"
@@ -13,7 +13,7 @@ function TEARollHelper:CHAT_MSG_SYSTEM(event, msg)
         --print(author, rollResult, rollMin, rollMax)
         local rollResultNumber = tonumber(rollResult)
         if rollResultNumber ~= nil then
-            turns.handleRollResult(rollResultNumber)
+            rollHandler.handleRollResult(rollResultNumber)
         else
             self:Print("Could not convert roll result to number! Roll result was:", rollResult)
         end

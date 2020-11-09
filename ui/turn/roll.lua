@@ -4,10 +4,10 @@ local buffsState = ns.state.buffs
 local characterState = ns.state.character
 local consequences = ns.consequences
 local constants = ns.constants
+local rollHandler = ns.rollHandler
 local rollState = ns.state.rolls
 local rules = ns.rules
 local settings = ns.settings
-local turns = ns.turns
 local turnState = ns.state.turn
 local ui = ns.ui
 local weaknesses = ns.resources.weaknesses
@@ -73,8 +73,8 @@ ui.modules.turn.modules.roll.getOptions = function(options)
         local rollMode = state[options.action].rollMode.get()
         local rollModeMod = getRollModeModifier()
 
-        turns.setAction(options.action)
-        turns.roll(rollMode, rollModeMod, isReroll)
+        rollHandler.setAction(options.action)
+        rollHandler.roll(rollMode, rollModeMod, isReroll)
     end
 
     return {
@@ -125,12 +125,12 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 order = 1,
                 type = "execute",
                 name = function()
-                    return turns.isRolling() and "Rolling..." or ui.iconString("Interface\\Buttons\\UI-GroupLoot-Dice-Up", "small", false) .. "Roll"
+                    return rollHandler.isRolling() and "Rolling..." or ui.iconString("Interface\\Buttons\\UI-GroupLoot-Dice-Up", "small", false) .. "Roll"
                 end,
                 desc = "Do a /roll " .. rules.rolls.MAX_ROLL .. ".",
                 width = 1.3,
                 disabled = function()
-                    return turns.isRolling()
+                    return rollHandler.isRolling()
                 end,
                 func = function()
                     performRoll()
@@ -148,8 +148,8 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                     return state[options.action].currentRoll.get()
                 end,
                 set = function(info, value)
-                    turns.setAction(options.action)
-                    turns.setCurrentRoll(value)
+                    rollHandler.setAction(options.action)
+                    rollHandler.setCurrentRoll(value)
                 end
             },
             useFatePoint = {

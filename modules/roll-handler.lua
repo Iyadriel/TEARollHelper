@@ -3,8 +3,8 @@ local _, ns = ...
 local bus = ns.bus
 local constants = ns.constants
 local gameEvents = ns.gameEvents
+local rollHandler = ns.rollHandler
 local rules = ns.rules
-local turns = ns.turns
 local ui = ns.ui
 
 local EVENTS = bus.EVENTS
@@ -109,8 +109,8 @@ function handleRollResult(result)
     end
 end
 
-turns.isRolling = isRolling
-turns.setCurrentRoll = setCurrentRoll
-turns.setAction = setAction
-turns.roll = doRoll
-turns.handleRollResult = handleRollResult
+rollHandler.isRolling = isRolling
+rollHandler.setCurrentRoll = setCurrentRoll
+rollHandler.setAction = setAction
+rollHandler.roll = doRoll
+rollHandler.handleRollResult = handleRollResult

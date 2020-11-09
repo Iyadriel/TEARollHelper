@@ -7,10 +7,10 @@ local characterState = ns.state.character.state
 local consequences = ns.consequences
 local constants = ns.constants
 local feats = ns.resources.feats
+local rollHandler = ns.rollHandler
 local rolls = ns.state.rolls
 local rules = ns.rules
 local traits = ns.resources.traits
-local turns = ns.turns
 local ui = ns.ui
 local utils = ns.utils
 
@@ -150,8 +150,8 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                             local rollMode = state[action].rollMode.get()
                             local rollModeMod = rolls.getRollModeModifier(action, TURN_TYPES.PLAYER.id)
 
-                            turns.setAction(action)
-                            turns.roll(rollMode, rollModeMod, false)
+                            rollHandler.setAction(action)
+                            rollHandler.roll(rollMode, rollModeMod, false)
                         end
                     },
                     useFaultline = ui.helpers.traitToggle(ACTIONS.attack, rolls.getAttack, TRAITS.FAULTLINE, {
