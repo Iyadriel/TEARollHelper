@@ -154,6 +154,16 @@ local function calculateMercyFromPainBonusHealing(attackIsAOE)
     return attackIsAOE and 4 or 2
 end
 
+-- Feat: Vengeance
+
+local function canProcVengeance()
+    return character.hasFeat(FEATS.VENGEANCE)
+end
+
+local function hasVengeanceProc(roll)
+    return roll >= 16
+end
+
 -- Trait: Shatter Soul
 
 local function canUseShatterSoul()
@@ -206,6 +216,9 @@ rules.offence = {
     canProcMercyFromPain = canProcMercyFromPain,
     hasMercyFromPainProc = hasMercyFromPainProc,
     calculateMercyFromPainBonusHealing = calculateMercyFromPainBonusHealing,
+
+    canProcVengeance = canProcVengeance,
+    hasVengeanceProc = hasVengeanceProc,
 
     canUseShatterSoul = canUseShatterSoul,
     shatterSoulEnabled = shatterSoulEnabled,

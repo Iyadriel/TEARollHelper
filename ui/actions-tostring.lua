@@ -88,6 +88,10 @@ local function attackToString(attack)
         if attack.hasAdrenalineProc then
             msg = msg .. COLOURS.FEATS.ADRENALINE .. "|nADRENALINE! You attack the same target a second time!|r "
         end
+
+        if attack.hasVengeanceProc then
+            msg = msg .. COLOURS.FEATS.VENGEANCE .. " VENGEANCE!"
+        end
     else
         msg = msg .. COLOURS.NOTE .. "You can't deal any damage with this roll."
     end

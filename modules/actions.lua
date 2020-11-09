@@ -9,12 +9,14 @@ local TRAITS = traits.TRAITS
 local function getAttack(attackIndex, roll, rollBuff, threshold, offence, offenceBuff, baseDmgBuff, damageDoneBuff, enemyId, isAOE, numBloodHarvestSlots, activeTraits)
     local attackValue
     local dmg
+    local originalRoll = roll
     local critType = rules.offence.getCritType()
     local isCrit = rules.offence.isCrit(roll)
     local hasAdrenalineProc = nil
     local hasMercyFromPainProc = nil
     local mercyFromPainBonusHealing = 0
     local shatterSoulEnabled = false
+    local hasVengeanceProc = nil
     local hasVindicationProc = nil
     local vindicationHealing = 0
 
@@ -46,6 +48,10 @@ local function getAttack(attackIndex, roll, rollBuff, threshold, offence, offenc
         mercyFromPainBonusHealing = rules.offence.calculateMercyFromPainBonusHealing(isAOE)
     end
 
+    if rules.offence.canProcVengeance() then
+        hasVengeanceProc = rules.offence.hasVengeanceProc(originalRoll)
+    end
+
     if rules.offence.canProcVindication() then
         hasVindicationProc = rules.offence.hasVindicationProc(dmg)
         if hasVindicationProc then
@@ -63,6 +69,7 @@ local function getAttack(attackIndex, roll, rollBuff, threshold, offence, offenc
         numBloodHarvestSlots = numBloodHarvestSlots,
         hasMercyFromPainProc = hasMercyFromPainProc,
         mercyFromPainBonusHealing = mercyFromPainBonusHealing,
+        hasVengeanceProc = hasVengeanceProc,
         traits = {
             [TRAITS.FAULTLINE.id] = {
                 canUse = dmg > 0,

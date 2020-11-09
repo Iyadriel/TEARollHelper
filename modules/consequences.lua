@@ -160,6 +160,10 @@ local function confirmAttackAction(attack)
         buffs.addFeatBuff(FEATS.MERCY_FROM_PAIN, { BuffEffectHealingDone:New(attack.mercyFromPainBonusHealing) })
     end
 
+    if attack.hasVengeanceProc then
+        buffs.addFeatBuff(FEATS.VENGEANCE)
+    end
+
     local shatterSoul = attack.traits[TRAITS.SHATTER_SOUL.id]
     if shatterSoul.active then
         useShatterSoul(attack)

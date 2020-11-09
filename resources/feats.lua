@@ -6,12 +6,14 @@ local models = ns.models
 
 local BuffDuration = models.BuffDuration
 local BuffEffectDamageTaken = models.BuffEffectDamageTaken
+local BuffEffectStat = models.BuffEffectStat
 
 local ACTIONS = constants.ACTIONS
 local DAMAGE_TYPES = constants.DAMAGE_TYPES
+local STATS = constants.STATS
 local TURN_TYPES = constants.TURN_TYPES
 
-feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "COUNTER_FORCE", "DIVINE_PURPOSE", "ETERNAL_SACRIFICE", "EXPANSIVE_ARSENAL", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "LIVING_BARRICADE", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "MONSTER_HUNTER", "ONSLAUGHT", "PARAGON", "PENANCE", "PHALANX", "PROFESSIONAL", "REAPER", "SHEPHERD_OF_THE_WICKED", "WARDER"}
+feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "COUNTER_FORCE", "DIVINE_PURPOSE", "ETERNAL_SACRIFICE", "EXPANSIVE_ARSENAL", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "LIVING_BARRICADE", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "MONSTER_HUNTER", "ONSLAUGHT", "PARAGON", "PENANCE", "PHALANX", "PROFESSIONAL", "REAPER", "SHEPHERD_OF_THE_WICKED", "VENGEANCE", "WARDER"}
 
 local FEATS = {
     FEATLESS = {
@@ -152,6 +154,14 @@ local FEATS = {
         desc = "You can now roll CC rolls with your Defence stat instead of your Offence stat.",
         note = "The addon will automatically use the highest stat.",
     },
+    VENGEANCE = {
+        id = "VENGEANCE",
+        name = "Vengeance",
+        desc = "When the raw result of your Offence attack roll is 16 or higher, you gain an additional +4 to Offence for your next player round.",
+        icon = "Interface\\Icons\\ability_racial_spatialrift",
+        isCustom = true,
+        player = "CALLEAN",
+    },
     WARDER = {
         id = "WARDER",
         name = "Warder",
@@ -177,6 +187,15 @@ local FEAT_BUFF_SPECS = {
             expireOnCombatEnd = true,
         }),
         -- effects provided in consequences.lua
+    },
+    [FEATS.VENGEANCE.id] = {
+        duration = BuffDuration:NewWithTurnType({
+            turnTypeID = TURN_TYPES.PLAYER.id,
+            remainingTurns = 1,
+        }),
+        effects = {
+            BuffEffectStat:New(STATS.offence, 4),
+        },
     },
 }
 
