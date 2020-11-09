@@ -355,7 +355,7 @@ end)
 bus.addListener(EVENTS.TRAIT_REMOVED, function(traitID)
     if not turnState.state.inCombat.get() then
         local trait = TRAITS[traitID]
-        if trait.numCharges then
+        if trait and trait.numCharges then -- check if trait exists in case it was removed from addon
             characterState.state.featsAndTraits.numTraitCharges.set(traitID, rules.traits.getMaxTraitCharges(trait))
         end
     end
