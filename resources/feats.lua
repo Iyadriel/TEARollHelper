@@ -4,6 +4,7 @@ local constants = ns.constants
 local feats = ns.resources.feats
 local models = ns.models
 
+local BuffDuration = models.BuffDuration
 local BuffEffectDamageTaken = models.BuffEffectDamageTaken
 
 local ACTIONS = constants.ACTIONS
@@ -160,22 +161,21 @@ local FEATS = {
 
 local FEAT_BUFF_SPECS = {
     [FEATS.LIVING_BARRICADE.id] = {
-        duration = {
-            remainingTurns = {
-                [TURN_TYPES.ENEMY.id] = 0,
-            },
-        },
+        duration = BuffDuration:NewWithTurnType({
+            turnTypeID = TURN_TYPES.ENEMY.id,
+            remainingTurns = 0,
+        }),
         effects = {
             BuffEffectDamageTaken:New(-3),
         },
     },
     [FEATS.MERCY_FROM_PAIN.id] = {
-        duration = {
-            expireAfterFirstAction = {
+        duration = BuffDuration:New({
+            expireAfterActions = {
                 [ACTIONS.healing] = true,
             },
             expireOnCombatEnd = true,
-        },
+        }),
         -- effects provided in consequences.lua
     },
 }

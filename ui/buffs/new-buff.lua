@@ -144,7 +144,7 @@ ui.modules.buffs.modules.newBuff.getOptions = function(options)
                     buffsState.newPlayerBuff.expireAfterNextTurn.set(value)
                 end,
             },
-            expireAfterFirstAction = {
+            expireAfterAnyAction = {
                 order = 7,
                 type = "toggle",
                 name = "Expire after first action",
@@ -152,9 +152,9 @@ ui.modules.buffs.modules.newBuff.getOptions = function(options)
                 hidden = function()
                     return buffsState.newPlayerBuff.type.get() == PLAYER_BUFF_TYPES.ROLL
                 end,
-                get = buffsState.newPlayerBuff.expireAfterFirstAction.get,
+                get = buffsState.newPlayerBuff.expireAfterAnyAction.get,
                 set = function(info, value)
-                    buffsState.newPlayerBuff.expireAfterFirstAction.set(value)
+                    buffsState.newPlayerBuff.expireAfterAnyAction.set(value)
                 end,
             },
             add = {
@@ -166,7 +166,7 @@ ui.modules.buffs.modules.newBuff.getOptions = function(options)
                     local buffType = newBuff.type.get()
                     local label = newBuff.label.get()
                     local expireAfterNextTurn = newBuff.expireAfterNextTurn.get()
-                    local expireAfterFirstAction = newBuff.expireAfterFirstAction.get()
+                    local expireAfterAnyAction = newBuff.expireAfterAnyAction.get()
 
                     if buffType == PLAYER_BUFF_TYPES.ROLL then
                         local turnTypeID = newBuff.turnTypeID.get()
@@ -175,16 +175,16 @@ ui.modules.buffs.modules.newBuff.getOptions = function(options)
                     elseif buffType == PLAYER_BUFF_TYPES.STAT then
                         local stat = newBuff.stat.get()
                         local amount = newBuff.amount.get()
-                        buffs.addStatBuff(stat, amount, label, expireAfterNextTurn, expireAfterFirstAction)
+                        buffs.addStatBuff(stat, amount, label, expireAfterNextTurn, expireAfterAnyAction)
                     elseif buffType == PLAYER_BUFF_TYPES.BASE_DMG then
                         local amount = newBuff.amount.get()
-                        buffs.addBaseDmgBuff(amount, label, expireAfterNextTurn, expireAfterFirstAction)
+                        buffs.addBaseDmgBuff(amount, label, expireAfterNextTurn, expireAfterAnyAction)
                     elseif buffType == PLAYER_BUFF_TYPES.ADVANTAGE then
                         local action = newBuff.action.get()
-                        buffs.addAdvantageBuff(action, label, expireAfterNextTurn, expireAfterFirstAction)
+                        buffs.addAdvantageBuff(action, label, expireAfterNextTurn, expireAfterAnyAction)
                     elseif buffType == PLAYER_BUFF_TYPES.DISADVANTAGE then
                         local action = newBuff.action.get()
-                        buffs.addDisadvantageDebuff(action, label, expireAfterNextTurn, expireAfterFirstAction)
+                        buffs.addDisadvantageDebuff(action, label, expireAfterNextTurn, expireAfterAnyAction)
                     end
                 end
             },

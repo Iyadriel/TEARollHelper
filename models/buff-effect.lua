@@ -42,9 +42,9 @@ end
 
 function BuffEffect:GetValueTooltipText(msgStart, value)
     if value > 0 then
-        return msgStart .. " increased by " .. value .. ". "
+        return msgStart .. " increased by " .. value .. "."
     else
-        return msgStart .. " reduced by " .. abs(value) .. ". "
+        return msgStart .. " reduced by " .. abs(value) .. "."
     end
 end
 

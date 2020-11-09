@@ -4,6 +4,7 @@ local constants = ns.constants
 local models = ns.models
 local traits = ns.resources.traits
 
+local BuffDuration = models.BuffDuration
 local BuffEffectAdvantage = models.BuffEffectAdvantage
 local BuffEffectMaxHealth = models.BuffEffectMaxHealth
 local BuffEffectStat = models.BuffEffectStat
@@ -139,21 +140,20 @@ local TRAITS = {
 local TRAIT_BUFF_SPECS = {
     [TRAITS.ARTISAN.id] = {
         {
-            duration = {
-                expireAfterFirstAction = {
+            duration = BuffDuration:New({
+                expireAfterActions = {
                     [ACTIONS.utility] = true,
                 }
-            },
+            }),
             -- effects provided in consequences.lua
         },
     },
     [TRAITS.BULWARK.id] = {
         {
-            duration = {
-                remainingTurns = {
-                    [TURN_TYPES.ENEMY.id] = 0,
-                },
-            },
+            duration = BuffDuration:NewWithTurnType({
+                turnTypeID = TURN_TYPES.ENEMY.id,
+                remainingTurns = 0,
+            }),
             effects = {
                 BuffEffectAdvantage:New({
                     [ACTIONS.defend] = true,
@@ -164,47 +164,45 @@ local TRAIT_BUFF_SPECS = {
     },
     [TRAITS.CALAMITY_GAMBIT.id] = {
         {
-            duration = {
-                remainingTurns = {
-                    [TURN_TYPES.PLAYER.id] = 1,
-                },
-            },
+            duration = BuffDuration:NewWithTurnType({
+                turnTypeID = TURN_TYPES.PLAYER.id,
+                remainingTurns = 1,
+            }),
             -- effects provided in consequences.lua
         },
         {
-            duration = {
-                remainingTurns = {
-                    [TURN_TYPES.ENEMY.id] = 2,
-                },
-            },
+            duration = BuffDuration:NewWithTurnType({
+                turnTypeID = TURN_TYPES.ENEMY.id,
+                remainingTurns = 2,
+            }),
             -- effects provided in consequences.lua
         },
     },
     [TRAITS.EMPOWERED_BLADES.id] = {
         {
-            duration = {
-                expireAfterFirstAction = {
+            duration = BuffDuration:New({
+                expireAfterActions = {
                     [ACTIONS.attack] = true,
-                },
-            },
+                }
+            }),
             -- effects provided in consequences.lua
         },
     },
     [TRAITS.FAELUNES_REGROWTH.id] = {
         {
-            duration = {
+            duration = BuffDuration:New({
                 remainingTurns = 2,
-            },
+                expireOnCombatEnd = true,
+            }),
             -- effects provided in consequences.lua
         },
     },
     [TRAITS.FOCUS.id] = {
         {
-            duration = {
-                remainingTurns = {
-                    [TURN_TYPES.PLAYER.id] = 0,
-                },
-            },
+            duration = BuffDuration:NewWithTurnType({
+                turnTypeID = TURN_TYPES.PLAYER.id,
+                remainingTurns = 0,
+            }),
             effects = {
                 BuffEffectAdvantage:New(nil, TURN_TYPES.PLAYER.id),
             },
@@ -212,9 +210,9 @@ local TRAIT_BUFF_SPECS = {
     },
     [TRAITS.LIFE_WITHIN.id] = {
         {
-            duration = {
+            duration = BuffDuration:New({
                 expireOnCombatEnd = true,
-            },
+            }),
             effects = {
                 BuffEffectMaxHealth:New(10)
             },
@@ -222,11 +220,10 @@ local TRAIT_BUFF_SPECS = {
     },
     [TRAITS.SHATTER_SOUL.id] = {
         {
-            duration = {
-                remainingTurns = {
-                    [TURN_TYPES.PLAYER.id] = 1,
-                },
-            },
+            duration = BuffDuration:NewWithTurnType({
+                turnTypeID = TURN_TYPES.PLAYER.id,
+                remainingTurns = 1,
+            }),
             effects = {
                 BuffEffectStat:New(STATS.offence, 6)
             },
@@ -234,10 +231,10 @@ local TRAIT_BUFF_SPECS = {
     },
     [TRAITS.VERSATILE.id] = {
         {
-            duration = {
+            duration = BuffDuration:New({
                 remainingTurns = 0,
-                expireAfterFirstAction = true,
-            },
+                expireAfterAnyAction = true,
+            }),
             -- effects provided in consequences.lua
         }
     },

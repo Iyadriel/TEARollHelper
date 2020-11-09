@@ -11,7 +11,7 @@ function RacialTraitBuff:New(racialTrait, effects)
         "racial",
         racialTrait.name,
         racialTrait.icon,
-        {}, -- no duration
+        nil, -- no duration
         false,
         effects
     )

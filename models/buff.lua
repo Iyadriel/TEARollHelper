@@ -23,17 +23,8 @@ function Buff:New(id, label, icon, duration, canCancel, effects)
         label = "Buff"
     end
 
-    duration = duration or {}
-
     if canCancel == nil then
         canCancel = true
-    end
-
-    local remainingTurns
-    if type(duration.remainingTurns) == "table" then
-        remainingTurns = utils.shallowCopy(duration.remainingTurns)
-    else
-        remainingTurns = duration.remainingTurns
     end
 
     local buff = {
@@ -41,17 +32,17 @@ function Buff:New(id, label, icon, duration, canCancel, effects)
         --source = obj.source,
         label = label,
         icon = icon,
-        duration = {
-            remainingTurns = remainingTurns,
-            expireAfterFirstAction = duration.expireAfterFirstAction,
-            expireOnCombatEnd = duration.expireOnCombatEnd,
-        },
+        duration = utils.deepCopy(duration),
         numStacks = 1,
         canCancel = canCancel,
         effects = effects or {},
     }
 
     return Buff:NewFromObj(buff)
+end
+
+function Buff:GetDuration()
+    return self.duration
 end
 
 function Buff:GetEffectOfType(BuffEffect)
@@ -89,12 +80,27 @@ function Buff:AddStack()
     bus.fire(EVENTS.BUFF_STACK_ADDED, self)
 end
 
+function Buff:ShouldExpire(turnTypeID)
+    return self.duration and self.duration:ShouldExpire(turnTypeID)
+end
+
+function Buff:Expire()
+    self:Remove()
+    bus.fire(EVENTS.BUFF_EXPIRED, self.label)
+end
+
 function Buff:GetTooltip()
-    local msg = {"|n"}
+    local msg = {}
 
     for i, effect in ipairs(self.effects) do
-        table.insert(msg, effect:GetTooltipText())
         table.insert(msg, "|n")
+        table.insert(msg, effect:GetTooltipText())
+    end
+
+    if self.duration then
+        table.insert(msg, "|n")
+        table.insert(msg, TEARollHelper.COLOURS.NOTE)
+        table.insert(msg, self.duration:GetTooltipText())
     end
 
     return table.concat(msg)

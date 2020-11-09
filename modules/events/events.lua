@@ -116,19 +116,6 @@ bus.addListener(EVENTS.COMBAT_OVER, function()
     end
 end)
 
-local function setRemainingTurns(buff, remainingTurns, turnTypeID)
-    if type(buff.duration.remainingTurns) == "table" then
-        buff.duration.remainingTurns[turnTypeID] = remainingTurns
-    else
-        buff.duration.remainingTurns = remainingTurns
-    end
-end
-
-local function expireBuff(buff)
-    buff:Remove()
-    bus.fire(EVENTS.BUFF_EXPIRED, buff.label)
-end
-
 local function applyDamageTick(buff)
     local dotEffect = buff:GetEffectOfType(BuffEffectDamageOverTime)
     local damagePerTick = dotEffect.damagePerTick
@@ -161,20 +148,8 @@ bus.addListener(EVENTS.TURN_STARTED, function(index, turnTypeID)
     for i = #activeBuffs, 1, -1 do
         local buff = activeBuffs[i]
 
-        local remainingTurns
-        if type(buff.duration.remainingTurns) == "table" then
-            remainingTurns = buff.duration.remainingTurns[turnTypeID]
-        else
-            remainingTurns = buff.duration.remainingTurns
-        end
-
-        if remainingTurns then
-             -- this check shouldn't be needed because buffs with 0 turns left are removed at the end of a turn
-             -- but just to be sure
-            if remainingTurns > 0 then
-                setRemainingTurns(buff, remainingTurns - 1, turnTypeID)
-                TEARollHelper:Debug("Decremented buff remaining turns at index " .. i)
-            end
+        if buff.duration then
+            buff.duration:DecrementRemainingTurns(turnTypeID)
         end
 
         if buff.turnTypeID == nil or buff.turnTypeID == turnTypeID then
@@ -205,15 +180,8 @@ bus.addListener(EVENTS.TURN_FINISHED, function(index, turnTypeID)
     for i = #activeBuffs, 1, -1 do
         local buff = activeBuffs[i]
 
-        local remainingTurns
-        if type(buff.duration.remainingTurns) == "table" then
-            remainingTurns = buff.duration.remainingTurns[turnTypeID]
-        else
-            remainingTurns = buff.duration.remainingTurns
-        end
-
-        if remainingTurns and remainingTurns <= 0 then
-            expireBuff(buff)
+        if buff:ShouldExpire(turnTypeID) then
+            buff:Expire()
         end
     end
 end)
@@ -235,8 +203,9 @@ bus.addListener(EVENTS.COMBAT_OVER, function()
             applyRemainingHealAmount(buff)
         end
 
-        if buff.duration.expireOnCombatEnd then
-            expireBuff(buff)
+        local duration = buff:GetDuration()
+        if duration and duration:ExpiresOnCombatEnd() then
+            buff:Expire()
         end
     end
 end)
@@ -246,15 +215,10 @@ bus.addListener(EVENTS.ACTION_PERFORMED, function(actionType)
 
     for i = #activeBuffs, 1, -1 do
         local buff = activeBuffs[i]
-        local expireAfterFirstAction = buff.duration.expireAfterFirstAction
-        if expireAfterFirstAction then
-            if type(expireAfterFirstAction) == "table" then
-                if expireAfterFirstAction[actionType] then
-                    expireBuff(buff)
-                end
-            else
-                expireBuff(buff)
-            end
+        local duration = buff:GetDuration()
+
+        if duration and (duration:ExpiresAfterAnyAction() or duration:ExpiresAfterAction(actionType)) then
+            buff:Expire()
         end
     end
 end)

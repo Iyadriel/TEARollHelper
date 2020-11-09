@@ -4,6 +4,7 @@ local constants = ns.constants
 local models = ns.models
 local weaknesses = ns.resources.weaknesses
 
+local BuffDuration = models.BuffDuration
 local BuffEffectDisadvantage = models.BuffEffectDisadvantage
 local BuffEffectMaxHealth = models.BuffEffectMaxHealth
 local BuffEffectStat = models.BuffEffectStat
@@ -115,22 +116,20 @@ local WEAKNESS_BUFF_SPECS = {
         canCancel = true,
     },
     [WEAKNESSES.REBOUND.id] = {
-        duration = {
-            remainingTurns = {
-                [TURN_TYPES.ENEMY.id] = 1,
-            },
-        },
+        duration = BuffDuration:NewWithTurnType({
+            turnTypeID = TURN_TYPES.ENEMY.id,
+            remainingTurns = 1,
+        }),
         effects = {
             BuffEffectDisadvantage:New(nil, TURN_TYPES.ENEMY.id)
         },
         canCancel = true,
     },
     [WEAKNESSES.TEMPO.id] = {
-        duration = {
-            remainingTurns = {
-                [TURN_TYPES.PLAYER.id] = 1,
-            },
-        },
+        duration = BuffDuration:NewWithTurnType({
+            turnTypeID = TURN_TYPES.PLAYER.id,
+            remainingTurns = 1,
+        }),
         effects = {
             BuffEffectDisadvantage:New(nil, TURN_TYPES.PLAYER.id)
         },

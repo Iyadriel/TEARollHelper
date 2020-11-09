@@ -11,7 +11,7 @@ function CriticalWoundDebuff:New(criticalWound, effects)
         "criticalWound_" .. criticalWound.id,
         criticalWound.name,
         criticalWound.icon,
-        {}, -- no duration
+        nil, -- no duration
         false,
         effects
     )

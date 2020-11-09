@@ -3,48 +3,12 @@ local _, ns = ...
 local COLOURS = TEARollHelper.COLOURS
 
 local buffsState = ns.state.buffs.state
-local constants = ns.constants
 local ui = ns.ui
-
-local TURN_TYPES = constants.TURN_TYPES
 
 local imageCoords = {.08, .92, .08, .92}
 
 local function getBuff(index)
     return buffsState.activeBuffs.get()[index]
-end
-
-local function buffDesc(buff)
-    local msg = {
-        buff:GetTooltip()
-    }
-
-    local duration = buff.duration
-
-    if duration.remainingTurns then
-        if type(duration.remainingTurns) == "table" then
-            local remainingPlayerTurns = duration.remainingTurns[TURN_TYPES.PLAYER.id]
-            local remainingEnemyTurns = duration.remainingTurns[TURN_TYPES.ENEMY.id]
-
-            if remainingPlayerTurns then
-                table.insert(msg, COLOURS.NOTE .. "|nRemaining " .. TURN_TYPES.PLAYER.name .. " turns: " .. remainingPlayerTurns)
-            elseif remainingEnemyTurns then
-                table.insert(msg, COLOURS.NOTE .. "|nRemaining " .. TURN_TYPES.ENEMY.name .. " turns: " .. remainingEnemyTurns)
-            end
-        else
-            table.insert(msg, COLOURS.NOTE .. "|nRemaining turns: " .. duration.remainingTurns)
-        end
-    end
-
-    if duration.expireAfterFirstAction then
-        table.insert(msg, COLOURS.NOTE .. "|nLasts for 1 action")
-    end
-
-    if duration.expireOnCombatEnd then
-        table.insert(msg, COLOURS.NOTE .. "|nLasts until end of combat")
-    end
-
-    return table.concat(msg)
 end
 
 ui.modules.buffs.modules.buffButton.getOption = function(index)
@@ -64,7 +28,7 @@ ui.modules.buffs.modules.buffButton.getOption = function(index)
             local buff = getBuff(index)
             if not buff then return "" end
 
-            local msg = (buff.colour or "|cffffffff") .. buff.label
+            local msg = buff.label
 
             if buff.numStacks > 1 then
                 msg = msg .. " (" .. buff.numStacks .. ")"
@@ -82,7 +46,7 @@ ui.modules.buffs.modules.buffButton.getOption = function(index)
             local buff = getBuff(index)
             if not buff then return "" end
 
-            return buffDesc(buff)
+            return buff:GetTooltip()
         end,
         dialogControl = "TEABuffButton"
     }

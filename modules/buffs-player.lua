@@ -10,7 +10,7 @@ local STAT_LABELS = constants.STAT_LABELS
 local TURN_TYPES = constants.TURN_TYPES
 
 local Buff = models.Buff
-
+local BuffDuration = models.BuffDuration
 local BuffEffectAdvantage = models.BuffEffectAdvantage
 local BuffEffectBaseDamage = models.BuffEffectBaseDamage
 local BuffEffectDisadvantage = models.BuffEffectDisadvantage
@@ -34,11 +34,11 @@ local function getRemainingTurns(expireAfterNextTurn)
     return 1
 end
 
-local function getPlayerBuffDuration(expireAfterNextTurn, expireAfterFirstAction)
-    return {
+local function getPlayerBuffDuration(expireAfterNextTurn, expireAfterAnyAction)
+    return BuffDuration:New({
         remainingTurns = getRemainingTurns(expireAfterNextTurn),
-        expireAfterFirstAction = expireAfterFirstAction,
-    }
+        expireAfterAnyAction = expireAfterAnyAction,
+    })
 end
 
 local function addRollBuff(turnTypeID, amount, label)
@@ -51,12 +51,11 @@ local function addRollBuff(turnTypeID, amount, label)
         "player_roll_" .. turnTypeID,
         label,
         TURN_TYPE_ICONS[turnTypeID],
-        {
-            remainingTurns = {
-                [turnTypeID] = 0
-            },
-            expireAfterFirstAction = true,
-        },
+        BuffDuration:NewWithTurnType({
+            turnTypeID = turnTypeID,
+            remainingTurns = 0,
+            expireAfterAnyAction = true,
+        }),
         true,
         { BuffEffectRoll:New(turnTypeID, amount) }
     )
@@ -67,7 +66,7 @@ local function addRollBuff(turnTypeID, amount, label)
     bus.fire(EVENTS.ROLL_BUFF_ADDED, turnTypeID, amount)
 end
 
-local function addStatBuff(stat, amount, label, expireAfterNextTurn, expireAfterFirstAction)
+local function addStatBuff(stat, amount, label, expireAfterNextTurn, expireAfterAnyAction)
     local existingBuff = buffsState.state.buffLookup.getPlayerStatBuff(stat)
     if existingBuff then
         existingBuff:Remove()
@@ -81,7 +80,7 @@ local function addStatBuff(stat, amount, label, expireAfterNextTurn, expireAfter
         "player_" .. stat,
         label,
         STAT_TYPE_ICONS[stat],
-        getPlayerBuffDuration(expireAfterNextTurn, expireAfterFirstAction),
+        getPlayerBuffDuration(expireAfterNextTurn, expireAfterAnyAction),
         true,
         { BuffEffectStat:New(stat, amount) }
     )
@@ -91,7 +90,7 @@ local function addStatBuff(stat, amount, label, expireAfterNextTurn, expireAfter
     bus.fire(EVENTS.STAT_BUFF_ADDED, stat, amount)
 end
 
-local function addBaseDmgBuff(amount, label, expireAfterNextTurn, expireAfterFirstAction)
+local function addBaseDmgBuff(amount, label, expireAfterNextTurn, expireAfterAnyAction)
     local existingBuff = buffsState.state.buffLookup.getPlayerBaseDmgBuff()
     if existingBuff then
         existingBuff:Remove()
@@ -105,7 +104,7 @@ local function addBaseDmgBuff(amount, label, expireAfterNextTurn, expireAfterFir
         "player_baseDmg",
         label,
         "Interface\\Icons\\ability_warrior_victoryrush",
-        getPlayerBuffDuration(expireAfterNextTurn, expireAfterFirstAction),
+        getPlayerBuffDuration(expireAfterNextTurn, expireAfterAnyAction),
         true,
         { BuffEffectBaseDamage:New(amount) }
     )
@@ -116,7 +115,7 @@ local function addBaseDmgBuff(amount, label, expireAfterNextTurn, expireAfterFir
     bus.fire(EVENTS.BASE_DMG_BUFF_ADDED, amount)
 end
 
-local function addAdvantageBuff(action, label, expireAfterNextTurn, expireAfterFirstAction)
+local function addAdvantageBuff(action, label, expireAfterNextTurn, expireAfterAnyAction)
     local existingBuff = buffsState.state.buffLookup.getPlayerAdvantageBuff(action)
     if existingBuff then
         existingBuff:Remove()
@@ -130,7 +129,7 @@ local function addAdvantageBuff(action, label, expireAfterNextTurn, expireAfterF
         "player_advantage_" .. action,
         label,
         "Interface\\Icons\\spell_holy_borrowedtime",
-        getPlayerBuffDuration(expireAfterNextTurn, expireAfterFirstAction),
+        getPlayerBuffDuration(expireAfterNextTurn, expireAfterAnyAction),
         true,
         { BuffEffectAdvantage:New({ [action] = true }) }
     )
@@ -138,7 +137,7 @@ local function addAdvantageBuff(action, label, expireAfterNextTurn, expireAfterF
     buff:Apply()
 end
 
-local function addDisadvantageDebuff(action, label, expireAfterNextTurn, expireAfterFirstAction)
+local function addDisadvantageDebuff(action, label, expireAfterNextTurn, expireAfterAnyAction)
     local existingBuff = buffsState.state.buffLookup.getPlayerDisadvantageDebuff(action)
     if existingBuff then
         existingBuff:Remove()
@@ -152,7 +151,7 @@ local function addDisadvantageDebuff(action, label, expireAfterNextTurn, expireA
         "player_disadvantage_" .. action,
         label,
         "Interface\\Icons\\achievement_bg_overcome500disadvantage",
-        getPlayerBuffDuration(expireAfterNextTurn, expireAfterFirstAction),
+        getPlayerBuffDuration(expireAfterNextTurn, expireAfterAnyAction),
         true,
         { BuffEffectDisadvantage:New({ [action] = true }) }
     )

@@ -53,7 +53,7 @@ buffsState.initState = function()
             action = ACTIONS.attack,
             label = "",
             expireAfterNextTurn = true,
-            expireAfterFirstAction = true,
+            expireAfterAnyAction = true,
         },
     }
 end
@@ -110,7 +110,7 @@ buffsState.state = {
             buffsState.state.newPlayerBuff.amount.set(1)
             buffsState.state.newPlayerBuff.label.set("")
             buffsState.state.newPlayerBuff.expireAfterNextTurn.set(true)
-            buffsState.state.newPlayerBuff.expireAfterFirstAction.set(true)
+            buffsState.state.newPlayerBuff.expireAfterAnyAction.set(true)
         end,
         remove = function (buff)
             local buffID = buff.id
@@ -220,7 +220,7 @@ buffsState.state = {
         action = basicGetSet("newPlayerBuff", "action"),
         label = basicGetSet("newPlayerBuff", "label"),
         expireAfterNextTurn = basicGetSet("newPlayerBuff", "expireAfterNextTurn"),
-        expireAfterFirstAction = basicGetSet("newPlayerBuff", "expireAfterFirstAction"),
+        expireAfterAnyAction = basicGetSet("newPlayerBuff", "expireAfterAnyAction"),
     }
 }
 

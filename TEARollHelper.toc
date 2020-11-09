@@ -20,6 +20,7 @@ models/buff/feat-buff.lua
 models/buff/racial-trait-buff.lua
 models/buff/trait-buff.lua
 models/buff/weakness-debuff.lua
+models/buff-duration.lua
 models/buff-effect.lua
 models/buff-effect/buff-effect-advantage.lua
 models/buff-effect/buff-effect-base-damage.lua

@@ -27,6 +27,23 @@ local function shallowCopy(table)
     return copy
 end
 
+local function deepCopy(obj, seen)
+    if type(obj) ~= 'table' then return obj end
+
+    if seen and seen[obj] then return seen[obj] end
+
+    local s = seen or {}
+
+    local res = setmetatable({}, getmetatable(obj))
+    s[obj] = res
+
+    for k, v in pairs(obj) do
+        res[deepCopy(k, s)] = deepCopy(v, s)
+    end
+
+    return res
+end
+
 local function colorsAndPercent(a, b, ...)
 	if(a <= 0 or b == 0) then
 		return nil, ...
@@ -80,6 +97,7 @@ end
 
 utils.merge = merge
 utils.shallowCopy = shallowCopy
+utils.deepCopy = deepCopy
 utils.healthColor = healthColor
 utils.formatHealth = formatHealth
 utils.formatPlayerName = formatPlayerName
