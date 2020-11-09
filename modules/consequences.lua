@@ -122,7 +122,7 @@ local function useVersatile()
     local stat2 = rollState.state.shared.versatile.stat2.get()
     buffs.addTraitBuff(TRAITS.VERSATILE, {
         BuffEffectStat:New(stat1, -character.getPlayerStat(stat1)),
-        BuffEffectStat:New(stat2, character.getPlayerStat(stat2)),
+        BuffEffectStat:New(stat2, character.getPlayerStat(stat1)),
     })
 end
 
