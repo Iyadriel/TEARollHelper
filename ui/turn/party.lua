@@ -4,6 +4,7 @@ local COLOURS = TEARollHelper.COLOURS
 
 local bus = ns.bus
 local party = ns.state.party
+local settings = ns.settings
 local ui = ns.ui
 local utils = ns.utils
 
@@ -44,15 +45,15 @@ ui.modules.turn.modules.party.getOptions = function(options)
 
             return partyMembers
         end)(), ]]
+        hidden = function()
+            return party.state.numMembers.get() == 0
+        end,
         args = {
             members = {
                 order = 0,
                 type = "multiselect",
                 width = "full",
                 name = "Party members",
-                hidden = function()
-                    return party.state.numMembers.get() == 0
-                end,
                 values = function()
                     local values = {}
 
@@ -81,7 +82,7 @@ ui.modules.turn.modules.party.getOptions = function(options)
                 name = "Request update",
                 desc = "Ask everyone to send you their status. This should not be necessary, but can help in case of a de-sync.",
                 hidden = function()
-                    return party.state.numMembers.get() == 0
+                    return not settings.debug.get()
                 end,
                 func = function()
                     bus.fire(EVENTS.COMMS_FORCE_REFRESH)
@@ -92,7 +93,7 @@ ui.modules.turn.modules.party.getOptions = function(options)
                 type = "execute",
                 name = "Remove",
                 hidden = function()
-                    return numSelected == 0 or party.state.numMembers.get() == 0
+                    return numSelected == 0
                 end,
                 func = function()
                     state.partyMembers.removeMultiple(selected)
@@ -100,14 +101,6 @@ ui.modules.turn.modules.party.getOptions = function(options)
                     numSelected = 0
                 end
             },
-            emptyState = {
-                order = 3,
-                type = "description",
-                name = "Your party is empty.",
-                hidden = function()
-                    return party.state.numMembers.get() > 0
-                end,
-            }
         },
     }
 end
