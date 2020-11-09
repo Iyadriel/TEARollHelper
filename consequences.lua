@@ -17,6 +17,7 @@ local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
 
 local BuffEffectDamageDone = models.BuffEffectDamageDone
+local BuffEffectHealingDone = models.BuffEffectHealingDone
 local BuffEffectHealingOverTime = models.BuffEffectHealingOverTime
 local BuffEffectStat = models.BuffEffectStat
 local BuffEffectUtilityBonus = models.BuffEffectUtilityBonus
@@ -156,7 +157,7 @@ local function confirmAttackAction(attack)
     characterState.state.featsAndTraits.numBloodHarvestSlots.use(attack.numBloodHarvestSlots)
 
     if attack.hasMercyFromPainProc then
-        buffs.addFeatBuff(FEATS.MERCY_FROM_PAIN, attack.mercyFromPainBonusHealing)
+        buffs.addFeatBuff(FEATS.MERCY_FROM_PAIN, { BuffEffectHealingDone:New(attack.mercyFromPainBonusHealing) })
     end
 
     local shatterSoul = attack.traits[TRAITS.SHATTER_SOUL.id]

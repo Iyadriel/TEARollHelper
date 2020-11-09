@@ -1,6 +1,13 @@
 local _, ns = ...
 
+local constants = ns.constants
+local models = ns.models
+
 local racialTraits = ns.resources.racialTraits
+
+local BuffEffectStat = models.BuffEffectStat
+
+local STATS = constants.STATS
 
 local RACE_IDS = {
     1, -- Human
@@ -97,11 +104,6 @@ local RACIAL_TRAITS = {
         zones = {
             FOREST = true,
         },
-        buffs = {
-            stats = {
-                defence = 2
-            }
-        }
     },
     EXPANSIVE_MIND = {
         id = 7,
@@ -121,13 +123,6 @@ local RACIAL_TRAITS = {
         zones = {
             TAINTED = true,
         },
-        buffs = {
-            stats = {
-                offence = 1,
-                defence = 1,
-                spirit = 1,
-            }
-        }
     },
     VICIOUSNESS = {
         id = 22,
@@ -167,12 +162,6 @@ local RACIAL_TRAITS = {
             UNDEAD = true,
             VOID = true,
         },
-        buffs = {
-            stats = {
-                offence = 1,
-                defence = 1,
-            }
-        },
     },
     BRUSH_IT_OFF = {
         id = 32,
@@ -192,13 +181,6 @@ local RACIAL_TRAITS = {
         zones = {
             INDOORS = true,
         },
-        buffs = {
-            stats = {
-                offence = 1,
-                defence = 1,
-                spirit = 1,
-            }
-        }
     },
     MASTERCRAFT = {
         id = 37,
@@ -218,6 +200,34 @@ local RACIAL_TRAITS = {
     },
 }
 
+local RACIAL_TRAIT_BUFF_SPECS = {
+    [RACIAL_TRAITS.QUICKNESS.id] = {
+        effects = {
+            BuffEffectStat:New(STATS.defence, 2),
+        },
+    },
+    [RACIAL_TRAITS.HEROIC_PRESENCE.id] = {
+        effects = {
+            BuffEffectStat:New(STATS.offence, 1),
+            BuffEffectStat:New(STATS.defence, 1),
+            BuffEffectStat:New(STATS.spirit, 1),
+        },
+    },
+    [RACIAL_TRAITS.DEMONBANE.id] = {
+        effects = {
+            BuffEffectStat:New(STATS.offence, 1),
+            BuffEffectStat:New(STATS.defence, 1),
+        },
+    },
+    [RACIAL_TRAITS.DUNGEON_DELVER.id] = {
+        effects = {
+            BuffEffectStat:New(STATS.offence, 1),
+            BuffEffectStat:New(STATS.defence, 1),
+            BuffEffectStat:New(STATS.spirit, 1),
+        },
+    },
+}
+
 local function getRacialTrait(traitID)
     local key = RACIAL_TRAITS_LOOKUP[traitID]
     return RACIAL_TRAITS[key]
@@ -229,5 +239,7 @@ end
 
 racialTraits.RACE_NAMES = RACE_NAMES
 racialTraits.RACIAL_TRAITS = RACIAL_TRAITS
+racialTraits.RACIAL_TRAIT_BUFF_SPECS = RACIAL_TRAIT_BUFF_SPECS
+
 racialTraits.getRacialTrait = getRacialTrait
 racialTraits.equals = equals

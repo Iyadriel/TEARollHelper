@@ -16,14 +16,6 @@ function BuffEffectHealingOverTime:New(healingPerTick)
     return buff
 end
 
-function BuffEffectHealingOverTime:Apply()
-
-end
-
-function BuffEffectHealingOverTime:Remove()
-
-end
-
 function BuffEffectHealingOverTime:GetTooltipText()
     return "Healing for " .. self.healingPerTick .. " at the start of every turn."
 end

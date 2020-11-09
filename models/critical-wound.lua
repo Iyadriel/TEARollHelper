@@ -1,12 +1,11 @@
 local _, ns = ...
 
-local buffsState = ns.state.buffs
 local bus = ns.bus
 local characterState = ns.state.character
-local constants = ns.constants
 local models = ns.models
 
-local BUFF_SOURCES = constants.BUFF_SOURCES
+local CriticalWoundDebuff = models.CriticalWoundDebuff
+
 local EVENTS = bus.EVENTS
 
 local CriticalWound = {}
@@ -20,48 +19,33 @@ function CriticalWound:NewFromObj(obj)
     return wound
 end
 
-function CriticalWound:New(id, index, name, desc, icon, buff)
+function CriticalWound:New(id, index, name, desc, icon, buffSpec)
     local wound = {
         id = id,
         index = index,
         name = name,
         desc = desc,
         icon = icon,
-        buff = buff
     }
 
+    if buffSpec then
+        wound.debuff = CriticalWoundDebuff:New(wound, buffSpec.effects)
+    end
+
     return CriticalWound:NewFromObj(wound)
+end
+
+function CriticalWound:GetDebuff()
+    return self.debuff
 end
 
 function CriticalWound:IsActive()
     return characterState.state.criticalWounds.has(self)
 end
 
-function CriticalWound:GetBuffID()
-    return "criticalWound_" .. self.id
-end
-
 function CriticalWound:Apply()
-    if self.buff then
-        local newBuff = {
-            id = self:GetBuffID(),
-            label = self.name,
-            icon = self.icon,
-
-            source = BUFF_SOURCES.CRITICAL_WOUND,
-            types = self.buff.types,
-            canCancel = false,
-
-            -- Extra properties
-            actions = self.buff.actions,
-            amount = self.buff.amount,
-            damagePerTick = self.buff.damagePerTick,
-            canBeMitigated = self.buff.canBeMitigated,
-            stats = self.buff.stats,
-            turnTypeID = self.buff.turnTypeID,
-        }
-
-        buffsState.state.activeBuffs.add(newBuff)
+    if self.debuff then
+        self.debuff:Apply()
     end
 
     characterState.state.criticalWounds.apply(self)
@@ -69,12 +53,8 @@ function CriticalWound:Apply()
 end
 
 function CriticalWound:Remove()
-    if self.buff then
-        local existingBuff = buffsState.state.buffLookup.getCriticalWoundDebuff(self)
-
-        if existingBuff then
-            buffsState.state.activeBuffs.remove(existingBuff)
-        end
+    if self.debuff then
+        self.debuff:Remove()
     end
 
     characterState.state.criticalWounds.remove(self)

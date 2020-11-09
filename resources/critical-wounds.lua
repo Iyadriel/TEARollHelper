@@ -1,13 +1,21 @@
 local _, ns = ...
 
 local constants = ns.constants
+local models = ns.models
+
 local criticalWounds = ns.resources.criticalWounds
 
-local CriticalWound = ns.models.CriticalWound
-local CriticalWoundCripplingPain = ns.models.CriticalWoundCripplingPain
+local BuffEffectDamageOverTime = models.BuffEffectDamageOverTime
+local BuffEffectDamageTaken = models.BuffEffectDamageTaken
+local BuffEffectDisadvantage = models.BuffEffectDisadvantage
+local BuffEffectMaxHealth = models.BuffEffectMaxHealth
+local BuffEffectStat = models.BuffEffectStat
+
+local CriticalWound = models.CriticalWound
+local CriticalWoundCripplingPain = models.CriticalWoundCripplingPain
 
 local ACTIONS = constants.ACTIONS
-local BUFF_TYPES = constants.BUFF_TYPES
+local STATS = constants.STATS
 local TURN_TYPES = constants.TURN_TYPES
 
 local wounds = {
@@ -17,12 +25,11 @@ local wounds = {
         name = "Injured Arm",
         desc = "You have disadvantage on Attack rolls.",
         icon = "Interface\\Icons\\ability_warrior_bloodfrenzy",
-        buff = {
-            types = { [BUFF_TYPES.DISADVANTAGE] = true },
-            actions = {
-                [ACTIONS.attack] = true,
-            },
-        },
+        buffSpec = {
+            effects = {
+                BuffEffectDisadvantage:New({ [ACTIONS.attack] = true })
+            }
+        }
     },
     INJURED_LEG = {
         id = "INJURED_LEG",
@@ -30,12 +37,11 @@ local wounds = {
         name = "Injured Leg",
         desc = "You have disadvantage on Defence rolls.",
         icon = "Interface\\Icons\\ability_monk_legsweep",
-        buff = {
-            types = { [BUFF_TYPES.DISADVANTAGE] = true },
-            actions = {
-                [ACTIONS.defend] = true,
-            },
-        },
+        buffSpec = {
+            effects = {
+                BuffEffectDisadvantage:New({ [ACTIONS.defend] = true })
+            }
+        }
     },
     BAD_WOUNDS = {
         id = "BAD_WOUNDS",
@@ -43,9 +49,10 @@ local wounds = {
         name = "Bad Wounds",
         desc = "Your max HP is reduced by 8.",
         icon = "Interface\\Icons\\ability_backstab",
-        buff = {
-            types = { [BUFF_TYPES.MAX_HEALTH] = true },
-            amount = -8,
+        buffSpec = {
+            effects = {
+                BuffEffectMaxHealth:New(-8)
+            }
         },
     },
     INTERNAL_BLEEDING = {
@@ -54,12 +61,11 @@ local wounds = {
         name = "Internal Bleeding",
         desc = "You take 3 damage at the start of every player turn. Cannot be prevented or reduced in any way.",
         icon = "Interface\\Icons\\spell_shadow_lifedrain",
-        buff = {
-            types = { [BUFF_TYPES.DAMAGE_OVER_TIME] = true },
-            turnTypeID = TURN_TYPES.PLAYER.id,
-            canBeMitigated = false,
-            damagePerTick = 3,
-        },
+        buffSpec = {
+            effects = {
+                BuffEffectDamageOverTime:New(3, false, TURN_TYPES.PLAYER.id)
+            }
+        }
     },
     CONCUSSION = {
         id = "CONCUSSION",
@@ -75,13 +81,14 @@ local wounds = {
         name = "Crippling Pain",
         desc = "You have disadvantage on one of the following, and cannot perform the other one at all (your choice) - Saves, Buff Rolls.",
         icon = "Interface\\Icons\\spell_holy_painsupression",
-        buff = {
-            types = { [BUFF_TYPES.DISADVANTAGE] = true },
-            actions = {
-                [ACTIONS.buff] = true,
-                [ACTIONS.meleeSave] = true,
-                [ACTIONS.rangedSave] = true,
-            },
+        buffSpec = {
+            effects = {
+                BuffEffectDisadvantage:New({
+                    [ACTIONS.buff] = true,
+                    [ACTIONS.meleeSave] = true,
+                    [ACTIONS.rangedSave] = true,
+                })
+            }
         },
     },
     DEEP_BRUISING = {
@@ -90,9 +97,10 @@ local wounds = {
         name = "Deep Bruising",
         desc = "You take 5 more damage from all sources except for Internal Bleeding.",
         icon = "Interface\\Icons\\ability_warrior_trauma",
-        buff = {
-            types = { [BUFF_TYPES.DAMAGE_TAKEN] = true },
-            amount = 5,
+        buffSpec = {
+            effects = {
+                BuffEffectDamageTaken:New(5)
+            }
         },
     },
     RUPTURED_ORGANS = {
@@ -101,14 +109,13 @@ local wounds = {
         name = "Ruptured Organs",
         desc = "Your Offence, Defence, and Spirit stats are reduced by 3.",
         icon = "Interface\\Icons\\ability_rogue_rupture",
-        buff = {
-            types = { [BUFF_TYPES.STAT] = true },
-            stats = {
-                offence = -3,
-                defence = -3,
-                spirit = -3,
-            },
-        },
+        buffSpec = {
+            effects = {
+                BuffEffectStat:New(STATS.offence, -3),
+                BuffEffectStat:New(STATS.defence, -3),
+                BuffEffectStat:New(STATS.spirit, -3),
+            }
+        }
     },
 }
 
@@ -125,6 +132,6 @@ for id, wound in pairs(wounds) do
         wound.name,
         wound.desc,
         wound.icon,
-        wound.buff
+        wound.buffSpec
     )
 end

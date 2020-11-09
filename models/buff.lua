@@ -23,6 +23,8 @@ function Buff:New(id, label, icon, duration, canCancel, effects)
         label = "Buff"
     end
 
+    duration = duration or {}
+
     if canCancel == nil then
         canCancel = true
     end
@@ -39,7 +41,6 @@ function Buff:New(id, label, icon, duration, canCancel, effects)
         --source = obj.source,
         label = label,
         icon = icon,
-        types = {}, -- TODO remove legacy
         duration = {
             remainingTurns = remainingTurns,
             expireAfterFirstAction = duration.expireAfterFirstAction,
@@ -47,7 +48,7 @@ function Buff:New(id, label, icon, duration, canCancel, effects)
         },
         numStacks = 1,
         canCancel = canCancel,
-        effects = effects,
+        effects = effects or {},
     }
 
     return Buff:NewFromObj(buff)

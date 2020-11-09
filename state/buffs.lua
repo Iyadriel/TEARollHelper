@@ -13,8 +13,8 @@ local BuffEffectAdvantage = models.BuffEffectAdvantage
 local BuffEffectDisadvantage = models.BuffEffectDisadvantage
 
 local ACTIONS = constants.ACTIONS
-local BUFF_TYPES = constants.BUFF_TYPES
 local EVENTS = bus.EVENTS
+local PLAYER_BUFF_TYPES = constants.PLAYER_BUFF_TYPES
 local STATS = constants.STATS
 local TRAITS = traits.TRAITS
 local TURN_TYPES = constants.TURN_TYPES
@@ -46,7 +46,7 @@ buffsState.initState = function()
         buffLookup = {},
 
         newPlayerBuff = {
-            type = BUFF_TYPES.ROLL,
+            type = PLAYER_BUFF_TYPES.ROLL,
             turnTypeID = TURN_TYPES.PLAYER.id,
             stat = STATS.offence,
             amount = 1,
@@ -104,7 +104,7 @@ buffsState.state = {
             buffsState.state.buffLookup.add(buff)
 
             -- reset input
-            buffsState.state.newPlayerBuff.type.set(BUFF_TYPES.ROLL)
+            buffsState.state.newPlayerBuff.type.set(PLAYER_BUFF_TYPES.ROLL)
             buffsState.state.newPlayerBuff.turnTypeID.set(TURN_TYPES.PLAYER.id)
             buffsState.state.newPlayerBuff.stat.set(STATS.offence)
             buffsState.state.newPlayerBuff.amount.set(1)
@@ -203,9 +203,6 @@ buffsState.state = {
         getRacialBuff = function()
             return buffsState.state.buffLookup.get("racial")
         end,
-        getCriticalWoundDebuff = function(criticalWound)
-            return buffsState.state.buffLookup.get(criticalWound:GetBuffID())
-        end,
         add = function(buff)
             state.buffLookup[buff.id] = buff
             TEARollHelper:Debug("Added buff:", buff.id)
@@ -230,7 +227,7 @@ buffsState.state = {
 local function removeWeaknessDebuff(weakness)
     local weaknessDebuff = buffsState.state.buffLookup.getWeaknessDebuff(weakness)
     if weaknessDebuff then
-        buffsState.state.activeBuffs.remove(weaknessDebuff)
+        weaknessDebuff:Remove()
         TEARollHelper:Debug("Removed weakness debuff because player no longer has Weakness:", weakness.name)
     end
 end
@@ -239,23 +236,19 @@ bus.addListener(EVENTS.TRAIT_REMOVED, function(traitID)
     local traitBuffs = buffsState.state.buffLookup.getTraitBuffs(TRAITS[traitID])
     if traitBuffs then
         for _, traitBuff in pairs(traitBuffs) do
-            buffsState.state.activeBuffs.remove(traitBuff)
+            traitBuff:Remove()
         end
     end
 end)
 
 bus.addListener(EVENTS.WEAKNESS_REMOVED, function(weaknessID)
-    if weaknessID == WEAKNESSES.TEMPO.id then
-        removeWeaknessDebuff(WEAKNESSES.TEMPO)
-    elseif weaknessID == WEAKNESSES.TIMID.id then
-        removeWeaknessDebuff(WEAKNESSES.TIMID)
-    end
+    removeWeaknessDebuff(WEAKNESSES[weaknessID])
 end)
 
 bus.addListener(EVENTS.RACIAL_TRAIT_CHANGED, function()
     local racialBuff = buffsState.state.buffLookup.getRacialBuff()
     if racialBuff then
-        buffsState.state.activeBuffs.remove(racialBuff)
+        racialBuff:Remove()
         TEARollHelper:Debug("Removed racial trait buff because racial trait in character sheet changed.")
     end
 end)

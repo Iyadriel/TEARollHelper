@@ -2,15 +2,17 @@ local _, ns = ...
 
 local constants = ns.constants
 local feats = ns.resources.feats
+local models = ns.models
+
+local BuffEffectDamageTaken = models.BuffEffectDamageTaken
 
 local ACTIONS = constants.ACTIONS
-local BUFF_TYPES = constants.BUFF_TYPES
 local DAMAGE_TYPES = constants.DAMAGE_TYPES
 local TURN_TYPES = constants.TURN_TYPES
 
 feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "COUNTER_FORCE", "DIVINE_PURPOSE", "ETERNAL_SACRIFICE", "EXPANSIVE_ARSENAL", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "LIVING_BARRICADE", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "MONSTER_HUNTER", "ONSLAUGHT", "PARAGON", "PENANCE", "PHALANX", "PROFESSIONAL", "REAPER", "SHEPHERD_OF_THE_WICKED", "WARDER"}
 
-feats.FEATS = {
+local FEATS = {
     FEATLESS = {
         id = "FEATLESS",
         name = "Featless / other"
@@ -83,13 +85,6 @@ feats.FEATS = {
         desc = "When tasked with doing multiple defense rolls in the same enemy turn (saves not included) you take 3 less damage from all sources for the duration of the enemy turn.",
         note = "Activate manually from the Defend action tab.",
         icon = "Interface\\Icons\\ability_warrior_shieldwall",
-        buff = {
-            type = BUFF_TYPES.DAMAGE_TAKEN,
-            amount = -3,
-            remainingTurns = {
-                [TURN_TYPES.ENEMY.id] = 0,
-            },
-        },
     },
     MEDIC = {
         id = "MEDIC",
@@ -106,13 +101,6 @@ feats.FEATS = {
         name = "Mercy from Pain",
         desc = "Every time you deal 5 damage or more to a single enemy, your next healing roll is boosted by +2 HP, if you deal 5 damage or more to multiple enemies at once, your next healing roll is instead boosted by +4HP (does not stack). The bonus to healing lasts until the end of combat, but does not stack with itself and is consumed on your next heal roll.",
         icon = "Interface\\Icons\\spell_holy_holyguidance",
-        buff = {
-            type = BUFF_TYPES.HEALING_DONE,
-            expireAfterFirstAction = {
-                [ACTIONS.healing] = true,
-            },
-            expireOnCombatEnd = true,
-        },
     },
     MONSTER_HUNTER = {
         id = "MONSTER_HUNTER",
@@ -169,3 +157,28 @@ feats.FEATS = {
         desc = "You now have advantage on Ranged save rolls.",
     },
 }
+
+local FEAT_BUFF_SPECS = {
+    [FEATS.LIVING_BARRICADE.id] = {
+        duration = {
+            remainingTurns = {
+                [TURN_TYPES.ENEMY.id] = 0,
+            },
+        },
+        effects = {
+            BuffEffectDamageTaken:New(-3),
+        },
+    },
+    [FEATS.MERCY_FROM_PAIN.id] = {
+        duration = {
+            expireAfterFirstAction = {
+                [ACTIONS.healing] = true,
+            },
+            expireOnCombatEnd = true,
+        },
+        -- effects provided in consequences.lua
+    },
+}
+
+feats.FEATS = FEATS
+feats.FEAT_BUFF_SPECS = FEAT_BUFF_SPECS

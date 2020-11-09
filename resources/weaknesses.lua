@@ -1,14 +1,19 @@
 local _, ns = ...
 
 local constants = ns.constants
+local models = ns.models
 local weaknesses = ns.resources.weaknesses
 
-local BUFF_TYPES = constants.BUFF_TYPES
+local BuffEffectDisadvantage = models.BuffEffectDisadvantage
+local BuffEffectMaxHealth = models.BuffEffectMaxHealth
+local BuffEffectStat = models.BuffEffectStat
+
+local STATS = constants.STATS
 local TURN_TYPES = constants.TURN_TYPES
 
 weaknesses.WEAKNESS_KEYS = {"BRUTE", "CORRUPTED", "FATELESS", "FEATLESS", "FRAGILE", "GLASS_CANNON", "OUTCAST", "OVERFLOW", "REBOUND", "TEMPERED_BENEVOLENCE", "TEMPO", "TIMID", "WOE_UPON_THE_AFFLICTED"}
 
-weaknesses.WEAKNESSES = {
+local WEAKNESSES = {
     BRUTE = {
         id = "BRUTE",
         name = "Brute",
@@ -21,10 +26,6 @@ weaknesses.WEAKNESSES = {
         desc = "All healing received from other players and NPCs is cut in half, rounded down. Furthermore you must choose one of the following types of healing: Holy, Unholy, Life. Whenever you are healed by the chosen type, your max HP is reduced by 3. Your HP returns to normal after combat ends, but you are not healed for the missing HP. If healed by your chosen type outside of combat your HP returns to normal after the next combat section ends.",
         icon = "Interface\\Icons\\spell_deathknight_bloodplague",
         supported = true,
-        debuff = {
-            type = BUFF_TYPES.MAX_HEALTH,
-            amount = -3
-        }
     },
     FATELESS = {
         id = "FATELESS",
@@ -70,13 +71,6 @@ weaknesses.WEAKNESSES = {
         desc = "When rolling a nat 1 on any player turn roll, you take damage equal to your Offense or Spirit stat, whichever is highest, and you have disadvantage during the next enemy turn. Requires at least 4 out of 6 points in either Offense or Spirit to pick.",
         icon = "Interface\\Icons\\ability_hunter_hatchettoss",
         supported = true,
-        debuff = {
-            type = BUFF_TYPES.DISADVANTAGE,
-            turnTypeID = TURN_TYPES.ENEMY.id,
-            remainingTurns = {
-                [TURN_TYPES.ENEMY.id] = 1,
-            },
-        }
     },
     TEMPO = {
         id = "TEMPO",
@@ -84,13 +78,6 @@ weaknesses.WEAKNESSES = {
         desc = "If you take damage during an enemy turn, you have disadvantage on your next player turn.",
         icon = "Interface\\Icons\\ability_mage_timewarp",
         supported = true,
-        debuff = {
-            type = BUFF_TYPES.DISADVANTAGE,
-            turnTypeID = TURN_TYPES.PLAYER.id,
-            remainingTurns = {
-                [TURN_TYPES.PLAYER.id] = 1,
-            },
-        }
     },
     TEMPERED_BENEVOLENCE = {
         id = "TEMPERED_BENEVOLENCE",
@@ -105,15 +92,6 @@ weaknesses.WEAKNESSES = {
         icon = "Interface\\Icons\\spell_misc_emotionafraid",
         supported = true,
         distanceFromEnemy = "melee",
-        debuff = {
-            type = BUFF_TYPES.STAT,
-            stats = {
-                offence = -2,
-                defence = -2,
-                spirit = -2
-            },
-            canCancel = false,
-        }
     },
     WOE_UPON_THE_AFFLICTED = {
         id = "WOE_UPON_THE_AFFLICTED",
@@ -128,3 +106,45 @@ weaknesses.WEAKNESSES = {
         supported = true,
     },
 }
+
+local WEAKNESS_BUFF_SPECS = {
+    [WEAKNESSES.CORRUPTED.id] = {
+        effects = {
+            BuffEffectMaxHealth:New(-3)
+        },
+        canCancel = true,
+    },
+    [WEAKNESSES.REBOUND.id] = {
+        duration = {
+            remainingTurns = {
+                [TURN_TYPES.ENEMY.id] = 1,
+            },
+        },
+        effects = {
+            BuffEffectDisadvantage:New(nil, TURN_TYPES.ENEMY.id)
+        },
+        canCancel = true,
+    },
+    [WEAKNESSES.TEMPO.id] = {
+        duration = {
+            remainingTurns = {
+                [TURN_TYPES.PLAYER.id] = 1,
+            },
+        },
+        effects = {
+            BuffEffectDisadvantage:New(nil, TURN_TYPES.PLAYER.id)
+        },
+        canCancel = true,
+    },
+    [WEAKNESSES.TIMID.id] = {
+        effects = {
+            BuffEffectStat:New(STATS.offence, -2),
+            BuffEffectStat:New(STATS.defence, -2),
+            BuffEffectStat:New(STATS.spirit, -2),
+        },
+        canCancel = false,
+    },
+}
+
+weaknesses.WEAKNESSES = WEAKNESSES
+weaknesses.WEAKNESS_BUFF_SPECS = WEAKNESS_BUFF_SPECS

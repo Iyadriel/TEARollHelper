@@ -15,9 +15,10 @@ local criticalWounds = ns.resources.criticalWounds
 local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
 
+local BuffEffectDamageOverTime = models.BuffEffectDamageOverTime
+local BuffEffectDamageTaken = models.BuffEffectDamageTaken
 local BuffEffectHealingOverTime = models.BuffEffectHealingOverTime
 
-local BUFF_TYPES = constants.BUFF_TYPES
 local EVENTS = bus.EVENTS
 local INCOMING_HEAL_SOURCES = constants.INCOMING_HEAL_SOURCES
 local TRAITS = traits.TRAITS
@@ -129,16 +130,20 @@ local function expireBuff(buff)
 end
 
 local function applyDamageTick(buff)
-    local damagePerTick = buff.damagePerTick
+    local dotEffect = buff:GetEffectOfType(BuffEffectDamageOverTime)
+    local damagePerTick = dotEffect.damagePerTick
 
     -- Hack for "You take 5 more damage from all sources except for Internal Bleeding"
-    local criticalWoundBuffId = criticalWounds.WOUNDS.INTERNAL_BLEEDING:GetBuffID()
+    local isIB = buff.GetCriticalWoundID and buff:GetCriticalWoundID() == criticalWounds.WOUNDS.INTERNAL_BLEEDING.id
     local deepBruising = criticalWounds.WOUNDS.DEEP_BRUISING
-    if buff.id == criticalWoundBuffId and buffsState.state.buffLookup.getCriticalWoundDebuff(deepBruising) then
-        damagePerTick = damagePerTick - deepBruising.buff.amount
+    local hasDB = deepBruising:IsActive()
+
+    if isIB and hasDB then
+        local damageToSubtract = deepBruising:GetDebuff():GetEffectOfType(BuffEffectDamageTaken).value
+        damagePerTick = damagePerTick - damageToSubtract
     end
 
-    characterState.state.health.damage(damagePerTick, { canBeMitigated = buff.canBeMitigated })
+    characterState.state.health.damage(damagePerTick, { canBeMitigated = dotEffect.canBeMitigated })
 end
 
 local function applyHealTick(effect)
@@ -173,11 +178,13 @@ bus.addListener(EVENTS.TURN_STARTED, function(index, turnTypeID)
         end
 
         if buff.turnTypeID == nil or buff.turnTypeID == turnTypeID then
-            if buff.types[BUFF_TYPES.DAMAGE_OVER_TIME] then
+            local dotEffect = buff:GetEffectOfType(BuffEffectDamageOverTime)
+            if dotEffect and (not dotEffect.turnTypeID or dotEffect.turnTypeID == turnTypeID) then
                 table.insert(dmgOverTimeBuffs, buff)
             end
+
             local hotEffect = buff:GetEffectOfType(BuffEffectHealingOverTime)
-            if buff:GetEffectOfType(BuffEffectHealingOverTime) then
+            if hotEffect then
                 table.insert(healingOverTimeEffects, hotEffect)
             end
         end

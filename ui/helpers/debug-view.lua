@@ -8,7 +8,7 @@ local function debugView()
     return {
         order = 0,
         type = "group",
-        name = "Debug",
+        name = "Buffs",
         inline = true,
         hidden = function()
             return not settings.debug.get()
@@ -19,13 +19,13 @@ local function debugView()
                 type = "description",
                 name = function()
                     local out = {
-                        "Offence buff: ",
+                        "Offence: ",
                         buffsState.buffs.offence.get(),
-                        "|nDefence buff: ",
+                        "|nDefence: ",
                         buffsState.buffs.defence.get(),
-                        "|nSpirit buff: ",
+                        "|nSpirit: ",
                         buffsState.buffs.spirit.get(),
-                        "|nStamina buff: ",
+                        "|nStamina: ",
                         buffsState.buffs.stamina.get(),
                     }
 

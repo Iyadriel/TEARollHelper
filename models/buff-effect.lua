@@ -1,19 +1,11 @@
 local _, ns = ...
 
-local constants = ns.constants
 local models = ns.models
-local turnState = ns.state.turn
-
-local TURN_TYPES = constants.TURN_TYPES
 
 local BuffEffect = {}
 
 function BuffEffect:NewFromObj(obj)
     local buffEffect = obj
-
---[[     buffEffect.appliesToTurns = {
-        [TURN_TYPES.PLAYER.id] = true,
-    } ]]
 
     setmetatable(buffEffect, self)
     self.__index = self
@@ -43,11 +35,6 @@ end
 function BuffEffect:Is(buffEffectType)
     return self.__index == buffEffectType
 end
-
---[[ function BuffEffect:IsActive()
-    local turnTypeID = turnState.state.type.get()
-    return self.appliesToTurns[turnTypeID]
-end ]]
 
 function BuffEffect:GetTooltipText()
     return "Unknown effect"
