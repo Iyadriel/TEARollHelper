@@ -75,6 +75,7 @@ modules/rules/offence.lua
 modules/rules/penance.lua
 modules/rules/defence.lua
 modules/rules/cc.lua
+modules/rules/critical-wounds.lua
 modules/rules/healing.lua
 modules/rules/buffing.lua
 modules/rules/meleeSave.lua

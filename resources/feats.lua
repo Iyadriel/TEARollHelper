@@ -13,7 +13,7 @@ local DAMAGE_TYPES = constants.DAMAGE_TYPES
 local STATS = constants.STATS
 local TURN_TYPES = constants.TURN_TYPES
 
-feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "COUNTER_FORCE", "DIVINE_PURPOSE", "ETERNAL_SACRIFICE", "EXPANSIVE_ARSENAL", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "LIVING_BARRICADE", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "MONSTER_HUNTER", "ONSLAUGHT", "PARAGON", "PENANCE", "PHALANX", "PROFESSIONAL", "REAPER", "SHEPHERD_OF_THE_WICKED", "VENGEANCE", "WARDER"}
+feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "COUNTER_FORCE", "DIVINE_PURPOSE", "ETERNAL_SACRIFICE", "EXPANSIVE_ARSENAL", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "LIVING_BARRICADE", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "MONSTER_HUNTER", "ONSLAUGHT", "PARAGON", "PENANCE", "PHALANX", "PROFESSIONAL", "REAPER", "SHEPHERD_OF_THE_WICKED", "TRAUMA_RESPONSE", "VENGEANCE", "WARDER"}
 
 local FEATS = {
     FEATLESS = {
@@ -153,6 +153,11 @@ local FEATS = {
         name = "Shepherd of the Wicked",
         desc = "You can now roll CC rolls with your Defence stat instead of your Offence stat.",
         note = "The addon will automatically use the highest stat.",
+    },
+    TRAUMA_RESPONSE = {
+        id = "TRAUMA_RESPONSE",
+        name = "Trauma Response",
+        desc = "Your cost for removing a Critical Wound from yourself or another character is now 1 Greater Heal Slot.",
     },
     VENGEANCE = {
         id = "VENGEANCE",
