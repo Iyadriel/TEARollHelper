@@ -13,7 +13,7 @@ local ACTIONS = constants.ACTIONS
 local STATS = constants.STATS
 local TURN_TYPES = constants.TURN_TYPES
 
-traits.TRAIT_KEYS = {"OTHER", "ARTISAN", "ASCEND", "BULWARK", "CALAMITY_GAMBIT", "EMPOWERED_BLADES", "FAELUNES_REGROWTH", "FAULTLINE", "FOCUS", "LIFE_PULSE", "LIFE_WITHIN", "PRESENCE_OF_VIRTUE", "REAP", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "VERSATILE", "VINDICATION"}
+traits.TRAIT_KEYS = {"OTHER", "ARTISAN", "ASCEND", "BULWARK", "EMPOWERED_BLADES", "FAELUNES_REGROWTH", "FAULTLINE", "FOCUS", "LIFE_PULSE", "LIFE_WITHIN", "PRESENCE_OF_VIRTUE", "REAP", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "VERSATILE", "VESEERAS_IRE", "VINDICATION"}
 
 local TRAITS = {
     OTHER = {
@@ -39,13 +39,6 @@ local TRAITS = {
         desc = "Activate to gain +3 to defense as well as advantage on all defense rolls for the current or next enemy turn. Activate and then roll.",
         icon = "Interface\\Icons\\spell_holy_greaterblessingofsanctuary",
         numCharges = 2,
-    },
-    CALAMITY_GAMBIT = {
-        id = "CALAMITY_GAMBIT",
-        name = "Calamity Gambit",
-        desc = "Activate to double your Offence stat for the current and the next player turn. However, your defence stat is reduced by an amount equal to your regular offense stat for the next two enemy turns. Activate and then roll.",
-        icon = "Interface\\Icons\\spell_shadow_unstableaffliction_3",
-        numCharges = 1,
     },
     EMPOWERED_BLADES = {
         id = "EMPOWERED_BLADES",
@@ -129,6 +122,13 @@ local TRAITS = {
         icon = "Interface\\Icons\\spell_arcane_arcanetactics",
         numCharges = 2,
     },
+    VESEERAS_IRE = {
+        id = "VESEERAS_IRE",
+        name = "Veseera's Ire",
+        desc = "Activate to double your Offence stat for the current and the next player turn. However, your defence stat is reduced by an amount equal to your regular offense stat for the next two enemy turns. Activate and then roll.",
+        icon = "Interface\\Icons\\spell_shadow_unstableaffliction_3",
+        numCharges = 1,
+    },
     VINDICATION = {
         id = "VINDICATION",
         name = "Vindication",
@@ -160,22 +160,6 @@ local TRAIT_BUFF_SPECS = {
                 }),
                 BuffEffectStat:New(STATS.defence, 3),
             },
-        },
-    },
-    [TRAITS.CALAMITY_GAMBIT.id] = {
-        {
-            duration = BuffDuration:NewWithTurnType({
-                turnTypeID = TURN_TYPES.PLAYER.id,
-                remainingTurns = 1,
-            }),
-            -- effects provided in consequences.lua
-        },
-        {
-            duration = BuffDuration:NewWithTurnType({
-                turnTypeID = TURN_TYPES.ENEMY.id,
-                remainingTurns = 2,
-            }),
-            -- effects provided in consequences.lua
         },
     },
     [TRAITS.EMPOWERED_BLADES.id] = {
@@ -237,6 +221,22 @@ local TRAIT_BUFF_SPECS = {
             }),
             -- effects provided in consequences.lua
         }
+    },
+    [TRAITS.VESEERAS_IRE.id] = {
+        {
+            duration = BuffDuration:NewWithTurnType({
+                turnTypeID = TURN_TYPES.PLAYER.id,
+                remainingTurns = 1,
+            }),
+            -- effects provided in consequences.lua
+        },
+        {
+            duration = BuffDuration:NewWithTurnType({
+                turnTypeID = TURN_TYPES.ENEMY.id,
+                remainingTurns = 2,
+            }),
+            -- effects provided in consequences.lua
+        },
     },
 }
 

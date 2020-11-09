@@ -79,15 +79,6 @@ local function useBulwark()
     buffs.addTraitBuff(TRAITS.BULWARK)
 end
 
-local function useCalamityGambit()
-    buffs.addTraitBuff(TRAITS.CALAMITY_GAMBIT, {
-        BuffEffectStat:New(STATS.offence, character.getPlayerOffence()),
-    }, 1)
-    buffs.addTraitBuff(TRAITS.CALAMITY_GAMBIT, {
-        BuffEffectStat:New(STATS.defence, -character.getPlayerOffence()),
-    }, 2)
-end
-
 local function useEmpoweredBlades(defence)
     buffs.addTraitBuff(TRAITS.EMPOWERED_BLADES, { BuffEffectDamageDone:New(ceil(defence.dmgRisk / 2)) })
 end
@@ -126,15 +117,24 @@ local function useVersatile()
     })
 end
 
+local function useVeseerasIre()
+    buffs.addTraitBuff(TRAITS.VESEERAS_IRE, {
+        BuffEffectStat:New(STATS.offence, character.getPlayerOffence()),
+    }, 1)
+    buffs.addTraitBuff(TRAITS.VESEERAS_IRE, {
+        BuffEffectStat:New(STATS.defence, -character.getPlayerOffence()),
+    }, 2)
+end
+
 local TRAIT_FNS = {
     [TRAITS.ARTISAN.id] = useArtisan,
     [TRAITS.BULWARK.id] = useBulwark,
-    [TRAITS.CALAMITY_GAMBIT.id] = useCalamityGambit,
     [TRAITS.FOCUS.id] = useFocus,
     [TRAITS.LIFE_WITHIN.id] = useLifeWithin,
     [TRAITS.SECOND_WIND.id] = useSecondWind,
     [TRAITS.SHIELD_SLAM.id] = useShieldSlam,
     [TRAITS.VERSATILE.id] = useVersatile,
+    [TRAITS.VESEERAS_IRE.id] = useVeseerasIre,
 }
 
 local function useTrait(trait)

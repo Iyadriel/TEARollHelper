@@ -42,7 +42,7 @@ end
 -- Rolling
 
 local function shouldShowPreRollUI()
-    return character.hasTrait(TRAITS.CALAMITY_GAMBIT) or rules.playerTurn.shouldShowPreRollUI() or rules.other.shouldShowPreRollUI()
+    return character.hasTrait(TRAITS.VESEERAS_IRE) or rules.playerTurn.shouldShowPreRollUI() or rules.other.shouldShowPreRollUI()
 end
 
 rules.cc = {

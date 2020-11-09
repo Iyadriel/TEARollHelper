@@ -39,11 +39,11 @@ ui.modules.actions.modules.attack.getOptions = function(options)
             ui.modules.actions.modules.playerTurn.getSharedPreRollOptions({ order = 1 }),
             ui.modules.actions.modules.anyTurn.getSharedPreRollOptions({ order = 2 }),
             {
-                useCalamityGambit = ui.helpers.traitButton(TRAITS.CALAMITY_GAMBIT, {
+                useVeseerasIre = ui.helpers.traitButton(TRAITS.VESEERAS_IRE, {
                     order = 0,
                     checkBuff = true,
                 }),
-                calamityGambitActive = ui.helpers.traitActiveText(TRAITS.CALAMITY_GAMBIT, 0),
+                veseerasIreActive = ui.helpers.traitActiveText(TRAITS.VESEERAS_IRE, 0),
             }
         ),
     })
