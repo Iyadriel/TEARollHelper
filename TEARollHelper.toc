@@ -91,6 +91,8 @@ state/turn.lua
 modules/consequences.lua
 modules/roll-handler.lua
 
+migrations.lua
+
 ui/widgets/buff_button.lua
 ui/widgets/slider.lua
 
