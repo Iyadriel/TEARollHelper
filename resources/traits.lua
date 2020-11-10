@@ -72,7 +72,7 @@ local TRAITS = {
     GREATER_RESTORATION = {
         id = "GREATER_RESTORATION",
         name = "Greater Restoration",
-        desc = "Activate to remove a Critical Wound from yourself or another character without it costing any Greater Heal Slots. Activate after rolling.",
+        desc = "Activate to remove a Critical Wound from yourself or another character without it costing any Greater Heal Slots. Activate outside of rolling.",
         numCharges = 2,
     },
     LIFE_PULSE = {
