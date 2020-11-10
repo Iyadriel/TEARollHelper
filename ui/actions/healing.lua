@@ -183,6 +183,46 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                     }
                 }
             },
+            removeWounds = {
+                order = 4,
+                type = "group",
+                inline = true,
+                name = "Remove critical wounds",
+                hidden = function()
+                    local shown = character.hasTrait(TRAITS.GREATER_RESTORATION)
+
+                    if not shown then
+                        local cost = rules.criticalWounds.getNumGreaterHealSlotsToRemoveCriticalWound()
+                        shown = cost <= rules.healing.getMaxGreaterHealSlots()
+                    end
+
+                    return not shown
+                end,
+                args = {
+                    removeWound = {
+                        order = 0,
+                        type = "execute",
+                        name = "Remove critical wound",
+                        desc = function()
+                            local cost = rules.criticalWounds.getNumGreaterHealSlotsToRemoveCriticalWound()
+                            return "Spend " .. cost .. " Greater Heal slot(s) to remove a critical wound from yourself or someone else."
+                        end,
+                        disabled = function()
+                            local cost = rules.criticalWounds.getNumGreaterHealSlotsToRemoveCriticalWound()
+                            return characterState.healing.numGreaterHealSlots.get() < cost
+                        end,
+                        hidden = function()
+                            local cost = rules.criticalWounds.getNumGreaterHealSlotsToRemoveCriticalWound()
+                            return rules.healing.getMaxGreaterHealSlots() < cost
+                        end,
+                        func = consequences.removeCriticalWoundWithGreaterHealSlots,
+                    },
+                    useGreaterRestoration = ui.helpers.traitButton(TRAITS.GREATER_RESTORATION, {
+                        order = 1,
+                        checkBuff = true,
+                    }),
+                }
+            }
         }
     }
 end

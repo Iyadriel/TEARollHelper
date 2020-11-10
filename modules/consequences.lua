@@ -252,6 +252,11 @@ local function confirmAction(actionType, action, hideMsg)
     end
 end
 
+local function removeCriticalWoundWithGreaterHealSlots()
+    local cost = rules.criticalWounds.getNumGreaterHealSlotsToRemoveCriticalWound()
+    characterState.state.healing.numGreaterHealSlots.use(cost)
+end
+
 -- [[ Exports ]]
 
 consequences.applyFaelunesRegrowth = applyFaelunesRegrowth
@@ -261,3 +266,4 @@ consequences.enableLivingBarricade = enableLivingBarricade
 consequences.useTrait = useTrait
 consequences.confirmReboundRoll = confirmReboundRoll
 consequences.confirmAction = confirmAction
+consequences.removeCriticalWoundWithGreaterHealSlots = removeCriticalWoundWithGreaterHealSlots
