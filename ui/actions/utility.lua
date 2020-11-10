@@ -54,6 +54,9 @@ ui.modules.actions.modules.utility.getOptions = function(options)
                 type = "select",
                 width = 1.25,
                 desc = "The type of utility you're rolling for. This will apply any bonuses you have for that type to your roll.",
+                hidden = function()
+                    return not rules.utility.shouldShowUtilityTypeSelect()
+                end,
                 values = UTILITY_TYPE_OPTIONS,
                 get = state.utility.utilityTypeID.get,
                 set = function(info, value)

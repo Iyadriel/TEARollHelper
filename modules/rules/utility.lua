@@ -76,6 +76,11 @@ local function getRollModeModifier(utilityTypeID)
     return modifier
 end
 
+local function shouldShowUtilityTypeSelect()
+    local racialTrait = character.getPlayerRacialTrait()
+    return racialTrait.utilityBonus or racialTrait.utilityAdvantage
+end
+
 local function shouldShowPreRollUI(turnTypeID)
     return character.hasTrait(TRAITS.ARTISAN) or rules.other.shouldShowPreRollUI() or (turnTypeID == TURN_TYPES.PLAYER.id and rules.playerTurn.shouldShowPreRollUI())
 end
@@ -89,5 +94,6 @@ rules.utility = {
     calculateUtilityValue = calculateUtilityValue,
 
     getRollModeModifier = getRollModeModifier,
+    shouldShowUtilityTypeSelect = shouldShowUtilityTypeSelect,
     shouldShowPreRollUI = shouldShowPreRollUI,
 }
