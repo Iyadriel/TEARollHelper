@@ -38,9 +38,9 @@ local function calculateUtilityBonus(utilityBonusBuff)
     return calculateBaseUtilityBonus() + utilityBonusBuff
 end
 
-local function calculateUtilityValue(roll, useUtilityTrait, utilityBonusBuff)
+local function calculateUtilityValue(roll, utilityTrait, utilityBonusBuff)
     local value = roll
-    if useUtilityTrait then
+    if utilityTrait then
         local bonus = calculateUtilityBonus(utilityBonusBuff)
         value = value + bonus
     end

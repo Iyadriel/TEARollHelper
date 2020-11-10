@@ -32,7 +32,7 @@ ui.modules.config.modules.character.modules.utilityTraits.getOptions = function(
             desc = "Enter the name of your utility trait.",
             hidden = shouldHide,
             get = function()
-                return character.getUtilityTraitAtSlot(slotIndex)
+                return character.getUtilityTraitAtSlot(slotIndex).name
             end,
             set = function(info, name)
                 character.setUtilityTraitAtSlot(slotIndex, name)

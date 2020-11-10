@@ -93,7 +93,7 @@ rolls.initState = function()
         },
 
         [ACTIONS.utility] = {
-            useUtilityTrait = false,
+            utilityTraitSlot = 0,
             rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
         },
@@ -370,13 +370,13 @@ rolls.state = {
     },
 
     [ACTIONS.utility] = {
-        useUtilityTrait = basicGetSet(ACTIONS.utility, "useUtilityTrait"),
+        utilityTraitSlot = basicGetSet(ACTIONS.utility, "utilityTraitSlot"),
         rollMode = basicGetSet(ACTIONS.utility, "rollMode"),
         currentRoll = basicGetSet(ACTIONS.utility, "currentRoll"),
 
         resetSlots = function()
             TEARollHelper:Debug("Resetting slots for utility")
-            rolls.state.utility.useUtilityTrait.set(false)
+            rolls.state.utility.utilityTraitSlot.set(0)
         end,
     },
 }
@@ -422,6 +422,7 @@ bus.addListener(EVENTS.FEAT_CHANGED, function()
 end)
 bus.addListener(EVENTS.TRAITS_CHANGED, resetSlots)
 bus.addListener(EVENTS.WEAKNESSES_CHANGED, resetSlots)
+bus.addListener(EVENTS.UTILITY_TRAITS_CHANGED, resetSlots)
 bus.addListener(EVENTS.RACIAL_TRAIT_CHANGED, resetRolls) -- in case of crit threshold change
 bus.addListener(EVENTS.TURN_STARTED, function()
     resetSlots()
@@ -553,7 +554,8 @@ end
 local function getUtility()
     local rollBuff = getRollBuff()
     local utilityBonusBuff = buffsState.buffs.utilityBonus.get()
-    return actions.getUtility(state.utility.currentRoll, rollBuff, state.utility.useUtilityTrait, utilityBonusBuff)
+    local utilityTrait = character.getUtilityTraitAtSlot(state.utility.utilityTraitSlot)
+    return actions.getUtility(state.utility.currentRoll, rollBuff, utilityTrait, utilityBonusBuff)
 end
 
 -- Trait actions

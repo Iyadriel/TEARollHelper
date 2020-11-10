@@ -171,12 +171,24 @@ end
 
 -- [[ Utility traits ]]
 
+-- NOTE: filtered table, indexes not necessarily sequential
+local function getDefinedUtilityTraits()
+    local definedTraits = {}
+    for slotIndex, trait in pairs(TEARollHelper.db.profile.utilityTraits) do
+        if trait.name and trait.name:trim() ~= "" then
+            definedTraits[slotIndex] = trait
+        end
+    end
+    return definedTraits
+end
+
 local function getUtilityTraitAtSlot(slot)
-    return TEARollHelper.db.profile.utilityTraits[slot].name
+    return TEARollHelper.db.profile.utilityTraits[slot]
 end
 
 local function setUtilityTraitAtSlot(slot, name)
     TEARollHelper.db.profile.utilityTraits[slot].name = name
+    bus.fire(EVENTS.UTILITY_TRAITS_CHANGED)
 end
 
 -- [[ Racial traits ]]
@@ -265,6 +277,7 @@ character.getPlayerTraitIDAtSlot = getPlayerTraitIDAtSlot
 character.getPlayerTraitAtSlot = getPlayerTraitAtSlot
 character.setPlayerTraitByID = setPlayerTraitByID
 
+character.getDefinedUtilityTraits = getDefinedUtilityTraits
 character.getUtilityTraitAtSlot = getUtilityTraitAtSlot
 character.setUtilityTraitAtSlot = setUtilityTraitAtSlot
 

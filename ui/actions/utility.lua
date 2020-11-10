@@ -1,6 +1,7 @@
 local _, ns = ...
 
 local actions = ns.actions
+local character = ns.character
 local constants = ns.constants
 local rolls = ns.state.rolls
 local rules = ns.rules
@@ -56,28 +57,36 @@ ui.modules.actions.modules.utility.getOptions = function(options)
                     return not state.utility.currentRoll.get()
                 end,
                 args = {
-                    useUtilityTrait = {
+                    utilityTrait = {
                         order = 1 ,
-                        type = "toggle",
-                        name = "Use utility trait",
-                        desc = "Enable if you have a utility trait that fits what you are rolling for.",
-                        hidden = function()
+                        type = "select",
+                        name = "Utility trait",
+                        desc = "Select an applicable utility trait to use, if any.",
+                        values = function()
+                            local utilityTraits = {
+                                [0] = "None",
+                            }
+
+                            for slotIndex, trait in pairs(character.getDefinedUtilityTraits()) do
+                               utilityTraits[slotIndex] = trait.name
+                            end
+
+                            return utilityTraits
+                        end,
+                        disabled = function()
                             return not rules.utility.canUseUtilityTraits()
                         end,
                         get = function()
-                            return state.utility.useUtilityTrait.get()
+                            return state.utility.utilityTraitSlot.get()
                         end,
                         set = function(info, value)
-                            state.utility.useUtilityTrait.set(value)
+                            state.utility.utilityTraitSlot.set(value)
                         end
                     },
                     whitespace = {
                         order = 2,
                         type = "description",
                         name = " |n",
-                        hidden = function()
-                            return not rules.utility.canUseUtilityTraits()
-                        end,
                     },
                     utility = {
                         order = 3,
