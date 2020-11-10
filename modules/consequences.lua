@@ -87,6 +87,10 @@ local function useFocus()
     buffs.addTraitBuff(TRAITS.FOCUS)
 end
 
+local function useGreaterRestoration()
+    return "You can remove a critical wound from yourself or someone else."
+end
+
 local function useLifeWithin()
     buffs.addTraitBuff(TRAITS.LIFE_WITHIN)
     state.health.heal(rules.traits.LIFE_WITHIN_HEAL_AMOUNT, INCOMING_HEAL_SOURCES.SELF)
@@ -130,6 +134,7 @@ local TRAIT_FNS = {
     [TRAITS.ARTISAN.id] = useArtisan,
     [TRAITS.BULWARK.id] = useBulwark,
     [TRAITS.FOCUS.id] = useFocus,
+    [TRAITS.GREATER_RESTORATION.id] = useGreaterRestoration,
     [TRAITS.LIFE_WITHIN.id] = useLifeWithin,
     [TRAITS.SECOND_WIND.id] = useSecondWind,
     [TRAITS.SHIELD_SLAM.id] = useShieldSlam,

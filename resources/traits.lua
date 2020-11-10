@@ -13,7 +13,7 @@ local ACTIONS = constants.ACTIONS
 local STATS = constants.STATS
 local TURN_TYPES = constants.TURN_TYPES
 
-traits.TRAIT_KEYS = {"OTHER", "ARTISAN", "ASCEND", "BULWARK", "EMPOWERED_BLADES", "FAELUNES_REGROWTH", "FAULTLINE", "FOCUS", "LIFE_PULSE", "LIFE_WITHIN", "PRESENCE_OF_VIRTUE", "REAP", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "VERSATILE", "VESEERAS_IRE", "VINDICATION"}
+traits.TRAIT_KEYS = {"OTHER", "ARTISAN", "ASCEND", "BULWARK", "EMPOWERED_BLADES", "FAELUNES_REGROWTH", "FAULTLINE", "FOCUS", "GREATER_RESTORATION", "LIFE_PULSE", "LIFE_WITHIN", "PRESENCE_OF_VIRTUE", "REAP", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "VERSATILE", "VESEERAS_IRE", "VINDICATION"}
 
 local TRAITS = {
     OTHER = {
@@ -67,6 +67,12 @@ local TRAITS = {
         name = "Focus",
         desc = "Activate to gain advantage to all of your rolls during the current player turn. Activate and then roll.",
         icon = "Interface\\Icons\\spell_nature_focusedmind",
+        numCharges = 2,
+    },
+    GREATER_RESTORATION = {
+        id = "GREATER_RESTORATION",
+        name = "Greater Restoration",
+        desc = "Activate to remove a Critical Wound from yourself or another character without it costing any Greater Heal Slots. Activate after rolling.",
         numCharges = 2,
     },
     LIFE_PULSE = {
