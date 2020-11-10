@@ -11,11 +11,14 @@ local rolls = ns.state.rolls
 local rules = ns.rules
 local turnState = ns.state.turn
 
+local utilityTypes = ns.resources.utilityTypes
+
 local ACTIONS = constants.ACTIONS
 local DEFENCE_TYPES = constants.DEFENCE_TYPES
 local EVENTS = bus.EVENTS
 local ROLL_MODES = constants.ROLL_MODES
 local STATS = constants.STATS
+local UTILITY_TYPES = utilityTypes.UTILITY_TYPES
 
 local state
 
@@ -93,6 +96,7 @@ rolls.initState = function()
         },
 
         [ACTIONS.utility] = {
+            utilityTypeID = UTILITY_TYPES.OTHER.id,
             utilityTraitSlot = 0,
             rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
@@ -370,6 +374,7 @@ rolls.state = {
     },
 
     [ACTIONS.utility] = {
+        utilityTypeID = basicGetSet(ACTIONS.utility, "utilityTypeID"),
         utilityTraitSlot = basicGetSet(ACTIONS.utility, "utilityTraitSlot"),
         rollMode = basicGetSet(ACTIONS.utility, "rollMode"),
         currentRoll = basicGetSet(ACTIONS.utility, "currentRoll"),
@@ -413,6 +418,7 @@ local function resetThresholds()
     rolls.state.meleeSave.damageRisk.set(nil)
     rolls.state.rangedSave.defenceType.set(DEFENCE_TYPES.THRESHOLD)
     rolls.state.rangedSave.threshold.set(nil)
+    rolls.state.utility.utilityTypeID.set(UTILITY_TYPES.OTHER.id)
 end
 
 bus.addListener(EVENTS.CHARACTER_STAT_CHANGED, resetSlots)
@@ -423,7 +429,11 @@ end)
 bus.addListener(EVENTS.TRAITS_CHANGED, resetSlots)
 bus.addListener(EVENTS.WEAKNESSES_CHANGED, resetSlots)
 bus.addListener(EVENTS.UTILITY_TRAITS_CHANGED, resetSlots)
-bus.addListener(EVENTS.RACIAL_TRAIT_CHANGED, resetRolls) -- in case of crit threshold change
+bus.addListener(EVENTS.RACIAL_TRAIT_CHANGED, function()
+    resetSlots() -- in case of utility bonus change
+    resetRolls() -- in case of crit threshold change
+    resetThresholds() -- in case of utility bonus change
+end)
 bus.addListener(EVENTS.TURN_STARTED, function()
     resetSlots()
     resetRolls()
@@ -554,8 +564,9 @@ end
 local function getUtility()
     local rollBuff = getRollBuff()
     local utilityBonusBuff = buffsState.buffs.utilityBonus.get()
+    local utilityTypeID = state.utility.utilityTypeID
     local utilityTrait = character.getUtilityTraitAtSlot(state.utility.utilityTraitSlot)
-    return actions.getUtility(state.utility.currentRoll, rollBuff, utilityTrait, utilityBonusBuff)
+    return actions.getUtility(state.utility.currentRoll, rollBuff, utilityTypeID, utilityTrait, utilityBonusBuff)
 end
 
 -- Trait actions

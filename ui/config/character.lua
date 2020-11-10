@@ -15,7 +15,7 @@ ui.modules.config.modules.character.modules = {
 ui.modules.config.modules.character.getOptions = function()
     local featOptions = ui.modules.config.modules.character.modules.feats.getOptions({ order = 1 })
     local weaknessOptions = ui.modules.config.modules.character.modules.weaknesses.getOptions({ order = 13 })
-    local racialTraitOptions = ui.modules.config.modules.character.modules.racialTraits.getOptions({ order = 26 })
+    local racialTraitOptions = ui.modules.config.modules.character.modules.racialTraits.getOptions({ order = 23 })
 
     local traitOptions = {}
     local traitOrder = 5
@@ -28,7 +28,7 @@ ui.modules.config.modules.character.getOptions = function()
     local utilityTraitOrder = 17
     for i = 1, rules.utility.MAX_NUM_UTILITY_TRAITS do
         utilityTraitOptions[i] = ui.modules.config.modules.character.modules.utilityTraits.getOptions({ slotIndex = i, order = utilityTraitOrder })
-        utilityTraitOrder = utilityTraitOrder + 2
+        utilityTraitOrder = utilityTraitOrder + 1
     end
 
     return {
@@ -59,19 +59,14 @@ ui.modules.config.modules.character.getOptions = function()
             numWeaknesses = weaknessOptions.numWeaknesses,
             weaknessNote = weaknessOptions.weaknessNote,
 
-            utilityTrait1Name = utilityTraitOptions[1].trait,
-            utilityTrait1Type = utilityTraitOptions[1].utilityType,
-            utilityTrait2Name = utilityTraitOptions[2].trait,
-            utilityTrait2Type = utilityTraitOptions[2].utilityType,
-            utilityTrait3Name = utilityTraitOptions[3].trait,
-            utilityTrait3Type = utilityTraitOptions[3].utilityType,
-            utilityTrait4Name = utilityTraitOptions[4].trait,
-            utilityTrait4Type = utilityTraitOptions[4].utilityType,
-            utilityTrait5Name = utilityTraitOptions[5].trait,
-            utilityTrait5Type = utilityTraitOptions[5].utilityType,
+            utilityTrait1 = utilityTraitOptions[1].trait,
+            utilityTrait2 = utilityTraitOptions[2].trait,
+            utilityTrait3 = utilityTraitOptions[3].trait,
+            utilityTrait4 = utilityTraitOptions[4].trait,
+            utilityTrait5 = utilityTraitOptions[5].trait,
 
             space = {
-                order = 25,
+                order = 22,
                 type = "description",
                 name = " ",
             },

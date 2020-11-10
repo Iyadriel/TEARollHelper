@@ -6,11 +6,13 @@ local rules = ns.rules
 
 local feats = ns.resources.feats
 local traits = ns.resources.traits
+local utilityTypes = ns.resources.utilityTypes
 local weaknesses = ns.resources.weaknesses
 
 local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
 local TURN_TYPES = constants.TURN_TYPES
+local UTILITY_TYPES = utilityTypes.UTILITY_TYPES
 local WEAKNESSES = weaknesses.WEAKNESSES
 
 local MAX_NUM_UTILITY_TRAITS = 5 -- static constant to know how many UI elements to create for this
@@ -34,16 +36,30 @@ local function calculateBaseUtilityBonus()
     return character.hasFeat(FEATS.PROFESSIONAL) and 8 or 5
 end
 
-local function calculateUtilityBonus(utilityBonusBuff)
+-- the bonus that the player has for utility rolls of a certain type
+local function calculateUtilityTypeBonus(utilityTypeID)
+    local racialTrait = character.getPlayerRacialTrait()
+    if racialTrait.utilityBonus and racialTrait.utilityBonus[utilityTypeID] then
+        return racialTrait.utilityBonus[utilityTypeID]
+    end
+
+    return 0
+end
+
+-- the bonus added to utility rolls when a utility trait is applicable
+local function calculateUtilityTraitBonus(utilityBonusBuff)
     return calculateBaseUtilityBonus() + utilityBonusBuff
 end
 
-local function calculateUtilityValue(roll, utilityTrait, utilityBonusBuff)
+local function calculateUtilityValue(roll, utilityTypeID, utilityTrait, utilityBonusBuff)
     local value = roll
+
     if utilityTrait then
-        local bonus = calculateUtilityBonus(utilityBonusBuff)
-        value = value + bonus
+        value = value + calculateUtilityTraitBonus(utilityBonusBuff)
     end
+
+    value = value + calculateUtilityTypeBonus(utilityTypeID)
+
     return value
 end
 

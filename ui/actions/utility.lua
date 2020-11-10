@@ -9,6 +9,7 @@ local ui = ns.ui
 local utils = ns.utils
 
 local traits = ns.resources.traits
+local utilityTypes = ns.resources.utilityTypes
 
 local ACTIONS = constants.ACTIONS
 local ACTION_LABELS = constants.ACTION_LABELS
@@ -16,6 +17,19 @@ local TRAITS = traits.TRAITS
 local TURN_TYPES = constants.TURN_TYPES
 
 local state = rolls.state
+
+local UTILITY_TYPE_OPTIONS = (function()
+    local options = {}
+
+    for i = 1, #utilityTypes.UTILITY_TYPE_KEYS do
+        local key = utilityTypes.UTILITY_TYPE_KEYS[i]
+        local utilityType = utilityTypes.UTILITY_TYPES[key]
+
+        options[key] = utilityType.name
+    end
+
+    return options
+end)()
 
 --[[ local options = {
     order: Number,
@@ -34,8 +48,20 @@ ui.modules.actions.modules.utility.getOptions = function(options)
         name = ACTION_LABELS.utility,
         order = options.order,
         args = {
-            preRoll = ui.modules.turn.modules.roll.getPreRollOptions({
+            utilityType = {
                 order = 0,
+                name = "Utility type",
+                type = "select",
+                width = 1.25,
+                desc = "The type of utility you're rolling for. This will apply any bonuses you have for that type to your roll.",
+                values = UTILITY_TYPE_OPTIONS,
+                get = state.utility.utilityTypeID.get,
+                set = function(info, value)
+                    state.utility.utilityTypeID.set(value)
+                end
+            },
+            preRoll = ui.modules.turn.modules.roll.getPreRollOptions({
+                order = 1,
                 hidden = function()
                     return not rules.utility.shouldShowPreRollUI(options.turnTypeID)
                 end,
@@ -47,9 +73,9 @@ ui.modules.actions.modules.utility.getOptions = function(options)
                     artisanActive = ui.helpers.traitActiveText(TRAITS.ARTISAN, 2),
                 }),
             }),
-            roll = ui.modules.turn.modules.roll.getOptions({ order = 1, action = ACTIONS.utility }),
+            roll = ui.modules.turn.modules.roll.getOptions({ order = 2, action = ACTIONS.utility }),
             utility = {
-                order = 2,
+                order = 3,
                 type = "group",
                 name = ACTION_LABELS.utility,
                 inline = true,

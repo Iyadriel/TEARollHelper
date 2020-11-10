@@ -342,9 +342,9 @@ local function getBuff(roll, rollBuff, spirit, spiritBuff, offence, offenceBuff,
     }
 end
 
-local function getUtility(roll, rollBuff, utilityTrait, utilityBonusBuff)
+local function getUtility(roll, rollBuff, utilityTypeID, utilityTrait, utilityBonusBuff)
     roll = rules.rolls.calculateRoll(roll, rollBuff)
-    local utilityValue = rules.utility.calculateUtilityValue(roll, utilityTrait, utilityBonusBuff)
+    local utilityValue = rules.utility.calculateUtilityValue(roll, utilityTypeID, utilityTrait, utilityBonusBuff)
 
     return {
         utilityValue = utilityValue
