@@ -16,7 +16,7 @@ local ACTIONS, SPECIAL_ACTIONS = constants.ACTIONS, constants.SPECIAL_ACTIONS
 local EVENTS = bus.EVENTS
 local FEATS = feats.FEATS
 local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
-local STATS = constants.STATS
+local STATS, STAT_LABELS, STATS_SORTED = constants.STATS, constants.STAT_LABELS, constants.STATS_SORTED
 local TRAITS = traits.TRAITS
 local WEAKNESSES = weaknesses.WEAKNESSES
 
@@ -248,6 +248,126 @@ bus.addListener(EVENTS.WEAKNESS_ADDED, function(weaknessID)
         setPlayerRacialTrait(RACIAL_TRAITS.OUTCAST)
     end
 end)
+
+-- [[ ToString ]]
+
+--[[ local TEMPLATE = {
+    "{stats}",
+    "{newline}",
+    "{feat}",
+    "{newline}",
+    "{traits}",
+    "{weaknesses}",
+    "{newline}",
+    "{racial}",
+    "{utility}",
+}
+
+local function getStatsEntries(msgTable)
+    local addNewline = false
+
+    for _, stat in ipairs(STATS_SORTED) do
+        local value = character.getPlayerStat(stat)
+        if value ~= 0 then
+            addNewline = true
+            local sign = value > 0 and "+" or "-"
+            tinsert(msgTable, sign)
+            tinsert(msgTable, abs(value))
+            tinsert(msgTable, " ")
+            tinsert(msgTable, STAT_LABELS[stat])
+            tinsert(msgTable, "|n")
+        end
+    end
+
+    if addNewline then
+        tinsert(msgTable, "|n")
+    end
+end
+
+local function addFeatEntries(msgTable)
+    tinsert(msgTable, "Feat: ")
+    tinsert(msgTable, character.getPlayerFeat().name)
+    tinsert(msgTable, "|n")
+end
+
+local function addTraitEntries(msgTable)
+    local traitList = {}
+    for slot, id in pairs(TEARollHelper.db.profile.traits) do
+        if id ~= TRAITS.OTHER.id then
+            tinsert(traitList, TRAITS[id])
+        end
+    end
+
+    if #traitList > 0 then
+        tinsert(msgTable, "|n")
+    end
+
+    for i, trait in ipairs(traitList) do
+        tinsert(msgTable, "Trait ")
+        tinsert(msgTable, i)
+        tinsert(msgTable, ": ")
+        tinsert(msgTable, trait.name)
+        tinsert(msgTable, "|n")
+    end
+
+    if #traitList > 0 then
+        table.remove(msgTable) -- remove last newline
+    end
+end
+
+local function addWeaknessEntries(msgTable)
+    if getNumWeaknesses() > 0 then
+        if getNumWeaknesses() > 1 then
+            tinsert(msgTable, "|nWeaknesses: ")
+        else
+            tinsert(msgTable, "|nWeakness: ")
+        end
+
+        local addNewline = false
+        for weaknessID in pairs(getPlayerWeaknesses()) do
+            addNewline = true
+            tinsert(msgTable, WEAKNESSES[weaknessID].name)
+            tinsert(msgTable, ", ")
+        end
+
+        table.remove(msgTable)
+
+        if addNewline then
+            tinsert(msgTable, "|n")
+        end
+    end
+end
+
+local function addRacialEntries(msgTable)
+    tinsert(msgTable, "|nRacial: ")
+    tinsert(msgTable, getPlayerRacialTrait().name)
+    tinsert(msgTable, "|n")
+end
+
+local function addUtilityEntries(msgTable)
+    tinsert(msgTable, "Utility: ")
+
+    local utilityTraits = getDefinedUtilityTraits()
+    for _, utilityTrait in pairs(utilityTraits) do
+        tinsert(msgTable, utilityTrait.name)
+        tinsert(msgTable, ", ")
+    end
+
+    table.remove(msgTable)
+end
+
+local function characterSheetToString()
+    local msg = {}
+
+    addStatsEntries(msg)
+    addFeatEntries(msg)
+    addTraitEntries(msg)
+    addWeaknessEntries(msg)
+    addRacialEntries(msg)
+    addUtilityEntries(msg)
+
+    return table.concat(msg)
+end ]]
 
 character.getPlayerOffence = getPlayerOffence
 character.getPlayerDefence = getPlayerDefence

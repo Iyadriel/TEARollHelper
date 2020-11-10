@@ -74,6 +74,15 @@ ui.modules.config.modules.character.getOptions = function()
             racialTrait = racialTraitOptions.racialTrait,
             racialTraitDesc = racialTraitOptions.racialTraitDesc,
             racialTraitNote = racialTraitOptions.racialTraitNote,
+
+--[[             characterSheet = {
+                order = 26,
+                type = "input",
+                multiline = 13,
+                name = "Preview",
+                width = "full",
+                get = character.characterSheetToString
+            } ]]
         }
     }
 end
