@@ -63,6 +63,19 @@ local function calculateUtilityValue(roll, utilityTypeID, utilityTrait, utilityB
     return value
 end
 
+-- Rolling
+
+local function getRollModeModifier(utilityTypeID)
+    local modifier = 0
+
+    local racialTrait = character.getPlayerRacialTrait()
+    if racialTrait.utilityAdvantage and racialTrait.utilityAdvantage[utilityTypeID] then
+        modifier = modifier + 1
+    end
+
+    return modifier
+end
+
 local function shouldShowPreRollUI(turnTypeID)
     return character.hasTrait(TRAITS.ARTISAN) or rules.other.shouldShowPreRollUI() or (turnTypeID == TURN_TYPES.PLAYER.id and rules.playerTurn.shouldShowPreRollUI())
 end
@@ -74,5 +87,7 @@ rules.utility = {
     getNumAllowedUtilityTraits = getNumAllowedUtilityTraits,
     calculateBaseUtilityBonus = calculateBaseUtilityBonus,
     calculateUtilityValue = calculateUtilityValue,
+
+    getRollModeModifier = getRollModeModifier,
     shouldShowPreRollUI = shouldShowPreRollUI,
 }

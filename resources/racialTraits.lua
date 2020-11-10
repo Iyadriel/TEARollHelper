@@ -147,7 +147,10 @@ local RACIAL_TRAITS = {
         desc = DESCRIPTIONS.ENTROPIC_EMBRACE,
         name = "Entropic Embrace",
         icon = "Interface\\Icons\\ability_racial_entropicembrace",
-        supported = false,
+        supported = true,
+        utilityAdvantage = {
+            VOID = true,
+        }
     },
     DEMONBANE = {
         id = 30,
@@ -185,14 +188,20 @@ local RACIAL_TRAITS = {
         desc = DESCRIPTIONS.MASTERCRAFT,
         name = "Mastercraft",
         icon = "Interface\\Icons\\ability_racial_mastercraft",
-        supported = false,
+        supported = true,
+        utilityAdvantage = {
+            MECHANICAL = true,
+        }
     },
     ARCANE_AFFINITY = {
         id = 100,
         desc = DESCRIPTIONS.ARCANE_AFFINITY,
         name = "Arcane Affinity",
         icon = "Interface\\Icons\\inv_enchant_shardglimmeringlarge",
-        supported = false,
+        supported = true,
+        utilityAdvantage = {
+            ARCANE = true,
+        }
     },
 }
 

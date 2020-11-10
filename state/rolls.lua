@@ -585,8 +585,9 @@ local function getRollModeModifier(action, turnTypeID)
     local advantageBuff = buffsState.buffLookup.getAdvantageBuff(action, turnTypeID)
     local disadvantageDebuff = buffsState.buffLookup.getDisadvantageDebuff(action, turnTypeID)
     local enemyId = environment.state.enemyId.get()
+    local utilityTypeID = state.utility.utilityTypeID
 
-    local modifier = rules.rolls.getRollModeModifier(action, advantageBuff, disadvantageDebuff, enemyId)
+    local modifier = rules.rolls.getRollModeModifier(action, advantageBuff, disadvantageDebuff, enemyId, utilityTypeID)
 
     return modifier
 end

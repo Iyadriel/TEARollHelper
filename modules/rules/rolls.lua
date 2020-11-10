@@ -51,7 +51,7 @@ local function shouldSuggestFatePoint(roll, attack, cc, healing, buff, defence, 
     end
 end
 
-local function getRollModeModifier(action, advantageBuff, disadvantageDebuff, enemyId)
+local function getRollModeModifier(action, advantageBuff, disadvantageDebuff, enemyId, utilityTypeID)
     local modifier = 0
 
     if advantageBuff then
@@ -67,6 +67,8 @@ local function getRollModeModifier(action, advantageBuff, disadvantageDebuff, en
         modifier = modifier + rules.meleeSave.getRollModeModifier()
     elseif action == ACTIONS.rangedSave then
         modifier = modifier + rules.rangedSave.getRollModeModifier()
+    elseif action == ACTIONS.utility then
+        modifier = modifier + rules.utility.getRollModeModifier(utilityTypeID)
     end
 
     modifier = max(ROLL_MODES.DISADVANTAGE, min(ROLL_MODES.ADVANTAGE, modifier))
