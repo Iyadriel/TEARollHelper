@@ -62,7 +62,7 @@ ui.modules.config.modules.character.modules.utilityTraits.getOptions = function(
             hidden = shouldHide,
             values = UTILITY_TYPE_OPTIONS,
             get = function()
-                return character.getUtilityTraitAtSlot(slotIndex).utilityType
+                return character.getUtilityTraitAtSlot(slotIndex).utilityTypeID
             end,
             set = function(info, name)
                 character.setUtilityTraitTypeAtSlot(slotIndex, name)

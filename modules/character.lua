@@ -191,8 +191,8 @@ local function setUtilityTraitNameAtSlot(slot, name)
     bus.fire(EVENTS.UTILITY_TRAITS_CHANGED)
 end
 
-local function setUtilityTraitTypeAtSlot(slot, utilityType)
-    TEARollHelper.db.profile.utilityTraits[slot].utilityType = utilityType
+local function setUtilityTraitTypeAtSlot(slot, utilityTypeID)
+    TEARollHelper.db.profile.utilityTraits[slot].utilityTypeID = utilityTypeID
     bus.fire(EVENTS.UTILITY_TRAITS_CHANGED)
 end
 
