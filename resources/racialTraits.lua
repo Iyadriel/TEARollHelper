@@ -81,7 +81,10 @@ local RACIAL_TRAITS = {
         desc = DESCRIPTIONS.DIPLOMACY,
         name = "Diplomacy",
         icon = "Interface\\Icons\\inv_misc_note_02",
-        supported = false,
+        supported = true,
+        utilityBonus = {
+            FRIENDLY_INTERACTIONS = 5,
+        }
     },
     MIGHT_OF_THE_MOUNTAIN = {
         id = 3,
@@ -106,7 +109,10 @@ local RACIAL_TRAITS = {
         desc = DESCRIPTIONS.EXPANSIVE_MIND,
         name = "Expansive Mind",
         icon = "Interface\\Icons\\inv_enchant_essenceeternallarge",
-        supported = false,
+        supported = true,
+        utilityBonus = {
+            INTELLIGENCE = 5,
+        }
     },
     HEROIC_PRESENCE = {
         id = 11,
@@ -130,7 +136,11 @@ local RACIAL_TRAITS = {
         desc = DESCRIPTIONS.INNER_PEACE,
         name = "Inner Peace",
         icon = "Interface\\Icons\\pandarenracial_innerpeace",
-        supported = false,
+        supported = true,
+        utilityBonus = {
+            MENTAL_FOCUS = 5,
+            SENSES = 5,
+        }
     },
     ENTROPIC_EMBRACE = {
         id = 29,
