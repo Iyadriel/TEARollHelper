@@ -12,9 +12,6 @@ local PREFIX = "TEARollHelper"
 local CHANNEL_PARTY = "PARTY"
 local CHANNEL_RAID = "RAID"
 local MSG_TYPES = {
-    CHARACTER_STATUS_UPDATE_OLD = "CHARACTER_STATUS_UPDATE", -- an update from someone else's character.
-    GROUP_STATUS_REQUEST_OLD = "GROUP_STATUS_REQUEST", -- someone requesting that group members send them their status.
-
     CHARACTER_STATUS_UPDATE = 0, -- an update from someone else's character.
     GROUP_STATUS_REQUEST = 1, -- someone requesting that group members send them their status.
 }
@@ -38,9 +35,6 @@ local function onGroupStatusRequestReceived(sender)
 end
 
 local incomingMsgHandlers = {
-    [MSG_TYPES.CHARACTER_STATUS_UPDATE_OLD] = onStatusReceived,
-    [MSG_TYPES.GROUP_STATUS_REQUEST_OLD] = onGroupStatusRequestReceived,
-
     [MSG_TYPES.CHARACTER_STATUS_UPDATE] = onStatusReceived,
     [MSG_TYPES.GROUP_STATUS_REQUEST] = onGroupStatusRequestReceived,
 }
