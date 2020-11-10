@@ -1,11 +1,14 @@
 local _, ns = ...
 
 local db = ns.db
+
 local feats = ns.resources.feats
 local traits = ns.resources.traits
+local utilityTypes = ns.resources.utilityTypes
 
 local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
+local UTILITY_TYPES = utilityTypes.UTILITY_TYPES
 
 local AceDB = LibStub("AceDB-3.0")
 local AceDBOptions = LibStub("AceDBOptions-3.0")
@@ -27,11 +30,11 @@ local defaults = {
         numWeaknesses = 0,
         weaknesses = {},
         utilityTraits = {
-            [1] = {},
-            [2] = {},
-            [3] = {},
-            [4] = {},
-            [5] = {},
+            [1] = { utilityType = UTILITY_TYPES.OTHER.id },
+            [2] = { utilityType = UTILITY_TYPES.OTHER.id },
+            [3] = { utilityType = UTILITY_TYPES.OTHER.id },
+            [4] = { utilityType = UTILITY_TYPES.OTHER.id },
+            [5] = { utilityType = UTILITY_TYPES.OTHER.id },
         },
         racialTraitID = select(3, UnitRace("player")),
     },

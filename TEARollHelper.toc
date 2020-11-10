@@ -45,6 +45,7 @@ resources/feats.lua
 resources/players.lua
 resources/racialTraits.lua
 resources/traits.lua
+resources/utility-types.lua
 resources/weaknesses.lua
 resources/zones.lua
 

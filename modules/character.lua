@@ -186,8 +186,13 @@ local function getUtilityTraitAtSlot(slot)
     return TEARollHelper.db.profile.utilityTraits[slot]
 end
 
-local function setUtilityTraitAtSlot(slot, name)
+local function setUtilityTraitNameAtSlot(slot, name)
     TEARollHelper.db.profile.utilityTraits[slot].name = name
+    bus.fire(EVENTS.UTILITY_TRAITS_CHANGED)
+end
+
+local function setUtilityTraitTypeAtSlot(slot, utilityType)
+    TEARollHelper.db.profile.utilityTraits[slot].utilityType = utilityType
     bus.fire(EVENTS.UTILITY_TRAITS_CHANGED)
 end
 
@@ -279,7 +284,8 @@ character.setPlayerTraitByID = setPlayerTraitByID
 
 character.getDefinedUtilityTraits = getDefinedUtilityTraits
 character.getUtilityTraitAtSlot = getUtilityTraitAtSlot
-character.setUtilityTraitAtSlot = setUtilityTraitAtSlot
+character.setUtilityTraitNameAtSlot = setUtilityTraitNameAtSlot
+character.setUtilityTraitTypeAtSlot = setUtilityTraitTypeAtSlot
 
 character.getPlayerRacialTrait = getPlayerRacialTrait
 character.hasRacialTrait = hasRacialTrait

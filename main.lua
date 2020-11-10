@@ -23,6 +23,7 @@ ns.resources = {
     players = {},
     racialTraits = {},
     traits = {},
+    utilityTypes = {},
     weaknesses = {},
     zones = {},
 }
