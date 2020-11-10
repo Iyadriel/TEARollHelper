@@ -12,7 +12,7 @@ local BuffEffectStat = models.BuffEffectStat
 local STATS = constants.STATS
 local TURN_TYPES = constants.TURN_TYPES
 
-weaknesses.WEAKNESS_KEYS = {"BRUTE", "CORRUPTED", "FATELESS", "FEATLESS", "FRAGILE", "GLASS_CANNON", "OUTCAST", "OVERFLOW", "REBOUND", "TEMPERED_BENEVOLENCE", "TEMPO", "TIMID", "WOE_UPON_THE_AFFLICTED"}
+weaknesses.WEAKNESS_KEYS = {"BRUTE", "CORRUPTED", "FATELESS", "FEATLESS", "FRAGILE", "GLASS_CANNON", "OLD_SCARS", "OUTCAST", "OVERFLOW", "REBOUND", "TEMPERED_BENEVOLENCE", "TEMPO", "TIMID", "WOE_UPON_THE_AFFLICTED"}
 
 local WEAKNESSES = {
     BRUTE = {
@@ -53,6 +53,12 @@ local WEAKNESSES = {
         supported = true,
         isCustom = true,
         player = "CALLEAN",
+    },
+    OLD_SCARS = {
+        id = "OLD_SCARS",
+        name = "Old Scars",
+        desc = "Your Critical Wounds levels can no longer be removed by the spending of Greater Heal slots.",
+        supported = true,
     },
     OUTCAST = {
         id = "OUTCAST",
