@@ -29,7 +29,7 @@ local function onStatusReceived(sender, payload)
         return
     end
 
-    local characterStatus = CharacterStatus:New(sender, payload.currentHealth, payload.maxHealth)
+    local characterStatus = CharacterStatus:New(sender, payload.currentHealth, payload.maxHealth, payload.criticalWounds)
     bus.fire(EVENTS.COMMS_STATUS_RECEIVED, sender, characterStatus)
 end
 

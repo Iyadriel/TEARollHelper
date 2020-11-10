@@ -16,8 +16,9 @@ local function getStatus()
     local name = UnitName("player")
     local currentHP = characterState.state.health.get()
     local maxHP = characterState.state.maxHealth.get()
+    local criticalWounds = characterState.state.criticalWounds.list()
 
-    return CharacterStatus:New(name, currentHP, maxHP)
+    return CharacterStatus:New(name, currentHP, maxHP, criticalWounds)
 end
 
 local function updatePartyMember(name, characterStatus)
@@ -44,7 +45,6 @@ local function requestGroupStatus()
         comms.broadcastGroupStatusRequest(inRaid)
     end
 end
-
 
 local function sendCharacterStatusToPlayer(targetPlayerName)
     local characterStatus = getStatus()

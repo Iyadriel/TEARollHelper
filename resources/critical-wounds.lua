@@ -135,3 +135,8 @@ for id, wound in pairs(wounds) do
         wound.buffSpec
     )
 end
+
+criticalWounds.getName = function(id)
+    local wound = criticalWounds.WOUNDS[id]
+    return wound and wound.name or "Unknown wound"
+end

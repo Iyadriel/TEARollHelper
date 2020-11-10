@@ -254,6 +254,9 @@ characterState.state = {
         },
     },
     criticalWounds = {
+        list = function()
+            return state.criticalWounds
+        end,
         has = function(criticalWound)
             return state.criticalWounds[criticalWound.id]
         end,

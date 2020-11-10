@@ -4,11 +4,12 @@ local models = ns.models
 
 local CharacterStatus = {}
 
-function CharacterStatus:New(name, currentHealth, maxHealth)
+function CharacterStatus:New(name, currentHealth, maxHealth, criticalWounds)
     local status = {
         name = name,
         currentHealth = currentHealth,
         maxHealth = maxHealth,
+        criticalWounds = criticalWounds,
     }
 
     setmetatable(status, self)

@@ -45,12 +45,12 @@ party.state = {
 
             return floor((currentHealth / maxHealth) * 100)
         end,
-        add = function(name, initialCharacterStatus)
+        add = function(name, initialStatus)
             TEARollHelper:Debug("party.add", name)
 
-            local currentHealth, maxHealth = initialCharacterStatus.currentHealth, initialCharacterStatus.maxHealth
+            local currentHealth, maxHealth, criticalWounds = initialStatus.currentHealth, initialStatus.maxHealth, initialStatus.criticalWounds
 
-            state.partyMembers[name] = PartyMember:New(name, currentHealth, maxHealth)
+            state.partyMembers[name] = PartyMember:New(name, currentHealth, maxHealth, criticalWounds)
             state.numMembers = state.numMembers + 1
 
             bus.fire(EVENTS.PARTY_MEMBER_ADDED, name)
@@ -63,6 +63,9 @@ party.state = {
                 party.state.partyMembers.add(name, characterStatus)
             else
                 partyMember:UpdateHealth(characterStatus.currentHealth, characterStatus.maxHealth)
+                if characterStatus.criticalWounds then
+                partyMember:UpdateCriticalWounds(characterStatus.criticalWounds)
+                end
                 bus.fire(EVENTS.PARTY_MEMBER_UPDATED, name)
             end
         end,
