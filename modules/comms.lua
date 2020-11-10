@@ -12,8 +12,11 @@ local PREFIX = "TEARollHelper"
 local CHANNEL_PARTY = "PARTY"
 local CHANNEL_RAID = "RAID"
 local MSG_TYPES = {
-    CHARACTER_STATUS_UPDATE = "CHARACTER_STATUS_UPDATE", -- an update from someone else's character.
-    GROUP_STATUS_REQUEST = "GROUP_STATUS_REQUEST", -- someone requesting that group members send them their status.
+    CHARACTER_STATUS_UPDATE_OLD = "CHARACTER_STATUS_UPDATE", -- an update from someone else's character.
+    GROUP_STATUS_REQUEST_OLD = "GROUP_STATUS_REQUEST", -- someone requesting that group members send them their status.
+
+    CHARACTER_STATUS_UPDATE = 0, -- an update from someone else's character.
+    GROUP_STATUS_REQUEST = 1, -- someone requesting that group members send them their status.
 }
 
 local function validateStatus(payload)
@@ -34,6 +37,14 @@ local function onGroupStatusRequestReceived(sender)
     bus.fire(EVENTS.COMMS_STATUS_REQUEST_RECEIVED, sender)
 end
 
+local incomingMsgHandlers = {
+    [MSG_TYPES.CHARACTER_STATUS_UPDATE_OLD] = onStatusReceived,
+    [MSG_TYPES.GROUP_STATUS_REQUEST_OLD] = onGroupStatusRequestReceived,
+
+    [MSG_TYPES.CHARACTER_STATUS_UPDATE] = onStatusReceived,
+    [MSG_TYPES.GROUP_STATUS_REQUEST] = onGroupStatusRequestReceived,
+}
+
 function TEARollHelper:OnCommReceived(prefix, message, distribution, sender)
     if prefix ~= PREFIX then return end
 
@@ -46,10 +57,8 @@ function TEARollHelper:OnCommReceived(prefix, message, distribution, sender)
 
     TEARollHelper:Debug("[comms] received", msgType, "from", sender)
 
-    if msgType == MSG_TYPES.CHARACTER_STATUS_UPDATE then
-        onStatusReceived(sender, payload)
-    elseif msgType == MSG_TYPES.GROUP_STATUS_REQUEST then
-        onGroupStatusRequestReceived(sender)
+    if incomingMsgHandlers[msgType] then
+        incomingMsgHandlers[msgType](sender, payload)
     else
         TEARollHelper:Print("Received message with unknown type (" .. msgType .. ") from:", sender)
     end
