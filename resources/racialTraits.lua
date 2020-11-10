@@ -75,7 +75,6 @@ local RACIAL_TRAITS = {
         id = -1,
         name = "Outcast",
         supported = true,
-        manualActivation = false
     },
     DIPLOMACY = {
         id = 1,
@@ -83,7 +82,6 @@ local RACIAL_TRAITS = {
         name = "Diplomacy",
         icon = "Interface\\Icons\\inv_misc_note_02",
         supported = false,
-        manualActivation = true
     },
     MIGHT_OF_THE_MOUNTAIN = {
         id = 3,
@@ -92,7 +90,6 @@ local RACIAL_TRAITS = {
         icon = "Interface\\Icons\\inv_hammer_05",
         note = "This is compatible with effects that reduce the critical hit threshold.",
         supported = true,
-        manualActivation = false
     },
     QUICKNESS = {
         id = 4,
@@ -100,7 +97,6 @@ local RACIAL_TRAITS = {
         name = "Quickness",
         icon = "Interface\\Icons\\ability_racial_shadowmeld",
         supported = true,
-        manualActivation = false,
         zones = {
             FOREST = true,
         },
@@ -111,7 +107,6 @@ local RACIAL_TRAITS = {
         name = "Expansive Mind",
         icon = "Interface\\Icons\\inv_enchant_essenceeternallarge",
         supported = false,
-        manualActivation = true
     },
     HEROIC_PRESENCE = {
         id = 11,
@@ -119,7 +114,6 @@ local RACIAL_TRAITS = {
         name = "Heroic Presence",
         icon = "Interface\\Icons\\inv_helmet_21",
         supported = true,
-        manualActivation = false,
         zones = {
             TAINTED = true,
         },
@@ -130,7 +124,6 @@ local RACIAL_TRAITS = {
         name = "Viciousness",
         icon = "Interface\\Icons\\ability_hunter_pet_wolf",
         supported = true,
-        manualActivation = false
     },
     INNER_PEACE = {
         id = 25,
@@ -138,7 +131,6 @@ local RACIAL_TRAITS = {
         name = "Inner Peace",
         icon = "Interface\\Icons\\pandarenracial_innerpeace",
         supported = false,
-        manualActivation = true
     },
     ENTROPIC_EMBRACE = {
         id = 29,
@@ -146,7 +138,6 @@ local RACIAL_TRAITS = {
         name = "Entropic Embrace",
         icon = "Interface\\Icons\\ability_racial_entropicembrace",
         supported = false,
-        manualActivation = true
     },
     DEMONBANE = {
         id = 30,
@@ -154,7 +145,6 @@ local RACIAL_TRAITS = {
         name = "Demonbane",
         icon = "Interface\\Icons\\ability_racial_demonbane",
         supported = true,
-        manualActivation = false,
         buffAgainstEnemies = {
             DEMON = true,
             FEL = true,
@@ -169,7 +159,6 @@ local RACIAL_TRAITS = {
         name = "Brush It Off",
         icon = "Interface\\Icons\\ability_racial_brushitoff",
         supported = false,
-        manualActivation = false
     },
     DUNGEON_DELVER = {
         id = 34,
@@ -177,7 +166,6 @@ local RACIAL_TRAITS = {
         name = "Dungeon Delver",
         icon = "Interface\\Icons\\ability_racial_dungeondelver",
         supported = true,
-        manualActivation = false,
         zones = {
             INDOORS = true,
         },
@@ -188,7 +176,6 @@ local RACIAL_TRAITS = {
         name = "Mastercraft",
         icon = "Interface\\Icons\\ability_racial_mastercraft",
         supported = false,
-        manualActivation = true
     },
     ARCANE_AFFINITY = {
         id = 100,
@@ -196,7 +183,6 @@ local RACIAL_TRAITS = {
         name = "Arcane Affinity",
         icon = "Interface\\Icons\\inv_enchant_shardglimmeringlarge",
         supported = false,
-        manualActivation = true
     },
 }
 
