@@ -169,6 +169,16 @@ function clearExcessTraits()
     end
 end
 
+-- [[ Utility traits ]]
+
+local function getUtilityTraitAtSlot(slot)
+    return TEARollHelper.db.profile.utilityTraits[slot].name
+end
+
+local function setUtilityTraitAtSlot(slot, name)
+    TEARollHelper.db.profile.utilityTraits[slot].name = name
+end
+
 -- [[ Racial traits ]]
 
 function getPlayerRacialTrait()
@@ -254,6 +264,9 @@ character.hasTrait = hasTrait
 character.getPlayerTraitIDAtSlot = getPlayerTraitIDAtSlot
 character.getPlayerTraitAtSlot = getPlayerTraitAtSlot
 character.setPlayerTraitByID = setPlayerTraitByID
+
+character.getUtilityTraitAtSlot = getUtilityTraitAtSlot
+character.setUtilityTraitAtSlot = setUtilityTraitAtSlot
 
 character.getPlayerRacialTrait = getPlayerRacialTrait
 character.hasRacialTrait = hasRacialTrait

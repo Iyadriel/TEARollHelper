@@ -128,6 +128,7 @@ ui/config/character.lua
 ui/config/character/stats.lua
 ui/config/character/feats.lua
 ui/config/character/traits.lua
+ui/config/character/utility-traits.lua
 ui/config/character/weaknesses.lua
 ui/config/character/racial-traits.lua
 ui/config/settings.lua

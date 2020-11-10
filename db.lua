@@ -26,7 +26,14 @@ local defaults = {
         },
         numWeaknesses = 0,
         weaknesses = {},
-        racialTraitID = select(3, UnitRace("player"))
+        utilityTraits = {
+            [1] = {},
+            [2] = {},
+            [3] = {},
+            [4] = {},
+            [5] = {},
+        },
+        racialTraitID = select(3, UnitRace("player")),
     },
     global = {
         settings = {

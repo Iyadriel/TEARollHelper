@@ -13,8 +13,20 @@ local TRAITS = traits.TRAITS
 local TURN_TYPES = constants.TURN_TYPES
 local WEAKNESSES = weaknesses.WEAKNESSES
 
+local MAX_NUM_UTILITY_TRAITS = 5 -- static constant to know how many UI elements to create for this
+
 local function canUseUtilityTraits()
     return not character.hasWeakness(WEAKNESSES.BRUTE)
+end
+
+local function getNumAllowedUtilityTraits()
+    local numTraits = 3
+
+    if character.hasFeat(FEATS.PROFESSIONAL) then
+        numTraits = numTraits + 2
+    end
+
+    return numTraits
 end
 
 -- also used to calculate artisan trait bonus
@@ -40,7 +52,10 @@ local function shouldShowPreRollUI(turnTypeID)
 end
 
 rules.utility = {
+    MAX_NUM_UTILITY_TRAITS = MAX_NUM_UTILITY_TRAITS,
+
     canUseUtilityTraits = canUseUtilityTraits,
+    getNumAllowedUtilityTraits = getNumAllowedUtilityTraits,
     calculateBaseUtilityBonus = calculateBaseUtilityBonus,
     calculateUtilityValue = calculateUtilityValue,
     shouldShowPreRollUI = shouldShowPreRollUI,

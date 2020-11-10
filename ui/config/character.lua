@@ -8,19 +8,27 @@ ui.modules.config.modules.character.modules = {
     stats = {},
     traits = {},
     weaknesses = {},
+    utilityTraits = {},
     racialTraits = {},
 }
 
 ui.modules.config.modules.character.getOptions = function()
     local featOptions = ui.modules.config.modules.character.modules.feats.getOptions({ order = 1 })
     local weaknessOptions = ui.modules.config.modules.character.modules.weaknesses.getOptions({ order = 13 })
-    local racialTraitOptions = ui.modules.config.modules.character.modules.racialTraits.getOptions({ order = 17 })
+    local racialTraitOptions = ui.modules.config.modules.character.modules.racialTraits.getOptions({ order = 23 })
 
     local traitOptions = {}
     local traitOrder = 5
     for i = 1, rules.traits.MAX_NUM_TRAITS do
         traitOptions[i] = ui.modules.config.modules.character.modules.traits.getOptions({ slotIndex = i, order = traitOrder })
         traitOrder = traitOrder + 3
+    end
+
+    local utilityTraitOptions = {}
+    local utilityTraitOrder = 17
+    for i = 1, rules.utility.MAX_NUM_UTILITY_TRAITS do
+        utilityTraitOptions[i] = ui.modules.config.modules.character.modules.utilityTraits.getOptions({ slotIndex = i, order = utilityTraitOrder })
+        utilityTraitOrder = utilityTraitOrder + 1
     end
 
     return {
@@ -50,6 +58,18 @@ ui.modules.config.modules.character.getOptions = function()
             weaknesses = weaknessOptions.weaknesses,
             numWeaknesses = weaknessOptions.numWeaknesses,
             weaknessNote = weaknessOptions.weaknessNote,
+
+            utilityTrait1 = utilityTraitOptions[1].trait,
+            utilityTrait2 = utilityTraitOptions[2].trait,
+            utilityTrait3 = utilityTraitOptions[3].trait,
+            utilityTrait4 = utilityTraitOptions[4].trait,
+            utilityTrait5 = utilityTraitOptions[5].trait,
+
+            space = {
+                order = 22,
+                type = "description",
+                name = " ",
+            },
 
             racialTrait = racialTraitOptions.racialTrait,
             racialTraitDesc = racialTraitOptions.racialTraitDesc,
