@@ -6,7 +6,6 @@ local utils = ns.utils
 ui.modules.turn.modules = {
     character = {},
     effects = {},
-    environment = {},
     party = {},
     roll = {},
     turn = {},
@@ -30,7 +29,7 @@ ui.modules.turn.getOptions = function()
             effects = ui.modules.turn.modules.effects.getOptions({ order = 2 }),
             buffs = ui.modules.buffs.getOptions({ order = 3 }),
             character = ui.modules.turn.modules.character.getOptions({ order = 4 }),
-            environment = ui.modules.turn.modules.environment.getOptions({ order = 5 }),
+            environment = ui.modules.environment.getOptions({ order = 5 }),
             party = ui.modules.turn.modules.party.getOptions({ order = 6 }),
         }
     }

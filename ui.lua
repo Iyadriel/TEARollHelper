@@ -16,6 +16,7 @@ local modules = {
         name = "TEARollHelper",
         friendlyName = constants.FRIENDLY_ADDON_NAME,
     },
+    environment = {},
     turn = {
         name = "TEARollHelperTurn",
         friendlyName = "Turn View"

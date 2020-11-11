@@ -38,6 +38,7 @@ models/character-status.lua
 models/critical-wound.lua
 models/critical-wound-crippling-pain.lua
 models/party-member.lua
+models/unit.lua
 
 resources/critical-wounds.lua
 resources/enemies.lua

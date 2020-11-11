@@ -25,13 +25,8 @@ local function shouldShowDistanceFromEnemy()
     return character.hasWeakness(WEAKNESSES.TIMID)
 end
 
-local function shouldShowEnvironment()
-    return shouldShowEnemySelect() or shouldShowZoneSelect() or shouldShowDistanceFromEnemy()
-end
-
 rules.environment = {
     shouldShowEnemySelect = shouldShowEnemySelect,
     shouldShowZoneSelect = shouldShowZoneSelect,
     shouldShowDistanceFromEnemy = shouldShowDistanceFromEnemy,
-    shouldShowEnvironment = shouldShowEnvironment,
 }

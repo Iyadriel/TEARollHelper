@@ -8,19 +8,29 @@ local zones = ns.resources.zones
 
 local state = environment.state
 
+local MARKER_LIST = (function()
+    local list = {}
+    for markerIndex, markerString in ipairs(ICON_LIST) do
+        list[markerIndex] = markerString .. "0|t"
+    end
+    return list
+end)()
+
+local newUnit = {
+    markerIndex = 1,
+    name = ""
+}
+
 --[[ local options = {
     order: Number
 } ]]
-ui.modules.turn.modules.environment.getOptions = function(options)
+ui.modules.environment.getOptions = function(options)
     return {
         order = options.order,
         type = "group",
         name = function()
             local zone = zones.ZONES[state.zoneId.get()]
             return ui.iconString(zone.icon) .. "Environment"
-        end,
-        hidden = function()
-            return not rules.environment.shouldShowEnvironment()
         end,
         args = {
             enemy = {
@@ -85,6 +95,108 @@ ui.modules.turn.modules.environment.getOptions = function(options)
                 set = function(info, value)
                     state.distanceFromEnemy.set(value)
                 end
+            },
+            units = {
+                order = 3,
+                type = "group",
+                name = "Units",
+                inline = true,
+                args = (function()
+                    local units = {
+                        markerIndex = {
+                            order = 0,
+                            type = "select",
+                            width = 0.5,
+                            name = "Marker",
+                            values = function()
+                                local values = {}
+
+                                for markerIndex, marker in ipairs(MARKER_LIST) do
+                                    if not state.units.get(markerIndex) then
+                                        values[markerIndex] = marker
+                                    end
+                                end
+
+                                return values
+                            end,
+                            get = function()
+                                return newUnit.markerIndex
+                            end,
+                            set = function(info, value)
+                                newUnit.markerIndex = value
+                            end,
+                        },
+                        name = {
+                            order = 1,
+                            type = "input",
+                            name = "Name",
+                            width = 0.9,
+                            get = function()
+                                return newUnit.name
+                            end,
+                            set = function(info, value)
+                                newUnit.name = value
+                            end,
+                        },
+                        add = {
+                            order = 2,
+                            type = "execute",
+                            width = 0.7,
+                            name = "Add",
+                            disabled = function()
+                                return newUnit.markerIndex == nil or newUnit.name:trim() == "" or state.units.get(newUnit.markerIndex)
+                            end,
+                            func = function()
+                                state.units.add(newUnit.markerIndex, newUnit.name)
+
+                                if newUnit.markerIndex < #ICON_LIST then
+                                    newUnit.markerIndex = newUnit.markerIndex + 1
+                                end
+
+                                newUnit.name = ""
+                            end,
+                        }
+                    }
+
+                    local order = 3
+
+                    for i = 1, #MARKER_LIST do
+                        units["unit" .. i .. "name"] = {
+                            order = order,
+                            type = "input",
+                            name = MARKER_LIST[i],
+                            width = 1.5,
+                            hidden = function()
+                                return not state.units.get(i)
+                            end,
+                            get = function()
+                                return state.units.get(i):GetName()
+                            end,
+                            set = function(info, value)
+                                state.units.get(i):SetName(value)
+                            end,
+                        }
+
+                        order = order + 1
+
+                        units["unit" .. i .. "remove"] = {
+                            order = order,
+                            type = "execute",
+                            name = "Clear",
+                            width = 0.6,
+                            hidden = function()
+                                return not state.units.get(i)
+                            end,
+                            func = function()
+                                state.units.remove(i)
+                            end,
+                        }
+
+                        order = order + 1
+                    end
+
+                    return units
+                end)(),
             },
         }
     }
