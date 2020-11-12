@@ -15,6 +15,7 @@ local MSG_TYPES = {
     UNIT_ADDED = 2, -- unit added
     UNIT_UPDATED = 3, -- unit updated
     UNIT_REMOVED = 4, -- unit removed
+    UNIT_LIST = 5, -- list of all units (manual broadcast)
 }
 
 local incomingMsgHandlers = {}

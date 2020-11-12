@@ -223,13 +223,25 @@ bus.addListener(EVENTS.ACTION_PERFORMED, function(actionType)
     end
 end)
 
--- [[ Party ]]
+-- [[ Comms ]]
 
 -- TODO find a way to update only the party tab
-local function updateTurnUI()
+local function updatePartyUI()
     if settings.refreshOnPartyUpdate.get() then
         ui.update(ui.modules.turn.name)
     end
 end
-bus.addListener(EVENTS.PARTY_MEMBER_ADDED, updateTurnUI)
-bus.addListener(EVENTS.PARTY_MEMBER_UPDATED, updateTurnUI)
+
+bus.addListener(EVENTS.PARTY_MEMBER_ADDED, updatePartyUI)
+bus.addListener(EVENTS.PARTY_MEMBER_UPDATED, updatePartyUI)
+
+local function updateUnitList(isLocal)
+    if not isLocal then
+        ui.update(ui.modules.turn.name)
+    end
+end
+
+bus.addListener(EVENTS.UNIT_ADDED, updateUnitList)
+bus.addListener(EVENTS.UNIT_UPDATED, updateUnitList)
+bus.addListener(EVENTS.UNIT_REMOVED, updateUnitList)
+bus.addListener(EVENTS.UNITS_REPLACED, updateUnitList)

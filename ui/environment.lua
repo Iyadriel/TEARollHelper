@@ -1,11 +1,13 @@
 local _, ns = ...
 
+local bus = ns.bus
 local enemies = ns.resources.enemies
 local environment = ns.state.environment
 local rules = ns.rules
 local ui = ns.ui
 local zones = ns.resources.zones
 
+local EVENTS = bus.EVENTS
 local state = environment.state
 
 local MARKER_LIST = (function()
@@ -147,7 +149,7 @@ ui.modules.environment.getOptions = function(options)
                                 return newUnit.unitIndex == nil or newUnit.name:trim() == "" or state.units.get(newUnit.unitIndex)
                             end,
                             func = function()
-                                state.units.add(newUnit.unitIndex, newUnit.name)
+                                state.units.add(newUnit.unitIndex, newUnit.name, true)
 
                                 if newUnit.unitIndex < #ICON_LIST then
                                     newUnit.unitIndex = newUnit.unitIndex + 1
@@ -181,7 +183,7 @@ ui.modules.environment.getOptions = function(options)
                                 return state.units.get(unitIndex):GetName()
                             end,
                             set = function(info, value)
-                                state.units.update(unitIndex, value)
+                                state.units.update(unitIndex, value, true)
                             end,
                         }
 
@@ -201,6 +203,19 @@ ui.modules.environment.getOptions = function(options)
                         }
 
                         order = order + 1
+
+                        units.broadcast = {
+                            order = order,
+                            type = "execute",
+                            name = "Announce",
+                            width = "full",
+                            hidden = function()
+                                return state.units.count() == 0
+                            end,
+                            func = function()
+                                bus.fire(EVENTS.COMMS_BROADCAST_UNIT_LIST, state.units.list())
+                            end,
+                        }
                     end
 
                     return units

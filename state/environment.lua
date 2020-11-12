@@ -48,6 +48,9 @@ environment.state = {
         bus.fire(EVENTS.DISTANCE_FROM_ENEMY_CHANGED, distanceFromEnemy)
     end),
     units = {
+        list = function()
+            return state.units
+        end,
         get = function(unitIndex)
             return state.units[unitIndex]
         end,
@@ -58,24 +61,33 @@ environment.state = {
             end
             return count
         end,
-        add = function(unitIndex, name)
+        add = function(unitIndex, name, isLocal)
             local unit = state.units[unitIndex]
             if not unit then
                 unit = Unit:New(unitIndex, name)
                 state.units[unitIndex] = unit
-                bus.fire(EVENTS.UNIT_ADDED, unit)
+                bus.fire(EVENTS.UNIT_ADDED, isLocal, unit)
             end
         end,
-        update = function(unitIndex, name)
+        update = function(unitIndex, name, isLocal)
             local unit = state.units[unitIndex]
             if unit then
                 unit:SetName(name)
-                bus.fire(EVENTS.UNIT_UPDATED, unit)
+                bus.fire(EVENTS.UNIT_UPDATED, isLocal, unit)
             end
         end,
-        remove = function(unitIndex)
+        remove = function(unitIndex, isLocal)
             state.units[unitIndex] = nil
-            bus.fire(EVENTS.UNIT_REMOVED, unitIndex)
+            bus.fire(EVENTS.UNIT_REMOVED, isLocal, unitIndex)
+        end,
+        replaceList = function(units, isLocal)
+            state.units = {}
+
+            for unitIndex, unit in pairs(units) do
+                state.units[unitIndex] = Unit:New(unitIndex, unit.name)
+            end
+
+            bus.fire(EVENTS.UNITS_REPLACED, isLocal)
         end
     },
 }
