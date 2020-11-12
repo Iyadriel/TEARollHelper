@@ -62,6 +62,7 @@ modules/buffs.lua
 modules/buffs-player.lua
 modules/character.lua
 modules/comms.lua
+modules/comms/party.lua
 modules/comms/unit.lua
 
 modules/events/events.lua

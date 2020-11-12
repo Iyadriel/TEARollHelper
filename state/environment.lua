@@ -48,23 +48,34 @@ environment.state = {
         bus.fire(EVENTS.DISTANCE_FROM_ENEMY_CHANGED, distanceFromEnemy)
     end),
     units = {
-        get = function(markerIndex)
-            return state.units[markerIndex]
+        get = function(unitIndex)
+            return state.units[unitIndex]
         end,
-        add = function(markerIndex, name)
-            if not state.units[markerIndex] then
-                state.units[markerIndex] = Unit:New(markerIndex, name)
+        count = function()
+            local count = 0
+            for unitIndex, unit in pairs(state.units) do
+                count = count + 1
+            end
+            return count
+        end,
+        add = function(unitIndex, name)
+            local unit = state.units[unitIndex]
+            if not unit then
+                unit = Unit:New(unitIndex, name)
+                state.units[unitIndex] = unit
+                bus.fire(EVENTS.UNIT_ADDED, unit)
             end
         end,
-        addOrUpdate = function(markerIndex, name)
-            if not state.units[markerIndex] then
-                environment.state.units.add(markerIndex, name)
-            else
-                state.units[markerIndex]:SetName(name)
+        update = function(unitIndex, name)
+            local unit = state.units[unitIndex]
+            if unit then
+                unit:SetName(name)
+                bus.fire(EVENTS.UNIT_UPDATED, unit)
             end
         end,
-        remove = function(markerIndex)
-            state.units[markerIndex] = nil
+        remove = function(unitIndex)
+            state.units[unitIndex] = nil
+            bus.fire(EVENTS.UNIT_REMOVED, unitIndex)
         end
     },
 }

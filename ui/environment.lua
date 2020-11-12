@@ -10,14 +10,14 @@ local state = environment.state
 
 local MARKER_LIST = (function()
     local list = {}
-    for markerIndex, markerString in ipairs(ICON_LIST) do
-        list[markerIndex] = markerString .. "0|t"
+    for i, markerString in ipairs(ICON_LIST) do
+        list[i] = markerString .. "0|t"
     end
     return list
 end)()
 
 local newUnit = {
-    markerIndex = 1,
+    unitIndex = 1,
     name = ""
 }
 
@@ -103,7 +103,7 @@ ui.modules.environment.getOptions = function(options)
                 inline = true,
                 args = (function()
                     local units = {
-                        markerIndex = {
+                        unitIndex = {
                             order = 0,
                             type = "select",
                             width = 0.5,
@@ -111,19 +111,19 @@ ui.modules.environment.getOptions = function(options)
                             values = function()
                                 local values = {}
 
-                                for markerIndex, marker in ipairs(MARKER_LIST) do
-                                    if not state.units.get(markerIndex) then
-                                        values[markerIndex] = marker
+                                for unitIndex, marker in ipairs(MARKER_LIST) do
+                                    if not state.units.get(unitIndex) then
+                                        values[unitIndex] = marker
                                     end
                                 end
 
                                 return values
                             end,
                             get = function()
-                                return newUnit.markerIndex
+                                return newUnit.unitIndex
                             end,
                             set = function(info, value)
-                                newUnit.markerIndex = value
+                                newUnit.unitIndex = value
                             end,
                         },
                         name = {
@@ -144,51 +144,59 @@ ui.modules.environment.getOptions = function(options)
                             width = 0.7,
                             name = "Add",
                             disabled = function()
-                                return newUnit.markerIndex == nil or newUnit.name:trim() == "" or state.units.get(newUnit.markerIndex)
+                                return newUnit.unitIndex == nil or newUnit.name:trim() == "" or state.units.get(newUnit.unitIndex)
                             end,
                             func = function()
-                                state.units.add(newUnit.markerIndex, newUnit.name)
+                                state.units.add(newUnit.unitIndex, newUnit.name)
 
-                                if newUnit.markerIndex < #ICON_LIST then
-                                    newUnit.markerIndex = newUnit.markerIndex + 1
+                                if newUnit.unitIndex < #ICON_LIST then
+                                    newUnit.unitIndex = newUnit.unitIndex + 1
                                 end
 
                                 newUnit.name = ""
                             end,
+                        },
+                        divider = {
+                            order = 3,
+                            type = "header",
+                            name = "",
+                            hidden = function()
+                                return state.units.count() == 0
+                            end
                         }
                     }
 
-                    local order = 3
+                    local order = 4
 
-                    for i = 1, #MARKER_LIST do
-                        units["unit" .. i .. "name"] = {
+                    for unitIndex = 1, #MARKER_LIST do
+                        units["unit" .. unitIndex .. "name"] = {
                             order = order,
                             type = "input",
-                            name = MARKER_LIST[i],
+                            name = MARKER_LIST[unitIndex],
                             width = 1.5,
                             hidden = function()
-                                return not state.units.get(i)
+                                return not state.units.get(unitIndex)
                             end,
                             get = function()
-                                return state.units.get(i):GetName()
+                                return state.units.get(unitIndex):GetName()
                             end,
                             set = function(info, value)
-                                state.units.get(i):SetName(value)
+                                state.units.update(unitIndex, value)
                             end,
                         }
 
                         order = order + 1
 
-                        units["unit" .. i .. "remove"] = {
+                        units["unit" .. unitIndex .. "remove"] = {
                             order = order,
                             type = "execute",
                             name = "Clear",
                             width = 0.6,
                             hidden = function()
-                                return not state.units.get(i)
+                                return not state.units.get(unitIndex)
                             end,
                             func = function()
-                                state.units.remove(i)
+                                state.units.remove(unitIndex, true)
                             end,
                         }
 

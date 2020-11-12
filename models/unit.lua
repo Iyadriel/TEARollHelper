@@ -4,9 +4,9 @@ local models = ns.models
 
 local Unit = {}
 
-function Unit:New(markerIndex, name)
+function Unit:New(unitIndex, name)
     local unit = {
-        markerIndex = markerIndex,
+        unitIndex = unitIndex,
         name = name,
     }
 
