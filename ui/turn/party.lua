@@ -85,7 +85,7 @@ ui.modules.turn.modules.party.getOptions = function(options)
                     return not settings.debug.get()
                 end,
                 func = function()
-                    bus.fire(EVENTS.COMMS_FORCE_REFRESH)
+                    bus.fire(EVENTS.COMMS_FORCE_PARTY_REFRESH)
                 end
             },
             remove = {
