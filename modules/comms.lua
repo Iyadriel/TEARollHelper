@@ -2,50 +2,35 @@ local _, ns = ...
 
 local bus = ns.bus
 local comms = ns.comms
-local models = ns.models
+local gameAPI = ns.gameAPI
 
 local EVENTS = bus.EVENTS
 
-local CharacterStatus = models.CharacterStatus
-
 local PREFIX = "TEARollHelper"
-local CHANNEL_PARTY = "PARTY"
-local CHANNEL_RAID = "RAID"
+local PROTOCOL_VERSION = GetAddOnMetadata("TEARollHelper", "X-ProtocolVersion")
+
 local MSG_TYPES = {
     CHARACTER_STATUS_UPDATE = 0, -- an update from someone else's character.
     GROUP_STATUS_REQUEST = 1, -- someone requesting that group members send them their status.
+    UNIT_ADDED = 2, -- unit added
+    UNIT_UPDATED = 3, -- unit updated
+    UNIT_REMOVED = 4, -- unit removed
 }
 
-local function validateStatus(payload)
-    return payload.currentHealth ~= nil and payload.maxHealth ~= nil
-end
-
-local function onStatusReceived(sender, payload)
-    if not validateStatus(payload) then
-        TEARollHelper:Print("Received invalid character status from:", sender)
-        return
-    end
-
-    local characterStatus = CharacterStatus:New(sender, payload.currentHealth, payload.maxHealth, payload.criticalWounds)
-    bus.fire(EVENTS.COMMS_STATUS_RECEIVED, sender, characterStatus)
-end
-
-local function onGroupStatusRequestReceived(sender)
-    bus.fire(EVENTS.COMMS_STATUS_REQUEST_RECEIVED, sender)
-end
-
-local incomingMsgHandlers = {
-    [MSG_TYPES.CHARACTER_STATUS_UPDATE] = onStatusReceived,
-    [MSG_TYPES.GROUP_STATUS_REQUEST] = onGroupStatusRequestReceived,
-}
+local incomingMsgHandlers = {}
 
 function TEARollHelper:OnCommReceived(prefix, message, distribution, sender)
     if prefix ~= PREFIX then return end
 
-    local success, msgType, payload = TEARollHelper:Deserialize(message)
+    local success, protocolVersion, msgType, payload = TEARollHelper:Deserialize(message)
 
     if not success then
-        TEARollHelper:Print("Failed to parse message from:", sender)
+        TEARollHelper:Print("[comms] Failed to parse message from:", sender)
+        return
+    end
+
+    if protocolVersion ~= PROTOCOL_VERSION then
+        TEARollHelper:Debug("[comms] Incompatible protocol version", protocolVersion, "from", sender)
         return
     end
 
@@ -54,8 +39,12 @@ function TEARollHelper:OnCommReceived(prefix, message, distribution, sender)
     if incomingMsgHandlers[msgType] then
         incomingMsgHandlers[msgType](sender, payload)
     else
-        TEARollHelper:Print("Received message with unknown type (" .. msgType .. ") from:", sender)
+        TEARollHelper:Print("[comms] Received message with unknown type (" .. msgType .. ") from:", sender)
     end
+end
+
+local function getBroadcastChannel(inRaid)
+    return inRaid and "RAID" or "PARTY"
 end
 
 local function registerComms()
@@ -64,37 +53,44 @@ local function registerComms()
     bus.fire(EVENTS.COMMS_READY)
 end
 
-local function getBroadcastChannel(inRaid)
-    return inRaid and CHANNEL_RAID or CHANNEL_PARTY
+local function registerMsgHandler(msgType, handler)
+    incomingMsgHandlers[msgType] = handler
 end
 
--- Broadcast your own status so that people can update you in their party state.
-local function broadcastCharacterStatus(characterStatus, inRaid)
-    local channel = getBroadcastChannel(inRaid)
-    TEARollHelper:Debug("[comms] Broadcasting status to", channel)
-    local msg = TEARollHelper:Serialize(MSG_TYPES.CHARACTER_STATUS_UPDATE, characterStatus)
-
-    TEARollHelper:SendCommMessage(PREFIX, msg, channel)
+local function serializeMsg(msgType, payload)
+    if payload then
+        return TEARollHelper:Serialize(PROTOCOL_VERSION, msgType, payload)
+    end
+    return TEARollHelper:Serialize(PROTOCOL_VERSION, msgType)
 end
 
--- Request that people send you their status.
-local function broadcastGroupStatusRequest(inRaid)
-    local channel = getBroadcastChannel(inRaid)
-    TEARollHelper:Debug("[comms] Requesting status from group members in channel", channel)
-    local msg = TEARollHelper:Serialize(MSG_TYPES.GROUP_STATUS_REQUEST)
-
-    TEARollHelper:SendCommMessage(PREFIX, msg, channel)
+local function sendMsg(msg, channel, target)
+    TEARollHelper:SendCommMessage(PREFIX, msg, channel, target)
 end
 
--- Send your own status to a specific player (because they broadcast a request for this)
-local function sendCharacterStatusToPlayer(characterStatus, targetPlayerName)
-    TEARollHelper:Debug("[comms] Sending status to:", targetPlayerName)
-    local msg = TEARollHelper:Serialize(MSG_TYPES.CHARACTER_STATUS_UPDATE, characterStatus)
+local function broadcast(commsCallback)
+--[[     return function(...)
+        local inGroup, inRaid = gameAPI.inGroupOrRaid()
+        if not inGroup then
+            local channel = "GUILD"
+            local msg = commsCallback(...)
+            sendMsg(msg, channel)
+        end
+    end ]]
 
-    TEARollHelper:SendCommMessage(PREFIX, msg, "WHISPER", targetPlayerName)
+    return function(...)
+        local inGroup, inRaid = gameAPI.inGroupOrRaid()
+        if inGroup then
+            local channel = getBroadcastChannel(inRaid)
+            local msg = commsCallback(...)
+            sendMsg(msg, channel)
+        end
+    end
 end
 
+comms.MSG_TYPES = MSG_TYPES
 comms.registerComms = registerComms
-comms.broadcastCharacterStatus = broadcastCharacterStatus
-comms.broadcastGroupStatusRequest = broadcastGroupStatusRequest
-comms.sendCharacterStatusToPlayer = sendCharacterStatusToPlayer
+comms.registerMsgHandler = registerMsgHandler
+comms.serializeMsg = serializeMsg
+comms.sendMsg = sendMsg
+comms.broadcast = broadcast
