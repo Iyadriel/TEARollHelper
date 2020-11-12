@@ -25,7 +25,7 @@ function TEARollHelper:OnCommReceived(prefix, message, distribution, sender)
     local success, protocolVersion, msgType, payload = TEARollHelper:Deserialize(message)
 
     if not success then
-        TEARollHelper:Print("[comms] Failed to parse message from:", sender)
+        TEARollHelper:Debug("[comms] Failed to parse message from:", sender)
         return
     end
 
@@ -39,7 +39,7 @@ function TEARollHelper:OnCommReceived(prefix, message, distribution, sender)
     if incomingMsgHandlers[msgType] then
         incomingMsgHandlers[msgType](sender, payload)
     else
-        TEARollHelper:Print("[comms] Received message with unknown type (" .. msgType .. ") from:", sender)
+        TEARollHelper:Debug("[comms] Received message with unknown type (" .. msgType .. ") from:", sender)
     end
 end
 
