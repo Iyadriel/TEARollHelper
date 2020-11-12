@@ -204,7 +204,18 @@ ui.modules.environment.getOptions = function(options)
 
                         order = order + 1
 
-                        units.broadcast = {
+                        units.announceSpacing = {
+                            order = order,
+                            type = "description",
+                            name = " ",
+                            hidden = function()
+                                return state.units.count() == 0
+                            end,
+                        }
+
+                        order = order + 1
+
+                        units.announce = {
                             order = order,
                             type = "execute",
                             name = "Announce",
