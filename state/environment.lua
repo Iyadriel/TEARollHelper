@@ -20,6 +20,7 @@ environment.initState = function()
         zoneId = ZONES.OTHER.id,
         distanceFromEnemy = nil, -- so that user has to manually set their range
         units = {},
+        numUnits = 0,
     }
 end
 
@@ -55,17 +56,16 @@ environment.state = {
             return state.units[unitIndex]
         end,
         count = function()
-            local count = 0
-            for unitIndex, unit in pairs(state.units) do
-                count = count + 1
-            end
-            return count
+            return state.numUnits
         end,
         add = function(unitIndex, name, isLocal)
             local unit = state.units[unitIndex]
             if not unit then
                 unit = Unit:New(unitIndex, name)
+
                 state.units[unitIndex] = unit
+                state.numUnits = state.numUnits + 1
+
                 bus.fire(EVENTS.UNIT_ADDED, isLocal, unit)
             end
         end,
@@ -78,13 +78,17 @@ environment.state = {
         end,
         remove = function(unitIndex, isLocal)
             state.units[unitIndex] = nil
+            state.numUnits = state.numUnits - 1
+
             bus.fire(EVENTS.UNIT_REMOVED, isLocal, unitIndex)
         end,
         replaceList = function(units, isLocal)
             state.units = {}
+            state.numUnits = 0
 
             for unitIndex, unit in pairs(units) do
                 state.units[unitIndex] = Unit:New(unitIndex, unit.name)
+                state.numUnits = state.numUnits + 1
             end
 
             bus.fire(EVENTS.UNITS_REPLACED, isLocal)
