@@ -1,5 +1,7 @@
 local _, ns = ...
 
+local COLOURS = TEARollHelper.COLOURS
+
 local bus = ns.bus
 local enemies = ns.resources.enemies
 local environment = ns.state.environment
@@ -225,6 +227,17 @@ ui.modules.environment.getOptions = function(options)
                             end,
                             func = function()
                                 bus.fire(EVENTS.COMMS_BROADCAST_UNIT_LIST, state.units.list())
+                            end,
+                        }
+
+                        order = order + 1
+
+                        units.announceSubtext = {
+                            order = order,
+                            type = "description",
+                            name = COLOURS.NOTE .. "Updates are automatic, announcing is only to fill list for new group members",
+                            hidden = function()
+                                return state.units.count() == 0
                             end,
                         }
                     end
