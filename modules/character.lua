@@ -194,7 +194,8 @@ end
 -- [[ Racial traits ]]
 
 function getPlayerRacialTrait()
-    return racialTraits.getRacialTrait(TEARollHelper.db.profile.racialTraitID)
+    -- outcast here is fallback for unsupported races (horde)
+    return racialTraits.getRacialTrait(TEARollHelper.db.profile.racialTraitID) or RACIAL_TRAITS.OUTCAST
 end
 
 function hasRacialTrait(racialTrait)
