@@ -29,8 +29,7 @@ ui.modules.units.getOptions = function(options)
     return {
         order = options.order,
         type = "group",
-        name = "Units",
-        inline = true,
+        name = ui.iconString("Interface\\TargetingFrame\\UI-RaidTargetingIcon_3") .. "Units",
         args = (function()
             local units = {
                 unitIndex = {

@@ -25,19 +25,31 @@ ui.modules.turn.modules.turn.getOptions = function(options)
         args = {
             turnType = {
                 type = "select",
-                name = "",
+                name = function()
+                    if state.inCombat.get() then
+                        return ui.iconString("Interface\\Icons\\ability_warrior_challange", "small") .. "Turn " .. state.index.get()
+                    end
+                    return TURN_TYPES.OUT_OF_COMBAT.name
+                end,
+                width = 0.7,
                 values = {
                     [TURN_TYPES.PLAYER.id] = TURN_TYPES.PLAYER.name .. " turn",
                     [TURN_TYPES.ENEMY.id] = TURN_TYPES.ENEMY.name .. " turn",
+                    --[TURN_TYPES.OUT_OF_COMBAT.id] = "End combat",
                 },
                 sorting = {TURN_TYPES.PLAYER.id, TURN_TYPES.ENEMY.id},
+                --sorting = {TURN_TYPES.PLAYER.id, TURN_TYPES.ENEMY.id, TURN_TYPES.OUT_OF_COMBAT.id},
                 order = 0,
                 hidden = function()
                     return not state.inCombat.get()
                 end,
                 get = state.type.get,
                 set = function(info, value)
-                    state.type.set(value)
+--[[                     if value == TURN_TYPES.OUT_OF_COMBAT.id then
+                        state.inCombat.set(false)
+                    else ]]
+                        state.type.set(value)
+                    --end
                 end
             },
             nextTurn = {
