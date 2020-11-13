@@ -21,10 +21,10 @@ ui.modules.turn.getOptions = function()
         name = ui.modules.turn.friendlyName,
         type = "group",
         args = {
-            environment = ui.modules.environment.getOptions({ order = 0 }),
-
             startCombat = turnOptions.args.startCombat,
+
             turnType = turnOptions.args.turnType,
+            enemy = ui.modules.environment.getEnemyOption(1),
             nextTurn = turnOptions.args.nextTurn,
             endCombat = turnOptions.args.endCombat,
 
@@ -40,8 +40,9 @@ ui.modules.turn.getOptions = function()
             effects = ui.modules.turn.modules.effects.getOptions({ order = 6 }),
             buffs = ui.modules.buffs.getOptions({ order = 7 }),
             character = ui.modules.turn.modules.character.getOptions({ order = 8 }),
-            party = ui.modules.turn.modules.party.getOptions({ order = 9 }),
-            units = ui.modules.units.getOptions({ order = 10 }),
+            environment = ui.modules.environment.getOptions({ order = 9 }),
+            party = ui.modules.turn.modules.party.getOptions({ order = 10 }),
+            units = ui.modules.units.getOptions({ order = 11 }),
         }
     }
 end

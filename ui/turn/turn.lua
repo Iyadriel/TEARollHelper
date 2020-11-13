@@ -24,6 +24,7 @@ ui.modules.turn.modules.turn.getOptions = function(options)
         order = options.order,
         args = {
             turnType = {
+                order = 0,
                 type = "select",
                 name = function()
                     if state.inCombat.get() then
@@ -35,38 +36,31 @@ ui.modules.turn.modules.turn.getOptions = function(options)
                 values = {
                     [TURN_TYPES.PLAYER.id] = TURN_TYPES.PLAYER.name .. " turn",
                     [TURN_TYPES.ENEMY.id] = TURN_TYPES.ENEMY.name .. " turn",
-                    --[TURN_TYPES.OUT_OF_COMBAT.id] = "End combat",
                 },
                 sorting = {TURN_TYPES.PLAYER.id, TURN_TYPES.ENEMY.id},
-                --sorting = {TURN_TYPES.PLAYER.id, TURN_TYPES.ENEMY.id, TURN_TYPES.OUT_OF_COMBAT.id},
-                order = 0,
                 hidden = function()
                     return not state.inCombat.get()
                 end,
                 get = state.type.get,
                 set = function(info, value)
---[[                     if value == TURN_TYPES.OUT_OF_COMBAT.id then
-                        state.inCombat.set(false)
-                    else ]]
-                        state.type.set(value)
-                    --end
+                    state.type.set(value)
                 end
             },
             nextTurn = {
+                order = 2,
                 type = "execute",
                 name = "Next turn",
-                width = 1.6,
-                order = 1,
+                width = 1.3,
                 hidden = function()
                     return not state.inCombat.get()
                 end,
                 func = state.index.increment,
             },
             startCombat = {
+                order = 0,
                 type = "execute",
                 name = ui.iconString("Interface\\Icons\\ability_warrior_challange", "small") .. "Start combat",
                 width = "full",
-                order = 2,
                 hidden = function()
                     return state.inCombat.get()
                 end,
@@ -78,7 +72,7 @@ ui.modules.turn.modules.turn.getOptions = function(options)
                 type = "execute",
                 name = "End combat",
                 width = 0.75,
-                order = 2,
+                order = 3,
                 hidden = function()
                     return not state.inCombat.get()
                 end,

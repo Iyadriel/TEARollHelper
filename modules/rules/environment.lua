@@ -26,7 +26,7 @@ local function shouldShowDistanceFromEnemy()
 end
 
 local function shouldShowEnvironment()
-    return shouldShowEnemySelect() or shouldShowZoneSelect() or shouldShowDistanceFromEnemy()
+    return shouldShowZoneSelect() or shouldShowDistanceFromEnemy()
 end
 
 rules.environment = {
