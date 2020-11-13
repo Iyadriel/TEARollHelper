@@ -28,6 +28,7 @@ ui.modules.turn.getOptions = function()
             nextTurn = turnOptions.args.nextTurn,
             endCombat = turnOptions.args.endCombat,
 
+            outOfCombatSpacing = turnOptions.args.outOfCombatSpacing,
             spacing = {
                 order = 4,
                 type = "description",

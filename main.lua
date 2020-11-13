@@ -61,7 +61,7 @@ function TEARollHelper:OnInitialize()
     self:InitState()
 
     AceConfig:RegisterOptionsTable(turn.name, turn.getOptions())
-    AceConfigDialog:SetDefaultSize(turn.name, 630, 720)
+    AceConfigDialog:SetDefaultSize(turn.name, 630, 680)
 
     ns.launchers.initLaunchers()
 

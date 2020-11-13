@@ -32,7 +32,7 @@ ui.modules.turn.modules.turn.getOptions = function(options)
                     end
                     return TURN_TYPES.OUT_OF_COMBAT.name
                 end,
-                width = 0.7,
+                width = 0.8,
                 values = {
                     [TURN_TYPES.PLAYER.id] = TURN_TYPES.PLAYER.name .. " turn",
                     [TURN_TYPES.ENEMY.id] = TURN_TYPES.ENEMY.name .. " turn",
@@ -50,14 +50,14 @@ ui.modules.turn.modules.turn.getOptions = function(options)
                 order = 2,
                 type = "execute",
                 name = "Next turn",
-                width = 1.3,
+                width = 1.1,
                 hidden = function()
                     return not state.inCombat.get()
                 end,
                 func = state.index.increment,
             },
             startCombat = {
-                order = 0,
+                order = 1,
                 type = "execute",
                 name = ui.iconString("Interface\\Icons\\ability_warrior_challange", "small") .. "Start combat",
                 width = "full",
@@ -67,6 +67,14 @@ ui.modules.turn.modules.turn.getOptions = function(options)
                 func = function()
                     state.inCombat.set(true)
                 end
+            },
+            outOfCombatSpacing = {
+                order = 0,
+                type = "description",
+                name = " ",
+                hidden = function()
+                    return state.inCombat.get()
+                end,
             },
             endCombat = {
                 type = "execute",

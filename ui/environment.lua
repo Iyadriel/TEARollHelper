@@ -77,7 +77,7 @@ ui.modules.environment.getEnemyOption = function(order)
         name = "Enemy",
         type = "select",
         desc = "The enemy you are fighting",
-        width = 0.75,
+        width = 0.85,
         hidden = function()
             return not turnState.state.inCombat.get() or not rules.environment.shouldShowEnemySelect()
         end,
