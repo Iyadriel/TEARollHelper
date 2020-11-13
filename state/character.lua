@@ -392,6 +392,8 @@ bus.addListener(EVENTS.WEAKNESS_REMOVED, function(weaknessID)
     elseif weaknessID == WEAKNESSES.TEMPERED_BENEVOLENCE.id then
         updateGreaterHealSlots("player no longer has Tempered Benevolence weakness")
     end
+
+    character.clearExcessTraits()
 end)
 
 characterState.summariseHP = summariseHP

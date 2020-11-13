@@ -397,6 +397,7 @@ character.hasTrait = hasTrait
 character.getPlayerTraitIDAtSlot = getPlayerTraitIDAtSlot
 character.getPlayerTraitAtSlot = getPlayerTraitAtSlot
 character.setPlayerTraitByID = setPlayerTraitByID
+character.clearExcessTraits = clearExcessTraits
 
 character.getDefinedUtilityTraits = getDefinedUtilityTraits
 character.getUtilityTraitAtSlot = getUtilityTraitAtSlot
