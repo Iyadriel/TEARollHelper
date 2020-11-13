@@ -16,19 +16,17 @@ ui.modules.environment.getOptions = function(options)
     return {
         order = options.order,
         type = "group",
-        inline = true,
---[[         name = function()
+        name = function()
             local zone = zones.ZONES[state.zoneId.get()]
-            return ui.iconString(zone.icon) .. "Environment"
-        end, ]]
-        name = "Environment",
+            return ui.iconString(zone.icon) .. "Zone (" .. zone.colour .. zone.name .. "|r)"
+        end,
         hidden = function()
             return not rules.environment.shouldShowEnvironment()
         end,
         args = {
             zone = {
                 order = 0,
-                name = "Environment",
+                name = "Zone",
                 type = "select",
                 desc = "The environment you are fighting in",
                 width = 0.8,
