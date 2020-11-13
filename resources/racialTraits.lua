@@ -181,6 +181,7 @@ local RACIAL_TRAITS = {
         supported = true,
         zones = {
             INDOORS = true,
+            UNDERGROUND = true,
         },
     },
     MASTERCRAFT = {
