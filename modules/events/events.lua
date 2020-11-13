@@ -6,6 +6,7 @@ local bus = ns.bus
 local character = ns.character
 local characterState = ns.state.character
 local constants = ns.constants
+local environmentState = ns.state.environment
 local models = ns.models
 local settings = ns.settings
 local turnState = ns.state.turn
@@ -114,6 +115,8 @@ bus.addListener(EVENTS.COMBAT_OVER, function()
         debuff:Remove()
         TEARollHelper:Print("Corruption stacks removed, max health returned to normal.")
     end
+
+    environmentState.state.distanceFromEnemy.set(nil)
 end)
 
 local function applyDamageTick(buff)
