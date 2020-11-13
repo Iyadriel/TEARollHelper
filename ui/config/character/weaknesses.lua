@@ -74,22 +74,5 @@ ui.modules.config.modules.character.modules.weaknesses.getOptions = function(opt
                 return weaknessOptions
             end)(),
         },
-        numWeaknesses = {
-            order = options.order + 1,
-            type = "range",
-            name = "Weaknesses",
-            min = 0,
-            max = 2,
-            step = 1,
-            get = character.getNumWeaknesses,
-            set = function(info, value)
-                character.setNumWeaknesses(value)
-            end,
-        },
-        weaknessNote = {
-            order = options.order + 2,
-            type = "description",
-            name = COLOURS.NOTE .. "Not all weaknesses are currently supported, but the amount of weaknesses you have affects how many traits you can have.|n ",
-        },
     }
 end

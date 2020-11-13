@@ -15,7 +15,7 @@ ui.modules.config.modules.character.modules = {
 ui.modules.config.modules.character.getOptions = function()
     local featOptions = ui.modules.config.modules.character.modules.feats.getOptions({ order = 1 })
     local weaknessOptions = ui.modules.config.modules.character.modules.weaknesses.getOptions({ order = 13 })
-    local racialTraitOptions = ui.modules.config.modules.character.modules.racialTraits.getOptions({ order = 23 })
+    local racialTraitOptions = ui.modules.config.modules.character.modules.racialTraits.getOptions({ order = 21 })
 
     local traitOptions = {}
     local traitOrder = 5
@@ -56,8 +56,6 @@ ui.modules.config.modules.character.getOptions = function()
             trait3Note = traitOptions[3].traitNote,
 
             weaknesses = weaknessOptions.weaknesses,
-            numWeaknesses = weaknessOptions.numWeaknesses,
-            weaknessNote = weaknessOptions.weaknessNote,
 
             utilityTrait1 = utilityTraitOptions[1].trait,
             utilityTrait2 = utilityTraitOptions[2].trait,
@@ -66,7 +64,7 @@ ui.modules.config.modules.character.getOptions = function()
             utilityTrait5 = utilityTraitOptions[5].trait,
 
             space = {
-                order = 22,
+                order = 20,
                 type = "description",
                 name = " ",
             },
@@ -76,7 +74,7 @@ ui.modules.config.modules.character.getOptions = function()
             racialTraitNote = racialTraitOptions.racialTraitNote,
 
 --[[             characterSheet = {
-                order = 26,
+                order = 24,
                 type = "input",
                 multiline = 13,
                 name = "Preview",

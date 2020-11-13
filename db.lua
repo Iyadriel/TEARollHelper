@@ -27,7 +27,6 @@ local defaults = {
             [2] = TRAITS.OTHER.id,
             [3] = TRAITS.OTHER.id
         },
-        numWeaknesses = 0,
         weaknesses = {},
         utilityTraits = {
             [1] = { utilityTypeID = UTILITY_TYPES.OTHER.id },
