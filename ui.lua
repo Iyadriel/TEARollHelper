@@ -20,7 +20,8 @@ local modules = {
     turn = {
         name = "TEARollHelperTurn",
         friendlyName = "Turn View"
-    }
+    },
+    units = {},
 }
 
 local function openWindow(name)
