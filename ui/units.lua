@@ -59,7 +59,7 @@ ui.modules.units.getOptions = function(options)
                     order = 1,
                     type = "input",
                     name = "Name",
-                    width = 0.9,
+                    width = 1,
                     get = function()
                         return newUnit.name
                     end,
@@ -102,7 +102,7 @@ ui.modules.units.getOptions = function(options)
                     order = order,
                     type = "input",
                     name = MARKER_LIST[unitIndex],
-                    width = 1.5,
+                    width = 1.6,
                     hidden = function()
                         return not state.units.get(unitIndex)
                     end,
