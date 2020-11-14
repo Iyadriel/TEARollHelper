@@ -33,6 +33,7 @@ models/buff-effect/buff-effect-healing-done.lua
 models/buff-effect/buff-effect-hot.lua
 models/buff-effect/buff-effect-max-health.lua
 models/buff-effect/buff-effect-roll.lua
+models/buff-effect/buff-effect-special.lua
 models/buff-effect/buff-effect-stat.lua
 models/buff-effect/buff-effect-utility-bonus.lua
 models/character-status.lua
@@ -67,6 +68,7 @@ modules/comms/unit.lua
 
 modules/events/events.lua
 modules/events/game-events.lua
+modules/events/ko.lua
 
 launchers.lua
 
