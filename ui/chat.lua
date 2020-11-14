@@ -108,6 +108,6 @@ bus.addListener(EVENTS.FEAT_BUFF_ADDED, function(featID)
     TEARollHelper:Print(COLOURS.FEATS.GENERIC .. "Added Feat buff:", FEATS[featID].name)
 end)
 
-bus.addListener(EVENTS.BUFF_EXPIRED, function(label)
+bus.addListener(EVENTS.BUFF_EXPIRED, function(id, label)
     TEARollHelper:Print("Buff expired:", label)
 end)

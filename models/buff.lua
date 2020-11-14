@@ -86,7 +86,7 @@ end
 
 function Buff:Expire()
     self:Remove()
-    bus.fire(EVENTS.BUFF_EXPIRED, self.label)
+    bus.fire(EVENTS.BUFF_EXPIRED, self.id, self.label)
 end
 
 function Buff:GetTooltip()
