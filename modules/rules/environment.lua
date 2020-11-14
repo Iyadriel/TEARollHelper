@@ -13,6 +13,7 @@ local function shouldShowEnemySelect()
 
     return featPassives and featPassives.advantageAgainstEnemies
         or character.getPlayerRacialTrait().buffAgainstEnemies
+        or character.hasTrait(TRAITS.HOLY_BULWARK)
         or character.hasTrait(TRAITS.SHATTER_SOUL)
         or character.hasWeakness(WEAKNESSES.WOE_UPON_THE_AFFLICTED)
 end

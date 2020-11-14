@@ -7,6 +7,7 @@ local buffsState = ns.state.buffs.state
 local character = ns.character
 local consequences = ns.consequences
 local constants = ns.constants
+local environment = ns.state.environment
 local feats = ns.resources.feats
 local rolls = ns.state.rolls
 local rules = ns.rules
@@ -116,8 +117,18 @@ ui.modules.actions.modules.defend.getOptions = function(options)
             defendThreshold = sharedOptions.defendThreshold,
             damageRisk = sharedOptions.damageRisk,
             damageType = sharedOptions.damageType,
-            preRoll = ui.modules.turn.modules.roll.getPreRollOptions({
+            useHolyBulwark = ui.helpers.traitButton(TRAITS.HOLY_BULWARK, {
                 order = 4,
+                hidden = function()
+                    local enemyId = environment.state.enemyId.get()
+                    return not rules.traits.canUseHolyBulwark(enemyId) or not rolls.state.defend.damageRisk.get()
+                end,
+                func = function()
+                    consequences.useTrait(TRAITS.HOLY_BULWARK)(false)
+                end,
+            }),
+            preRoll = ui.modules.turn.modules.roll.getPreRollOptions({
+                order = 5,
                 hidden = function()
                     return shouldHideRoll() or not rules.defence.shouldShowPreRollUI()
                 end,
@@ -151,12 +162,12 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                 ),
             }),
             roll = ui.modules.turn.modules.roll.getOptions({
-                order = 5,
+                order = 6,
                 action = ACTIONS.defend,
                 hidden = shouldHideRoll,
             }),
             defend = {
-                order = 6,
+                order = 7,
                 type = "group",
                 name = ACTION_LABELS.defend,
                 inline = true,
@@ -188,7 +199,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                 }
             },
             summary = {
-                order = 7,
+                order = 8,
                 type = "group",
                 name = "Summary",
                 inline = true,

@@ -27,9 +27,10 @@ end
 --[[ local options = {
     order: Number,
     width: Any,
-    name: Function,
-    hidden: Function,
+    name: Function?,
+    hidden: Function?,
     checkBuff: Boolean,
+    func: Function?,
 } ]]
 local function traitButton(trait, options)
     return {
@@ -44,7 +45,7 @@ local function traitButton(trait, options)
         disabled = function()
             return state.featsAndTraits.numTraitCharges.get(trait.id) == 0
         end,
-        func = consequences.useTrait(trait)
+        func = options.func or consequences.useTrait(trait)
     }
 end
 

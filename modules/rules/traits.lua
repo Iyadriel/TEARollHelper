@@ -1,14 +1,22 @@
 local _, ns = ...
 
 local character = ns.character
+local enemies = ns.resources.enemies
 local feats = ns.resources.feats
 local rules = ns.rules
 local traits = ns.resources.traits
 
+local ENEMIES = enemies.ENEMIES
 local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
 
 local MAX_NUM_TRAITS = 3
+local HOLY_BULWARK_ENEMIES = {
+    [ENEMIES.DEMON.id] = true,
+    [ENEMIES.ELDRITCH.id] = true,
+    [ENEMIES.UNDEAD.id] = true,
+    [ENEMIES.VOID.id] = true,
+}
 local LIFE_WITHIN_HEAL_AMOUNT = 10
 local SECOND_WIND_HEAL_AMOUNT = 15
 local SHATTER_SOUL_HEAL_AMOUNT = 6
@@ -39,6 +47,10 @@ local function calculateRegrowthHealingPerTick(initialHealAmount)
     return ceil(initialHealAmount / 2)
 end
 
+local function canUseHolyBulwark(enemyId)
+    return character.hasTrait(TRAITS.HOLY_BULWARK) and HOLY_BULWARK_ENEMIES[enemyId]
+end
+
 local function calculateShieldSlamDmg(baseDmgBuff, defence, defenceBuff)
     local baseDmg = rules.offence.getBaseDamageAfterBuffs(baseDmgBuff)
     local defenceStat = rules.common.calculateDefenceStat(nil, defence, defenceBuff)
@@ -56,5 +68,6 @@ rules.traits = {
     getMaxTraitCharges = getMaxTraitCharges,
 
     calculateRegrowthHealingPerTick = calculateRegrowthHealingPerTick,
+    canUseHolyBulwark = canUseHolyBulwark,
     calculateShieldSlamDmg = calculateShieldSlamDmg,
 }

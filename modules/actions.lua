@@ -353,6 +353,26 @@ end
 
 -- Trait actions
 
+local function getHolyBulwark(dmgRisk, damageTakenBuff, isSave)
+    local damageTaken = 0
+    local effectiveIncomingDamage = rules.effects.calculateEffectiveIncomingDamage(dmgRisk, damageTakenBuff, true)
+    local damagePrevented
+
+    if isSave then
+        -- when saving ally, the original damage directed towards them is prevented
+        damagePrevented = rules.defence.calculateDamagePrevented(dmgRisk, damageTaken)
+    else
+        -- if it's not a save, use effective incoming damage for damage prevented
+        damagePrevented = rules.defence.calculateDamagePrevented(effectiveIncomingDamage, damageTaken)
+    end
+
+    return {
+        dmgRisk = dmgRisk,
+        damagePrevented = damagePrevented,
+        retaliateDmg = dmgRisk
+    }
+end
+
 local function getShieldSlam(baseDmgBuff, defence, defenceBuff)
     local dmg = rules.traits.calculateShieldSlamDmg(baseDmgBuff, defence, defenceBuff)
 
@@ -371,5 +391,6 @@ ns.actions.getHealing = getHealing
 ns.actions.getBuff = getBuff
 ns.actions.getUtility = getUtility
 ns.actions.traits = {
-    getShieldSlam = getShieldSlam
+    getHolyBulwark = getHolyBulwark,
+    getShieldSlam = getShieldSlam,
 }

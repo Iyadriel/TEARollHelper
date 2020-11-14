@@ -571,6 +571,12 @@ end
 
 -- Trait actions
 
+local function getHolyBulwark(isSave)
+    local damageTakenBuff = buffsState.buffs.damageTaken.get()
+
+    return actions.traits.getHolyBulwark(state.defend.damageRisk, damageTakenBuff, isSave)
+end
+
 local function getShieldSlam()
     local baseDmgBuff = buffsState.buffs.baseDamage.get()
     local defence = character.getPlayerDefence()
@@ -604,6 +610,7 @@ rolls.getUtility = getUtility
 
 rolls.traits = {
     getShieldSlam = getShieldSlam,
+    getHolyBulwark = getHolyBulwark,
 }
 
 rolls.getRollModeModifier = getRollModeModifier

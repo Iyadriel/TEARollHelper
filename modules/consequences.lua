@@ -91,6 +91,16 @@ local function useGreaterRestoration()
     return "You can remove a critical wound from yourself or someone else."
 end
 
+local function useHolyBulwark(isSave)
+    local holyBulwark = rollState.traits.getHolyBulwark(isSave)
+
+    if holyBulwark.damagePrevented > 0 then
+        state.defence.damagePrevented.increment(holyBulwark.damagePrevented)
+    end
+
+    return actions.traitToString(TRAITS.HOLY_BULWARK, holyBulwark)
+end
+
 local function useLifeWithin()
     buffs.addTraitBuff(TRAITS.LIFE_WITHIN)
     state.health.heal(rules.traits.LIFE_WITHIN_HEAL_AMOUNT, INCOMING_HEAL_SOURCES.SELF)
@@ -135,6 +145,7 @@ local TRAIT_FNS = {
     [TRAITS.BULWARK.id] = useBulwark,
     [TRAITS.FOCUS.id] = useFocus,
     [TRAITS.GREATER_RESTORATION.id] = useGreaterRestoration,
+    [TRAITS.HOLY_BULWARK.id] = useHolyBulwark,
     [TRAITS.LIFE_WITHIN.id] = useLifeWithin,
     [TRAITS.SECOND_WIND.id] = useSecondWind,
     [TRAITS.SHIELD_SLAM.id] = useShieldSlam,

@@ -259,6 +259,20 @@ end
 
 -- Trait actions
 
+local function holyBulwarkToString(holyBulwark)
+    local msg
+
+    if holyBulwark.damagePrevented > 0 then
+        msg = COLOURS.ROLES.TANK .. "You prevent " .. holyBulwark.damagePrevented .. " damage. |r"
+    else
+        msg = "You block the attack. "
+    end
+
+    msg = msg .. "You retaliate for " .. holyBulwark.retaliateDmg .. " damage!"
+
+    return msg
+end
+
 local function shieldSlamToString(shieldSlam)
     return "You deal " .. shieldSlam.dmg .. " damage with your Shield Slam."
 end
@@ -276,6 +290,7 @@ local toString = {
 }
 
 local traitsToString = {
+    [TRAITS.HOLY_BULWARK] = holyBulwarkToString,
     [TRAITS.SHIELD_SLAM] = shieldSlamToString,
 }
 

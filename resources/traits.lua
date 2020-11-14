@@ -13,7 +13,7 @@ local ACTIONS = constants.ACTIONS
 local STATS = constants.STATS
 local TURN_TYPES = constants.TURN_TYPES
 
-traits.TRAIT_KEYS = {"OTHER", "ARTISAN", "ASCEND", "BULWARK", "EMPOWERED_BLADES", "FAELUNES_REGROWTH", "FAULTLINE", "FOCUS", "GREATER_RESTORATION", "LIFE_PULSE", "LIFE_WITHIN", "PRESENCE_OF_VIRTUE", "REAP", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "VERSATILE", "VESEERAS_IRE", "VINDICATION"}
+traits.TRAIT_KEYS = {"OTHER", "ARTISAN", "ASCEND", "BULWARK", "EMPOWERED_BLADES", "FAELUNES_REGROWTH", "FAULTLINE", "FOCUS", "GREATER_RESTORATION", "HOLY_BULWARK", "LIFE_PULSE", "LIFE_WITHIN", "PRESENCE_OF_VIRTUE", "REAP", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "VERSATILE", "VESEERAS_IRE", "VINDICATION"}
 
 local TRAITS = {
     OTHER = {
@@ -74,6 +74,12 @@ local TRAITS = {
         name = "Greater Restoration",
         desc = "Activate to remove a Critical Wound from yourself or another character without it costing any Greater Heal Slots. Activate outside of rolling.",
         numCharges = 2,
+    },
+    HOLY_BULWARK = {
+        id = "HOLY_BULWARK",
+        name = "Holy Bulwark",
+        desc = "Activate on an enemy turn to block the damage incoming towards yourself or an ally from an enemy attack, then deal the blocked damage back to the attacker. Only works against enemies who are Undead, Demonic, Void, or Eldritch. Activate outside of rolling.",
+        numCharges = 1,
     },
     LIFE_PULSE = {
         id = "LIFE_PULSE",

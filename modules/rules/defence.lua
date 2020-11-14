@@ -2,9 +2,10 @@ local _, ns = ...
 
 local character = ns.character
 local constants = ns.constants
+local rules = ns.rules
+
 local feats = ns.resources.feats
 local racialTraits = ns.resources.racialTraits
-local rules = ns.rules
 local traits = ns.resources.traits
 
 local DAMAGE_TYPES = constants.DAMAGE_TYPES
