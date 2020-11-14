@@ -12,7 +12,7 @@ local BuffEffectStat = models.BuffEffectStat
 local STATS = constants.STATS
 local TURN_TYPES = constants.TURN_TYPES
 
-weaknesses.WEAKNESS_KEYS = {"BRUTE", "CORRUPTED", "FATELESS", "FEATLESS", "FRAGILE", "GLASS_CANNON", "OLD_SCARS", "OTHER", "OUTCAST", "OVERFLOW", "REBOUND", "TEMPERED_BENEVOLENCE", "TEMPO", "TIMID", "WOE_UPON_THE_AFFLICTED"}
+weaknesses.WEAKNESS_KEYS = {"BRUTE", "CORRUPTED", "FATELESS", "FEATLESS", "FRAGILE", "GLASS_CANNON", "OLD_SCARS", "OTHER", "OUTCAST", "OVERFLOW", "REBOUND", "TEMPERED_BENEVOLENCE", "TEMPO", "TIMID", "WOE_UPON_THE_AFFLICTED", "WORN"}
 
 local WEAKNESSES = {
     BRUTE = {
@@ -116,6 +116,11 @@ local WEAKNESSES = {
             VOID = true,
         },
         supported = true,
+    },
+    WORN = {
+        id = "WORN",
+        name = "Worn",
+        desc = "When going KO your max HP is reduced by 6 instead of 3.",
     },
 }
 
