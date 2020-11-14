@@ -52,9 +52,6 @@ ui.modules.config.modules.character.modules.racialTraits.getOptions = function(o
                 local msg = ""
                 local trait = character.getPlayerRacialTrait()
                 if trait and trait.desc then
-                    if not trait.supported then
-                        msg = COLOURS.NOTE .. "(Not implemented)|r "
-                    end
                     msg = msg .. trait.desc
                 end
                 return msg
