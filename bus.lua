@@ -44,6 +44,7 @@ local EVENTS = {
     DAMAGE_PREVENTED_COUNTER_RESET = "DAMAGE_PREVENTED_COUNTER_RESET",
     DAMAGE_TAKEN = "DAMAGE_TAKEN", -- incomingDamage, damageTaken, overkill
     HEALED = "HEALED", -- amountHealed, netAmountHealed, overHealing
+    KO = "KO",
     TRAIT_ACTIVATED = "TRAIT_ACTIVATED", -- traitID, msg?
 
     -- Buffs

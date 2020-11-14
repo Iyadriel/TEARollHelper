@@ -33,12 +33,17 @@ function Buff:New(id, label, icon, duration, canCancel, effects)
         label = label,
         icon = icon,
         duration = utils.deepCopy(duration),
+        originalDuration = utils.deepCopy(duration),
         numStacks = 1,
         canCancel = canCancel,
         effects = effects or {},
     }
 
     return Buff:NewFromObj(buff)
+end
+
+function Buff:IsActive()
+    buffsState.state.buffLookup.get(self.id)
 end
 
 function Buff:GetDuration()
@@ -78,6 +83,10 @@ function Buff:AddStack()
     end
     self.numStacks = self.numStacks + 1
     bus.fire(EVENTS.BUFF_STACK_ADDED, self)
+end
+
+function Buff:RefreshDuration()
+    self.duration = utils.deepCopy(self.originalDuration)
 end
 
 function Buff:ShouldExpire(turnTypeID)

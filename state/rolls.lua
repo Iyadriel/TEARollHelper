@@ -17,6 +17,7 @@ local ACTIONS = constants.ACTIONS
 local DEFENCE_TYPES = constants.DEFENCE_TYPES
 local EVENTS = bus.EVENTS
 local ROLL_MODES = constants.ROLL_MODES
+local SPECIAL_ACTIONS = constants.SPECIAL_ACTIONS
 local STATS = constants.STATS
 local UTILITY_TYPES = utilityTypes.UTILITY_TYPES
 
@@ -101,6 +102,11 @@ rolls.initState = function()
             rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
         },
+
+        [SPECIAL_ACTIONS.clingToConsciousness] = {
+            rollMode = ROLL_MODES.NORMAL,
+            currentRoll = nil,
+        }
     }
 end
 
@@ -384,6 +390,11 @@ rolls.state = {
             rolls.state.utility.utilityTraitSlot.set(0)
         end,
     },
+
+    [SPECIAL_ACTIONS.clingToConsciousness] = {
+        rollMode = basicGetSet(SPECIAL_ACTIONS.clingToConsciousness, "rollMode"),
+        currentRoll = basicGetSet(SPECIAL_ACTIONS.clingToConsciousness, "currentRoll"),
+    },
 }
 
 local function resetSlots()
@@ -406,6 +417,7 @@ local function resetRolls()
     rolls.state.attack.attacks.clear()
     rolls.state.defend.defences.clear()
     rolls.state.healing.heals.clear()
+    rolls.state[SPECIAL_ACTIONS.clingToConsciousness].currentRoll.set(nil)
 end
 
 local function resetThresholds()

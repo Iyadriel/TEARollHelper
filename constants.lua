@@ -27,7 +27,8 @@ local ACTION_LABELS = {
 }
 
 local SPECIAL_ACTIONS = {
-    save = "save",
+    save = "save", -- used for Crippling Pain CW
+    clingToConsciousness = "clingingOn",
 }
 
 local SPECIAL_ACTION_LABELS = {

@@ -35,15 +35,16 @@ ui.modules.turn.getOptions = function()
                 name = " "
             },
 
+            KO = actionOptions.KO,
             playerTurn = actionOptions.playerTurn,
             enemyTurn = actionOptions.enemyTurn,
             outOfCombat = actionOptions.outOfCombat,
-            effects = ui.modules.turn.modules.effects.getOptions({ order = 6 }),
-            buffs = ui.modules.buffs.getOptions({ order = 7 }),
-            character = ui.modules.turn.modules.character.getOptions({ order = 8 }),
-            environment = ui.modules.environment.getOptions({ order = 9 }),
-            party = ui.modules.turn.modules.party.getOptions({ order = 10 }),
-            units = ui.modules.units.getOptions({ order = 11 }),
+            effects = ui.modules.turn.modules.effects.getOptions({ order = 7 }),
+            buffs = ui.modules.buffs.getOptions({ order = 8 }),
+            character = ui.modules.turn.modules.character.getOptions({ order = 9 }),
+            environment = ui.modules.environment.getOptions({ order = 10 }),
+            party = ui.modules.turn.modules.party.getOptions({ order = 11 }),
+            units = ui.modules.units.getOptions({ order = 12 }),
         }
     }
 end

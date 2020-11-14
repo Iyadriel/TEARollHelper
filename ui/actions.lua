@@ -9,6 +9,7 @@ local traits = ns.resources.traits
 local turn = ns.state.turn
 local ui = ns.ui
 
+local SPECIAL_ACTIONS = constants.SPECIAL_ACTIONS
 local COLOURS = TEARollHelper.COLOURS
 local TRAITS = traits.TRAITS
 local TURN_TYPES = constants.TURN_TYPES
@@ -35,13 +36,21 @@ ui.modules.actions.modules = {
     groupName: String
 } ]]
 ui.modules.actions.getOptions = function(options)
-    local lifeWithin = ui.helpers.traitButton(TRAITS.LIFE_WITHIN, { order = 0 })
+    local lifeWithin = ui.helpers.traitButton(TRAITS.LIFE_WITHIN, { order = 1})
 
     return {
-        playerTurn = {
-            name = options.groupName or "Player turn",
-            type = "group",
+        KO = {
             order = options.order,
+            type = "group",
+            name = "Unconscious",
+            args = {
+                koRoll = ui.modules.turn.modules.roll.getOptions({ order = 0, action = SPECIAL_ACTIONS.clingToConsciousness }),
+            },
+        },
+        playerTurn = {
+            order = options.order + 1,
+            type = "group",
+            name = options.groupName or "Player turn",
             childGroups = "tab",
             hidden = function()
                 return turnState.type.get() ~= TURN_TYPES.PLAYER.id
@@ -49,28 +58,28 @@ ui.modules.actions.getOptions = function(options)
             args = {
                 lifeWithin = lifeWithin,
                 shieldSlam = ui.helpers.traitButton(TRAITS.SHIELD_SLAM, {
-                    order = 1,
+                    order = 2,
                     name = function()
                         return COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.SHIELD_SLAM.name .. ": Deal " .. rolls.traits.getShieldSlam().dmg .. " damage"
                     end,
                     width = "full",
                 }),
-                attack = ui.modules.actions.modules.attack.getOptions({ order = 2 }),
-                penance = ui.modules.actions.modules.penance.getOptions({ order = 3 }),
-                cc = ui.modules.actions.modules.cc.getOptions({ order = 4 }),
+                attack = ui.modules.actions.modules.attack.getOptions({ order = 3 }),
+                penance = ui.modules.actions.modules.penance.getOptions({ order = 4 }),
+                cc = ui.modules.actions.modules.cc.getOptions({ order = 5 }),
                 heal = ui.modules.actions.modules.healing.getOptions({
-                    order = 5,
+                    order = 6,
                     outOfCombat = false,
                     turnTypeID = TURN_TYPES.PLAYER.id,
                 }),
-                buff = ui.modules.actions.modules.buff.getOptions({ order = 6 }),
-                utility = ui.modules.actions.modules.utility.getOptions({ order = 7, turnTypeID = TURN_TYPES.PLAYER.id }),
+                buff = ui.modules.actions.modules.buff.getOptions({ order = 7 }),
+                utility = ui.modules.actions.modules.utility.getOptions({ order = 8, turnTypeID = TURN_TYPES.PLAYER.id }),
             }
         },
         enemyTurn = {
-            name = options.groupName or "Enemy turn",
+            order = options.order + 1,
             type = "group",
-            order = options.order,
+            name = options.groupName or "Enemy turn",
             childGroups = "tab",
             hidden = function()
                 return turnState.type.get() ~= TURN_TYPES.ENEMY.id
@@ -84,9 +93,9 @@ ui.modules.actions.getOptions = function(options)
             }
         },
         outOfCombat = {
-            name = options.groupName or "Out of combat",
+            order = options.order + 1,
             type = "group",
-            order = options.order,
+            name = options.groupName or "Out of combat",
             childGroups = "tab",
             hidden = function()
                 return turnState.inCombat.get()
