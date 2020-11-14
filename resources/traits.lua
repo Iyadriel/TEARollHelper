@@ -23,7 +23,7 @@ local TRAITS = {
     ARTISAN = {
         id = "ARTISAN",
         name = "Artisan",
-        desc = "Activate to double the bonuses of your Utility traits for your next Utility roll. Activate before rolling. Does not enhance the effects of Silamel's Ace.",
+        desc = "Activate to double the bonuses of your Utility traits for your next Utility roll. Activate before rolling.",
         icon = "Interface\\Icons\\trade_engraving",
         numCharges = 3,
     },
