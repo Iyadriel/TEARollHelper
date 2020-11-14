@@ -132,7 +132,7 @@ local TRAITS = {
         name = "Versatile",
         desc = "Activate to choose one stat, and transfer its value to another stat of your choice for the duration of your next roll. Activate before rolling. Does not grant additional Greater Heal Slots. If you use Versatile to gain HP, and then have that amount or less HP left total by the end of your turn, you go down to 1 HP rather than 0 HP.",
         icon = "Interface\\Icons\\spell_arcane_arcanetactics",
-        numCharges = 2,
+        numCharges = 3,
     },
     VESEERAS_IRE = {
         id = "VESEERAS_IRE",
