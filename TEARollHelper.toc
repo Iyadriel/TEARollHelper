@@ -87,6 +87,7 @@ modules/rules/meleeSave.lua
 modules/rules/rangedSave.lua
 modules/rules/traits.lua
 modules/rules/utility.lua
+modules/rules/ko.lua
 
 state/buffs.lua
 state/character.lua
