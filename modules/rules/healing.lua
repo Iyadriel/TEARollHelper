@@ -64,16 +64,24 @@ local function getNumSpiritPerGreaterHealSlot()
     return character.hasWeakness(WEAKNESSES.TEMPERED_BENEVOLENCE) and 3 or 2
 end
 
+local function getBaseGreaterHealSlots()
+    local spirit = character.getPlayerSpirit()
+    return max(0, floor(spirit / getNumSpiritPerGreaterHealSlot()))
+end
+
 local function getMaxGreaterHealSlots()
     if character.hasFeat(FEATS.PARAGON) then
         return 0
     end
 
-    local spirit = character.getPlayerSpirit()
-    local numSlots = max(0, floor(spirit / getNumSpiritPerGreaterHealSlot()))
+    local numSlots = getBaseGreaterHealSlots()
 
-    if character.hasSpiritMastery() and not character.hasWeakness(WEAKNESSES.TEMPERED_BENEVOLENCE) then
+    if character.hasSpiritProficiency() and not character.hasWeakness(WEAKNESSES.TEMPERED_BENEVOLENCE) then
         numSlots = numSlots + 1
+
+        if character.hasSpiritMastery() then
+            numSlots = numSlots + 1
+        end
     end
 
     if character.hasFeat(FEATS.MENDER) then
