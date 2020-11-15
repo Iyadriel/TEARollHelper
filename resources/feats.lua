@@ -15,7 +15,7 @@ local DAMAGE_TYPES = constants.DAMAGE_TYPES
 local STATS = constants.STATS
 local TURN_TYPES = constants.TURN_TYPES
 
-feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "COUNTER_FORCE", "DIVINE_PURPOSE", "ETERNAL_SACRIFICE", "EXPANSIVE_ARSENAL", "FOCUS", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "LIVING_BARRICADE", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "MONSTER_HUNTER", "ONSLAUGHT", "PARAGON", "PENANCE", "PHALANX", "PROFESSIONAL", "REAPER", "SHEPHERD_OF_THE_WICKED", "TRAUMA_RESPONSE", "VENGEANCE", "WARDER"}
+feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "CHAPLAIN_OF_VIOLENCE", "COUNTER_FORCE", "DIVINE_PURPOSE", "ETERNAL_SACRIFICE", "EXPANSIVE_ARSENAL", "FOCUS", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "LIVING_BARRICADE", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "MONSTER_HUNTER", "ONSLAUGHT", "PARAGON", "PENANCE", "PHALANX", "PROFESSIONAL", "REAPER", "SHEPHERD_OF_THE_WICKED", "TRAUMA_RESPONSE", "VENGEANCE", "WARDER"}
 
 local FEATS = {
     FEATLESS = {
@@ -31,6 +31,12 @@ local FEATS = {
         id = "BLOOD_HARVEST",
         name = "Blood Harvest",
         desc = "For every 2 points you put into the Offence stat you gain a Harvest Slot. You can activate these Harvest Slots to spend them just like a Greater Heal Slot. Spending a Harvest slot increases the damage of your next Offence attack by +3. This damage is dealt even if you miss.",
+    },
+    CHAPLAIN_OF_VIOLENCE = {
+        id = "CHAPLAIN_OF_VIOLENCE",
+        name = "Chaplain of Violence",
+        desc = "Healing a single friendly target for 3HP or more increases the damage of your next successful Offence Attack roll by +2. Using a Greater Heal slot increases the damage to +4. This bonus does not stack and is consumed on your next successful Offence Attack roll. Requires 4/6 Spirit in order to pick.",
+        icon = "Interface\\Icons\\spell_holy_holyguidance",
     },
     COUNTER_FORCE = {
         id = "COUNTER_FORCE",
@@ -111,7 +117,7 @@ local FEATS = {
         id = "MERCY_FROM_PAIN",
         name = "Mercy from Pain",
         desc = "Every time you deal 5 damage or more to a single enemy, your next healing roll is boosted by +2 HP, if you deal 5 damage or more to multiple enemies at once, your next healing roll is instead boosted by +4HP (does not stack). The bonus to healing lasts until the end of combat, but does not stack with itself and is consumed on your next heal roll.",
-        icon = "Interface\\Icons\\spell_holy_holyguidance",
+        icon = "Interface\\Icons\\ability_priest_atonement",
     },
     MONSTER_HUNTER = {
         id = "MONSTER_HUNTER",
@@ -183,6 +189,15 @@ local FEATS = {
 }
 
 local FEAT_BUFF_SPECS = {
+    [FEATS.CHAPLAIN_OF_VIOLENCE.id] = {
+        duration = BuffDuration:New({
+            expireAfterActions = {
+                [ACTIONS.attack] = true,
+            },
+            expireOnCombatEnd = true,
+        }),
+        -- effects provided in consequences.lua
+    },
     [FEATS.FOCUS.id] = {
         duration = BuffDuration:New({
             remainingTurns = 1,

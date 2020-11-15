@@ -134,6 +134,22 @@ local function getMaxOutOfCombatHeals()
     return character.hasFeat(FEATS.MEDIC) and 5 or 3
 end
 
+-- Feat: Chaplain of Violence
+
+local function canProcChaplainOfViolence()
+    return character.hasFeat(FEATS.CHAPLAIN_OF_VIOLENCE)
+end
+
+local function hasChaplainOfViolenceProc(amountHealed)
+    return amountHealed >= 3
+end
+
+local function calculateChaplainOfViolenceBonusDamage(numGreaterHealSlotsUsed)
+    return numGreaterHealSlotsUsed > 0 and 4 or 2
+end
+
+-- Feat: Paragon
+
 local function usesParagon()
     return character.hasFeat(FEATS.PARAGON)
 end
@@ -173,6 +189,11 @@ rules.healing = {
     applyOutOfCombatBaseAmountBonus = applyOutOfCombatBaseAmountBonus,
     getOutOfCombatBonus = getOutOfCombatBonus,
     getMaxOutOfCombatHeals = getMaxOutOfCombatHeals,
+
+    canProcChaplainOfViolence = canProcChaplainOfViolence,
+    hasChaplainOfViolenceProc = hasChaplainOfViolenceProc,
+    calculateChaplainOfViolenceBonusDamage = calculateChaplainOfViolenceBonusDamage,
+
     usesParagon = usesParagon,
     calculateNumPlayersHealableWithParagon = calculateNumPlayersHealableWithParagon,
 

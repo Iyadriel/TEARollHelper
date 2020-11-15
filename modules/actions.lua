@@ -268,6 +268,8 @@ local function getHealing(roll, rollBuff, spirit, spiritBuff, healingDoneBuff, n
     local healValue
     local amountHealed = 0
     local isCrit = rules.healing.isCrit(roll)
+    local hasChaplainOfViolenceProc = nil
+    local chaplainOfViolenceBonusDamage = 0
     local usesParagon = rules.healing.usesParagon()
     local playersHealableWithParagon = nil
 
@@ -300,6 +302,14 @@ local function getHealing(roll, rollBuff, spirit, spiritBuff, healingDoneBuff, n
         if isCrit then
             amountHealed = rules.healing.applyCritModifier(amountHealed)
         end
+
+        if rules.healing.canProcChaplainOfViolence() then
+            hasChaplainOfViolenceProc = rules.healing.hasChaplainOfViolenceProc(amountHealed)
+        end
+
+        if hasChaplainOfViolenceProc then
+            chaplainOfViolenceBonusDamage = rules.healing.calculateChaplainOfViolenceBonusDamage(numGreaterHealSlots)
+        end
     end
 
     return {
@@ -308,6 +318,8 @@ local function getHealing(roll, rollBuff, spirit, spiritBuff, healingDoneBuff, n
         isCrit = isCrit,
         outOfCombat = outOfCombat,
         numGreaterHealSlots = numGreaterHealSlots,
+        hasChaplainOfViolenceProc = hasChaplainOfViolenceProc,
+        chaplainOfViolenceBonusDamage = chaplainOfViolenceBonusDamage,
         usesParagon = usesParagon,
         playersHealableWithParagon = playersHealableWithParagon,
         traits = {

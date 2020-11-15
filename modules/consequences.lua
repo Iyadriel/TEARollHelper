@@ -193,8 +193,13 @@ end
 
 local function confirmHealAction(heal)
     characterState.state.healing.numGreaterHealSlots.use(heal.numGreaterHealSlots)
+
     if heal.outOfCombat and heal.numGreaterHealSlots <= 0 then
         characterState.state.healing.remainingOutOfCombatHeals.spendOne()
+    end
+
+    if heal.hasChaplainOfViolenceProc then
+        buffs.addFeatBuff(FEATS.CHAPLAIN_OF_VIOLENCE, { BuffEffectDamageDone:New(heal.chaplainOfViolenceBonusDamage) })
     end
 
     rollState.state.healing.heals.add(heal)
