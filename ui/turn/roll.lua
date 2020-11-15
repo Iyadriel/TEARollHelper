@@ -1,6 +1,7 @@
 local _, ns = ...
 
 local buffsState = ns.state.buffs
+local character = ns.character
 local characterState = ns.state.character
 local consequences = ns.consequences
 local constants = ns.constants
@@ -10,11 +11,14 @@ local rules = ns.rules
 local settings = ns.settings
 local turnState = ns.state.turn
 local ui = ns.ui
+
+local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
 
 local ACTIONS = constants.ACTIONS
 local COLOURS = TEARollHelper.COLOURS
 local ROLL_MODES = constants.ROLL_MODES
+local TRAITS = traits.TRAITS
 local WEAKNESSES = weaknesses.WEAKNESSES
 
 local state = rollState.state
@@ -84,8 +88,24 @@ ui.modules.turn.modules.roll.getOptions = function(options)
         order = options.order,
         hidden = options.hidden or false,
         args = {
-            rollMode = {
+            momentOfExcellence = {
                 order = 0,
+                type = "execute",
+                width = "full",
+                name = COLOURS.TRAITS.MOMENT_OF_EXCELLENCE .. ui.iconString("Interface\\Buttons\\UI-GroupLoot-Dice-Up", "small", false) .. "Moment of Excellence",
+                hidden = function()
+                    local trait = TRAITS.MOMENT_OF_EXCELLENCE
+                    return not character.hasTrait(trait) or characterState.state.featsAndTraits.numTraitCharges.get(trait.id) <= 0
+                end,
+                func = function()
+                    rollHandler.setAction(options.action)
+                    rollHandler.doMomentOfExcellence()
+                    consequences.useTraitCharge(TRAITS.MOMENT_OF_EXCELLENCE)
+                end,
+            },
+            rollMode = {
+                order = 1,
+                type = "select",
                 name =  function()
                     local rollModeMod = getRollModeModifier()
                     if rollModeMod == ROLL_MODES.ADVANTAGE then
@@ -105,7 +125,6 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                     end
                     return msg
                 end,
-                type = "select",
                 width = 0.75,
                 values = function()
                     local rollModeMod = getRollModeModifier()
@@ -122,7 +141,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 end
             },
             performRoll = {
-                order = 1,
+                order = 2,
                 type = "execute",
                 name = function()
                     return rollHandler.isRolling() and "Rolling..." or ui.iconString("Interface\\Buttons\\UI-GroupLoot-Dice-Up", "small", false) .. "Roll"
@@ -137,7 +156,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 end,
             },
             roll = {
-                order = 2,
+                order = 3,
                 name = "Roll result",
                 type = "range",
                 desc = "The number you rolled",
@@ -153,7 +172,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 end
             },
             useFatePoint = {
-                order = 3,
+                order = 4,
                 type = "execute",
                 name = "Use Fate Point",
                 desc = "Uses a Fate Point and rolls again, picking the highest result.",
@@ -196,7 +215,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 end,
             },
             rebound = {
-                order = 4,
+                order = 5,
                 type = "execute",
                 name = COLOURS.DAMAGE .. "Confirm " .. WEAKNESSES.REBOUND.name,
                 desc = WEAKNESSES.REBOUND.desc,

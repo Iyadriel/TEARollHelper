@@ -33,7 +33,7 @@ local WEAKNESSES = weaknesses.WEAKNESSES
 
 local state = characterState.state
 
-local function useTraitCharge(trait, msg)
+local function useTraitCharge(trait)
     local traitGetSet = state.featsAndTraits.numTraitCharges
     traitGetSet.set(trait.id, traitGetSet.get(trait.id) - 1)
 end
@@ -269,6 +269,7 @@ end
 
 -- [[ Exports ]]
 
+consequences.useTraitCharge = useTraitCharge
 consequences.applyFaelunesRegrowth = applyFaelunesRegrowth
 consequences.useFatePoint = useFatePoint
 consequences.restoreGreaterHealSlotWithExcess = restoreGreaterHealSlotWithExcess

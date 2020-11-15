@@ -13,7 +13,7 @@ local ACTIONS = constants.ACTIONS
 local STATS = constants.STATS
 local TURN_TYPES = constants.TURN_TYPES
 
-traits.TRAIT_KEYS = {"OTHER", "ARTISAN", "ASCEND", "BULWARK", "EMPOWERED_BLADES", "FAELUNES_REGROWTH", "FAULTLINE", "GREATER_RESTORATION", "HOLY_BULWARK", "LIFE_PULSE", "LIFE_WITHIN", "PRESENCE_OF_VIRTUE", "REAP", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "VERSATILE", "VESEERAS_IRE", "VINDICATION"}
+traits.TRAIT_KEYS = {"OTHER", "ARTISAN", "ASCEND", "BULWARK", "EMPOWERED_BLADES", "FAELUNES_REGROWTH", "FAULTLINE", "GREATER_RESTORATION", "HOLY_BULWARK", "LIFE_PULSE", "LIFE_WITHIN", "MOMENT_OF_EXCELLENCE", "PRESENCE_OF_VIRTUE", "REAP", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "VERSATILE", "VESEERAS_IRE", "VINDICATION"}
 
 local TRAITS = {
     OTHER = {
@@ -85,6 +85,12 @@ local TRAITS = {
         name = "Life Within",
         desc = "Activate to increase your current and max HP by 10. Lasts until end of combat. Activate outside of rolling on either a player or enemy turn.",
         icon = "Interface\\Icons\\ability_druid_flourish",
+        numCharges = 1,
+    },
+    MOMENT_OF_EXCELLENCE = {
+        id = "MOMENT_OF_EXCELLENCE",
+        name = "Moment of Excellence",
+        desc = "Instead of rolling, you can activate this trait to gain the nat20 critical result of an Offense, Defense, Stamina, Spirit, or Utility roll.",
         numCharges = 1,
     },
     PRESENCE_OF_VIRTUE = {
