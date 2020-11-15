@@ -33,7 +33,7 @@ local FEATS = {
     COUNTER_FORCE = {
         id = "COUNTER_FORCE",
         name = "Counter-Force",
-        desc = "Your melee save rolls no longer benefit from your Defence stat, but if you manage the roll you deal damage back to the attacker by an amount equal to your Defence stat.",
+        desc = "Your melee save rolls only benefit from half of your Defence stat (rounded up), but if you manage the roll you deal damage back to the attacker by an amount equal to your Defence stat.",
     },
     DIVINE_PURPOSE = {
         id = "DIVINE_PURPOSE",
