@@ -19,7 +19,7 @@ local function calculateMeleeSaveValue(roll, damageType, defence, buff)
 end
 
 local function calculateDamagePrevented(dmgRisk)
-    if character.hasDefenceMastery() then
+    if character.hasDefenceProficiency() then
         return dmgRisk
     end
     return 0
