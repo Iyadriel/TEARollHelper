@@ -64,16 +64,24 @@ local function getNumSpiritPerGreaterHealSlot()
     return character.hasWeakness(WEAKNESSES.TEMPERED_BENEVOLENCE) and 3 or 2
 end
 
+local function getBaseGreaterHealSlots()
+    local spirit = character.getPlayerSpirit()
+    return max(0, floor(spirit / getNumSpiritPerGreaterHealSlot()))
+end
+
 local function getMaxGreaterHealSlots()
     if character.hasFeat(FEATS.PARAGON) then
         return 0
     end
 
-    local spirit = character.getPlayerSpirit()
-    local numSlots = max(0, floor(spirit / getNumSpiritPerGreaterHealSlot()))
+    local numSlots = getBaseGreaterHealSlots()
 
-    if character.hasSpiritMastery() and not character.hasWeakness(WEAKNESSES.TEMPERED_BENEVOLENCE) then
+    if character.hasSpiritProficiency() and not character.hasWeakness(WEAKNESSES.TEMPERED_BENEVOLENCE) then
         numSlots = numSlots + 1
+
+        if character.hasSpiritMastery() then
+            numSlots = numSlots + 1
+        end
     end
 
     if character.hasFeat(FEATS.MENDER) then
@@ -126,6 +134,22 @@ local function getMaxOutOfCombatHeals()
     return character.hasFeat(FEATS.MEDIC) and 5 or 3
 end
 
+-- Feat: Chaplain of Violence
+
+local function canProcChaplainOfViolence()
+    return character.hasFeat(FEATS.CHAPLAIN_OF_VIOLENCE)
+end
+
+local function hasChaplainOfViolenceProc(amountHealed)
+    return amountHealed >= 3
+end
+
+local function calculateChaplainOfViolenceBonusDamage(numGreaterHealSlotsUsed)
+    return numGreaterHealSlotsUsed > 0 and 4 or 2
+end
+
+-- Feat: Paragon
+
 local function usesParagon()
     return character.hasFeat(FEATS.PARAGON)
 end
@@ -165,6 +189,11 @@ rules.healing = {
     applyOutOfCombatBaseAmountBonus = applyOutOfCombatBaseAmountBonus,
     getOutOfCombatBonus = getOutOfCombatBonus,
     getMaxOutOfCombatHeals = getMaxOutOfCombatHeals,
+
+    canProcChaplainOfViolence = canProcChaplainOfViolence,
+    hasChaplainOfViolenceProc = hasChaplainOfViolenceProc,
+    calculateChaplainOfViolenceBonusDamage = calculateChaplainOfViolenceBonusDamage,
+
     usesParagon = usesParagon,
     calculateNumPlayersHealableWithParagon = calculateNumPlayersHealableWithParagon,
 

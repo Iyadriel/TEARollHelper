@@ -33,7 +33,7 @@ local function calculateDamageTaken(defenceType, threshold, defendValue, effecti
 end
 
 local function calculateDamagePrevented(dmgRisk, damageTaken)
-    if character.hasDefenceMastery() then
+    if character.hasDefenceProficiency() then
         return dmgRisk - damageTaken
     end
     return 0

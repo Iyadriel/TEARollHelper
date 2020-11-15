@@ -33,7 +33,7 @@ local WEAKNESSES = weaknesses.WEAKNESSES
 
 local state = characterState.state
 
-local function useTraitCharge(trait, msg)
+local function useTraitCharge(trait)
     local traitGetSet = state.featsAndTraits.numTraitCharges
     traitGetSet.set(trait.id, traitGetSet.get(trait.id) - 1)
 end
@@ -65,6 +65,10 @@ end
 
 -- Feats
 
+local function enableFocus()
+    buffs.addFeatBuff(FEATS.FOCUS)
+end
+
 local function enableLivingBarricade()
     buffs.addFeatBuff(FEATS.LIVING_BARRICADE)
 end
@@ -81,10 +85,6 @@ end
 
 local function useEmpoweredBlades(defence)
     buffs.addTraitBuff(TRAITS.EMPOWERED_BLADES, { BuffEffectDamageDone:New(ceil(defence.dmgRisk / 2)) })
-end
-
-local function useFocus()
-    buffs.addTraitBuff(TRAITS.FOCUS)
 end
 
 local function useGreaterRestoration()
@@ -143,7 +143,6 @@ end
 local TRAIT_FNS = {
     [TRAITS.ARTISAN.id] = useArtisan,
     [TRAITS.BULWARK.id] = useBulwark,
-    [TRAITS.FOCUS.id] = useFocus,
     [TRAITS.GREATER_RESTORATION.id] = useGreaterRestoration,
     [TRAITS.HOLY_BULWARK.id] = useHolyBulwark,
     [TRAITS.LIFE_WITHIN.id] = useLifeWithin,
@@ -194,8 +193,13 @@ end
 
 local function confirmHealAction(heal)
     characterState.state.healing.numGreaterHealSlots.use(heal.numGreaterHealSlots)
+
     if heal.outOfCombat and heal.numGreaterHealSlots <= 0 then
         characterState.state.healing.remainingOutOfCombatHeals.spendOne()
+    end
+
+    if heal.hasChaplainOfViolenceProc then
+        buffs.addFeatBuff(FEATS.CHAPLAIN_OF_VIOLENCE, { BuffEffectDamageDone:New(heal.chaplainOfViolenceBonusDamage) })
     end
 
     rollState.state.healing.heals.add(heal)
@@ -270,9 +274,11 @@ end
 
 -- [[ Exports ]]
 
+consequences.useTraitCharge = useTraitCharge
 consequences.applyFaelunesRegrowth = applyFaelunesRegrowth
 consequences.useFatePoint = useFatePoint
 consequences.restoreGreaterHealSlotWithExcess = restoreGreaterHealSlotWithExcess
+consequences.enableFocus = enableFocus
 consequences.enableLivingBarricade = enableLivingBarricade
 consequences.useTrait = useTrait
 consequences.confirmReboundRoll = confirmReboundRoll

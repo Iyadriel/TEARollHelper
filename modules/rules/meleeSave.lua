@@ -9,15 +9,17 @@ local FEATS = feats.FEATS
 local BIG_FAIL_TREHSHOLD = 5
 
 local function calculateMeleeSaveValue(roll, damageType, defence, buff)
-    local value = roll
-    if not character.hasFeat(FEATS.COUNTER_FORCE) then
-        value = value + rules.common.calculateDefenceStat(damageType, defence, buff)
+    local defenceStat = rules.common.calculateDefenceStat(damageType, defence, buff)
+
+    if character.hasFeat(FEATS.COUNTER_FORCE) then
+        defenceStat = ceil(defenceStat / 2)
     end
-    return value
+
+    return roll + defenceStat
 end
 
 local function calculateDamagePrevented(dmgRisk)
-    if character.hasDefenceMastery() then
+    if character.hasDefenceProficiency() then
         return dmgRisk
     end
     return 0
