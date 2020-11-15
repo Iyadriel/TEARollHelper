@@ -76,6 +76,14 @@ local function setStat(stat, value)
     end
 end
 
+local function hasProficiency(stat)
+    return getPlayerStat(stat) >= STAT_POINTS_PROFICIENCY
+end
+
+local function hasMastery(stat)
+    return getPlayerStat(stat) >= STAT_POINTS_MASTERY
+end
+
 local function hasOffenceProficiency()
     return getPlayerOffence() >= STAT_POINTS_PROFICIENCY
 end
@@ -397,6 +405,9 @@ character.calculatePlayerMaxHealth = calculatePlayerMaxHealth
 character.calculatePlayerMaxHealthWithoutBuffs = calculatePlayerMaxHealthWithoutBuffs
 character.setStat = setStat
 
+
+character.hasProficiency = hasProficiency
+character.hasMastery = hasMastery
 
 character.hasOffenceProficiency = hasOffenceProficiency
 character.hasDefenceProficiency = hasDefenceProficiency

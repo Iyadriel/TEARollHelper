@@ -9,6 +9,7 @@ TEARollHelper.COLOURS = {
     DEBUFF = '|cff996600',
     CRITICAL = '|cffa335ee',
 
+    PROFICIENCY = '|cffa335ee',
     MASTERY = '|cffff8000',
 
     NOTE = '|cffbbbbbb',
