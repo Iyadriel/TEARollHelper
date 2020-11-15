@@ -345,6 +345,13 @@ bus.addListener(EVENTS.FEAT_CHANGED, function(featID)
     updateGreaterHealSlots("feat changed")
     resetRemainingOutOfCombatHeals("feat changed")
 
+    local featBuffs = buffsState.state.buffLookup.getFeatBuffs()
+    if featBuffs then
+        for _, featBuff in ipairs(featBuffs) do
+            featBuff:Remove()
+        end
+    end
+
     if featID == FEATS.BLOOD_HARVEST.id and not turnState.state.inCombat.get() then
         local numBloodHarvestSlots = characterState.state.featsAndTraits.numBloodHarvestSlots
         local maxSlots = rules.offence.getMaxBloodHarvestSlots()
