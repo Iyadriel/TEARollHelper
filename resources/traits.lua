@@ -59,7 +59,7 @@ local TRAITS = {
     FAULTLINE = {
         id = "FAULTLINE",
         name = "Faultline",
-        desc = "Activate to apply the result of an Offence attack roll onto a straight line outwards from yourself. All targets within line of sight along the line are struck. Activate after rolling.",
+        desc = "Activate to apply the result of an Offence attack roll to up to 3 additional targets. Activate after rolling.",
         numCharges = 2,
     },
     FOCUS = {

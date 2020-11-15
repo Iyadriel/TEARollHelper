@@ -22,7 +22,7 @@ local function empoweredBladesToString()
 end
 
 local function faultlineToString()
-    return " You apply your attack to all targets on a straight line outwards from yourself."
+    return " You apply your attack to up to 3 additional targets."
 end
 
 local function lifePulseToString()
