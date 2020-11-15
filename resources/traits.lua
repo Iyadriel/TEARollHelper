@@ -13,7 +13,7 @@ local ACTIONS = constants.ACTIONS
 local STATS = constants.STATS
 local TURN_TYPES = constants.TURN_TYPES
 
-traits.TRAIT_KEYS = {"OTHER", "ARTISAN", "ASCEND", "BULWARK", "EMPOWERED_BLADES", "FAELUNES_REGROWTH", "FAULTLINE", "FOCUS", "GREATER_RESTORATION", "HOLY_BULWARK", "LIFE_PULSE", "LIFE_WITHIN", "PRESENCE_OF_VIRTUE", "REAP", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "VERSATILE", "VESEERAS_IRE", "VINDICATION"}
+traits.TRAIT_KEYS = {"OTHER", "ARTISAN", "ASCEND", "BULWARK", "EMPOWERED_BLADES", "FAELUNES_REGROWTH", "FAULTLINE", "GREATER_RESTORATION", "HOLY_BULWARK", "LIFE_PULSE", "LIFE_WITHIN", "PRESENCE_OF_VIRTUE", "REAP", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "VERSATILE", "VESEERAS_IRE", "VINDICATION"}
 
 local TRAITS = {
     OTHER = {
@@ -60,13 +60,6 @@ local TRAITS = {
         id = "FAULTLINE",
         name = "Faultline",
         desc = "Activate to apply the result of an Offence attack roll to up to 3 additional targets. Activate after rolling.",
-        numCharges = 2,
-    },
-    FOCUS = {
-        id = "FOCUS",
-        name = "Focus",
-        desc = "Activate to gain advantage to all of your rolls during the current player turn. Activate and then roll.",
-        icon = "Interface\\Icons\\spell_nature_focusedmind",
         numCharges = 2,
     },
     GREATER_RESTORATION = {
@@ -192,17 +185,6 @@ local TRAIT_BUFF_SPECS = {
             }),
             -- effects provided in consequences.lua
         },
-    },
-    [TRAITS.FOCUS.id] = {
-        {
-            duration = BuffDuration:NewWithTurnType({
-                turnTypeID = TURN_TYPES.PLAYER.id,
-                remainingTurns = 0,
-            }),
-            effects = {
-                BuffEffectAdvantage:New(nil, TURN_TYPES.PLAYER.id),
-            },
-        }
     },
     [TRAITS.LIFE_WITHIN.id] = {
         {

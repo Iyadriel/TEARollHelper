@@ -5,7 +5,9 @@ local feats = ns.resources.feats
 local models = ns.models
 
 local BuffDuration = models.BuffDuration
+local BuffEffectAdvantage = models.BuffEffectAdvantage
 local BuffEffectDamageTaken = models.BuffEffectDamageTaken
+local BuffEffectDisadvantage = models.BuffEffectDisadvantage
 local BuffEffectStat = models.BuffEffectStat
 
 local ACTIONS = constants.ACTIONS
@@ -13,7 +15,7 @@ local DAMAGE_TYPES = constants.DAMAGE_TYPES
 local STATS = constants.STATS
 local TURN_TYPES = constants.TURN_TYPES
 
-feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "COUNTER_FORCE", "DIVINE_PURPOSE", "ETERNAL_SACRIFICE", "EXPANSIVE_ARSENAL", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "LIVING_BARRICADE", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "MONSTER_HUNTER", "ONSLAUGHT", "PARAGON", "PENANCE", "PHALANX", "PROFESSIONAL", "REAPER", "SHEPHERD_OF_THE_WICKED", "TRAUMA_RESPONSE", "VENGEANCE", "WARDER"}
+feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "COUNTER_FORCE", "DIVINE_PURPOSE", "ETERNAL_SACRIFICE", "EXPANSIVE_ARSENAL", "FOCUS", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "LIVING_BARRICADE", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "MONSTER_HUNTER", "ONSLAUGHT", "PARAGON", "PENANCE", "PHALANX", "PROFESSIONAL", "REAPER", "SHEPHERD_OF_THE_WICKED", "TRAUMA_RESPONSE", "VENGEANCE", "WARDER"}
 
 local FEATS = {
     FEATLESS = {
@@ -59,6 +61,12 @@ local FEATS = {
         id = "EXPANSIVE_ARSENAL",
         name = "Expansive Arsenal",
         desc = "If you pick a second Weakness, you may pick a third Trait.",
+    },
+    FOCUS = {
+        id = "FOCUS",
+        name = "Focus",
+        desc = "You can give yourself advantage on all of your rolls on the current player turn, but you then get disadvantage on the next enemy turn.",
+        icon = "Interface\\Icons\\spell_nature_focusedmind",
     },
 --[[     FOREIGN_DISCIPLE = {
         id = "FOREIGN_DISCIPLE",
@@ -175,6 +183,15 @@ local FEATS = {
 }
 
 local FEAT_BUFF_SPECS = {
+    [FEATS.FOCUS.id] = {
+        duration = BuffDuration:New({
+            remainingTurns = 1,
+        }),
+        effects = {
+            BuffEffectAdvantage:New(nil, TURN_TYPES.PLAYER.id),
+            BuffEffectDisadvantage:New(nil, TURN_TYPES.ENEMY.id),
+        },
+    },
     [FEATS.LIVING_BARRICADE.id] = {
         duration = BuffDuration:NewWithTurnType({
             turnTypeID = TURN_TYPES.ENEMY.id,

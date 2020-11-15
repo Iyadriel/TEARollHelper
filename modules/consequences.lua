@@ -65,6 +65,10 @@ end
 
 -- Feats
 
+local function enableFocus()
+    buffs.addFeatBuff(FEATS.FOCUS)
+end
+
 local function enableLivingBarricade()
     buffs.addFeatBuff(FEATS.LIVING_BARRICADE)
 end
@@ -81,10 +85,6 @@ end
 
 local function useEmpoweredBlades(defence)
     buffs.addTraitBuff(TRAITS.EMPOWERED_BLADES, { BuffEffectDamageDone:New(ceil(defence.dmgRisk / 2)) })
-end
-
-local function useFocus()
-    buffs.addTraitBuff(TRAITS.FOCUS)
 end
 
 local function useGreaterRestoration()
@@ -143,7 +143,6 @@ end
 local TRAIT_FNS = {
     [TRAITS.ARTISAN.id] = useArtisan,
     [TRAITS.BULWARK.id] = useBulwark,
-    [TRAITS.FOCUS.id] = useFocus,
     [TRAITS.GREATER_RESTORATION.id] = useGreaterRestoration,
     [TRAITS.HOLY_BULWARK.id] = useHolyBulwark,
     [TRAITS.LIFE_WITHIN.id] = useLifeWithin,
@@ -273,6 +272,7 @@ end
 consequences.applyFaelunesRegrowth = applyFaelunesRegrowth
 consequences.useFatePoint = useFatePoint
 consequences.restoreGreaterHealSlotWithExcess = restoreGreaterHealSlotWithExcess
+consequences.enableFocus = enableFocus
 consequences.enableLivingBarricade = enableLivingBarricade
 consequences.useTrait = useTrait
 consequences.confirmReboundRoll = confirmReboundRoll
