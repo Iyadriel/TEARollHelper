@@ -108,7 +108,10 @@ end)
 -- TODO need some UI to confirm roll, can't reroll if everything's automatic
 
 bus.addListener(EVENTS.BUFF_EXPIRED, function(id)
-    if id == clingingOnBuff.id then
+    if id == fadingConsciousness.id then
+        -- TODO player didn't roll on this turn, what do?
+        setState(STATES.FINE)
+    elseif id == clingingOnBuff.id then
         goKO()
     end
 end)
