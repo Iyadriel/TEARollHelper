@@ -2,7 +2,7 @@ local _, ns = ...
 
 local buffsState = ns.state.buffs
 local bus = ns.bus
-local character = ns.character
+local characterState = ns.state.character
 local constants = ns.constants
 local models = ns.models
 local rules = ns.rules
@@ -81,14 +81,21 @@ local function goKO()
 end
 
 bus.addListener(EVENTS.CHARACTER_HEALTH, function(health)
-    local maxHealth = character.calculatePlayerMaxHealth()
+    local maxHealth = characterState.state.maxHealth.get()
 
     if currentState == STATES.FINE and health == 0 then
         fadingConsciousness:RefreshDuration()
         setState(STATES.FADING)
     elseif currentState == STATES.CLINGING_ON and rules.KO.canRecoverFromClingingOn(health, maxHealth) then
         setState(STATES.FINE)
-    elseif currentState == STATES.KO and rules.KO.canRecoverFromKO(health, maxHealth) then
+    end
+end)
+
+bus.addListener(EVENTS.HEALED, function()
+    local health = characterState.state.health.get()
+    local maxHealth = characterState.state.maxHealth.get()
+
+    if currentState == STATES.KO and rules.KO.canRecoverFromKO(health, maxHealth) then
         setState(STATES.FINE)
     end
 end)
