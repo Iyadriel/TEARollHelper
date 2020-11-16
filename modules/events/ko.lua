@@ -1,5 +1,6 @@
 local _, ns = ...
 
+local buffsState = ns.state.buffs
 local bus = ns.bus
 local character = ns.character
 local constants = ns.constants
@@ -30,7 +31,7 @@ local fadingConsciousness = Buff:New(
 )
 
 local clingingOnBuff = Buff:New("clinging", "Clinging on", "Interface\\Icons\\spell_holy_painsupression", nil, true, { BuffEffectSpecial:New("Get healed to full health to stay conscious!") })
-local unconsciousBuff = Buff:New("ko", "Unconscious", "Interface\\Icons\\spell_nature_sleep", nil, true)
+local unconsciousBuff = Buff:New("ko", "Unconscious", "Interface\\Icons\\spell_nature_sleep", nil, true, { BuffEffectSpecial:New("Get healed to at least half your health to return to consciousness!") })
 
 local STATES = {
     FINE = 0,
@@ -62,8 +63,14 @@ local function setState(newState)
 end
 
 local function goKO()
-    local maxHealthEffect = BuffEffectMaxHealth:New(rules.KO.getKOMaxHealthReduction())
-    local maxHealthDebuff = nil -- TODO add or increase stacks
+    local maxHealthBuff = buffsState.state.buffLookup.get("ko_maxhealth")
+    if maxHealthBuff then
+        maxHealthBuff:AddStack()
+    else
+        local maxHealthEffect = BuffEffectMaxHealth:New(-rules.KO.getKOMaxHealthReduction())
+        maxHealthBuff = Buff:New("ko_maxhealth", "Max health", "Interface\\Icons\\spell_nature_sleep", nil, true, { maxHealthEffect })
+        maxHealthBuff:Apply()
+    end
 
     bus.fire(EVENTS.KO)
 

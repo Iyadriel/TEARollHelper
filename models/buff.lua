@@ -42,10 +42,6 @@ function Buff:New(id, label, icon, duration, canCancel, effects)
     return Buff:NewFromObj(buff)
 end
 
-function Buff:IsActive()
-    buffsState.state.buffLookup.get(self.id)
-end
-
 function Buff:GetDuration()
     return self.duration
 end
