@@ -14,6 +14,7 @@ local BuffEffectSpecial = models.BuffEffectSpecial
 
 local EVENTS = bus.EVENTS
 local SPECIAL_ACTIONS = constants.SPECIAL_ACTIONS
+local STATES = constants.CONSCIOUSNESS_STATES
 local TURN_TYPES = constants.TURN_TYPES
 
 local fadingConsciousness = Buff:New(
@@ -33,22 +34,18 @@ local fadingConsciousness = Buff:New(
 local clingingOnBuff = Buff:New("clinging", "Clinging on", "Interface\\Icons\\spell_holy_painsupression", nil, true, { BuffEffectSpecial:New("Get healed to full health to stay conscious!") })
 local unconsciousBuff = Buff:New("ko", "Unconscious", "Interface\\Icons\\spell_nature_sleep", nil, true, { BuffEffectSpecial:New("Get healed to at least half your health to return to consciousness!") })
 
-local STATES = {
-    FINE = 0,
-    FADING = 1,
-    CLINGING_ON = 2,
-    KO = 3
-}
-
 local STATE_BUFFS = {
     [STATES.FADING] = fadingConsciousness,
     [STATES.CLINGING_ON] = clingingOnBuff,
-    [STATES.KO] = unconsciousBuff,
+    [STATES.UNCONSCIOUS] = unconsciousBuff,
 }
 
-local currentState = STATES.FINE
+local function getState()
+    return characterState.state.consciousness.get()
+end
 
 local function setState(newState)
+    local currentState = getState()
     if currentState == newState then return end
 
     if STATE_BUFFS[currentState] then
@@ -59,7 +56,7 @@ local function setState(newState)
         STATE_BUFFS[newState]:Apply()
     end
 
-    currentState = newState
+    characterState.state.consciousness.set(newState)
 end
 
 local function goKO()
@@ -77,16 +74,16 @@ local function goKO()
     -- TODO add critical wound
     -- TODO if character has Final Act feat, do dmg
 
-    setState(STATES.KO)
+    setState(STATES.UNCONSCIOUS)
 end
 
 bus.addListener(EVENTS.CHARACTER_HEALTH, function(health)
     local maxHealth = characterState.state.maxHealth.get()
 
-    if currentState == STATES.FINE and health == 0 then
+    if getState() == STATES.FINE and health == 0 then
         fadingConsciousness:RefreshDuration()
         setState(STATES.FADING)
-    elseif currentState == STATES.CLINGING_ON and rules.KO.canRecoverFromClingingOn(health, maxHealth) then
+    elseif getState() == STATES.CLINGING_ON and rules.KO.canRecoverFromClingingOn(health, maxHealth) then
         setState(STATES.FINE)
     end
 end)
@@ -95,7 +92,7 @@ bus.addListener(EVENTS.HEALED, function()
     local health = characterState.state.health.get()
     local maxHealth = characterState.state.maxHealth.get()
 
-    if currentState == STATES.KO and rules.KO.canRecoverFromKO(health, maxHealth) then
+    if getState() == STATES.UNCONSCIOUS and rules.KO.canRecoverFromKO(health, maxHealth) then
         setState(STATES.FINE)
     end
 end)
@@ -103,7 +100,7 @@ end)
 -- TODO final stand trait
 
 bus.addListener(EVENTS.ROLL_CHANGED, function(action, roll)
-    if currentState == STATES.FADING and action == SPECIAL_ACTIONS.clingToConsciousness then
+    if getState() == STATES.FADING and action == SPECIAL_ACTIONS.clingToConsciousness then
         if roll >= rules.KO.getClingToConsciousnessThreshold() then
             local duration = BuffDuration:NewWithTurnType({
                 turnTypeID = TURN_TYPES.PLAYER.id,

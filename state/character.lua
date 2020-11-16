@@ -3,6 +3,7 @@ local _, ns = ...
 local buffsState = ns.state.buffs
 local bus = ns.bus
 local character = ns.character
+local constants = ns.constants
 local rules = ns.rules
 local characterState = ns.state.character
 local turnState = ns.state.turn
@@ -13,6 +14,7 @@ local feats = ns.resources.feats
 local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
 
+local CONSCIOUSNESS_STATES = constants.CONSCIOUSNESS_STATES
 local EVENTS = bus.EVENTS
 local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
@@ -46,6 +48,7 @@ characterState.initState = function()
             excess = 0,
         },
 
+        consciousness = CONSCIOUSNESS_STATES.FINE,
         criticalWounds = {},
 
         featsAndTraits = {
@@ -252,6 +255,14 @@ characterState.state = {
                 end
             end,
         },
+    },
+    consciousness = {
+        get = function()
+            return state.consciousness
+        end,
+        set = function(consciousnessState)
+            state.consciousness = consciousnessState
+        end
     },
     criticalWounds = {
         list = function()
