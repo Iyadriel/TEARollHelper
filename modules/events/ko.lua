@@ -112,3 +112,10 @@ bus.addListener(EVENTS.BUFF_EXPIRED, function(id)
         goKO()
     end
 end)
+
+-- make sure we don't get stuck in some state if player manually cancels buff
+bus.addListener(EVENTS.BUFF_CANCELLED, function(id)
+    if id == fadingConsciousness.id or id == clingingOnBuff.id or id == unconsciousBuff.id then
+        setState(STATES.FINE)
+    end
+end)

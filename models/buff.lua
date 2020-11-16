@@ -75,6 +75,7 @@ end
 
 function Buff:Cancel()
     self:Remove()
+    bus.fire(EVENTS.BUFF_CANCELLED, self.id)
 end
 
 function Buff:AddStack()
