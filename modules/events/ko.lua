@@ -15,7 +15,20 @@ local EVENTS = bus.EVENTS
 local SPECIAL_ACTIONS = constants.SPECIAL_ACTIONS
 local TURN_TYPES = constants.TURN_TYPES
 
-local fadingConsciousness = Buff:New("fading", "Fading consciousness", "Interface\\Icons\\spell_frost_stun", BuffDuration:New(TURN_TYPES.PLAYER.id, 0), true, { BuffEffectSpecial:New("Roll to cling to consciousness!") })
+local fadingConsciousness = Buff:New(
+    "fading",
+    "Fading consciousness",
+    "Interface\\Icons\\spell_frost_stun",
+    BuffDuration:NewWithTurnType({
+        turnTypeID = TURN_TYPES.PLAYER.id,
+        remainingTurns = 1,
+    }),
+    true,
+    {
+        BuffEffectSpecial:New("Roll to cling to consciousness!")
+    }
+)
+
 local clingingOnBuff = Buff:New("clinging", "Clinging on", "Interface\\Icons\\spell_holy_painsupression", nil, true, { BuffEffectSpecial:New("Get healed to full health to stay conscious!") })
 local unconsciousBuff = Buff:New("ko", "Unconscious", "Interface\\Icons\\spell_nature_sleep", nil, true)
 
@@ -79,7 +92,10 @@ end)
 bus.addListener(EVENTS.ROLL_CHANGED, function(action, roll)
     if currentState == STATES.FADING and action == SPECIAL_ACTIONS.clingToConsciousness then
         if roll >= rules.KO.getClingToConsciousnessThreshold() then
-            local duration = BuffDuration:New(TURN_TYPES.PLAYER.id, rules.KO.getClingToConsciousnessDuration())
+            local duration = BuffDuration:NewWithTurnType({
+                turnTypeID = TURN_TYPES.PLAYER.id,
+                remainingTurns = rules.KO.getClingToConsciousnessDuration()
+            })
             clingingOnBuff:SetDuration(duration)
             setState(STATES.CLINGING_ON)
         else

@@ -15,7 +15,7 @@ end
 
 local function getClingToConsciousnessDuration()
     local stamina = character.getPlayerStamina()
-    return 0 + floor(stamina / 2)
+    return 1 + floor(stamina / 2)
 end
 
 local function getMaxHealthReduction()
