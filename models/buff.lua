@@ -86,6 +86,11 @@ function Buff:AddStack()
     bus.fire(EVENTS.BUFF_STACK_ADDED, self)
 end
 
+function Buff:SetDuration(duration)
+    self.duration = utils.deepCopy(duration)
+    self.originalDuration = utils.deepCopy(duration)
+end
+
 function Buff:RefreshDuration()
     self.duration = utils.deepCopy(self.originalDuration)
 end
