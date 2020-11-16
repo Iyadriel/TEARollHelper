@@ -89,7 +89,6 @@ bus.addListener(EVENTS.CHARACTER_HEALTH, function(health)
     elseif currentState == STATES.CLINGING_ON and rules.KO.canRecoverFromClingingOn(health, maxHealth) then
         setState(STATES.FINE)
     elseif currentState == STATES.KO and rules.KO.canRecoverFromKO(health, maxHealth) then
-        -- TODO remove max health stacks
         setState(STATES.FINE)
     end
 end)
