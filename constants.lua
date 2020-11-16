@@ -33,6 +33,7 @@ local SPECIAL_ACTIONS = {
 
 local SPECIAL_ACTION_LABELS = {
     save = "Save",
+    clingToConsciousness = "Cling to consciousness",
 }
 
 local ACTION_LABELS_NO_PENANCE = {

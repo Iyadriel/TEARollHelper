@@ -119,6 +119,7 @@ ui/actions/buff.lua
 ui/actions/cc.lua
 ui/actions/defend.lua
 ui/actions/healing.lua
+ui/actions/ko.lua
 ui/actions/meleeSave.lua
 ui/actions/penance.lua
 ui/actions/rangedSave.lua

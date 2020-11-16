@@ -9,7 +9,6 @@ local traits = ns.resources.traits
 local turn = ns.state.turn
 local ui = ns.ui
 
-local SPECIAL_ACTIONS = constants.SPECIAL_ACTIONS
 local COLOURS = TEARollHelper.COLOURS
 local TRAITS = traits.TRAITS
 local TURN_TYPES = constants.TURN_TYPES
@@ -28,7 +27,8 @@ ui.modules.actions.modules = {
     defend = {},
     meleeSave = {},
     rangedSave = {},
-    utility = {}
+    utility = {},
+    KO = {},
 }
 
 --[[ local options = {
@@ -39,14 +39,7 @@ ui.modules.actions.getOptions = function(options)
     local lifeWithin = ui.helpers.traitButton(TRAITS.LIFE_WITHIN, { order = 1})
 
     return {
-        KO = {
-            order = options.order,
-            type = "group",
-            name = "Unconscious",
-            args = {
-                koRoll = ui.modules.turn.modules.roll.getOptions({ order = 0, action = SPECIAL_ACTIONS.clingToConsciousness }),
-            },
-        },
+        KO = ui.modules.actions.modules.KO.getOptions({ order = options.order }),
         playerTurn = {
             order = options.order + 1,
             type = "group",
