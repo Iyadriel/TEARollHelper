@@ -18,12 +18,24 @@ local function getClingToConsciousnessDuration()
     return 1 + floor(stamina / 2)
 end
 
-local function getMaxHealthReduction()
+local function canRecoverFromClingingOn(health, maxHealth)
+    return health >= maxHealth
+end
+
+local function canRecoverFromKO(health, maxHealth)
+    return health >= ceil(maxHealth / 2)
+end
+
+local function getKOMaxHealthReduction()
     return character.hasWeakness(WEAKNESSES.WORN) and 6 or 3
 end
 
 rules.KO = {
     getClingToConsciousnessThreshold = getClingToConsciousnessThreshold,
     getClingToConsciousnessDuration = getClingToConsciousnessDuration,
-    getMaxHealthReduction = getMaxHealthReduction,
+
+    canRecoverFromClingingOn = canRecoverFromClingingOn,
+    canRecoverFromKO = canRecoverFromKO,
+
+    getKOMaxHealthReduction = getKOMaxHealthReduction,
 }

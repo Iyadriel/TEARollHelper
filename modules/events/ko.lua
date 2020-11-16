@@ -62,7 +62,7 @@ local function setState(newState)
 end
 
 local function goKO()
-    local maxHealthEffect = BuffEffectMaxHealth:New(rules.KO.getMaxHealthReduction())
+    local maxHealthEffect = BuffEffectMaxHealth:New(rules.KO.getKOMaxHealthReduction())
     local maxHealthDebuff = nil -- TODO add or increase stacks
 
     bus.fire(EVENTS.KO)
@@ -79,9 +79,9 @@ bus.addListener(EVENTS.CHARACTER_HEALTH, function(health)
     if currentState == STATES.FINE and health == 0 then
         fadingConsciousness:RefreshDuration()
         setState(STATES.FADING)
-    elseif currentState == STATES.CLINGING_ON and health == character.calculatePlayerMaxHealth() then
+    elseif currentState == STATES.CLINGING_ON and rules.KO.canRecoverFromClingingOn(health, maxHealth) then
         setState(STATES.FINE)
-    elseif currentState == STATES.KO and health >= ceil(maxHealth / 2) then
+    elseif currentState == STATES.KO and rules.KO.canRecoverFromKO(health, maxHealth) then
         -- TODO remove max health stacks
         setState(STATES.FINE)
     end
