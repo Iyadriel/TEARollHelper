@@ -3,10 +3,13 @@ local _, ns = ...
 local COLOURS = TEARollHelper.COLOURS
 
 local character = ns.character
+local constants = ns.constants
 local rules = ns.rules
 local ui = ns.ui
 local weaknesses = ns.resources.weaknesses
 
+local STATS = constants.STATS
+local STAT_LABELS = constants.STAT_LABELS
 local STAT_MIN_VALUE = rules.stats.STAT_MIN_VALUE
 local STAT_MAX_VALUE = rules.stats.STAT_MAX_VALUE
 local WEAKNESSES = weaknesses.WEAKNESSES
@@ -14,6 +17,25 @@ local WEAKNESSES = weaknesses.WEAKNESSES
 -- Update turn UI, in case it is also open
 local function updateTurnUI()
     ui.update(ui.modules.turn.name)
+end
+
+local function getStatLabel(stat)
+    return function()
+        local label = STAT_LABELS[stat]
+
+        if stat == STATS.stamina then
+            label = label .. " (HP: " .. character.calculatePlayerMaxHealthWithoutBuffs() .. ")"
+        end
+
+        if character.hasProficiency(stat) then
+            if character.hasMastery(stat) then
+                label = label .. COLOURS.MASTERY .. " (Mastery)"
+            else
+                label = label .. COLOURS.PROFICIENCY .. " (Proficiency)"
+            end
+        end
+        return label
+    end
 end
 
 --[[ local options = {
@@ -50,14 +72,8 @@ ui.modules.config.modules.character.modules.stats.getOptions = function(options)
         args = {
             offence = {
                 type = "range",
-                name = function()
-                    local label = "Offence"
-                    if character.hasOffenceMastery() then
-                        label = label .. COLOURS.MASTERY .. " Mastery unlocked!"
-                    end
-                    return label
-                end,
-                desc = "Mastery bonus: +2 base damage, increases to +4 on first player turn after being saved by another player",
+                name = getStatLabel(STATS.offence),
+                desc = "Proficiency bonus: +1 base damage. |nMastery bonus: +1 base damage, increases to +3 on first player turn after being saved by another player",
                 min = STAT_MIN_VALUE,
                 max = STAT_MAX_VALUE,
                 step = 1,
@@ -65,14 +81,8 @@ ui.modules.config.modules.character.modules.stats.getOptions = function(options)
             },
             defence = {
                 type = "range",
-                name = function()
-                    local label = "Defence"
-                    if character.hasDefenceMastery() then
-                        label = label .. COLOURS.MASTERY .. " Mastery unlocked!"
-                    end
-                    return label
-                end,
-                desc = "Mastery bonus: When you block incoming damage to yourself, or to someone else via Melee save, it counts towards your ”Damage prevented”. When that counter reaches 50 it resets back to zero and you can regain 1 fate point, or let someone else regain 1 fate point.",
+                name = getStatLabel(STATS.defence),
+                desc = "Proficiency bonus: When you block incoming damage to yourself, or to someone else via Melee save, it counts towards your ”Damage prevented”. When that counter reaches 50 it resets back to zero and you can regain 1 fate point. |nMastery bonus: You can let someone else regain 1 fate point, not just yourself.",
                 min = STAT_MIN_VALUE,
                 max = STAT_MAX_VALUE,
                 step = 1,
@@ -80,14 +90,8 @@ ui.modules.config.modules.character.modules.stats.getOptions = function(options)
             },
             spirit = {
                 type = "range",
-                name = function()
-                    local label = "Spirit"
-                    if character.hasSpiritMastery() then
-                        label = label .. COLOURS.MASTERY .. " Mastery unlocked!"
-                    end
-                    return label
-                end,
-                desc = "Mastery bonus: +1 Greater Heal slot. Increases healing done to KO'd targets by +3.",
+                name = getStatLabel(STATS.spirit),
+                desc = "Proficiency bonus: +1 Greater Heal slot. |nMastery bonus: +1 Greater Heal slot and increases healing done to KO'd targets by +3.",
                 min = STAT_MIN_VALUE,
                 max = STAT_MAX_VALUE,
                 step = 1,
@@ -95,14 +99,8 @@ ui.modules.config.modules.character.modules.stats.getOptions = function(options)
             },
             stamina = {
                 type = "range",
-                name = function()
-                    local label = "Stamina (max HP: " .. character.calculatePlayerMaxHealthWithoutBuffs() .. ")"
-                    if character.hasStaminaMastery() then
-                        label = label .. COLOURS.MASTERY .. " Mastery!"
-                    end
-                    return label
-                end,
-                desc = "Mastery bonus: Enemy attacks can no longer reduce your stats, stun you, or impose disadvantage upon you.",
+                name = getStatLabel(STATS.stamina),
+                desc = "Proficiency bonus: When at risk of receiving a critical wound, roll 1-4, if your result is 4 you resist the critical wound. |nMastery bonus: If your result is 1 or 4 you resist the critical wound.",
                 min = STAT_MIN_VALUE,
                 max = STAT_MAX_VALUE,
                 step = 1,

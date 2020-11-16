@@ -13,7 +13,7 @@ local ACTIONS = constants.ACTIONS
 local STATS = constants.STATS
 local TURN_TYPES = constants.TURN_TYPES
 
-traits.TRAIT_KEYS = {"OTHER", "ARTISAN", "ASCEND", "BULWARK", "EMPOWERED_BLADES", "FAELUNES_REGROWTH", "FAULTLINE", "FOCUS", "GREATER_RESTORATION", "HOLY_BULWARK", "LIFE_PULSE", "LIFE_WITHIN", "PRESENCE_OF_VIRTUE", "REAP", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "VERSATILE", "VESEERAS_IRE", "VINDICATION"}
+traits.TRAIT_KEYS = {"OTHER", "ARTISAN", "ASCEND", "BULWARK", "EMPOWERED_BLADES", "FAELUNES_REGROWTH", "FAULTLINE", "GREATER_RESTORATION", "HOLY_BULWARK", "LIFE_PULSE", "LIFE_WITHIN", "MOMENT_OF_EXCELLENCE", "PRESENCE_OF_VIRTUE", "REAP", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "VERSATILE", "VESEERAS_IRE", "VINDICATION"}
 
 local TRAITS = {
     OTHER = {
@@ -23,7 +23,7 @@ local TRAITS = {
     ARTISAN = {
         id = "ARTISAN",
         name = "Artisan",
-        desc = "Activate to double the bonuses of your Utility traits for your next Utility roll. Activate before rolling. Does not enhance the effects of Silamel's Ace.",
+        desc = "Activate to double the bonuses of your Utility traits for your next Utility roll. Activate before rolling.",
         icon = "Interface\\Icons\\trade_engraving",
         numCharges = 3,
     },
@@ -59,14 +59,7 @@ local TRAITS = {
     FAULTLINE = {
         id = "FAULTLINE",
         name = "Faultline",
-        desc = "Activate to apply the result of an Offence attack roll onto a straight line outwards from yourself. All targets within line of sight along the line are struck. Activate after rolling.",
-        numCharges = 2,
-    },
-    FOCUS = {
-        id = "FOCUS",
-        name = "Focus",
-        desc = "Activate to gain advantage to all of your rolls during the current player turn. Activate and then roll.",
-        icon = "Interface\\Icons\\spell_nature_focusedmind",
+        desc = "Activate to apply the result of an Offence attack roll to up to 3 additional targets. Activate after rolling.",
         numCharges = 2,
     },
     GREATER_RESTORATION = {
@@ -92,6 +85,12 @@ local TRAITS = {
         name = "Life Within",
         desc = "Activate to increase your current and max HP by 10. Lasts until end of combat. Activate outside of rolling on either a player or enemy turn.",
         icon = "Interface\\Icons\\ability_druid_flourish",
+        numCharges = 1,
+    },
+    MOMENT_OF_EXCELLENCE = {
+        id = "MOMENT_OF_EXCELLENCE",
+        name = "Moment of Excellence",
+        desc = "Instead of rolling, you can activate this trait to gain the nat20 critical result of an Offense, Defense, Stamina, Spirit, or Utility roll.",
         numCharges = 1,
     },
     PRESENCE_OF_VIRTUE = {
@@ -132,7 +131,7 @@ local TRAITS = {
         name = "Versatile",
         desc = "Activate to choose one stat, and transfer its value to another stat of your choice for the duration of your next roll. Activate before rolling. Does not grant additional Greater Heal Slots. If you use Versatile to gain HP, and then have that amount or less HP left total by the end of your turn, you go down to 1 HP rather than 0 HP.",
         icon = "Interface\\Icons\\spell_arcane_arcanetactics",
-        numCharges = 2,
+        numCharges = 3,
     },
     VESEERAS_IRE = {
         id = "VESEERAS_IRE",
@@ -192,17 +191,6 @@ local TRAIT_BUFF_SPECS = {
             }),
             -- effects provided in consequences.lua
         },
-    },
-    [TRAITS.FOCUS.id] = {
-        {
-            duration = BuffDuration:NewWithTurnType({
-                turnTypeID = TURN_TYPES.PLAYER.id,
-                remainingTurns = 0,
-            }),
-            effects = {
-                BuffEffectAdvantage:New(nil, TURN_TYPES.PLAYER.id),
-            },
-        }
     },
     [TRAITS.LIFE_WITHIN.id] = {
         {

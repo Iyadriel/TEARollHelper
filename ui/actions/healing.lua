@@ -120,7 +120,16 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                     confirm = {
                         order = 5,
                         type = "execute",
-                        name = "Confirm",
+                        name = function()
+                            local heal = rolls.getHealing(options.outOfCombat)
+                            local colour
+
+                            if heal.hasChaplainOfViolenceProc then
+                                colour = COLOURS.FEATS.CHAPLAIN_OF_VIOLENCE
+                            end
+
+                            return colour and colour .. "Confirm" or "Confirm"
+                        end,
                         desc = "Confirm that you perform the stated action, and consume any charges used.",
                         hidden = function()
                             return rolls.getHealing(options.outOfCombat).amountHealed <= 0

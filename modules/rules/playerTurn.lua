@@ -2,12 +2,13 @@ local _, ns = ...
 
 local character = ns.character
 local rules = ns.rules
-local traits = ns.resources.traits
 
-local TRAITS = traits.TRAITS
+local feats = ns.resources.feats
+
+local FEATS = feats.FEATS
 
 local function shouldShowPreRollUI()
-    return character.hasTrait(TRAITS.FOCUS)
+    return character.hasFeat(FEATS.FOCUS)
 end
 
 rules.playerTurn = {

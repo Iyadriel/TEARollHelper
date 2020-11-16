@@ -44,7 +44,12 @@ end
 -- Core
 
 local function getBaseDamage()
-    return character.hasOffenceMastery() and 3 or 1
+    if character.hasOffenceMastery() then
+        return 3
+    elseif character.hasOffenceProficiency() then
+        return 2
+    end
+    return 1
 end
 
 local function getBaseDamageAfterBuffs(baseDmgBuff)
@@ -120,7 +125,7 @@ local function canProcAdrenaline(attackIndex)
 end
 
 local function hasAdrenalineProc(threshold, attackValue)
-    return attackValue >= threshold + 6
+    return attackValue >= threshold + 8
 end
 
 -- Feat: Blood Harvest

@@ -36,14 +36,14 @@ ui.modules.actions.modules.attack.getOptions = function(options)
             return shouldHideRoll() or not rules.offence.shouldShowPreRollUI()
         end,
         args = utils.merge(
-            ui.modules.actions.modules.playerTurn.getSharedPreRollOptions({ order = 1 }),
-            ui.modules.actions.modules.anyTurn.getSharedPreRollOptions({ order = 2 }),
+            ui.modules.actions.modules.playerTurn.getSharedPreRollOptions({ order = 0 }),
+            ui.modules.actions.modules.anyTurn.getSharedPreRollOptions({ order = 1 }),
             {
                 useVeseerasIre = ui.helpers.traitButton(TRAITS.VESEERAS_IRE, {
-                    order = 0,
+                    order = 2,
                     checkBuff = true,
                 }),
-                veseerasIreActive = ui.helpers.traitActiveText(TRAITS.VESEERAS_IRE, 0),
+                veseerasIreActive = ui.helpers.traitActiveText(TRAITS.VESEERAS_IRE, 2),
             }
         ),
     })

@@ -17,6 +17,7 @@ local rollValues = {
     isRolling = false,
     tempRoll = nil,
     action = nil,
+    tempMomentOfExcellence = false,
     tempRollMode = nil,
     tempIsReroll = nil,
 }
@@ -40,14 +41,19 @@ local function setAction(action)
 end
 
 local function resetTempValues()
+    rollValues.tempMomentOfExcellence = false
     rollValues.tempRollMode = nil
     rollValues.tempRoll = nil
     rollValues.tempIsReroll = nil
 end
 
+local function getMinRoll()
+    return rollValues.tempMomentOfExcellence and 20 or rules.rolls.MIN_ROLL
+end
+
 local function sendRoll()
     gameEvents.listenForRolls()
-    RandomRoll(rules.rolls.MIN_ROLL, rules.rolls.MAX_ROLL)
+    RandomRoll(getMinRoll(), rules.rolls.MAX_ROLL)
 end
 
 local function getRequiredRollsForTurn()
@@ -66,6 +72,7 @@ function doRoll(rollMode, rollModeModifier, isReroll)
     rollMode = rollMode + rollModeModifier
     rollMode = max(ROLL_MODES.DISADVANTAGE, min(ROLL_MODES.ADVANTAGE, rollMode))
 
+    rollValues.tempMomentOfExcellence = false
     rollValues.tempRollMode = rollMode
     rollValues.isRolling = true
     rollValues.tempIsReroll = isReroll
@@ -75,6 +82,20 @@ function doRoll(rollMode, rollModeModifier, isReroll)
     local numRolls = getRequiredRollsForTurn()
     totalRequiredRolls = numRolls
     remainingRolls = numRolls
+
+    sendRoll()
+end
+
+local function doMomentOfExcellence()
+    rollValues.tempMomentOfExcellence = true
+    rollValues.tempRollMode = ROLL_MODES.NORMAL
+    rollValues.isRolling = true
+    rollValues.tempIsReroll = false
+
+    updateUI() -- so we can update the button state
+
+    totalRequiredRolls = 1
+    remainingRolls = 1
 
     sendRoll()
 end
@@ -113,4 +134,5 @@ rollHandler.isRolling = isRolling
 rollHandler.setCurrentRoll = setCurrentRoll
 rollHandler.setAction = setAction
 rollHandler.roll = doRoll
+rollHandler.doMomentOfExcellence = doMomentOfExcellence
 rollHandler.handleRollResult = handleRollResult

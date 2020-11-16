@@ -181,6 +181,19 @@ buffsState.state = {
             end
             return nil
         end,
+        getFeatBuffs = function()
+            local activeBuffs = buffsState.state.activeBuffs.get()
+            local featBuffs = {}
+            for _, buff in ipairs(activeBuffs) do
+                if buff.featID then
+                    table.insert(featBuffs, buff)
+                end
+            end
+            if #featBuffs == 0 then
+                return nil
+            end
+            return featBuffs
+        end,
         getFeatBuff = function(feat)
             return buffsState.state.buffLookup.get("feat_" .. feat.id)
         end,

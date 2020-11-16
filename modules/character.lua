@@ -16,9 +16,12 @@ local ACTIONS, SPECIAL_ACTIONS = constants.ACTIONS, constants.SPECIAL_ACTIONS
 local EVENTS = bus.EVENTS
 local FEATS = feats.FEATS
 local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
-local STATS, STAT_LABELS, STATS_SORTED = constants.STATS, constants.STAT_LABELS, constants.STATS_SORTED
+local STATS = constants.STATS
 local TRAITS = traits.TRAITS
 local WEAKNESSES = weaknesses.WEAKNESSES
+
+local STAT_POINTS_PROFICIENCY = 4
+local STAT_POINTS_MASTERY = 6
 
 local calculatePlayerMaxHealth, calculatePlayerMaxHealthWithoutBuffs
 local getPlayerFeat, hasFeat, hasFeatByID, setPlayerFeatByID, getPlayerRacialTrait, hasRacialTrait
@@ -73,20 +76,44 @@ local function setStat(stat, value)
     end
 end
 
+local function hasProficiency(stat)
+    return getPlayerStat(stat) >= STAT_POINTS_PROFICIENCY
+end
+
+local function hasMastery(stat)
+    return getPlayerStat(stat) >= STAT_POINTS_MASTERY
+end
+
+local function hasOffenceProficiency()
+    return getPlayerOffence() >= STAT_POINTS_PROFICIENCY
+end
+
+local function hasDefenceProficiency()
+    return getPlayerDefence() >= STAT_POINTS_PROFICIENCY
+end
+
+local function hasSpiritProficiency()
+    return getPlayerSpirit() >= STAT_POINTS_PROFICIENCY
+end
+
+local function hasStaminaProficiency()
+    return getPlayerStamina() >= STAT_POINTS_PROFICIENCY
+end
+
 local function hasOffenceMastery()
-    return getPlayerOffence() >= 6
+    return getPlayerOffence() >= STAT_POINTS_MASTERY
 end
 
 local function hasDefenceMastery()
-    return getPlayerDefence() >= 6
+    return getPlayerDefence() >= STAT_POINTS_MASTERY
 end
 
 local function hasSpiritMastery()
-    return getPlayerSpirit() >= 6
+    return getPlayerSpirit() >= STAT_POINTS_MASTERY
 end
 
 local function hasStaminaMastery()
-    return getPlayerStamina() >= 6
+    return getPlayerStamina() >= STAT_POINTS_MASTERY
 end
 
 -- [[ Actions ]]
@@ -378,6 +405,14 @@ character.calculatePlayerMaxHealth = calculatePlayerMaxHealth
 character.calculatePlayerMaxHealthWithoutBuffs = calculatePlayerMaxHealthWithoutBuffs
 character.setStat = setStat
 
+
+character.hasProficiency = hasProficiency
+character.hasMastery = hasMastery
+
+character.hasOffenceProficiency = hasOffenceProficiency
+character.hasDefenceProficiency = hasDefenceProficiency
+character.hasSpiritProficiency = hasSpiritProficiency
+character.hasStaminaProficiency = hasStaminaProficiency
 character.hasOffenceMastery = hasOffenceMastery
 character.hasDefenceMastery = hasDefenceMastery
 character.hasSpiritMastery = hasSpiritMastery

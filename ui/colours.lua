@@ -9,6 +9,7 @@ TEARollHelper.COLOURS = {
     DEBUFF = '|cff996600',
     CRITICAL = '|cffa335ee',
 
+    PROFICIENCY = '|cffa335ee',
     MASTERY = '|cffff8000',
 
     NOTE = '|cffbbbbbb',
@@ -22,6 +23,7 @@ TEARollHelper.COLOURS = {
 
         ADRENALINE = '|cffff6b6b',
         BLOOD_HARVEST = '|cffff6b6b',
+        CHAPLAIN_OF_VIOLENCE = '|cffebe8bb',
         MERCY_FROM_PAIN = '|cffebe8bb',
         REAPER = '|cffc41f3b',
         VENGEANCE = '|cff7b15d5',
@@ -33,6 +35,7 @@ TEARollHelper.COLOURS = {
         EMPOWERED_BLADES = '|cff9de851',
         FAELUNES_REGROWTH = '|cff02752a',
         HOLY_BULWARK = '|cfff4c96f',
+        MOMENT_OF_EXCELLENCE = '|cffa335ee',
         REAP = '|cffc41f3b',
         SHATTER_SOUL = '|cffa22fc8',
     },
