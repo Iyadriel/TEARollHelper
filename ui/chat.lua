@@ -9,6 +9,7 @@ local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
 
 local COLOURS = TEARollHelper.COLOURS
+local CONSCIOUSNESS_STATES = constants.CONSCIOUSNESS_STATES
 local EVENTS = bus.EVENTS
 local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
@@ -37,6 +38,19 @@ bus.addListener(EVENTS.ACTION_PERFORMED, function(actionType, action, hideMsg)
 end)
 
 -- [[ Character effects ]]
+
+bus.addListener(EVENTS.CONSCIOUSNESS_CHANGED, function(consciousnessState)
+    if consciousnessState == CONSCIOUSNESS_STATES.FINE then
+        TEARollHelper:Print("Hey you, you're finally awake.")
+    elseif consciousnessState == CONSCIOUSNESS_STATES.FADING then
+        TEARollHelper:Print("You are slipping away! Roll in the next player turn to cling to consciousness!")
+    elseif consciousnessState == CONSCIOUSNESS_STATES.CLINGING_ON then
+        TEARollHelper:Print("You cling on to consciousness! If you are healed to full, you will stay in the fight!")
+    elseif consciousnessState == CONSCIOUSNESS_STATES.UNCONSCIOUS then
+        TEARollHelper:Print("You are unconscious. Be healed for half your max HP to be revived.")
+        TEARollHelper:Print("You receive a random critical wound, roll 1-8.")
+    end
+end)
 
 bus.addListener(EVENTS.DAMAGE_PREVENTED_COUNTER_RESET, function()
     TEARollHelper:Print(COLOURS.MASTERY .. "Your 'Damage prevented' counter was maxed out and has been reset.")

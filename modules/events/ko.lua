@@ -57,6 +57,7 @@ local function setState(newState)
     end
 
     characterState.state.consciousness.set(newState)
+    bus.fire(EVENTS.CONSCIOUSNESS_CHANGED, newState)
 end
 
 local function goKO()
@@ -69,9 +70,6 @@ local function goKO()
         maxHealthBuff:Apply()
     end
 
-    bus.fire(EVENTS.KO)
-
-    -- TODO add critical wound
     -- TODO if character has Final Act feat, do dmg
 
     setState(STATES.UNCONSCIOUS)

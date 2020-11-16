@@ -39,12 +39,12 @@ local EVENTS = {
     ACTION_PERFORMED = "ACTION_PERFORMED", -- actionType, action, hideMsg
 
     -- Character effects
+    CONSCIOUSNESS_CHANGED = "CONSCIOUSNESS_CHANGED", -- consciousnessState
     CRITICAL_WOUND_TOGGLED = "CRITICAL_WOUND_TOGGLED", -- criticalWoundID
     DAMAGE_PREVENTED = "DAMAGE_PREVENTED", -- damagePrevented
     DAMAGE_PREVENTED_COUNTER_RESET = "DAMAGE_PREVENTED_COUNTER_RESET",
     DAMAGE_TAKEN = "DAMAGE_TAKEN", -- incomingDamage, damageTaken, overkill
     HEALED = "HEALED", -- amountHealed, netAmountHealed, overHealing
-    KO = "KO",
     TRAIT_ACTIVATED = "TRAIT_ACTIVATED", -- traitID, msg?
 
     -- Buffs
