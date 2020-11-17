@@ -38,6 +38,7 @@ TEARollHelper.COLOURS = {
         MOMENT_OF_EXCELLENCE = '|cffa335ee',
         REAP = '|cffc41f3b',
         SHATTER_SOUL = '|cffa22fc8',
+        VESEERAS_IRE = '|cff852f5b',
     },
 
     WEAKNESSES = {
