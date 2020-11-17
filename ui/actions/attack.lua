@@ -154,16 +154,16 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                             rollHandler.roll(rollMode, rollModeMod, false)
                         end
                     },
-                    useFaultline = ui.helpers.traitToggle(ACTIONS.attack, rolls.getAttack, TRAITS.FAULTLINE, {
+                    useFaultline = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.FAULTLINE, {
                         order = 6,
                     }),
-                    useReap = ui.helpers.traitToggle(ACTIONS.attack, rolls.getAttack, TRAITS.REAP, {
+                    useReap = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.REAP, {
                         order = 7,
                     }),
-                    useShatterSoul = ui.helpers.traitToggle(ACTIONS.attack, rolls.getAttack, TRAITS.SHATTER_SOUL, {
+                    useShatterSoul = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.SHATTER_SOUL, {
                         order = 8,
                     }),
-                    useVindication = ui.helpers.traitToggle(ACTIONS.attack, rolls.getAttack, TRAITS.VINDICATION, {
+                    useVindication = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.VINDICATION, {
                         order = 9,
                         name = function()
                             return COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.VINDICATION.name ..  ": " .. COLOURS.HEALING .. "Heal for " .. rolls.getAttack().traits[TRAITS.VINDICATION.id].healingDone .. " HP"

@@ -184,7 +184,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                             return actions.toString(ACTIONS.defend, rolls.getDefence())
                         end
                     },
-                    useEmpoweredBlades = ui.helpers.traitToggle(ACTIONS.defend, rolls.getDefence, TRAITS.EMPOWERED_BLADES, {
+                    useEmpoweredBlades = ui.helpers.traitToggle(ACTIONS.defend, TRAITS.EMPOWERED_BLADES, {
                         order = 1,
                     }),
                     confirm = ui.helpers.confirmActionButton(ACTIONS.defend, rolls.getDefence, {

@@ -110,11 +110,9 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                     },
                     useLifePulse = ui.helpers.traitToggle(
                         ACTIONS.healing,
-                        function()
-                            return rolls.getHealing(options.outOfCombat)
-                        end,
                         TRAITS.LIFE_PULSE, {
                             order = 4,
+                            actionArgs = { options.outOfCombat },
                         }
                     ),
                     confirm = {

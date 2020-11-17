@@ -581,6 +581,22 @@ local function getUtility()
     return actions.getUtility(state.utility.currentRoll, rollBuff, utilityTypeID, utilityTrait, utilityBonusBuff)
 end
 
+local ACTION_METHODS = {
+    [ACTIONS.attack] = getAttack,
+    [ACTIONS.penance] = getPenance,
+    [ACTIONS.cc] = getCC,
+    [ACTIONS.healing] = getHealing,
+    [ACTIONS.buff] = getBuff,
+    [ACTIONS.defend] = getDefence,
+    [ACTIONS.meleeSave] = getMeleeSave,
+    [ACTIONS.rangedSave] = getRangedSave,
+    [ACTIONS.utility] = getUtility,
+}
+
+local function getActionMethod(action)
+    return ACTION_METHODS[action]
+end
+
 -- Trait actions
 
 local function getHolyBulwark(isSave)
@@ -619,6 +635,7 @@ rolls.getDefence = getDefence
 rolls.getMeleeSave = getMeleeSave
 rolls.getRangedSave = getRangedSave
 rolls.getUtility = getUtility
+rolls.getActionMethod = getActionMethod
 
 rolls.traits = {
     getShieldSlam = getShieldSlam,

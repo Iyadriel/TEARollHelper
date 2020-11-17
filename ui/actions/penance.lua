@@ -121,10 +121,10 @@ ui.modules.actions.modules.penance.getOptions = function(options)
                             return actions.toString(ACTIONS.penance, penance)
                         end
                     },
-                    useFaultline = ui.helpers.traitToggle(ACTIONS.penance, rolls.getPenance, TRAITS.FAULTLINE, {
+                    useFaultline = ui.helpers.traitToggle(ACTIONS.penance, TRAITS.FAULTLINE, {
                         order = 3,
                     }),
-                    useVindication = ui.helpers.traitToggle(ACTIONS.penance, rolls.getPenance, TRAITS.VINDICATION, {
+                    useVindication = ui.helpers.traitToggle(ACTIONS.penance, TRAITS.VINDICATION, {
                         order = 4,
                         name = function()
                             return COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.VINDICATION.name ..  ": " .. COLOURS.HEALING .. "Heal for " .. rolls.getPenance().traits[TRAITS.VINDICATION.id].healingDone .. " HP"

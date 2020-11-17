@@ -63,8 +63,16 @@ end
 --[[ local options = {
     order: Number,
     name: Function?,
+    actionArgs: Array?,
 } ]]
-local function traitToggle(actionType, getAction, trait, options)
+local function traitToggle(actionType, trait, options)
+    local getAction = rolls.getActionMethod(actionType)
+
+    local actionArgs = nil
+    if options.actionArgs then
+        actionArgs =  unpack(options.actionArgs)
+    end
+
     return {
         order = options.order,
         type = "toggle",
@@ -76,7 +84,7 @@ local function traitToggle(actionType, getAction, trait, options)
         hidden = function()
             if character.hasTrait(trait) then
                 local numCharges = state.featsAndTraits.numTraitCharges.get(trait.id)
-                return numCharges <= 0 or not getAction().traits[trait.id].canUse
+                return numCharges <= 0 or not getAction(actionArgs).traits[trait.id].canUse
             end
             return true
         end,

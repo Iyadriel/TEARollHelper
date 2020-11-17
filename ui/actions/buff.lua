@@ -59,7 +59,7 @@ ui.modules.actions.modules.buff.getOptions = function(options)
                             return actions.toString(ACTIONS.buff, buff)
                         end
                     },
-                    useAscend = ui.helpers.traitToggle(ACTIONS.buff, rolls.getBuff, TRAITS.ASCEND, {
+                    useAscend = ui.helpers.traitToggle(ACTIONS.buff, TRAITS.ASCEND, {
                         order = 1,
                     }),
                     confirm = ui.helpers.confirmActionButton(ACTIONS.buff, rolls.getBuff, {

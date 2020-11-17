@@ -78,7 +78,7 @@ ui.modules.actions.modules.meleeSave.getOptions = function(options)
                             return actions.toString(ACTIONS.meleeSave, rolls.getMeleeSave())
                         end
                     },
-                    usePresenceOfVirtue = ui.helpers.traitToggle(ACTIONS.meleeSave, rolls.getMeleeSave, TRAITS.PRESENCE_OF_VIRTUE, {
+                    usePresenceOfVirtue = ui.helpers.traitToggle(ACTIONS.meleeSave, TRAITS.PRESENCE_OF_VIRTUE, {
                         order = 1,
                     }),
                     confirm = ui.helpers.confirmActionButton(ACTIONS.meleeSave, rolls.getMeleeSave, {
