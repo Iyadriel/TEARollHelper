@@ -37,7 +37,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
         end,
         args = utils.merge(
             ui.modules.actions.modules.playerTurn.getSharedPreRollOptions({ order = 0 }),
-            ui.modules.actions.modules.anyTurn.getSharedPreRollOptions({ order = 1 }),
+            ui.modules.actions.modules.anyTurn.getSharedPreRollOptions({ order = 1, action = ACTIONS.attack }),
             {
                 useVeseerasIre = ui.helpers.traitButton(TRAITS.VESEERAS_IRE, {
                     order = 2,

@@ -37,7 +37,7 @@ ui.modules.actions.modules.rangedSave.getOptions = function(options)
                 hidden = function()
                     return shouldHideRoll() or not rules.meleeSave.shouldShowPreRollUI()
                 end,
-                args = ui.modules.actions.modules.anyTurn.getSharedPreRollOptions({ order = 0 }),
+                args = ui.modules.actions.modules.anyTurn.getSharedPreRollOptions({ order = 0, action = ACTIONS.rangedSave }),
             }),
             roll = ui.modules.turn.modules.roll.getOptions({
                 order = 3,

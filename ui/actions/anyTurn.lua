@@ -11,12 +11,14 @@ local rolls = ns.state.rolls
 local traits = ns.resources.traits
 local ui = ns.ui
 
+local ACTIONS = constants.ACTIONS
 local TRAITS = traits.TRAITS
 
 local state = rolls.state
 
 --[[ local options = {
     order: Number,
+    action: String,
 } ]]
 ui.modules.actions.modules.anyTurn.getSharedPreRollOptions = function(options)
     return {
@@ -26,7 +28,7 @@ ui.modules.actions.modules.anyTurn.getSharedPreRollOptions = function(options)
             name = COLOURS.TRAITS.GENERIC .. TRAITS.VERSATILE.name,
             inline = true,
             hidden = function()
-                return not character.hasTrait(TRAITS.VERSATILE) or buffsState.buffLookup.getTraitBuffs(TRAITS.VERSATILE)
+                return options.action == ACTIONS.utility or not character.hasTrait(TRAITS.VERSATILE) or buffsState.buffLookup.getTraitBuffs(TRAITS.VERSATILE)
             end,
             args = {
                 stat1 = {

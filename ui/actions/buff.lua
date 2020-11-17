@@ -32,7 +32,7 @@ ui.modules.actions.modules.buff.getOptions = function(options)
                 end,
                 args = utils.merge(
                     ui.modules.actions.modules.playerTurn.getSharedPreRollOptions({ order = 0 }),
-                    ui.modules.actions.modules.anyTurn.getSharedPreRollOptions({ order = 1 })
+                    ui.modules.actions.modules.anyTurn.getSharedPreRollOptions({ order = 1, action = ACTIONS.buff })
                 )
             }),
             roll = ui.modules.turn.modules.roll.getOptions({

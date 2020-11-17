@@ -53,7 +53,7 @@ ui.modules.actions.modules.meleeSave.getOptions = function(options)
                 hidden = function()
                     return shouldHideRoll() or not rules.meleeSave.shouldShowPreRollUI()
                 end,
-                args = ui.modules.actions.modules.anyTurn.getSharedPreRollOptions({ order = 0 }),
+                args = ui.modules.actions.modules.anyTurn.getSharedPreRollOptions({ order = 0, action = ACTIONS.meleeSave }),
             }),
             roll = ui.modules.turn.modules.roll.getOptions({
                 order = 6,

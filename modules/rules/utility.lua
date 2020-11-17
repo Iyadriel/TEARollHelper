@@ -82,7 +82,7 @@ local function shouldShowUtilityTypeSelect()
 end
 
 local function shouldShowPreRollUI(turnTypeID)
-    return character.hasTrait(TRAITS.ARTISAN) or rules.other.shouldShowPreRollUI() or (turnTypeID == TURN_TYPES.PLAYER.id and rules.playerTurn.shouldShowPreRollUI())
+    return character.hasTrait(TRAITS.ARTISAN) or (turnTypeID == TURN_TYPES.PLAYER.id and rules.playerTurn.shouldShowPreRollUI())
 end
 
 rules.utility = {

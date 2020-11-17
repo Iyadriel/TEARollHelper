@@ -133,7 +133,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                     return shouldHideRoll() or not rules.defence.shouldShowPreRollUI()
                 end,
                 args = utils.merge(
-                    ui.modules.actions.modules.anyTurn.getSharedPreRollOptions({ order = 1 }),
+                    ui.modules.actions.modules.anyTurn.getSharedPreRollOptions({ order = 1, action = ACTIONS.defend }),
                     {
                         useBulwark = ui.helpers.traitButton(TRAITS.BULWARK, {
                             order = 0,
