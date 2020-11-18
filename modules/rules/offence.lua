@@ -169,6 +169,16 @@ local function hasVengeanceProc(roll)
     return roll >= 16
 end
 
+-- Trait: Critical Mass
+
+local function criticalMassEnabled(dmgDealt)
+    return dmgDealt > 0
+end
+
+local function calculateCriticalMassBonusDamage()
+    return character.getPlayerOffence()
+end
+
 -- Trait: Shatter Soul
 
 local function canUseShatterSoul()
@@ -224,6 +234,9 @@ rules.offence = {
 
     canProcVengeance = canProcVengeance,
     hasVengeanceProc = hasVengeanceProc,
+
+    criticalMassEnabled = criticalMassEnabled,
+    calculateCriticalMassBonusDamage = calculateCriticalMassBonusDamage,
 
     canUseShatterSoul = canUseShatterSoul,
     shatterSoulEnabled = shatterSoulEnabled,

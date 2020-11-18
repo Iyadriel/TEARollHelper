@@ -17,6 +17,10 @@ local function ascendToString()
     return COLOURS.BUFF .. " You apply your buff to a second target.|r"
 end
 
+local function criticalMassToString()
+    return " (damage from Critical Mass included)"
+end
+
 local function empoweredBladesToString()
     return COLOURS.TRAITS.EMPOWERED_BLADES .. " Your warglaives absorb the energy of the attack!|r"
 end
@@ -47,6 +51,7 @@ end
 
 local traitActionToString = {
     [TRAITS.ASCEND.id] = ascendToString,
+    [TRAITS.CRITICAL_MASS.id] = criticalMassToString,
     [TRAITS.EMPOWERED_BLADES.id] = empoweredBladesToString,
     [TRAITS.FAULTLINE.id] = faultlineToString,
     [TRAITS.LIFE_PULSE.id] = lifePulseToString,

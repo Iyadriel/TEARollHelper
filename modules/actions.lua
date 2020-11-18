@@ -15,6 +15,9 @@ local function getAttack(attackIndex, roll, rollBuff, threshold, offence, offenc
     local hasAdrenalineProc = nil
     local hasMercyFromPainProc = nil
     local mercyFromPainBonusHealing = 0
+    local canUseCriticalMass = nil
+    local criticalMassActive = nil
+    local criticalMassBonusDamage = 0
     local shatterSoulEnabled = false
     local hasVengeanceProc = nil
     local hasVindicationProc = nil
@@ -30,6 +33,13 @@ local function getAttack(attackIndex, roll, rollBuff, threshold, offence, offenc
 
     if rules.offence.canUseBloodHarvest() then
         dmg = dmg + rules.offence.calculateBloodHarvestBonus(numBloodHarvestSlots)
+    end
+
+    canUseCriticalMass = rules.offence.criticalMassEnabled(dmg)
+    criticalMassActive = canUseCriticalMass and activeTraits[TRAITS.CRITICAL_MASS.id]
+    if criticalMassActive then
+        criticalMassBonusDamage = rules.offence.calculateCriticalMassBonusDamage()
+        dmg = dmg + criticalMassBonusDamage
     end
 
     if isCrit and critType == rules.offence.CRIT_TYPES.DAMAGE then
@@ -71,6 +81,11 @@ local function getAttack(attackIndex, roll, rollBuff, threshold, offence, offenc
         mercyFromPainBonusHealing = mercyFromPainBonusHealing,
         hasVengeanceProc = hasVengeanceProc,
         traits = {
+            [TRAITS.CRITICAL_MASS.id] = {
+                canUse = canUseCriticalMass,
+                active = criticalMassActive,
+                dmg = criticalMassBonusDamage,
+            },
             [TRAITS.FAULTLINE.id] = {
                 canUse = dmg > 0,
                 active = dmg > 0 and activeTraits[TRAITS.FAULTLINE.id],

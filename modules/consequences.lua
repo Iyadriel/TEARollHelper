@@ -84,6 +84,10 @@ local function useBulwark()
     buffs.addTraitBuff(TRAITS.BULWARK)
 end
 
+local function useCriticalMass()
+    buffs.addTraitBuff(TRAITS.CRITICAL_MASS)
+end
+
 local function useEmpoweredBlades(defence)
     buffs.addTraitBuff(TRAITS.EMPOWERED_BLADES, { BuffEffectDamageDone:New(ceil(defence.dmgRisk / 2)) })
 end
@@ -155,6 +159,7 @@ end
 local TRAIT_FNS = {
     [TRAITS.ARTISAN.id] = useArtisan,
     [TRAITS.BULWARK.id] = useBulwark,
+    [TRAITS.CRITICAL_MASS.id] = useCriticalMass,
     [TRAITS.GREATER_RESTORATION.id] = useGreaterRestoration,
     [TRAITS.HOLY_BULWARK.id] = useHolyBulwark,
     [TRAITS.LIFE_WITHIN.id] = useLifeWithin,

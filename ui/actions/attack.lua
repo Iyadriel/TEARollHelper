@@ -154,23 +154,26 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                             rollHandler.roll(rollMode, rollModeMod, false)
                         end
                     },
-                    useFaultline = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.FAULTLINE, {
+                    useCriticalMass = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.CRITICAL_MASS, {
                         order = 6,
                     }),
-                    useReap = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.REAP, {
+                    useFaultline = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.FAULTLINE, {
                         order = 7,
                     }),
-                    useShatterSoul = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.SHATTER_SOUL, {
+                    useReap = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.REAP, {
                         order = 8,
                     }),
-                    useVindication = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.VINDICATION, {
+                    useShatterSoul = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.SHATTER_SOUL, {
                         order = 9,
+                    }),
+                    useVindication = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.VINDICATION, {
+                        order = 10,
                         name = function()
                             return COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.VINDICATION.name ..  ": " .. COLOURS.HEALING .. "Heal for " .. rolls.getAttack().traits[TRAITS.VINDICATION.id].healingDone .. " HP"
                         end,
                     }),
                     confirm = {
-                        order = 10,
+                        order = 11,
                         type = "execute",
                         name = function()
                             local attack = rolls.getAttack()
