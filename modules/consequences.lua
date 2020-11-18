@@ -21,7 +21,6 @@ local BuffEffectDamageDone = models.BuffEffectDamageDone
 local BuffEffectHealingDone = models.BuffEffectHealingDone
 local BuffEffectHealingOverTime = models.BuffEffectHealingOverTime
 local BuffEffectStat = models.BuffEffectStat
-local BuffEffectUtilityBonus = models.BuffEffectUtilityBonus
 
 local ACTIONS = constants.ACTIONS
 local ENEMIES = enemies.ENEMIES
@@ -75,10 +74,6 @@ local function enableLivingBarricade()
 end
 
 -- Traits
-
-local function useArtisan()
-    buffs.addTraitBuff(TRAITS.ARTISAN, { BuffEffectUtilityBonus:New(rules.utility.calculateBaseUtilityBonus()) })
-end
 
 local function useBulwark()
     buffs.addTraitBuff(TRAITS.BULWARK)
@@ -153,7 +148,6 @@ local function useVeseerasIre()
 end
 
 local TRAIT_FNS = {
-    [TRAITS.ARTISAN.id] = useArtisan,
     [TRAITS.BULWARK.id] = useBulwark,
     [TRAITS.GREATER_RESTORATION.id] = useGreaterRestoration,
     [TRAITS.HOLY_BULWARK.id] = useHolyBulwark,
@@ -171,10 +165,10 @@ local function useTrait(trait)
             local msg = trait:Activate(...)
             bus.fire(EVENTS.TRAIT_ACTIVATED, trait.id, msg)
         else
-        local msg = TRAIT_FNS[trait.id](...)
-        useTraitChargeWithMsg(trait, msg)
+            local msg = TRAIT_FNS[trait.id](...)
+            useTraitChargeWithMsg(trait, msg)
+        end
     end
-end
 end
 
 -- [[ Rolls ]]

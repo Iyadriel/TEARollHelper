@@ -9,6 +9,7 @@ local BuffEffectAdvantage = models.BuffEffectAdvantage
 local BuffEffectMaxHealth = models.BuffEffectMaxHealth
 local BuffEffectStat = models.BuffEffectStat
 
+local Artisan = models.Artisan
 local CriticalMass = models.CriticalMass
 
 local ACTIONS = constants.ACTIONS
@@ -22,13 +23,7 @@ local TRAITS = {
         id = "OTHER",
         name = "Other",
     },
-    ARTISAN = {
-        id = "ARTISAN",
-        name = "Artisan",
-        desc = "Activate to double the bonuses of your Utility traits for your next Utility roll. Activate before rolling.",
-        icon = "Interface\\Icons\\trade_engraving",
-        numCharges = 3,
-    },
+    ARTISAN = Artisan:New(),
     ASCEND = {
         id = "ASCEND",
         name = "Ascend",
@@ -159,16 +154,6 @@ local TRAITS = {
 }
 
 local TRAIT_BUFF_SPECS = {
-    [TRAITS.ARTISAN.id] = {
-        {
-            duration = BuffDuration:New({
-                expireAfterActions = {
-                    [ACTIONS.utility] = true,
-                }
-            }),
-            -- effects provided in consequences.lua
-        },
-    },
     [TRAITS.BULWARK.id] = {
         {
             duration = BuffDuration:NewWithTurnType({
