@@ -174,13 +174,13 @@ local function healingToString(healing)
         local healColour = (healing.outOfCombat and character.hasFeat(FEATS.MEDIC)) and COLOURS.FEATS.GENERIC or COLOURS.HEALING
 
         if healing.isCrit then
-            msg = msg .. COLOURS.CRITICAL .. "MANY HEALS!|r " .. healColour .. "You heal everyone in line of sight for " .. amount .. " HP."
+            msg = msg .. COLOURS.CRITICAL .. "MANY HEALS!|r " .. healColour .. "You heal everyone in line of sight for " .. amount .. " HP.|r"
         else
             if healing.usesParagon then
                 local targets = healing.playersHealableWithParagon > 1 and " allies" or " ally"
-                msg = msg .. healColour .. "You heal " .. healing.playersHealableWithParagon .. targets .. " for " .. amount .. " HP."
+                msg = msg .. healColour .. "You heal " .. healing.playersHealableWithParagon .. targets .. " for " .. amount .. " HP.|r"
             else
-                msg = msg .. healColour .. "You heal for " .. amount .. " HP."
+                msg = msg .. healColour .. "You heal for " .. amount .. " HP.|r"
             end
         end
     elseif not healing.canStillHeal then
