@@ -66,7 +66,7 @@ local FEATS = {
     EXPANSIVE_ARSENAL = {
         id = "EXPANSIVE_ARSENAL",
         name = "Expansive Arsenal",
-        desc = "If you pick a second Weakness, you may pick a third Trait.",
+        desc = "You may pick an extra Trait.",
     },
     FOCUS = {
         id = "FOCUS",

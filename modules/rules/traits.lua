@@ -23,14 +23,13 @@ local SHATTER_SOUL_HEAL_AMOUNT = 6
 
 local function calculateMaxTraits()
     local maxTraits = 1
-    local numWeaknesses = character.getNumWeaknesses()
 
-    if numWeaknesses > 0 then
+    if character.getNumWeaknesses() > 0 then
         maxTraits = maxTraits + 1
+    end
 
-        if numWeaknesses > 1 and character.hasFeat(FEATS.EXPANSIVE_ARSENAL) then
-            maxTraits = maxTraits + 1
-        end
+    if character.hasFeat(FEATS.EXPANSIVE_ARSENAL) then
+        maxTraits = maxTraits + 1
     end
 
     return maxTraits
