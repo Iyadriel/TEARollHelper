@@ -53,15 +53,21 @@ local function addTraitBuff(trait, providedEffects, index)
         end
     end
 
-    local buffSpec = TRAIT_BUFF_SPECS[trait.id][index]
-    local effects = providedEffects or buffSpec.effects
+    local newBuff
 
-    local newBuff = TraitBuff:New(
-        trait,
-        buffSpec.duration,
-        effects,
-        index
-    )
+    if trait.CreateBuff then
+        newBuff = trait:CreateBuff(index)
+    else
+        local buffSpec = TRAIT_BUFF_SPECS[trait.id][index]
+        local effects = providedEffects or buffSpec.effects
+
+        newBuff = TraitBuff:New(
+            trait,
+            buffSpec.duration,
+            effects,
+            index
+        )
+    end
 
     newBuff:Apply()
 end

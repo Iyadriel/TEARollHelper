@@ -167,9 +167,14 @@ local TRAIT_FNS = {
 
 local function useTrait(trait)
     return function(...)
+        if trait.Activate then
+            local msg = trait:Activate(...)
+            bus.fire(EVENTS.TRAIT_ACTIVATED, trait.id, msg)
+        else
         local msg = TRAIT_FNS[trait.id](...)
         useTraitChargeWithMsg(trait, msg)
     end
+end
 end
 
 -- [[ Rolls ]]
