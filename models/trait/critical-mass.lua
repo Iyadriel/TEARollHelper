@@ -1,6 +1,5 @@
 local _, ns = ...
 
-local buffs = ns.buffs
 local character = ns.character
 local models = ns.models
 
