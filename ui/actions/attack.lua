@@ -43,7 +43,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                     order = 2,
                     checkBuff = true,
                 }),
-                veseerasIreActive = ui.helpers.traitActiveText(TRAITS.VESEERAS_IRE, 2),
+                veseerasIreActive = ui.helpers.traitActiveText(TRAITS.VESEERAS_IRE, 3),
             }
         ),
     })

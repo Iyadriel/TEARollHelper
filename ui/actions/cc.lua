@@ -28,10 +28,10 @@ ui.modules.actions.modules.cc.getOptions = function(options)
             ui.modules.actions.modules.anyTurn.getSharedPreRollOptions({ order = 2, action = ACTIONS.cc }),
             {
                 useVeseerasIre = ui.helpers.traitButton(TRAITS.VESEERAS_IRE, {
-                    order = 0,
+                    order = 3,
                     checkBuff = true,
                 }),
-                veseerasIreActive = ui.helpers.traitActiveText(TRAITS.VESEERAS_IRE, 0),
+                veseerasIreActive = ui.helpers.traitActiveText(TRAITS.VESEERAS_IRE, 3),
             }
         ),
     })

@@ -27,7 +27,7 @@ local state = rolls.state
 } ]]
 ui.modules.actions.modules.healing.getOptions = function(options)
     local shouldShowPlayerTurnOptions = options.turnTypeID == TURN_TYPES.PLAYER.id
-    local preRollArgs = ui.modules.actions.modules.anyTurn.getSharedPreRollOptions({ order = 1, action = ACTIONS.healing })
+    local preRollArgs = ui.modules.actions.modules.anyTurn.getSharedPreRollOptions({ order = 1, action = ACTIONS.healing, actionArgs = { options.outOfCombat } })
 
     if shouldShowPlayerTurnOptions then
         preRollArgs = utils.merge(preRollArgs, ui.modules.actions.modules.playerTurn.getSharedPreRollOptions({ order = 0 }))

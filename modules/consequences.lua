@@ -2,6 +2,7 @@ local _, ns = ...
 
 local actions = ns.actions
 local buffs = ns.buffs
+local buffsState = ns.state.buffs
 local bus = ns.bus
 local character = ns.character
 local characterState = ns.state.character
@@ -122,6 +123,17 @@ local function useShieldSlam()
     return actions.traitToString(TRAITS.SHIELD_SLAM, rollState.traits.getShieldSlam())
 end
 
+local function useSilamelsAce()
+    local utilityBonusBuff = buffsState.state.buffs.utilityBonus.get()
+    local amount = rules.utility.calculateUtilityTraitBonus(utilityBonusBuff)
+
+    buffs.addTraitBuff(TRAITS.SILAMELS_ACE, {
+        BuffEffectStat:New(STATS.offence, amount),
+        BuffEffectStat:New(STATS.defence, amount),
+        BuffEffectStat:New(STATS.spirit, amount),
+    })
+end
+
 local function useVersatile()
     local stat1 = rollState.state.shared.versatile.stat1.get()
     local stat2 = rollState.state.shared.versatile.stat2.get()
@@ -148,6 +160,7 @@ local TRAIT_FNS = {
     [TRAITS.LIFE_WITHIN.id] = useLifeWithin,
     [TRAITS.SECOND_WIND.id] = useSecondWind,
     [TRAITS.SHIELD_SLAM.id] = useShieldSlam,
+    [TRAITS.SILAMELS_ACE.id] = useSilamelsAce,
     [TRAITS.VERSATILE.id] = useVersatile,
     [TRAITS.VESEERAS_IRE.id] = useVeseerasIre,
 }

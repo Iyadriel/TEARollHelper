@@ -13,7 +13,7 @@ local ACTIONS = constants.ACTIONS
 local STATS = constants.STATS
 local TURN_TYPES = constants.TURN_TYPES
 
-traits.TRAIT_KEYS = {"OTHER", "ARTISAN", "ASCEND", "BULWARK", "EMPOWERED_BLADES", "FAELUNES_REGROWTH", "FAULTLINE", "GREATER_RESTORATION", "HOLY_BULWARK", "LIFE_PULSE", "LIFE_WITHIN", "MOMENT_OF_EXCELLENCE", "PRESENCE_OF_VIRTUE", "REAP", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "VERSATILE", "VESEERAS_IRE", "VINDICATION"}
+traits.TRAIT_KEYS = {"OTHER", "ARTISAN", "ASCEND", "BULWARK", "EMPOWERED_BLADES", "FAELUNES_REGROWTH", "FAULTLINE", "GREATER_RESTORATION", "HOLY_BULWARK", "LIFE_PULSE", "LIFE_WITHIN", "MOMENT_OF_EXCELLENCE", "PRESENCE_OF_VIRTUE", "REAP", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "SILAMELS_ACE", "VERSATILE", "VESEERAS_IRE", "VINDICATION"}
 
 local TRAITS = {
     OTHER = {
@@ -126,6 +126,13 @@ local TRAITS = {
         desc = "Activate on a player turn, instead of rolling for attack you deal your base damage plus your Defence as damage to an enemy of your choice. Activate outside of rolling.",
         numCharges = 3,
     },
+    SILAMELS_ACE = {
+        id = "SILAMELS_ACE",
+        name = "Silamel's Ace",
+        desc = "Activate to have one of your Utility Trait bonuses apply to your next Offence, Defence or Spirit roll. Your emote must adhere to the theme of the chosen utility Trait, and the trait itself must be at least somewhat applicable. Activate and then roll.",
+        icon = "Interface\\Icons\\inv_glowingazeritespire",
+        numCharges = 2,
+    },
     VERSATILE = {
         id = "VERSATILE",
         name = "Versatile",
@@ -211,6 +218,14 @@ local TRAIT_BUFF_SPECS = {
             effects = {
                 BuffEffectStat:New(STATS.offence, 6)
             },
+        },
+    },
+    [TRAITS.SILAMELS_ACE.id] = {
+        {
+            duration = BuffDuration:New({
+                expireAfterAnyAction = true,
+            }),
+            -- effects provided in consequences.lua
         },
     },
     [TRAITS.VERSATILE.id] = {

@@ -36,7 +36,7 @@ local function canUseFeats()
 end
 
 local function shouldShowPreRollUI()
-    return character.hasTrait(TRAITS.VERSATILE)
+    return character.hasTrait(TRAITS.SILAMELS_ACE) or character.hasTrait(TRAITS.VERSATILE)
 end
 
 -- For use by other rule modules

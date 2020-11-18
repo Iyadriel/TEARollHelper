@@ -91,6 +91,7 @@ rules.utility = {
     canUseUtilityTraits = canUseUtilityTraits,
     getNumAllowedUtilityTraits = getNumAllowedUtilityTraits,
     calculateBaseUtilityBonus = calculateBaseUtilityBonus,
+    calculateUtilityTraitBonus = calculateUtilityTraitBonus,
     calculateUtilityValue = calculateUtilityValue,
 
     getRollModeModifier = getRollModeModifier,
