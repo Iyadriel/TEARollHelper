@@ -1,7 +1,9 @@
 local _, ns = ...
 
+local models = ns.models
 local rules = ns.rules
 
+local CriticalMass = models.CriticalMass
 local traits = ns.resources.traits
 
 local TRAITS = traits.TRAITS
@@ -35,10 +37,10 @@ local function getAttack(attackIndex, roll, rollBuff, threshold, offence, offenc
         dmg = dmg + rules.offence.calculateBloodHarvestBonus(numBloodHarvestSlots)
     end
 
-    canUseCriticalMass = rules.offence.criticalMassEnabled(dmg)
+    canUseCriticalMass = CriticalMass:IsUsable(dmg)
     criticalMassActive = canUseCriticalMass and activeTraits[TRAITS.CRITICAL_MASS.id]
     if criticalMassActive then
-        criticalMassBonusDamage = rules.offence.calculateCriticalMassBonusDamage()
+        criticalMassBonusDamage = CriticalMass:GetBonusDamage()
         dmg = dmg + criticalMassBonusDamage
     end
 

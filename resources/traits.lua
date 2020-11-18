@@ -9,6 +9,8 @@ local BuffEffectAdvantage = models.BuffEffectAdvantage
 local BuffEffectMaxHealth = models.BuffEffectMaxHealth
 local BuffEffectStat = models.BuffEffectStat
 
+local CriticalMass = models.CriticalMass
+
 local ACTIONS = constants.ACTIONS
 local STATS = constants.STATS
 local TURN_TYPES = constants.TURN_TYPES
@@ -40,12 +42,7 @@ local TRAITS = {
         icon = "Interface\\Icons\\spell_holy_greaterblessingofsanctuary",
         numCharges = 2,
     },
-    CRITICAL_MASS = {
-        id = "CRITICAL_MASS",
-        name = "Critical Mass",
-        desc = "Activate after a successful Offence Attack roll to deal bonus damage equal to your base Offence stat. Activate after rolling.",
-        numCharges = 2,
-    },
+    CRITICAL_MASS = CriticalMass:New(),
     EMPOWERED_BLADES = {
         id = "EMPOWERED_BLADES",
         name = "Empowered Blades",
