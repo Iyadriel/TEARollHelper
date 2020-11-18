@@ -108,15 +108,22 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                             return msg .. actions.toString(ACTIONS.healing, healing)
                         end
                     },
-                    useLifePulse = ui.helpers.traitToggle(
+                    useChastice = ui.helpers.traitToggle(
                         ACTIONS.healing,
-                        TRAITS.LIFE_PULSE, {
+                        TRAITS.CHASTICE, {
                             order = 4,
                             actionArgs = { options.outOfCombat },
                         }
                     ),
+                    useLifePulse = ui.helpers.traitToggle(
+                        ACTIONS.healing,
+                        TRAITS.LIFE_PULSE, {
+                            order = 5,
+                            actionArgs = { options.outOfCombat },
+                        }
+                    ),
                     confirm = {
-                        order = 5,
+                        order = 6,
                         type = "execute",
                         name = function()
                             local heal = rolls.getHealing(options.outOfCombat)
@@ -137,7 +144,7 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                         end
                     },
                     remainingHeals = {
-                        order = 6,
+                        order = 7,
                         type = "description",
                         name = function()
                             if rolls.getHealing(options.outOfCombat).numGreaterHealSlots > 0 then

@@ -1,12 +1,13 @@
 local _, ns = ...
 
-local models = ns.models
 local rules = ns.rules
 
-local CriticalMass = models.CriticalMass
 local traits = ns.resources.traits
 
 local TRAITS = traits.TRAITS
+
+local Chastice = TRAITS.CHASTICE
+local CriticalMass = TRAITS.CRITICAL_MASS
 
 local function getAttack(attackIndex, roll, rollBuff, threshold, offence, offenceBuff, baseDmgBuff, damageDoneBuff, enemyId, isAOE, numBloodHarvestSlots, activeTraits)
     local attackValue
@@ -38,7 +39,7 @@ local function getAttack(attackIndex, roll, rollBuff, threshold, offence, offenc
     end
 
     canUseCriticalMass = CriticalMass:IsUsable(dmg)
-    criticalMassActive = canUseCriticalMass and activeTraits[TRAITS.CRITICAL_MASS.id]
+    criticalMassActive = canUseCriticalMass and activeTraits[CriticalMass.id]
     if criticalMassActive then
         criticalMassBonusDamage = CriticalMass:GetBonusDamage()
         dmg = dmg + criticalMassBonusDamage
@@ -83,7 +84,7 @@ local function getAttack(attackIndex, roll, rollBuff, threshold, offence, offenc
         mercyFromPainBonusHealing = mercyFromPainBonusHealing,
         hasVengeanceProc = hasVengeanceProc,
         traits = {
-            [TRAITS.CRITICAL_MASS.id] = {
+            [CriticalMass.id] = {
                 canUse = canUseCriticalMass,
                 active = criticalMassActive,
                 dmg = criticalMassBonusDamage,
@@ -289,6 +290,9 @@ local function getHealing(roll, rollBuff, spirit, spiritBuff, healingDoneBuff, n
     local chaplainOfViolenceBonusDamage = 0
     local usesParagon = rules.healing.usesParagon()
     local playersHealableWithParagon = nil
+    local canUseChastice = nil
+    local chasticeActive = nil
+    local chasticeDmg = 0
 
     roll = rules.rolls.calculateRoll(roll, rollBuff)
 
@@ -329,6 +333,12 @@ local function getHealing(roll, rollBuff, spirit, spiritBuff, healingDoneBuff, n
         end
     end
 
+    canUseChastice = Chastice:IsUsable(amountHealed)
+    chasticeActive = canUseChastice and activeTraits[Chastice.id]
+    if chasticeActive then
+        chasticeDmg = Chastice:GetDamageDone(amountHealed)
+    end
+
     return {
         canStillHeal = canStillHeal,
         amountHealed = amountHealed,
@@ -340,6 +350,11 @@ local function getHealing(roll, rollBuff, spirit, spiritBuff, healingDoneBuff, n
         usesParagon = usesParagon,
         playersHealableWithParagon = playersHealableWithParagon,
         traits = {
+            [Chastice.id] = {
+                canUse = canUseChastice,
+                active = chasticeActive,
+                damageDone = chasticeDmg,
+            },
             [TRAITS.LIFE_PULSE.id] = {
                 canUse = amountHealed > 0,
                 active = amountHealed > 0 and activeTraits[TRAITS.LIFE_PULSE.id],

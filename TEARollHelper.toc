@@ -42,6 +42,7 @@ models/critical-wound-crippling-pain.lua
 models/party-member.lua
 models/trait.lua
 models/trait/artisan.lua
+models/trait/chastice.lua
 models/trait/critical-mass.lua
 models/unit.lua
 

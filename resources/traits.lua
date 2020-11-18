@@ -9,21 +9,22 @@ local BuffEffectAdvantage = models.BuffEffectAdvantage
 local BuffEffectMaxHealth = models.BuffEffectMaxHealth
 local BuffEffectStat = models.BuffEffectStat
 
-local Artisan = models.Artisan
-local CriticalMass = models.CriticalMass
+local Artisan = models.Artisan:New()
+local Chastice = models.Chastice:New()
+local CriticalMass = models.CriticalMass:New()
 
 local ACTIONS = constants.ACTIONS
 local STATS = constants.STATS
 local TURN_TYPES = constants.TURN_TYPES
 
-traits.TRAIT_KEYS = {"OTHER", "ARTISAN", "ASCEND", "BULWARK", "CRITICAL_MASS", "EMPOWERED_BLADES", "FAELUNES_REGROWTH", "FAULTLINE", "GREATER_RESTORATION", "HOLY_BULWARK", "LIFE_PULSE", "LIFE_WITHIN", "MOMENT_OF_EXCELLENCE", "PRESENCE_OF_VIRTUE", "REAP", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "SILAMELS_ACE", "VERSATILE", "VESEERAS_IRE", "VINDICATION"}
+traits.TRAIT_KEYS = {"OTHER", Artisan.id, "ASCEND", "BULWARK", Chastice.id, CriticalMass.id, "EMPOWERED_BLADES", "FAELUNES_REGROWTH", "FAULTLINE", "GREATER_RESTORATION", "HOLY_BULWARK", "LIFE_PULSE", "LIFE_WITHIN", "MOMENT_OF_EXCELLENCE", "PRESENCE_OF_VIRTUE", "REAP", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "SILAMELS_ACE", "VERSATILE", "VESEERAS_IRE", "VINDICATION"}
 
 local TRAITS = {
     OTHER = {
         id = "OTHER",
         name = "Other",
     },
-    ARTISAN = Artisan:New(),
+    [Artisan.id] = Artisan,
     ASCEND = {
         id = "ASCEND",
         name = "Ascend",
@@ -37,7 +38,8 @@ local TRAITS = {
         icon = "Interface\\Icons\\spell_holy_greaterblessingofsanctuary",
         numCharges = 2,
     },
-    CRITICAL_MASS = CriticalMass:New(),
+    [Chastice.id] = Chastice,
+    [CriticalMass.id] = CriticalMass,
     EMPOWERED_BLADES = {
         id = "EMPOWERED_BLADES",
         name = "Empowered Blades",
