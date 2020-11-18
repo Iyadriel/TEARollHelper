@@ -62,25 +62,21 @@ end
 
 local function calculateAttackDmg(threshold, attackValue, baseDmgBuff, damageDoneBuff)
     local overkill = attackValue - threshold
+    local damage = 0
 
     if overkill >= 0 then
         local baseDamage = getBaseDamageAfterBuffs(baseDmgBuff)
-        local damage
-
-        if character.hasFeat(FEATS.ONSLAUGHT) then
-            damage = baseDamage + ceil(character.getPlayerOffence() / 2)
-        else
-            damage = baseDamage + floor(overkill / 2) + damageDoneBuff
-        end
+        damage = baseDamage + floor(overkill / 2) + damageDoneBuff
 
         if character.hasWeakness(WEAKNESSES.GLASS_CANNON) then
             damage = damage + 2
         end
-
-        return damage
+    elseif character.hasFeat(FEATS.ONSLAUGHT) then
+        local baseDamage = getBaseDamageAfterBuffs(baseDmgBuff)
+        damage = baseDamage + damageDoneBuff
     end
 
-    return 0
+    return damage
 end
 
 local function applyCritModifier(dmg)

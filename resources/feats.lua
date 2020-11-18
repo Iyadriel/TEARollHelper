@@ -135,7 +135,7 @@ local FEATS = {
     ONSLAUGHT = {
         id = "ONSLAUGHT",
         name = "Onslaught",
-        desc = "When hitting with an Offence attack roll you always deal your base damage plus half of your Offence stat rounded up, regardless of how much you beat the threshold by.",
+        desc = "When rolling an Offence Attack roll against a target and failing to meet the threshold to hit, you still deal your base damage to the target.",
     },
     PARAGON = {
         id = "PARAGON",
