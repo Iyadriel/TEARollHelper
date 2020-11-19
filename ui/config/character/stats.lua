@@ -6,8 +6,11 @@ local character = ns.character
 local constants = ns.constants
 local rules = ns.rules
 local ui = ns.ui
+
+local feats = ns.resources.feats
 local weaknesses = ns.resources.weaknesses
 
+local FEATS = feats.FEATS
 local STATS = constants.STATS
 local STAT_LABELS = constants.STAT_LABELS
 local STAT_MIN_VALUE = rules.stats.STAT_MIN_VALUE
@@ -133,8 +136,16 @@ ui.modules.config.modules.character.modules.stats.getOptions = function(options)
                     return msg
                 end,
             },
-            reboundWarning = {
+            chaplainOfViolenceWarning = {
                 order = 5,
+                type = "description",
+                name = COLOURS.ERROR .. "These stats are not compatible with your " .. FEATS.CHAPLAIN_OF_VIOLENCE.name .. " feat.",
+                hidden = function()
+                    return not character.hasFeat(FEATS.CHAPLAIN_OF_VIOLENCE) or rules.stats.validateStatsForChaplainOfViolence()
+                end,
+            },
+            reboundWarning = {
+                order = 6,
                 type = "description",
                 name = COLOURS.ERROR .. "These stats are not compatible with your " .. WEAKNESSES.REBOUND.name .. " weakness.",
                 hidden = function()
@@ -142,7 +153,7 @@ ui.modules.config.modules.character.modules.stats.getOptions = function(options)
                 end,
             },
             temperedBenevolenceWarning = {
-                order = 6,
+                order = 7,
                 type = "description",
                 name = COLOURS.ERROR .. "These stats are not compatible with your " .. WEAKNESSES.TEMPERED_BENEVOLENCE.name .. " weakness.",
                 hidden = function()
@@ -150,7 +161,7 @@ ui.modules.config.modules.character.modules.stats.getOptions = function(options)
                 end,
             },
             overflowWarning = {
-                order = 7,
+                order = 8,
                 type = "description",
                 name = COLOURS.ERROR .. "These stats are not compatible with your " .. WEAKNESSES.OVERFLOW.name .. " weakness.",
                 hidden = function()
