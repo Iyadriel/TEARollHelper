@@ -66,12 +66,12 @@ local FEATS = {
     EXPANSIVE_ARSENAL = {
         id = "EXPANSIVE_ARSENAL",
         name = "Expansive Arsenal",
-        desc = "You may pick an extra Trait.",
+        desc = "You may pick an additional Trait.",
     },
     FOCUS = {
         id = "FOCUS",
         name = "Focus",
-        desc = "You can give yourself advantage on all of your rolls on the current player turn, but you then get disadvantage on the next enemy turn.",
+        desc = "On player turn you can choose to roll with advantage, but when doing so you have disadvantage on the following enemy turn. Choose before rolling whether or not to apply the advantage.",
         icon = "Interface\\Icons\\spell_nature_focusedmind",
     },
 --[[     FOREIGN_DISCIPLE = {

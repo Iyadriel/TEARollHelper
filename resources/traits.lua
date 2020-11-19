@@ -61,7 +61,7 @@ local TRAITS = {
     FAULTLINE = {
         id = "FAULTLINE",
         name = "Faultline",
-        desc = "Activate to apply the result of an Offence attack roll to up to 3 additional targets. Activate after rolling.",
+        desc = "Activate to deal your full damage to up to 3 additional targets. Activate after rolling.",
         numCharges = 2,
     },
     GREATER_RESTORATION = {
@@ -92,7 +92,7 @@ local TRAITS = {
     MOMENT_OF_EXCELLENCE = {
         id = "MOMENT_OF_EXCELLENCE",
         name = "Moment of Excellence",
-        desc = "Instead of rolling, you can activate this trait to gain the nat20 critical result of an Offense, Defense, Stamina, Spirit, or Utility roll.",
+        desc = "Instead of rolling, you can activate this trait to gain the nat20 critical result of an Offense, Defense, Stamina, Spirit, or Utility roll. Activate outside of rolling.",
         numCharges = 1,
     },
     PRESENCE_OF_VIRTUE = {
