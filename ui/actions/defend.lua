@@ -133,15 +133,20 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                     return shouldHideRoll() or not rules.defence.shouldShowPreRollUI()
                 end,
                 args = utils.merge(
-                    ui.modules.actions.modules.anyTurn.getSharedPreRollOptions({ order = 1, action = ACTIONS.defend }),
+                    ui.modules.actions.modules.anyTurn.getSharedPreRollOptions({ order = 3, action = ACTIONS.defend }),
                     {
-                        useBulwark = ui.helpers.traitButton(TRAITS.BULWARK, {
+                        useApexProtector = ui.helpers.traitButton(TRAITS.APEX_PROTECTOR, {
                             order = 0,
                             checkBuff = true,
                         }),
-                        bulwarkActive = ui.helpers.traitActiveText(TRAITS.BULWARK, 0),
-                        enableLivingBarricade = {
+                        apexProtectorActive = ui.helpers.traitActiveText(TRAITS.APEX_PROTECTOR, 0),
+                        useBulwark = ui.helpers.traitButton(TRAITS.BULWARK, {
                             order = 1,
+                            checkBuff = true,
+                        }),
+                        bulwarkActive = ui.helpers.traitActiveText(TRAITS.BULWARK, 1),
+                        enableLivingBarricade = {
+                            order = 2,
                             type = "execute",
                             name = COLOURS.FEATS.GENERIC .. "Enable " .. FEATS.LIVING_BARRICADE.name,
                             desc = FEATS.LIVING_BARRICADE.desc,
@@ -151,7 +156,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                             func = consequences.enableLivingBarricade,
                         },
                         livingBarricadeActive = {
-                            order = 1,
+                            order = 2,
                             type = "description",
                             name = COLOURS.FEATS.GENERIC .. FEATS.LIVING_BARRICADE.name .. " is active.",
                             hidden = function()
@@ -175,20 +180,30 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                     return not rolls.state.defend.currentRoll.get()
                 end,
                 args = {
-                    damageTaken = {
+                    result = {
                         order = 0,
                         type = "description",
-                        desc = "How much damage you take this turn",
                         fontSize = "medium",
                         name = function()
                             return actions.toString(ACTIONS.defend, rolls.getDefence())
                         end
                     },
-                    useEmpoweredBlades = ui.helpers.traitToggle(ACTIONS.defend, TRAITS.EMPOWERED_BLADES, {
+                    defendValue = {
                         order = 1,
+                        type = "description",
+                        fontSize = "small",
+                        hidden = function()
+                            return not buffsState.buffLookup.getTraitBuffs(TRAITS.APEX_PROTECTOR)
+                        end,
+                        name = function()
+                            return COLOURS.NOTE .. "Your total roll: " .. rolls.getDefence().defendValue
+                        end
+                    },
+                    useEmpoweredBlades = ui.helpers.traitToggle(ACTIONS.defend, TRAITS.EMPOWERED_BLADES, {
+                        order = 2,
                     }),
                     confirm = ui.helpers.confirmActionButton(ACTIONS.defend, rolls.getDefence, {
-                        order = 2,
+                        order = 3,
                         hideMsg = true,
                         func = function()
                             local defence = rolls.getDefence()

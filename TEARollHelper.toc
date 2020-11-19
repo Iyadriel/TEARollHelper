@@ -40,7 +40,9 @@ models/character-status.lua
 models/critical-wound.lua
 models/critical-wound-crippling-pain.lua
 models/party-member.lua
+
 models/trait.lua
+models/trait/apex-protector.lua
 models/trait/artisan.lua
 models/trait/chastice.lua
 models/trait/critical-mass.lua

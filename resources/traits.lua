@@ -9,6 +9,7 @@ local BuffEffectAdvantage = models.BuffEffectAdvantage
 local BuffEffectMaxHealth = models.BuffEffectMaxHealth
 local BuffEffectStat = models.BuffEffectStat
 
+local ApexProtector = models.ApexProtector:New()
 local Artisan = models.Artisan:New()
 local Chastice = models.Chastice:New()
 local CriticalMass = models.CriticalMass:New()
@@ -17,13 +18,14 @@ local ACTIONS = constants.ACTIONS
 local STATS = constants.STATS
 local TURN_TYPES = constants.TURN_TYPES
 
-traits.TRAIT_KEYS = {"OTHER", Artisan.id, "ASCEND", "BULWARK", Chastice.id, CriticalMass.id, "EMPOWERED_BLADES", "FAELUNES_REGROWTH", "FAULTLINE", "GREATER_RESTORATION", "HOLY_BULWARK", "LIFE_PULSE", "LIFE_WITHIN", "MOMENT_OF_EXCELLENCE", "PRESENCE_OF_VIRTUE", "REAP", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "SILAMELS_ACE", "VERSATILE", "VESEERAS_IRE", "VINDICATION"}
+traits.TRAIT_KEYS = {"OTHER", ApexProtector.id, Artisan.id, "ASCEND", "BULWARK", Chastice.id, CriticalMass.id, "EMPOWERED_BLADES", "FAELUNES_REGROWTH", "FAULTLINE", "GREATER_RESTORATION", "HOLY_BULWARK", "LIFE_PULSE", "LIFE_WITHIN", "MOMENT_OF_EXCELLENCE", "PRESENCE_OF_VIRTUE", "REAP", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "SILAMELS_ACE", "VERSATILE", "VESEERAS_IRE", "VINDICATION"}
 
 local TRAITS = {
     OTHER = {
         id = "OTHER",
         name = "Other",
     },
+    [ApexProtector.id] = ApexProtector,
     [Artisan.id] = Artisan,
     ASCEND = {
         id = "ASCEND",
