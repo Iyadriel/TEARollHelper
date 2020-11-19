@@ -12,6 +12,7 @@ local ui = ns.ui
 
 local ACTIONS = constants.ACTIONS
 local ACTION_LABELS = constants.ACTION_LABELS
+local DEFENCE_TYPES = constants.DEFENCE_TYPES
 local TRAITS = traits.TRAITS
 
 --[[ local options = {
@@ -42,7 +43,7 @@ ui.modules.actions.modules.meleeSave.getOptions = function(options)
                 order = 4,
                 hidden = function()
                     local enemyId = environment.state.enemyId.get()
-                    return not rules.traits.canUseHolyBulwark(enemyId) or not rolls.state.meleeSave.damageRisk.get()
+                    return not rules.traits.canUseHolyBulwark(enemyId) or not rolls.state.meleeSave.damageRisk.get() or rolls.state.meleeSave.defenceType.get() ~= DEFENCE_TYPES.THRESHOLD
                 end,
                 func = function()
                     consequences.useTrait(TRAITS.HOLY_BULWARK)(true)

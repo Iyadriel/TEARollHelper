@@ -121,7 +121,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                 order = 4,
                 hidden = function()
                     local enemyId = environment.state.enemyId.get()
-                    return not rules.traits.canUseHolyBulwark(enemyId) or not rolls.state.defend.damageRisk.get()
+                    return not rules.traits.canUseHolyBulwark(enemyId) or not rolls.state.defend.damageRisk.get() or rolls.state.defend.defenceType.get() ~= DEFENCE_TYPES.THRESHOLD
                 end,
                 func = function()
                     consequences.useTrait(TRAITS.HOLY_BULWARK)(false)
