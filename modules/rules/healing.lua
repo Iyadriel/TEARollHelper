@@ -78,10 +78,6 @@ local function getMaxGreaterHealSlots()
 
     if character.hasSpiritProficiency() and not character.hasWeakness(WEAKNESSES.TEMPERED_BENEVOLENCE) then
         numSlots = numSlots + 1
-
-        if character.hasSpiritMastery() then
-            numSlots = numSlots + 1
-        end
     end
 
     if character.hasFeat(FEATS.MENDER) then
