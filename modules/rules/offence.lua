@@ -121,7 +121,7 @@ local function canProcAdrenaline(attackIndex)
 end
 
 local function hasAdrenalineProc(threshold, attackValue)
-    return attackValue >= threshold + 8
+    return attackValue >= threshold + 6
 end
 
 -- Feat: Blood Harvest
