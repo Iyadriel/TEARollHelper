@@ -20,7 +20,6 @@ ui.modules.actions.modules = {
     playerTurn = {},
 
     attack = {},
-    penance = {},
     cc = {},
     healing = {},
     buff = {},
@@ -58,15 +57,14 @@ ui.modules.actions.getOptions = function(options)
                     width = "full",
                 }),
                 attack = ui.modules.actions.modules.attack.getOptions({ order = 3 }),
-                penance = ui.modules.actions.modules.penance.getOptions({ order = 4 }),
-                cc = ui.modules.actions.modules.cc.getOptions({ order = 5 }),
+                cc = ui.modules.actions.modules.cc.getOptions({ order = 4 }),
                 heal = ui.modules.actions.modules.healing.getOptions({
-                    order = 6,
+                    order = 5,
                     outOfCombat = false,
                     turnTypeID = TURN_TYPES.PLAYER.id,
                 }),
-                buff = ui.modules.actions.modules.buff.getOptions({ order = 7 }),
-                utility = ui.modules.actions.modules.utility.getOptions({ order = 8, turnTypeID = TURN_TYPES.PLAYER.id }),
+                buff = ui.modules.actions.modules.buff.getOptions({ order = 6 }),
+                utility = ui.modules.actions.modules.utility.getOptions({ order = 7, turnTypeID = TURN_TYPES.PLAYER.id }),
             }
         },
         enemyTurn = {

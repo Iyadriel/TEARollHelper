@@ -4,7 +4,6 @@ local constants = ns.constants
 
 local ACTIONS = {
     attack = "attack",
-    penance = "penance",
     cc = "cc",
     healing = "healing",
     buff = "buff",
@@ -16,7 +15,6 @@ local ACTIONS = {
 
 local ACTION_LABELS = {
     attack = "Attack",
-    penance = "Penance",
     cc = "CC",
     healing = "Heal",
     buff = "Buff",
@@ -34,17 +32,6 @@ local SPECIAL_ACTIONS = {
 local SPECIAL_ACTION_LABELS = {
     save = "Save",
     clingToConsciousness = "Cling to consciousness",
-}
-
-local ACTION_LABELS_NO_PENANCE = {
-    attack = "Attack",
-    cc = "CC",
-    healing = "Heal",
-    buff = "Buff",
-    defend = "Defend",
-    meleeSave = "Melee save",
-    rangedSave = "Ranged save",
-    utility = "Utility",
 }
 
 local CONSCIOUSNESS_STATES = {
@@ -121,7 +108,6 @@ constants.ACTIONS = ACTIONS
 constants.SPECIAL_ACTIONS = SPECIAL_ACTIONS
 constants.ACTION_LABELS = ACTION_LABELS
 constants.SPECIAL_ACTION_LABELS = SPECIAL_ACTION_LABELS
-constants.ACTION_LABELS_NO_PENANCE = ACTION_LABELS_NO_PENANCE
 constants.CONSCIOUSNESS_STATES = CONSCIOUSNESS_STATES
 constants.DAMAGE_TYPES = DAMAGE_TYPES
 constants.DAMAGE_TYPE_LABELS = DAMAGE_TYPE_LABELS

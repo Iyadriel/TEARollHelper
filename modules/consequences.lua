@@ -182,6 +182,7 @@ end
 
 local function confirmAttackAction(attack)
     characterState.state.featsAndTraits.numBloodHarvestSlots.use(attack.numBloodHarvestSlots)
+    characterState.state.healing.numGreaterHealSlots.use(attack.numGreaterHealSlots)
 
     if attack.hasMercyFromPainProc then
         buffs.addFeatBuff(FEATS.MERCY_FROM_PAIN, { BuffEffectHealingDone:New(attack.mercyFromPainBonusHealing) })
@@ -197,10 +198,6 @@ local function confirmAttackAction(attack)
     end
 
     rollState.state.attack.attacks.add(attack)
-end
-
-local function confirmPenanceAction(penance)
-    characterState.state.healing.numGreaterHealSlots.use(penance.numGreaterHealSlots)
 end
 
 local function confirmHealAction(heal)
@@ -244,7 +241,6 @@ end
 
 local actionFns = {
     [ACTIONS.attack] = confirmAttackAction,
-    [ACTIONS.penance] = confirmPenanceAction,
     [ACTIONS.healing] = confirmHealAction,
     [ACTIONS.defend] = confirmDefenceAction,
     [ACTIONS.meleeSave] = confirmMeleeSaveAction,
@@ -268,11 +264,7 @@ local function confirmAction(actionType, action, hideMsg)
 
     local actionState = rollState.state[actionType]
 
-    if actionType == ACTIONS.penance then
-        rollState.state[ACTIONS.attack].currentRoll.set(nil)
-    else
-        actionState.currentRoll.set(nil)
-    end
+    actionState.currentRoll.set(nil)
 
     if actionState.resetSlots then
         actionState.resetSlots()

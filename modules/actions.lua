@@ -9,9 +9,25 @@ local TRAITS = traits.TRAITS
 local Chastice = TRAITS.CHASTICE
 local CriticalMass = TRAITS.CRITICAL_MASS
 
-local function getAttack(attackIndex, roll, rollBuff, threshold, offence, offenceBuff, baseDmgBuff, damageDoneBuff, enemyId, isAOE, numBloodHarvestSlots, activeTraits)
+local function getAmountHealedWithPenance(numGreaterHealSlots, healingDoneBuff, targetIsKO)
+    local amountHealed = 0
+
+    amountHealed = rules.healing.applyHealingDoneBuff(amountHealed, healingDoneBuff)
+    amountHealed = amountHealed + rules.healing.calculateGreaterHealBonus(numGreaterHealSlots)
+
+    if rules.healing.canUseTargetKOBonus() and targetIsKO then
+        amountHealed = amountHealed + rules.healing.getTargetKOBonus()
+    end
+
+    return amountHealed
+end
+
+-- [[ Actions ]]
+
+local function getAttack(attackIndex, roll, rollBuff, threshold, stat, statBuff, baseDmgBuff, damageDoneBuff, healingDoneBuff, enemyId, isAOE, numGreaterHealSlots, targetIsKO, numBloodHarvestSlots, activeTraits)
     local attackValue
     local dmg
+    local amountHealed = 0
     local originalRoll = roll
     local critType = rules.offence.getCritType()
     local isCrit = rules.offence.isCrit(roll)
@@ -27,7 +43,7 @@ local function getAttack(attackIndex, roll, rollBuff, threshold, offence, offenc
     local vindicationHealing = 0
 
     roll = rules.rolls.calculateRoll(roll, rollBuff)
-    attackValue = rules.offence.calculateAttackValue(roll, offence, offenceBuff)
+    attackValue = rules.offence.calculateAttackValue(roll, stat, statBuff)
     dmg = rules.offence.calculateAttackDmg(threshold, attackValue, baseDmgBuff, damageDoneBuff)
 
     if rules.offence.canProcAdrenaline(attackIndex) then
@@ -36,6 +52,10 @@ local function getAttack(attackIndex, roll, rollBuff, threshold, offence, offenc
 
     if rules.offence.canUseBloodHarvest() then
         dmg = dmg + rules.offence.calculateBloodHarvestBonus(numBloodHarvestSlots)
+    end
+
+    if numGreaterHealSlots > 0 then
+        amountHealed = getAmountHealedWithPenance(numGreaterHealSlots, healingDoneBuff, targetIsKO)
     end
 
     canUseCriticalMass = CriticalMass:IsUsable(dmg)
@@ -75,10 +95,12 @@ local function getAttack(attackIndex, roll, rollBuff, threshold, offence, offenc
     return {
         attackValue = attackValue,
         dmg = dmg,
+        amountHealed = amountHealed,
         isCrit = isCrit,
         critType = critType,
         enemyId = enemyId,
         hasAdrenalineProc = hasAdrenalineProc,
+        numGreaterHealSlots = numGreaterHealSlots,
         numBloodHarvestSlots = numBloodHarvestSlots,
         hasMercyFromPainProc = hasMercyFromPainProc,
         mercyFromPainBonusHealing = mercyFromPainBonusHealing,
@@ -100,61 +122,6 @@ local function getAttack(attackIndex, roll, rollBuff, threshold, offence, offenc
             [TRAITS.SHATTER_SOUL.id] = {
                 canUse = shatterSoulEnabled,
                 active = shatterSoulEnabled and activeTraits[TRAITS.SHATTER_SOUL.id],
-            },
-            [TRAITS.VINDICATION.id] = {
-                canUse = hasVindicationProc,
-                healingDone = vindicationHealing,
-                active = hasVindicationProc and activeTraits[TRAITS.VINDICATION.id],
-            }
-        },
-    }
-end
-
-local function getPenance(roll, rollBuff, threshold, spirit, spiritBuff, baseDmgBuff, damageDoneBuff, numGreaterHealSlots, targetIsKO, activeTraits)
-    local attackValue
-    local dmg
-    local amountHealed = 0
-    local isCrit = rules.offence.isCrit(roll)
-    local hasVindicationProc = nil
-    local vindicationHealing = 0
-
-    roll = rules.rolls.calculateRoll(roll, rollBuff)
-
-    -- Damage
-
-    attackValue = rules.penance.calculateAttackValue(roll, spirit, spiritBuff)
-
-    dmg = rules.offence.calculateAttackDmg(threshold, attackValue, baseDmgBuff, damageDoneBuff)
-
-     if isCrit then
-        dmg = rules.offence.applyCritModifier(dmg)
-    end
-
-    if rules.offence.canProcVindication() then
-        hasVindicationProc = rules.offence.hasVindicationProc(dmg)
-        if hasVindicationProc then
-            vindicationHealing = rules.offence.calculateVindicationHealing(dmg)
-        end
-    end
-
-    -- Healing
-
-    amountHealed = rules.healing.calculateGreaterHealBonus(numGreaterHealSlots)
-
-    if targetIsKO then
-        amountHealed = amountHealed + rules.healing.getTargetKOBonus()
-    end
-
-    return {
-        attackValue = attackValue,
-        dmg = dmg,
-        isCrit = isCrit,
-        amountHealed = amountHealed,
-        numGreaterHealSlots = numGreaterHealSlots,
-        traits = {
-            [TRAITS.FAULTLINE.id] = {
-                canUse = dmg > 0,
-                active = dmg > 0 and activeTraits[TRAITS.FAULTLINE.id],
             },
             [TRAITS.VINDICATION.id] = {
                 canUse = hasVindicationProc,
@@ -308,7 +275,7 @@ local function getHealing(roll, rollBuff, spirit, spiritBuff, healingDoneBuff, n
         amountHealed = rules.healing.applyHealingDoneBuff(amountHealed, healingDoneBuff)
         amountHealed = amountHealed + rules.healing.calculateGreaterHealBonus(numGreaterHealSlots)
 
-        if targetIsKO then
+        if rules.healing.canUseTargetKOBonus() and targetIsKO then
             amountHealed = amountHealed + rules.healing.getTargetKOBonus()
         end
 
@@ -426,7 +393,6 @@ local function getShieldSlam(baseDmgBuff, defence, defenceBuff)
 end
 
 ns.actions.getAttack = getAttack
-ns.actions.getPenance = getPenance
 ns.actions.getCC = getCC
 ns.actions.getDefence = getDefence
 ns.actions.getMeleeSave = getMeleeSave

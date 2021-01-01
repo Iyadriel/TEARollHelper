@@ -3,6 +3,7 @@ local _, ns = ...
 local COLOURS = TEARollHelper.COLOURS
 
 local actions = ns.actions
+local character = ns.character
 local characterState = ns.state.character.state
 local consequences = ns.consequences
 local constants = ns.constants
@@ -117,12 +118,54 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                             max = characterState.featsAndTraits.numBloodHarvestSlots.get
                         })
                     },
+                    penance = {
+                        order = 2,
+                        type = "group",
+                        name = "Penance",
+                        hidden = function()
+                            return not character.hasFeat(FEATS.PENANCE) or rules.healing.getMaxGreaterHealSlots() == 0
+                        end,
+                        args = {
+                            actions_attack_greaterHeals = {
+                                order = 0,
+                                type = "range",
+                                name = "Greater Heals",
+                                desc = "The amount of Greater Heals to use.",
+                                min = 0,
+                                max = characterState.healing.numGreaterHealSlots.get(),
+                                step = 1,
+                                disabled = function()
+                                    return characterState.healing.numGreaterHealSlots.get() == 0
+                                end,
+                                get = state.attack.numGreaterHealSlots.get,
+                                set = function(info, value)
+                                    state.attack.numGreaterHealSlots.set(value)
+                                end,
+                                dialogControl = TEARollHelper:CreateCustomSlider("actions_attack_greaterHeals", {
+                                    max = characterState.healing.numGreaterHealSlots.get
+                                })
+                            },
+                            targetIsKO = {
+                                order = 1,
+                                type = "toggle",
+                                name = "Heal target is unconscious",
+                                desc = COLOURS.MASTERY .. "Your Spirit mastery increases healing done to KO'd targets by +3.",
+                                hidden = function()
+                                    return not rules.healing.canUseTargetKOBonus() or state.attack.numGreaterHealSlots.get() < 1
+                                end,
+                                get = state.attack.targetIsKO.get,
+                                set = function(info, value)
+                                    state.attack.targetIsKO.set(value)
+                                end,
+                            },
+                        }
+                    },
                     dmgTopMargin = {
                         order = 3,
                         type = "description",
                         name = " ",
                         hidden = function()
-                            return not (rules.offence.canUseBloodHarvest() or rules.offence.canProcMercyFromPain())
+                            return not (rules.offence.canUseBloodHarvest() or rules.offence.canProcMercyFromPain() or character.hasFeat(FEATS.PENANCE))
                         end,
                     },
                     dmg = {
@@ -226,13 +269,22 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                         name = function()
                             local msg = ""
                             local totalDamage = 0
+                            local totalHealing = 0
 
                             for i, attack in ipairs(rolls.state.attack.attacks.get()) do
                                 msg = msg .. COLOURS.NOTE .. ">|r " .. actions.toString(ACTIONS.attack, attack) .. "|r|n"
+
                                 totalDamage = totalDamage + attack.dmg
+                                totalHealing = totalHealing + attack.amountHealed
                             end
 
-                            msg = msg .. COLOURS.NOTE .. "|nTotal:|r " .. totalDamage .. " damage|n "
+                            msg = msg .. COLOURS.NOTE .. "|nTotal:|r " .. totalDamage .. " damage"
+
+                            if totalHealing > 0 then
+                                msg = msg .. ", " .. totalHealing .. " healing|n "
+                            end
+
+                            msg = msg .. "|n "
 
                             return msg
                         end,

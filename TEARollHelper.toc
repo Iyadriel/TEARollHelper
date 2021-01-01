@@ -85,7 +85,6 @@ modules/rules/effects.lua
 modules/rules/environment.lua
 modules/rules/playerTurn.lua
 modules/rules/offence.lua
-modules/rules/penance.lua
 modules/rules/defence.lua
 modules/rules/cc.lua
 modules/rules/critical-wounds.lua
@@ -127,7 +126,6 @@ ui/actions/defend.lua
 ui/actions/healing.lua
 ui/actions/ko.lua
 ui/actions/meleeSave.lua
-ui/actions/penance.lua
 ui/actions/rangedSave.lua
 ui/actions/utility.lua
 

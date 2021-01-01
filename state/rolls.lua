@@ -11,11 +11,13 @@ local rolls = ns.state.rolls
 local rules = ns.rules
 local turnState = ns.state.turn
 
+local feats = ns.resources.feats
 local utilityTypes = ns.resources.utilityTypes
 
 local ACTIONS = constants.ACTIONS
 local DEFENCE_TYPES = constants.DEFENCE_TYPES
 local EVENTS = bus.EVENTS
+local FEATS = feats.FEATS
 local ROLL_MODES = constants.ROLL_MODES
 local SPECIAL_ACTIONS = constants.SPECIAL_ACTIONS
 local STATS = constants.STATS
@@ -36,15 +38,11 @@ rolls.initState = function()
             attacks = {},
             threshold = nil,
             numBloodHarvestSlots = 0,
+            numGreaterHealSlots = 0, -- for penance
+            targetIsKO = false, -- for penance
             isAOE = false,
             rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
-            activeTraits = {},
-        },
-
-        [ACTIONS.penance] = {
-            numGreaterHealSlots = 1,
-            targetIsKO = false,
             activeTraits = {},
         },
 
@@ -161,6 +159,8 @@ rolls.state = {
         },
         threshold = basicGetSet(ACTIONS.attack, "threshold"),
         numBloodHarvestSlots = basicGetSet(ACTIONS.attack, "numBloodHarvestSlots"),
+        numGreaterHealSlots = basicGetSet(ACTIONS.attack, "numGreaterHealSlots"),
+        targetIsKO = basicGetSet(ACTIONS.attack, "targetIsKO"),
         isAOE = basicGetSet(ACTIONS.attack, "isAOE"),
         rollMode = basicGetSet(ACTIONS.attack, "rollMode"),
         currentRoll = basicGetSet(ACTIONS.attack, "currentRoll"),
@@ -183,35 +183,10 @@ rolls.state = {
         resetSlots = function()
             TEARollHelper:Debug("Resetting slots for attack")
             rolls.state.attack.numBloodHarvestSlots.set(0)
+            rolls.state.attack.numGreaterHealSlots.set(0)
+            rolls.state.attack.targetIsKO.set(false)
             rolls.state.attack.isAOE.set(false)
             rolls.state.attack.activeTraits.reset()
-        end,
-    },
-
-    [ACTIONS.penance] = {
-        numGreaterHealSlots = basicGetSet(ACTIONS.penance, "numGreaterHealSlots"),
-        targetIsKO = basicGetSet(ACTIONS.penance, "targetIsKO"),
-        activeTraits = {
-            get = function(trait)
-                return state.penance.activeTraits[trait.id]
-            end,
-            toggle = function(trait)
-                if state.penance.activeTraits[trait.id] then
-                    state.penance.activeTraits[trait.id] = false
-                else
-                    state.penance.activeTraits[trait.id] = true
-                end
-            end,
-            reset = function()
-                state.penance.activeTraits = {}
-            end,
-        },
-
-        resetSlots = function()
-            TEARollHelper:Debug("Resetting slots for penance")
-            rolls.state.penance.numGreaterHealSlots.set(1)
-            rolls.state.penance.targetIsKO.set(false)
-            rolls.state.penance.activeTraits.reset()
         end,
     },
 
@@ -399,7 +374,6 @@ rolls.state = {
 
 local function resetSlots()
     rolls.state.attack.resetSlots()
-    rolls.state.penance.resetSlots()
     rolls.state.healing.resetSlots()
     rolls.state.buff.resetSlots()
     rolls.state.defend.resetSlots()
@@ -410,9 +384,7 @@ end
 local function resetRolls()
     for _, action in pairs(ACTIONS) do
         local actionState = rolls.state[action]
-        if actionState.currentRoll then -- penance uses attack state for roll
-            actionState.currentRoll.set(nil)
-        end
+        actionState.currentRoll.set(nil)
     end
     rolls.state.attack.attacks.clear()
     rolls.state.defend.defences.clear()
@@ -462,8 +434,8 @@ bus.addListener(EVENTS.GREATER_HEAL_CHARGES_CHANGED, function(numCharges)
     if numCharges < state.healing.numGreaterHealSlots then
         rolls.state.healing.numGreaterHealSlots.set(numCharges)
     end
-    if numCharges < state.penance.numGreaterHealSlots then
-        rolls.state.penance.numGreaterHealSlots.set(max(1, numCharges))
+    if numCharges < state.attack.numGreaterHealSlots then
+        rolls.state.attack.numGreaterHealSlots.set(numCharges)
     end
 end)
 
@@ -488,8 +460,10 @@ end
 local function getAttack()
     local attackIndex = rolls.state.attack.attacks.count() + 1
     local rollBuff = getRollBuff()
-    local offence = character.getPlayerOffence()
-    local offenceBuff = buffsState.buffs.offence.get()
+    local whichStat = character.hasFeat(FEATS.PENANCE) and STATS.spirit or STATS.offence
+    local stat = character.getPlayerStat(whichStat)
+    local statBuff = buffsState.buffs[whichStat].get()
+    local healingDoneBuff = buffsState.buffs.healingDone.get()
     local baseDmgBuff = buffsState.buffs.baseDamage.get()
     local damageDoneBuff = buffsState.buffs.damageDone.get()
     local enemyId = environment.state.enemyId.get()
@@ -498,19 +472,7 @@ local function getAttack()
     local numBloodHarvestSlots = state.attack.numBloodHarvestSlots
     local activeTraits = state.attack.activeTraits
 
-    return actions.getAttack(attackIndex, state.attack.currentRoll, rollBuff, threshold, offence, offenceBuff, baseDmgBuff, damageDoneBuff, enemyId, isAOE, numBloodHarvestSlots, activeTraits)
-end
-
-local function getPenance()
-    local rollBuff = getRollBuff()
-    local spirit = character.getPlayerSpirit()
-    local spiritBuff = buffsState.buffs.spirit.get()
-    local baseDmgBuff = buffsState.buffs.baseDamage.get()
-    local damageDoneBuff = buffsState.buffs.damageDone.get()
-    local threshold = state.attack.threshold
-    local activeTraits = state.penance.activeTraits
-
-    return actions.getPenance(state.attack.currentRoll, rollBuff, threshold, spirit, spiritBuff, baseDmgBuff, damageDoneBuff, state.penance.numGreaterHealSlots, state.penance.targetIsKO, activeTraits)
+    return actions.getAttack(attackIndex, state.attack.currentRoll, rollBuff, threshold, stat, statBuff, baseDmgBuff, damageDoneBuff, healingDoneBuff, enemyId, isAOE, state.attack.numGreaterHealSlots, state.attack.targetIsKO, numBloodHarvestSlots, activeTraits)
 end
 
 local function getCC()
@@ -583,7 +545,6 @@ end
 
 local ACTION_METHODS = {
     [ACTIONS.attack] = getAttack,
-    [ACTIONS.penance] = getPenance,
     [ACTIONS.cc] = getCC,
     [ACTIONS.healing] = getHealing,
     [ACTIONS.buff] = getBuff,
@@ -627,7 +588,6 @@ local function getRollModeModifier(action, turnTypeID)
 end
 
 rolls.getAttack = getAttack
-rolls.getPenance = getPenance
 rolls.getCC = getCC
 rolls.getHealing = getHealing
 rolls.getBuff = getBuff

@@ -145,7 +145,7 @@ local FEATS = {
     PENANCE = {
         id = "PENANCE",
         name = "Penance",
-        desc = "You can use a Greater Heal slot to make an attack roll with your Spirit stat, dealing damage to your target as if it was an offence roll, and healing a target of your choice with the heal slot amount. (The heal slot does not contribute to the damage done. The damage and healing can be split between multiple targets as normal).",
+        desc = "You can now perform Attack rolls with your Spirit stat. When using a Greater Heal Slot you can also heal someone for the Heal Slot amount while using your Spirit to deal damage to an enemy. You can still choose to heal, buff, and ranged save with your Spirit Stat.",
     },
     PHALANX = {
         id = "PHALANX",
