@@ -15,7 +15,7 @@ local DAMAGE_TYPES = constants.DAMAGE_TYPES
 local STATS = constants.STATS
 local TURN_TYPES = constants.TURN_TYPES
 
-feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "CHAPLAIN_OF_VIOLENCE", "COUNTER_FORCE", "DIVINE_PURPOSE", "ETERNAL_SACRIFICE", "EXPANSIVE_ARSENAL", "FOCUS", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "LIVING_BARRICADE", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "MONSTER_HUNTER", "ONSLAUGHT", "PARAGON", "PENANCE", "PHALANX", "PROFESSIONAL", "REAPER", "SHEPHERD_OF_THE_WICKED", "TRAUMA_RESPONSE", "VENGEANCE", "WARDER"}
+feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "CHAPLAIN_OF_VIOLENCE", "COUNTER_FORCE", "DIVINE_PURPOSE", "ETERNAL_SACRIFICE", "EXPANSIVE_ARSENAL", "FOCUS", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "LIVING_BARRICADE", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "MONSTER_HUNTER", "ONSLAUGHT", "PARAGON", "PENANCE", "PHALANX", "PROFESSIONAL", "SHEPHERD_OF_THE_WICKED", "TRAUMA_RESPONSE", "VENGEANCE", "WARDER"}
 
 local FEATS = {
     FEATLESS = {
@@ -30,7 +30,7 @@ local FEATS = {
     BLOOD_HARVEST = {
         id = "BLOOD_HARVEST",
         name = "Blood Harvest",
-        desc = "For every 2 points you put into the Offence stat you gain a Harvest Slot. You can activate these Harvest Slots to spend them just like a Greater Heal Slot. Spending a Harvest slot increases the damage of your next Offence attack by +3. This damage is dealt even if you miss.",
+        desc = "For every 2 points you put into the Offence stat you gain a Harvest Slot. You can activate these Harvest Slots to spend them just like a Greater Heal Slot. Spending a Harvest slot increases the damage of your next Offence attack by +5. This damage is dealt even if you miss.",
     },
     CHAPLAIN_OF_VIOLENCE = {
         id = "CHAPLAIN_OF_VIOLENCE",
@@ -156,11 +156,6 @@ local FEATS = {
         id = "PROFESSIONAL",
         name = "Professional",
         desc = "You may pick 2 additional Utility Traits. Furthermore your Utility Traits now grant you a bonus of +8 rather than +5.",
-    },
-    REAPER = {
-        id = "REAPER",
-        name = "Reaper",
-        desc = "When scoring a nat 20 on an Offence attack roll, you no longer deal double damage, but instead activate the Reap trait without cost. You do not have to have Reap as a chosen trait.",
     },
     SHEPHERD_OF_THE_WICKED = {
         id = "SHEPHERD_OF_THE_WICKED",

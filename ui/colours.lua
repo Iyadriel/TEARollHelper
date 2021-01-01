@@ -25,7 +25,6 @@ TEARollHelper.COLOURS = {
         BLOOD_HARVEST = '|cffff6b6b',
         CHAPLAIN_OF_VIOLENCE = '|cffebe8bb',
         MERCY_FROM_PAIN = '|cffebe8bb',
-        REAPER = '|cffc41f3b',
         VENGEANCE = '|cff7b15d5',
     },
 

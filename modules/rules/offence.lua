@@ -138,7 +138,7 @@ local function getMaxBloodHarvestSlots()
 end
 
 local function calculateBloodHarvestBonus(numBloodHarvestSlots)
-    return numBloodHarvestSlots * 3
+    return numBloodHarvestSlots * 5
 end
 
 -- Feat: Mercy from Pain
