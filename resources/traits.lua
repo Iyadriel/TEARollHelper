@@ -61,7 +61,7 @@ local TRAITS = {
     FAULTLINE = {
         id = "FAULTLINE",
         name = "Faultline",
-        desc = "Activate to deal your full damage to up to 3 additional targets. Activate after rolling.",
+        desc = "Activate to deal your full damage to up to 2 additional targets. Activate after rolling.",
         numCharges = 2,
     },
     GREATER_RESTORATION = {
