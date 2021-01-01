@@ -7,6 +7,7 @@ local racialTraits = ns.resources.racialTraits
 local rules = ns.rules
 local weaknesses = ns.resources.weaknesses
 
+local CRIT_TYPES = constants.CRIT_TYPES
 local FEATS = feats.FEATS
 local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
 local TURN_TYPES = constants.TURN_TYPES
@@ -61,7 +62,11 @@ local function isCrit(roll)
     return roll >= critReq
 end
 
-local function applyCritModifier(amountHealed)
+local function applyCritModifier(amountHealed, critType)
+    if critType == CRIT_TYPES.VALUE_MOD then
+        amountHealed = amountHealed * 2
+    end
+
     if character.hasRacialTrait(RACIAL_TRAITS.MIGHT_OF_THE_MOUNTAIN) then
         amountHealed = amountHealed + 2
     end

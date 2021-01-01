@@ -17,11 +17,6 @@ local WEAKNESSES = weaknesses.WEAKNESSES
 
 local NUM_OFFENCE_PER_BLOOD_HARVEST_SLOT = 2
 
-local CRIT_TYPES = {
-    DAMAGE = 0,
-    REAPER = 1
-}
-
 -- Crits
 
 local function isCrit(roll)
@@ -32,13 +27,6 @@ local function isCrit(roll)
     end
 
     return roll >= critReq
-end
-
-local function getCritType()
---[[     if character.hasFeat(FEATS.REAPER) then
-        return CRIT_TYPES.REAPER
-    end ]]
-    return CRIT_TYPES.DAMAGE
 end
 
 -- Core
@@ -197,8 +185,6 @@ end
 
 rules.offence = {
     isCrit = isCrit,
-    CRIT_TYPES = CRIT_TYPES,
-    getCritType = getCritType,
 
     getBaseDamageAfterBuffs = getBaseDamageAfterBuffs,
     calculateAttackValue = calculateAttackValue,

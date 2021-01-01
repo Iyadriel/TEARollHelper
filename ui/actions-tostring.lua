@@ -6,10 +6,10 @@ local actions = ns.actions
 local character = ns.character
 local constants = ns.constants
 local feats = ns.resources.feats
-local rules = ns.rules
 local traits = ns.resources.traits
 
 local ACTIONS = constants.ACTIONS
+local CRIT_TYPES = constants.CRIT_TYPES
 local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
 
@@ -79,13 +79,13 @@ local function attackToString(attack)
     if attack.dmg > 0 then
         local excited = false
 
-        if attack.isCrit and attack.critType == rules.offence.CRIT_TYPES.DAMAGE then
+        if attack.isCrit then
             excited = true
             msg = msg .. COLOURS.CRITICAL .. "CRITICAL HIT!|r "
         end
 
-        if attack.isCrit and attack.critType == rules.offence.CRIT_TYPES.REAPER then
-            msg = msg .. COLOURS.FEATS.REAPER .. "TIME TO REAP!|r You deal " .. tostring(attack.dmg) .. " damage to all enemies in melee range of you or your target!"
+        if attack.isCrit and attack.critType == CRIT_TYPES.MULTI_TARGET then
+            msg = msg .. "BIG DAMAGE! You deal " .. tostring(attack.dmg) .. " damage to all enemies in melee range of you or your target!"
         else
             msg = msg .. "You deal " .. tostring(attack.dmg) .. " damage" .. (excited and "!" or ".")
         end
@@ -128,9 +128,13 @@ local function buffToString(buff)
     if buff.amountBuffed > 0 then
         local amount = tostring(buff.amountBuffed)
         if buff.isCrit then
-            msg = COLOURS.CRITICAL .. "BIG BUFF!|r " .. COLOURS.BUFF .. "You can buff everyone in line of sight for " .. amount .. "."
+            if buff.critType == CRIT_TYPES.VALUE_MOD then
+                msg = COLOURS.CRITICAL .. "BIG BUFF!|r " .. COLOURS.BUFF .. "You buff 1 person for " .. amount .. "!"
+            else
+                msg = COLOURS.CRITICAL .. "MANY BUFFS!|r " .. COLOURS.BUFF .. "You buff 3 people for " .. amount .. "!"
+            end
         else
-            msg = COLOURS.BUFF .. "You can buff someone for " .. amount .. "."
+            msg = COLOURS.BUFF .. "You buff someone for " .. amount .. "."
         end
 
         if buff.usesInspiringPresence then
@@ -153,7 +157,11 @@ local function healingToString(healing)
         local healColour = (healing.outOfCombat and character.hasFeat(FEATS.MEDIC)) and COLOURS.FEATS.GENERIC or COLOURS.HEALING
 
         if healing.isCrit then
-            msg = msg .. COLOURS.CRITICAL .. "MANY HEALS!|r " .. healColour .. "You heal everyone in line of sight for " .. amount .. " HP.|r"
+            if healing.critType == CRIT_TYPES.VALUE_MOD then
+                msg = COLOURS.CRITICAL .. "BIG HEAL!|r " .. healColour .. "You heal 1 person for " .. amount .. " HP!"
+            else
+                msg = COLOURS.CRITICAL .. "MANY HEALS!|r " .. healColour .. "You heal 3 people for " .. amount .. " HP!"
+            end
         else
             if healing.usesParagon then
                 local targets = healing.playersHealableWithParagon > 1 and " allies" or " ally"
@@ -185,8 +193,12 @@ local function defenceToString(defence)
             msg = "Safe! You don't take damage this turn."
         end
 
-        if defence.canRetaliate then
-            msg = msg .. COLOURS.CRITICAL .. "\nRETALIATE!|r You can deal "..defence.retaliateDmg.." damage to your attacker!"
+        if defence.isCrit then
+            if defence.critType == CRIT_TYPES.RETALIATE then
+                msg = msg .. COLOURS.CRITICAL .. "\nRETALIATE!|r You deal "..defence.retaliateDmg.." damage to your attacker!"
+            else
+                msg = msg .. COLOURS.CRITICAL .. "\nPROTECTOR!|r You activate Protector at no cost!"
+            end
         end
     end
 

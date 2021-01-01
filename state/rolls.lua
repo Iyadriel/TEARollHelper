@@ -15,6 +15,7 @@ local feats = ns.resources.feats
 local utilityTypes = ns.resources.utilityTypes
 
 local ACTIONS = constants.ACTIONS
+local CRIT_TYPES = constants.CRIT_TYPES
 local DEFENCE_TYPES = constants.DEFENCE_TYPES
 local EVENTS = bus.EVENTS
 local FEATS = feats.FEATS
@@ -43,6 +44,7 @@ rolls.initState = function()
             isAOE = false,
             rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
+            critType = CRIT_TYPES.VALUE_MOD,
             activeTraits = {},
         },
 
@@ -57,12 +59,14 @@ rolls.initState = function()
             targetIsKO = false,
             rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
+            critType = CRIT_TYPES.VALUE_MOD,
             activeTraits = {},
         },
 
         [ACTIONS.buff] = {
             rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
+            critType = CRIT_TYPES.VALUE_MOD,
             activeTraits = {},
         },
 
@@ -74,6 +78,7 @@ rolls.initState = function()
             damageRisk = nil,
             rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
+            critType = CRIT_TYPES.RETALIATE,
             activeTraits = {},
         },
 
@@ -472,7 +477,7 @@ local function getAttack()
     local numBloodHarvestSlots = state.attack.numBloodHarvestSlots
     local activeTraits = state.attack.activeTraits
 
-    return actions.getAttack(attackIndex, state.attack.currentRoll, rollBuff, threshold, stat, statBuff, baseDmgBuff, damageDoneBuff, healingDoneBuff, enemyId, isAOE, state.attack.numGreaterHealSlots, state.attack.targetIsKO, numBloodHarvestSlots, activeTraits)
+    return actions.getAttack(attackIndex, state.attack.currentRoll, rollBuff, state.attack.critType, threshold, stat, statBuff, baseDmgBuff, damageDoneBuff, healingDoneBuff, enemyId, isAOE, state.attack.numGreaterHealSlots, state.attack.targetIsKO, numBloodHarvestSlots, activeTraits)
 end
 
 local function getCC()
@@ -493,7 +498,7 @@ local function getHealing(outOfCombat)
     local remainingOutOfCombatHeals = characterState.healing.remainingOutOfCombatHeals.get()
     local activeTraits = state.healing.activeTraits
 
-    return actions.getHealing(state.healing.currentRoll, rollBuff, spirit, spiritBuff, healingDoneBuff, state.healing.numGreaterHealSlots, state.healing.targetIsKO, outOfCombat, remainingOutOfCombatHeals, activeTraits)
+    return actions.getHealing(state.healing.currentRoll, rollBuff, state.healing.critType, spirit, spiritBuff, healingDoneBuff, state.healing.numGreaterHealSlots, state.healing.targetIsKO, outOfCombat, remainingOutOfCombatHeals, activeTraits)
 end
 
 local function getBuff()
@@ -504,7 +509,7 @@ local function getBuff()
     local spiritBuff = buffsState.buffs.spirit.get()
     local activeTraits = state.buff.activeTraits
 
-    return actions.getBuff(state.buff.currentRoll, rollBuff, spirit, spiritBuff, offence, offenceBuff, activeTraits)
+    return actions.getBuff(state.buff.currentRoll, rollBuff, state.buff.critType, spirit, spiritBuff, offence, offenceBuff, activeTraits)
 end
 
 local function getDefence()
@@ -514,7 +519,7 @@ local function getDefence()
     local damageTakenBuff = buffsState.buffs.damageTaken.get()
     local activeTraits = state.defend.activeTraits
 
-    return actions.getDefence(state.defend.currentRoll, rollBuff, state.defend.defenceType, state.defend.threshold, state.defend.damageType, state.defend.damageRisk, defence, defenceBuff, damageTakenBuff, activeTraits)
+    return actions.getDefence(state.defend.currentRoll, rollBuff, state.defend.defenceType, state.defend.threshold, state.defend.damageType, state.defend.damageRisk, state.defend.critType, defence, defenceBuff, damageTakenBuff, activeTraits)
 end
 
 local function getMeleeSave()

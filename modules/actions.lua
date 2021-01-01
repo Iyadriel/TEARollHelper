@@ -1,9 +1,11 @@
 local _, ns = ...
 
+local constants = ns.constants
 local rules = ns.rules
 
 local traits = ns.resources.traits
 
+local CRIT_TYPES = constants.CRIT_TYPES
 local TRAITS = traits.TRAITS
 
 local Chastice = TRAITS.CHASTICE
@@ -25,12 +27,11 @@ end
 
 -- [[ Actions ]]
 
-local function getAttack(attackIndex, roll, rollBuff, threshold, stat, statBuff, baseDmgBuff, damageDoneBuff, healingDoneBuff, enemyId, isAOE, numGreaterHealSlots, targetIsKO, numBloodHarvestSlots, activeTraits)
+local function getAttack(attackIndex, roll, rollBuff, critType, threshold, stat, statBuff, baseDmgBuff, damageDoneBuff, healingDoneBuff, enemyId, isAOE, numGreaterHealSlots, targetIsKO, numBloodHarvestSlots, activeTraits)
     local attackValue
     local dmg
     local amountHealed = 0
     local originalRoll = roll
-    local critType = rules.offence.getCritType()
     local isCrit = rules.offence.isCrit(roll)
     local hasAdrenalineProc = nil
     local hasMercyFromPainProc = nil
@@ -66,7 +67,7 @@ local function getAttack(attackIndex, roll, rollBuff, threshold, stat, statBuff,
         dmg = dmg + criticalMassBonusDamage
     end
 
-    if isCrit and critType == rules.offence.CRIT_TYPES.DAMAGE then
+    if isCrit and critType == CRIT_TYPES.VALUE_MOD then
         dmg = rules.offence.applyCritModifier(dmg)
     end
 
@@ -144,7 +145,7 @@ local function getCC(roll, rollBuff, offence, offenceBuff, defence, defenceBuff)
     }
 end
 
-local function getDefence(roll, rollBuff, defenceType, threshold, damageType, dmgRisk, defence, defenceBuff, damageTakenBuff, activeTraits)
+local function getDefence(roll, rollBuff, defenceType, threshold, damageType, dmgRisk, critType, defence, defenceBuff, damageTakenBuff, activeTraits)
     local isCrit = rules.defence.isCrit(roll)
     local defendValue, damageTaken, damagePrevented
     local retaliateDmg = 0
@@ -170,7 +171,8 @@ local function getDefence(roll, rollBuff, defenceType, threshold, damageType, dm
         dmgRisk = dmgRisk,
         damageTaken = damageTaken,
         damagePrevented = damagePrevented,
-        canRetaliate = isCrit,
+        isCrit = isCrit,
+        critType = critType,
         retaliateDmg = retaliateDmg,
         empoweredBladesEnabled = empoweredBladesEnabled,
         traits = {
@@ -249,7 +251,7 @@ local function getRangedSave(roll, rollBuff, defenceType, threshold, spirit, buf
     }
 end
 
-local function getHealing(roll, rollBuff, spirit, spiritBuff, healingDoneBuff, numGreaterHealSlots, targetIsKO, outOfCombat, remainingOutOfCombatHeals, activeTraits)
+local function getHealing(roll, rollBuff, critType, spirit, spiritBuff, healingDoneBuff, numGreaterHealSlots, targetIsKO, outOfCombat, remainingOutOfCombatHeals, activeTraits)
     local canStillHeal = rules.healing.canStillHeal(outOfCombat, remainingOutOfCombatHeals, numGreaterHealSlots)
     local healValue
     local amountHealed = 0
@@ -290,7 +292,7 @@ local function getHealing(roll, rollBuff, spirit, spiritBuff, healingDoneBuff, n
         end
 
         if isCrit then
-            amountHealed = rules.healing.applyCritModifier(amountHealed)
+            amountHealed = rules.healing.applyCritModifier(amountHealed, critType)
         end
 
         if rules.healing.canProcChaplainOfViolence() then
@@ -312,6 +314,7 @@ local function getHealing(roll, rollBuff, spirit, spiritBuff, healingDoneBuff, n
         canStillHeal = canStillHeal,
         amountHealed = amountHealed,
         isCrit = isCrit,
+        critType = critType,
         outOfCombat = outOfCombat,
         numGreaterHealSlots = numGreaterHealSlots,
         hasChaplainOfViolenceProc = hasChaplainOfViolenceProc,
@@ -332,7 +335,7 @@ local function getHealing(roll, rollBuff, spirit, spiritBuff, healingDoneBuff, n
     }
 end
 
-local function getBuff(roll, rollBuff, spirit, spiritBuff, offence, offenceBuff, activeTraits)
+local function getBuff(roll, rollBuff, critType, spirit, spiritBuff, offence, offenceBuff, activeTraits)
     local buffValue
     local amountBuffed
     local isCrit = rules.buffing.isCrit(roll)
@@ -342,9 +345,14 @@ local function getBuff(roll, rollBuff, spirit, spiritBuff, offence, offenceBuff,
 
     amountBuffed = rules.buffing.calculateBuffAmount(buffValue)
 
+    if isCrit then
+        amountBuffed = rules.buffing.applyCritModifier(amountBuffed, critType)
+    end
+
     return {
         amountBuffed = amountBuffed,
         isCrit = isCrit,
+        critType = critType,
         usesInspiringPresence = rules.buffing.usesInspiringPresence(),
         traits = {
             [TRAITS.ASCEND.id] = {

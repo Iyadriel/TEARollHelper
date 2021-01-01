@@ -1,10 +1,12 @@
 local _, ns = ...
 
 local character = ns.character
+local constants = ns.constants
 local feats = ns.resources.feats
 local rules = ns.rules
 local weaknesses = ns.resources.weaknesses
 
+local CRIT_TYPES = constants.CRIT_TYPES
 local FEATS = feats.FEATS
 local WEAKNESSES = weaknesses.WEAKNESSES
 
@@ -48,6 +50,14 @@ local function isCrit(roll)
     return roll >= critReq
 end
 
+local function applyCritModifier(amountBuffed, critType)
+    if critType == CRIT_TYPES.VALUE_MOD then
+        amountBuffed = amountBuffed * 2
+    end
+
+    return amountBuffed
+end
+
 local function shouldShowPreRollUI()
     return rules.playerTurn.shouldShowPreRollUI() or rules.other.shouldShowPreRollUI()
 end
@@ -58,6 +68,7 @@ rules.buffing = {
     calculateBuffValue = calculateBuffValue,
     calculateBuffAmount = calculateBuffAmount,
     isCrit = isCrit,
+    applyCritModifier = applyCritModifier,
 
     shouldShowPreRollUI = shouldShowPreRollUI,
 }
