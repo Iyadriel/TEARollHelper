@@ -105,7 +105,7 @@ local TRAITS = {
         id = "REAP",
         name = "Reap",
         desc = "Activate to apply the result of an Offence roll to all enemies in melee range around you, or in melee range around your target. Activate after rolling.",
-        numCharges = 1,
+        numCharges = 2,
     },
     SECOND_WIND = {
         id = "SECOND_WIND",
