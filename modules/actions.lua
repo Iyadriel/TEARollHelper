@@ -12,6 +12,7 @@ local CriticalMass = TRAITS.CRITICAL_MASS
 local function getAmountHealedWithPenance(numGreaterHealSlots, healingDoneBuff, targetIsKO)
     local amountHealed = 0
 
+    amountHealed = rules.healing.applySpiritBonus(amountHealed)
     amountHealed = rules.healing.applyHealingDoneBuff(amountHealed, healingDoneBuff)
     amountHealed = amountHealed + rules.healing.calculateGreaterHealBonus(numGreaterHealSlots)
 
@@ -272,6 +273,7 @@ local function getHealing(roll, rollBuff, spirit, spiritBuff, healingDoneBuff, n
             amountHealed = rules.healing.applyOutOfCombatBaseAmountBonus(amountHealed)
         end
 
+        amountHealed = rules.healing.applySpiritBonus(amountHealed)
         amountHealed = rules.healing.applyHealingDoneBuff(amountHealed, healingDoneBuff)
         amountHealed = amountHealed + rules.healing.calculateGreaterHealBonus(numGreaterHealSlots)
 

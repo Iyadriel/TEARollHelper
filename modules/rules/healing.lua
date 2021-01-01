@@ -42,6 +42,15 @@ local function calculateBaseAmountHealed(healValue)
     return 0
 end
 
+local function applySpiritBonus(amountHealed)
+    if character.hasSpiritMastery() then
+        return amountHealed + 2
+    elseif character.hasSpiritProficiency() then
+        return amountHealed + 1
+    end
+    return amountHealed
+end
+
 local function applyHealingDoneBuff(amountHealed, healingDoneBuff)
     return amountHealed + healingDoneBuff
 end
@@ -96,7 +105,7 @@ local function canUseTargetKOBonus()
 end
 
 local function getTargetKOBonus()
-    return 3
+    return 2
 end
 
 local function canUseExcess()
@@ -169,6 +178,7 @@ rules.healing = {
     canHeal = canHeal,
     calculateHealValue = calculateHealValue,
     calculateBaseAmountHealed = calculateBaseAmountHealed,
+    applySpiritBonus = applySpiritBonus,
     applyHealingDoneBuff = applyHealingDoneBuff,
     isCrit = isCrit,
     applyCritModifier = applyCritModifier,
