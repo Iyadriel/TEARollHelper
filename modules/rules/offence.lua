@@ -35,9 +35,9 @@ local function isCrit(roll)
 end
 
 local function getCritType()
-    if character.hasFeat(FEATS.REAPER) then
+--[[     if character.hasFeat(FEATS.REAPER) then
         return CRIT_TYPES.REAPER
-    end
+    end ]]
     return CRIT_TYPES.DAMAGE
 end
 
