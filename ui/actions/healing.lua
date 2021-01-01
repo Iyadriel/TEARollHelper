@@ -15,6 +15,7 @@ local utils = ns.utils
 
 local ACTIONS = constants.ACTIONS
 local ACTION_LABELS = constants.ACTION_LABELS
+local CRIT_TYPES = constants.CRIT_TYPES
 local TRAITS = traits.TRAITS
 local TURN_TYPES = constants.TURN_TYPES
 
@@ -96,34 +97,65 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                             state.healing.targetIsKO.set(value)
                         end,
                     },
+                    greaterHealsBottomMargin = {
+                        order = 3,
+                        type = "description",
+                        name = " ",
+                        hidden = function()
+                            return rules.healing.getMaxGreaterHealSlots() <= 0
+                        end,
+                    },
+                    critType = {
+                        order = 4,
+                        type = "select",
+                        name = "Crit effect",
+                        width = 0.8,
+                        hidden = function()
+                            return not rolls.getHealing(options.outOfCombat).isCrit
+                        end,
+                        values = {
+                            [CRIT_TYPES.VALUE_MOD] = "Double amount",
+                            [CRIT_TYPES.MULTI_TARGET] = "Many heals",
+                        },
+                        get = rolls.state.healing.critType.get,
+                        set = function(info, value)
+                            rolls.state.healing.critType.set(value)
+                        end
+                    },
+                    critTypeMargin = {
+                        order = 5,
+                        type = "description",
+                        name = " ",
+                        hidden = function()
+                            return not rolls.getHealing(options.outOfCombat).isCrit
+                        end,
+                    },
                     healing = {
                         type = "description",
                         desc = "How much you can heal for",
                         fontSize = "medium",
-                        order = 3,
+                        order = 6,
                         name = function()
                             local healing = rolls.getHealing(options.outOfCombat)
-                            local msg = rules.healing.getMaxGreaterHealSlots() > 0 and " |n" or "" -- Only show spacing if greater heals are shown. Dirty hack
-
-                            return msg .. actions.toString(ACTIONS.healing, healing)
+                            return actions.toString(ACTIONS.healing, healing)
                         end
                     },
                     useChastice = ui.helpers.traitToggle(
                         ACTIONS.healing,
                         TRAITS.CHASTICE, {
-                            order = 4,
+                            order = 7,
                             actionArgs = { options.outOfCombat },
                         }
                     ),
                     useLifePulse = ui.helpers.traitToggle(
                         ACTIONS.healing,
                         TRAITS.LIFE_PULSE, {
-                            order = 5,
+                            order = 8,
                             actionArgs = { options.outOfCombat },
                         }
                     ),
                     confirm = {
-                        order = 6,
+                        order = 9,
                         type = "execute",
                         name = function()
                             local heal = rolls.getHealing(options.outOfCombat)
@@ -144,7 +176,7 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                         end
                     },
                     remainingHeals = {
-                        order = 7,
+                        order = 10,
                         type = "description",
                         name = function()
                             if rolls.getHealing(options.outOfCombat).numGreaterHealSlots > 0 then

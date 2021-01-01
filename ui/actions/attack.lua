@@ -17,6 +17,7 @@ local utils = ns.utils
 
 local ACTIONS = constants.ACTIONS
 local ACTION_LABELS = constants.ACTION_LABELS
+local CRIT_TYPES = constants.CRIT_TYPES
 local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
 local TURN_TYPES = constants.TURN_TYPES
@@ -168,8 +169,33 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                             return not (rules.offence.canUseBloodHarvest() or rules.offence.canProcMercyFromPain() or character.hasFeat(FEATS.PENANCE))
                         end,
                     },
-                    dmg = {
+                    critType = {
                         order = 4,
+                        type = "select",
+                        name = "Crit effect",
+                        width = 0.8,
+                        hidden = function()
+                            return not rolls.getAttack().isCrit
+                        end,
+                        values = {
+                            [CRIT_TYPES.VALUE_MOD] = "Double damage",
+                            [CRIT_TYPES.MULTI_TARGET] = "Reap",
+                        },
+                        get = rolls.state.attack.critType.get,
+                        set = function(info, value)
+                            rolls.state.attack.critType.set(value)
+                        end
+                    },
+                    critTypeMargin = {
+                        order = 5,
+                        type = "description",
+                        name = " ",
+                        hidden = function()
+                            return not rolls.getAttack().isCrit
+                        end,
+                    },
+                    dmg = {
+                        order = 6,
                         type = "description",
                         desc = "How much damage you can deal to a target",
                         fontSize = "medium",
@@ -179,7 +205,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                         end
                     },
                     attackAgain = {
-                        order = 5,
+                        order = 7,
                         type = "execute",
                         name = COLOURS.FEATS.ADRENALINE .. "Attack again",
                         hidden = function()
@@ -198,25 +224,25 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                         end
                     },
                     useCriticalMass = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.CRITICAL_MASS, {
-                        order = 6,
-                    }),
-                    useFaultline = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.FAULTLINE, {
-                        order = 7,
-                    }),
-                    useReap = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.REAP, {
                         order = 8,
                     }),
-                    useShatterSoul = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.SHATTER_SOUL, {
+                    useFaultline = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.FAULTLINE, {
                         order = 9,
                     }),
-                    useVindication = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.VINDICATION, {
+                    useReap = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.REAP, {
                         order = 10,
+                    }),
+                    useShatterSoul = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.SHATTER_SOUL, {
+                        order = 11,
+                    }),
+                    useVindication = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.VINDICATION, {
+                        order = 12,
                         name = function()
                             return COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.VINDICATION.name ..  ": " .. COLOURS.HEALING .. "Heal for " .. rolls.getAttack().traits[TRAITS.VINDICATION.id].healingDone .. " HP"
                         end,
                     }),
                     confirm = {
-                        order = 11,
+                        order = 13,
                         type = "execute",
                         name = function()
                             local attack = rolls.getAttack()

@@ -77,17 +77,14 @@ local function attackToString(attack)
     local msg = ""
 
     if attack.dmg > 0 then
-        local excited = false
-
         if attack.isCrit then
-            excited = true
-            msg = msg .. COLOURS.CRITICAL .. "CRITICAL HIT!|r "
-        end
-
-        if attack.isCrit and attack.critType == CRIT_TYPES.MULTI_TARGET then
-            msg = msg .. "BIG DAMAGE! You deal " .. tostring(attack.dmg) .. " damage to all enemies in melee range of you or your target!"
+            if attack.critType == CRIT_TYPES.VALUE_MOD then
+                msg = msg .. COLOURS.CRITICAL .. "CRITICAL HIT!|r You deal " .. tostring(attack.dmg) .. " damage!"
+            else
+                msg = msg .. COLOURS.CRITICAL .. "BIG DAMAGE!|r You deal " .. tostring(attack.dmg) .. " damage to all enemies in melee range of you or your target!"
+            end
         else
-            msg = msg .. "You deal " .. tostring(attack.dmg) .. " damage" .. (excited and "!" or ".")
+            msg = msg .. "You deal " .. tostring(attack.dmg) .. " damage."
         end
 
         if attack.hasAdrenalineProc then

@@ -17,6 +17,7 @@ local utils = ns.utils
 
 local ACTIONS = constants.ACTIONS
 local ACTION_LABELS = constants.ACTION_LABELS
+local CRIT_TYPES = constants.CRIT_TYPES
 local DEFENCE_TYPES = constants.DEFENCE_TYPES
 local DEFENCE_TYPE_LABELS = constants.DEFENCE_TYPE_LABELS
 local FEATS = feats.FEATS
@@ -180,8 +181,33 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                     return not rolls.state.defend.currentRoll.get()
                 end,
                 args = {
-                    result = {
+                    critType = {
                         order = 0,
+                        type = "select",
+                        name = "Crit effect",
+                        width = 0.8,
+                        hidden = function()
+                            return not rolls.getDefence().isCrit
+                        end,
+                        values = {
+                            [CRIT_TYPES.RETALIATE] = "Retaliate",
+                            [CRIT_TYPES.PROTECTOR] = "Protector",
+                        },
+                        get = rolls.state.defend.critType.get,
+                        set = function(info, value)
+                            rolls.state.defend.critType.set(value)
+                        end
+                    },
+                    critTypeMargin = {
+                        order = 1,
+                        type = "description",
+                        name = " ",
+                        hidden = function()
+                            return not rolls.getDefence().isCrit
+                        end,
+                    },
+                    result = {
+                        order = 2,
                         type = "description",
                         fontSize = "medium",
                         name = function()
@@ -189,7 +215,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                         end
                     },
                     defendValue = {
-                        order = 1,
+                        order = 3,
                         type = "description",
                         fontSize = "small",
                         hidden = function()
@@ -200,10 +226,10 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                         end
                     },
                     useEmpoweredBlades = ui.helpers.traitToggle(ACTIONS.defend, TRAITS.EMPOWERED_BLADES, {
-                        order = 2,
+                        order = 4,
                     }),
                     confirm = ui.helpers.confirmActionButton(ACTIONS.defend, rolls.getDefence, {
-                        order = 3,
+                        order = 5,
                         hideMsg = true,
                         func = function()
                             local defence = rolls.getDefence()

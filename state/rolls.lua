@@ -169,6 +169,7 @@ rolls.state = {
         isAOE = basicGetSet(ACTIONS.attack, "isAOE"),
         rollMode = basicGetSet(ACTIONS.attack, "rollMode"),
         currentRoll = basicGetSet(ACTIONS.attack, "currentRoll"),
+        critType = basicGetSet(ACTIONS.attack, "critType"),
         activeTraits = {
             get = function(trait)
                 return state.attack.activeTraits[trait.id]
@@ -219,6 +220,7 @@ rolls.state = {
         targetIsKO = basicGetSet(ACTIONS.healing, "targetIsKO"),
         rollMode = basicGetSet(ACTIONS.healing, "rollMode"),
         currentRoll = basicGetSet(ACTIONS.healing, "currentRoll"),
+        critType = basicGetSet(ACTIONS.healing, "critType"),
         activeTraits = {
             get = function(trait)
                 return state.healing.activeTraits[trait.id]
@@ -246,6 +248,7 @@ rolls.state = {
     [ACTIONS.buff] = {
         rollMode = basicGetSet(ACTIONS.buff, "rollMode"),
         currentRoll = basicGetSet(ACTIONS.buff, "currentRoll"),
+        critType = basicGetSet(ACTIONS.buff, "critType"),
         activeTraits = {
             get = function(trait)
                 return state.buff.activeTraits[trait.id]
@@ -293,6 +296,7 @@ rolls.state = {
         damageRisk = basicGetSet(ACTIONS.defend, "damageRisk"),
         rollMode = basicGetSet(ACTIONS.defend, "rollMode"),
         currentRoll = basicGetSet(ACTIONS.defend, "currentRoll"),
+        critType = basicGetSet(ACTIONS.defend, "critType"),
         activeTraits = {
             get = function(trait)
                 return state.defend.activeTraits[trait.id]

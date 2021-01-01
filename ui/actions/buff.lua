@@ -11,6 +11,7 @@ local utils = ns.utils
 
 local ACTIONS = constants.ACTIONS
 local ACTION_LABELS = constants.ACTION_LABELS
+local CRIT_TYPES = constants.CRIT_TYPES
 local TRAITS = traits.TRAITS
 
 --[[ local options = {
@@ -48,11 +49,36 @@ ui.modules.actions.modules.buff.getOptions = function(options)
                     return not rolls.state.buff.currentRoll.get()
                 end,
                 args = {
+                    critType = {
+                        order = 0,
+                        type = "select",
+                        name = "Crit effect",
+                        width = 0.8,
+                        hidden = function()
+                            return not rolls.getBuff().isCrit
+                        end,
+                        values = {
+                            [CRIT_TYPES.VALUE_MOD] = "Double amount",
+                            [CRIT_TYPES.MULTI_TARGET] = "Many buffs",
+                        },
+                        get = rolls.state.buff.critType.get,
+                        set = function(info, value)
+                            rolls.state.buff.critType.set(value)
+                        end
+                    },
+                    critTypeMargin = {
+                        order = 1,
+                        type = "description",
+                        name = " ",
+                        hidden = function()
+                            return not rolls.getBuff().isCrit
+                        end,
+                    },
                     buff = {
+                        order = 2,
                         type = "description",
                         desc = "How much you can buff for",
                         fontSize = "medium",
-                        order = 0,
                         name = function()
                             local buff = rolls.getBuff()
 
@@ -60,10 +86,10 @@ ui.modules.actions.modules.buff.getOptions = function(options)
                         end
                     },
                     useAscend = ui.helpers.traitToggle(ACTIONS.buff, TRAITS.ASCEND, {
-                        order = 1,
+                        order = 3,
                     }),
                     confirm = ui.helpers.confirmActionButton(ACTIONS.buff, rolls.getBuff, {
-                       order = 2,
+                       order = 4,
                        hidden = function()
                             local buff = rolls.getBuff()
                             local shouldShow = buff.amountBuffed > 0
