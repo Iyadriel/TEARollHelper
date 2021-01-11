@@ -66,7 +66,7 @@ local function empoweredBladesEnabled(damageTaken, damageType)
 end
 
 local function shouldShowPreRollUI()
-    return character.hasFeat(FEATS.LIVING_BARRICADE) or character.hasTrait(TRAITS.APEX_PROTECTOR) or character.hasTrait(TRAITS.BULWARK) or rules.other.shouldShowPreRollUI()
+    return character.hasFeat(FEATS.LIVING_BARRICADE) or character.hasTrait(TRAITS.APEX_PROTECTOR) or character.hasTrait(TRAITS.ANQULANS_REDOUBT) or rules.other.shouldShowPreRollUI()
 end
 
 local function shouldShowDamageType()

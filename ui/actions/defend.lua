@@ -141,11 +141,11 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                             checkBuff = true,
                         }),
                         apexProtectorActive = ui.helpers.traitActiveText(TRAITS.APEX_PROTECTOR, 0),
-                        useBulwark = ui.helpers.traitButton(TRAITS.BULWARK, {
+                        useAnqulansRedoubt = ui.helpers.traitButton(TRAITS.ANQULANS_REDOUBT, {
                             order = 1,
                             checkBuff = true,
                         }),
-                        bulwarkActive = ui.helpers.traitActiveText(TRAITS.BULWARK, 1),
+                        anqulansRedoubtActive = ui.helpers.traitActiveText(TRAITS.ANQULANS_REDOUBT, 1),
                         enableLivingBarricade = {
                             order = 2,
                             type = "execute",

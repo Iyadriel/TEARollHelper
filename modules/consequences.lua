@@ -75,8 +75,8 @@ end
 
 -- Traits
 
-local function useBulwark()
-    buffs.addTraitBuff(TRAITS.BULWARK)
+local function useAnqulansRedoubt()
+    buffs.addTraitBuff(TRAITS.ANQULANS_REDOUBT)
 end
 
 local function useEmpoweredBlades(defence)
@@ -148,7 +148,7 @@ local function useVeseerasIre()
 end
 
 local TRAIT_FNS = {
-    [TRAITS.BULWARK.id] = useBulwark,
+    [TRAITS.ANQULANS_REDOUBT.id] = useAnqulansRedoubt,
     [TRAITS.GREATER_RESTORATION.id] = useGreaterRestoration,
     [TRAITS.HOLY_BULWARK.id] = useHolyBulwark,
     [TRAITS.LIFE_WITHIN.id] = useLifeWithin,

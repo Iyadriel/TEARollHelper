@@ -18,7 +18,7 @@ local ACTIONS = constants.ACTIONS
 local STATS = constants.STATS
 local TURN_TYPES = constants.TURN_TYPES
 
-traits.TRAIT_KEYS = {"OTHER", ApexProtector.id, Artisan.id, "ASCEND", "BULWARK", Chastice.id, CriticalMass.id, "EMPOWERED_BLADES", "FAELUNES_REGROWTH", "FAULTLINE", "GREATER_RESTORATION", "HOLY_BULWARK", "LIFE_PULSE", "LIFE_WITHIN", "MOMENT_OF_EXCELLENCE", "PRESENCE_OF_VIRTUE", "REAP", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "SILAMELS_ACE", "VERSATILE", "VESEERAS_IRE", "VINDICATION"}
+traits.TRAIT_KEYS = {"OTHER", ApexProtector.id, Artisan.id, "ASCEND", "ANQULANS_REDOUBT", Chastice.id, CriticalMass.id, "EMPOWERED_BLADES", "FAELUNES_REGROWTH", "FAULTLINE", "GREATER_RESTORATION", "HOLY_BULWARK", "LIFE_PULSE", "LIFE_WITHIN", "MOMENT_OF_EXCELLENCE", "PRESENCE_OF_VIRTUE", "REAP", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "SILAMELS_ACE", "VERSATILE", "VESEERAS_IRE", "VINDICATION"}
 
 local TRAITS = {
     OTHER = {
@@ -33,9 +33,9 @@ local TRAITS = {
         desc = "Activate to replicate your buff roll and apply it to a secondary target. Activate after rolling.",
         numCharges = 2,
     },
-    BULWARK = {
-        id = "BULWARK",
-        name = "Bulwark",
+    ANQULANS_REDOUBT = {
+        id = "ANQULANS_REDOUBT",
+        name = "Anqulan's Redoubt",
         desc = "Activate to gain +3 to defense as well as advantage on all defense rolls for the current or next enemy turn. Activate and then roll.",
         icon = "Interface\\Icons\\spell_holy_greaterblessingofsanctuary",
         numCharges = 2,
@@ -158,7 +158,7 @@ local TRAITS = {
 }
 
 local TRAIT_BUFF_SPECS = {
-    [TRAITS.BULWARK.id] = {
+    [TRAITS.ANQULANS_REDOUBT.id] = {
         {
             duration = BuffDuration:NewWithTurnType({
                 turnTypeID = TURN_TYPES.ENEMY.id,
