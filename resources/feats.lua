@@ -15,7 +15,7 @@ local DAMAGE_TYPES = constants.DAMAGE_TYPES
 local STATS = constants.STATS
 local TURN_TYPES = constants.TURN_TYPES
 
-feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "CHAPLAIN_OF_VIOLENCE", "COUNTER_FORCE", "DIVINE_PURPOSE", "ETERNAL_SACRIFICE", "EXPANSIVE_ARSENAL", "FOCUS", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "LIVING_BARRICADE", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "MONSTER_HUNTER", "ONSLAUGHT", "PARAGON", "PENANCE", "PHALANX", "PROFESSIONAL", "SHEPHERD_OF_THE_WICKED", "TRAUMA_RESPONSE", "VENGEANCE", "WARDER"}
+feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "CHAPLAIN_OF_VIOLENCE", "COUNTER_FORCE", "DEFENSIVE_TACTICIAN", "DIVINE_PURPOSE", "ETERNAL_SACRIFICE", "EXPANSIVE_ARSENAL", "FOCUS", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "LIVING_BARRICADE", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "MONSTER_HUNTER", "ONSLAUGHT", "PARAGON", "PENANCE", "PHALANX", "PROFESSIONAL", "SHEPHERD_OF_THE_WICKED", "TRAUMA_RESPONSE", "VENGEANCE", "WARDER"}
 
 local FEATS = {
     FEATLESS = {
@@ -42,6 +42,12 @@ local FEATS = {
         id = "COUNTER_FORCE",
         name = "Counter-Force",
         desc = "Your melee save rolls only benefit from half of your Defence stat (rounded up), but if you manage the roll you deal damage back to the attacker by an amount equal to your Defence stat.",
+    },
+    DEFENSIVE_TACTICIAN = {
+        id = "DEFENSIVE_TACTICIAN",
+        name = "Defensive Tactician",
+        desc = "After successfully blocking an enemy attack (either at you or through a Melee save) add half the damage rounded down to your next successful Offence attack roll. Does not stack, the highest result is chosen. Requires at least 4/6 Defence to pick.",
+        icon = "Interface\\Icons\\spell_holy_ardentdefender",
     },
     DIVINE_PURPOSE = {
         id = "DIVINE_PURPOSE",
@@ -185,6 +191,15 @@ local FEATS = {
 
 local FEAT_BUFF_SPECS = {
     [FEATS.CHAPLAIN_OF_VIOLENCE.id] = {
+        duration = BuffDuration:New({
+            expireAfterActions = {
+                [ACTIONS.attack] = true,
+            },
+            expireOnCombatEnd = true,
+        }),
+        -- effects provided in consequences.lua
+    },
+    [FEATS.DEFENSIVE_TACTICIAN.id] = {
         duration = BuffDuration:New({
             expireAfterActions = {
                 [ACTIONS.attack] = true,

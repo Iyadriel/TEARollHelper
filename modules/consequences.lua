@@ -65,6 +65,10 @@ end
 
 -- Feats
 
+local function applyDefensiveTactician(dmgRisk)
+    buffs.addFeatBuff(FEATS.DEFENSIVE_TACTICIAN, { BuffEffectDamageDone:New(floor(dmgRisk / 2)) })
+end
+
 local function enableFocus()
     buffs.addFeatBuff(FEATS.FOCUS)
 end
@@ -222,6 +226,10 @@ local function confirmDefenceAction(defence)
         state.defence.damagePrevented.increment(defence.damagePrevented)
     end
 
+    if defence.hasDefensiveTacticianProc then
+        applyDefensiveTactician(defence.dmgRisk)
+    end
+
     local empoweredBlades = defence.traits[TRAITS.EMPOWERED_BLADES.id]
     if empoweredBlades.active then
         useEmpoweredBlades(defence)
@@ -236,6 +244,10 @@ local function confirmMeleeSaveAction(meleeSave)
     end
     if meleeSave.damagePrevented > 0 then
         state.defence.damagePrevented.increment(meleeSave.damagePrevented)
+    end
+
+    if meleeSave.hasDefensiveTacticianProc then
+        applyDefensiveTactician(meleeSave.dmgRisk)
     end
 end
 

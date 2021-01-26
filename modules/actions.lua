@@ -149,6 +149,7 @@ local function getDefence(roll, rollBuff, defenceType, threshold, damageType, dm
     local isCrit = rules.defence.isCrit(roll)
     local defendValue, damageTaken, damagePrevented
     local retaliateDmg = 0
+    local hasDefensiveTacticianProc = nil
     local empoweredBladesEnabled = false
 
     local effectiveIncomingDamage = rules.effects.calculateEffectiveIncomingDamage(dmgRisk, damageTakenBuff, true)
@@ -160,6 +161,10 @@ local function getDefence(roll, rollBuff, defenceType, threshold, damageType, dm
 
     if isCrit then
         retaliateDmg = rules.defence.calculateRetaliationDamage(defence)
+    end
+
+    if rules.defence.canProcDefensiveTactician() then
+        hasDefensiveTacticianProc = rules.defence.hasDefensiveTacticianProc(damageTaken)
     end
 
     if rules.defence.canUseEmpoweredBlades() then
@@ -174,7 +179,9 @@ local function getDefence(roll, rollBuff, defenceType, threshold, damageType, dm
         isCrit = isCrit,
         critType = critType,
         retaliateDmg = retaliateDmg,
-        empoweredBladesEnabled = empoweredBladesEnabled,
+
+        hasDefensiveTacticianProc = hasDefensiveTacticianProc,
+
         traits = {
             [TRAITS.EMPOWERED_BLADES.id] = {
                 canUse = empoweredBladesEnabled,
@@ -191,6 +198,7 @@ local function getMeleeSave(roll, rollBuff, defenceType, threshold, damageType, 
     local isBigFail
     local hasCounterForceProc = nil
     local counterForceDmg = 0
+    local hasDefensiveTacticianProc = nil
 
     roll = rules.rolls.calculateRoll(roll, rollBuff)
     meleeSaveValue = rules.meleeSave.calculateMeleeSaveValue(roll, damageType, defence, defenceBuff)
@@ -216,13 +224,21 @@ local function getMeleeSave(roll, rollBuff, defenceType, threshold, damageType, 
         end
     end
 
+    if rules.defence.canProcDefensiveTactician() then
+        hasDefensiveTacticianProc = rules.defence.hasDefensiveTacticianProc(damageTaken)
+    end
+
     return {
         meleeSaveValue = meleeSaveValue,
+        dmgRisk = dmgRisk,
         damageTaken = damageTaken,
         damagePrevented = damagePrevented,
         isBigFail = isBigFail,
+
         hasCounterForceProc = hasCounterForceProc,
         counterForceDmg = counterForceDmg,
+        hasDefensiveTacticianProc = hasDefensiveTacticianProc,
+
         traits = {
             [TRAITS.PRESENCE_OF_VIRTUE.id] = {
                 canUse = damageTaken <= 0,
