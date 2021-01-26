@@ -97,28 +97,6 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                             state.attack.isAOE.set(value)
                         end
                     },
-                    actions_attack_bloodHarvest = {
-                        order = 2,
-                        type = "range",
-                        name = COLOURS.FEATS.BLOOD_HARVEST .. FEATS.BLOOD_HARVEST.name,
-                        desc = "The amount of Blood Harvest slots to use.",
-                        min = 0,
-                        max = characterState.featsAndTraits.numBloodHarvestSlots.get(),
-                        step = 1,
-                        hidden = function()
-                            return not rules.offence.canUseBloodHarvest()
-                        end,
-                        disabled = function()
-                            return rules.offence.getMaxBloodHarvestSlots() == 0 or characterState.featsAndTraits.numBloodHarvestSlots.get() == 0
-                        end,
-                        get = state.attack.numBloodHarvestSlots.get,
-                        set = function(info, value)
-                            state.attack.numBloodHarvestSlots.set(value)
-                        end,
-                        dialogControl = TEARollHelper:CreateCustomSlider("actions_attack_bloodHarvest", {
-                            max = characterState.featsAndTraits.numBloodHarvestSlots.get
-                        })
-                    },
                     penance = {
                         order = 2,
                         type = "group",
@@ -166,7 +144,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                         type = "description",
                         name = " ",
                         hidden = function()
-                            return not (rules.offence.canUseBloodHarvest() or rules.offence.canProcMercyFromPain() or character.hasFeat(FEATS.PENANCE))
+                            return not (rules.offence.canProcMercyFromPain() or character.hasFeat(FEATS.PENANCE))
                         end,
                     },
                     critType = {
@@ -223,26 +201,51 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                             rollHandler.roll(rollMode, rollModeMod, false)
                         end
                     },
-                    useCriticalMass = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.CRITICAL_MASS, {
+                    useBloodHarvest = {
                         order = 8,
-                    }),
-                    useFaultline = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.FAULTLINE, {
+                        type = "toggle",
+                        width = "full",
+                        name = function()
+                            return COLOURS.FEATS.BLOOD_HARVEST .. "Use " .. FEATS.BLOOD_HARVEST.name
+                        end,
+                        desc = FEATS.BLOOD_HARVEST.desc,
+                        hidden = function()
+                            if rules.offence.canUseBloodHarvest() then
+                                return rules.offence.getMaxBloodHarvestSlots() <= 0 or characterState.featsAndTraits.numBloodHarvestSlots.get() <= 0
+                            end
+                            return true
+                        end,
+                        get = function()
+                            return state.attack.numBloodHarvestSlots.get() > 0
+                        end,
+                        set = function()
+                            if state.attack.numBloodHarvestSlots.get() > 0 then
+                                state.attack.numBloodHarvestSlots.set(0)
+                            else
+                                state.attack.numBloodHarvestSlots.set(1)
+                            end
+                        end,
+                    },
+                    useCriticalMass = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.CRITICAL_MASS, {
                         order = 9,
                     }),
-                    useReap = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.REAP, {
+                    useFaultline = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.FAULTLINE, {
                         order = 10,
                     }),
-                    useShatterSoul = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.SHATTER_SOUL, {
+                    useReap = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.REAP, {
                         order = 11,
                     }),
-                    useVindication = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.VINDICATION, {
+                    useShatterSoul = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.SHATTER_SOUL, {
                         order = 12,
+                    }),
+                    useVindication = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.VINDICATION, {
+                        order = 13,
                         name = function()
                             return COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.VINDICATION.name ..  ": " .. COLOURS.HEALING .. "Heal for " .. rolls.getAttack().traits[TRAITS.VINDICATION.id].healingDone .. " HP"
                         end,
                     }),
                     confirm = {
-                        order = 13,
+                        order = 14,
                         type = "execute",
                         name = function()
                             local attack = rolls.getAttack()
