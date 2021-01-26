@@ -3,6 +3,8 @@ local _, ns = ...
 local constants = ns.constants
 local models = ns.models
 
+local ACTIONS = constants.ACTIONS
+local ACTION_LABELS = constants.ACTION_LABELS
 local TURN_TYPES = constants.TURN_TYPES
 
 local BuffDuration = {}
@@ -100,6 +102,12 @@ function BuffDuration:GetTooltipText()
 
     if self:ExpiresAfterAnyAction() then
         table.insert(msg, "|nLasts for 1 action")
+    end
+
+    for action in pairs(ACTIONS) do
+        if self:ExpiresAfterAction(action) then
+            table.insert(msg, "|nLasts for 1 " .. ACTION_LABELS[action] .. " action")
+        end
     end
 
     if self:ExpiresOnCombatEnd() then
