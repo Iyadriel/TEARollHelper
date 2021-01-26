@@ -182,20 +182,20 @@ local function defenceToString(defence)
     local msg
 
     if defence.damageTaken > 0 then
-        msg = COLOURS.DAMAGE .. "You take " .. tostring(defence.damageTaken) .. " damage."
+        msg = COLOURS.DAMAGE .. "You take " .. tostring(defence.damageTaken) .. " damage.|r"
     else
         if defence.damagePrevented > 0 then
-            msg = COLOURS.ROLES.TANK .. "You prevent " .. defence.damagePrevented .. " damage."
+            msg = COLOURS.ROLES.TANK .. "You prevent " .. defence.damagePrevented .. " damage.|r"
         else
-            msg = "Safe! You don't take damage this turn."
+            msg = "Safe! You don't take damage this turn.|r"
         end
+    end
 
-        if defence.isCrit then
-            if defence.critType == CRIT_TYPES.RETALIATE then
-                msg = msg .. COLOURS.CRITICAL .. "\nRETALIATE!|r You deal "..defence.retaliateDmg.." damage to your attacker!"
-            else
-                msg = msg .. COLOURS.CRITICAL .. "\nPROTECTOR!|r You activate Protector at no cost!"
-            end
+    if defence.isCrit then
+        if defence.critType == CRIT_TYPES.RETALIATE then
+            msg = msg .. COLOURS.CRITICAL .. "\nRETALIATE!|r You deal "..defence.retaliateDmg.." damage to your attacker!"
+        else
+            msg = msg .. COLOURS.CRITICAL .. "\nPROTECTOR!|r You activate Protector at no cost!"
         end
     end
 
