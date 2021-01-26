@@ -8,6 +8,7 @@ local rules = ns.rules
 local ui = ns.ui
 
 local feats = ns.resources.feats
+local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
 
 local FEATS = feats.FEATS
@@ -15,6 +16,7 @@ local STATS = constants.STATS
 local STAT_LABELS = constants.STAT_LABELS
 local STAT_MIN_VALUE = rules.stats.STAT_MIN_VALUE
 local STAT_MAX_VALUE = rules.stats.STAT_MAX_VALUE
+local TRAITS = traits.TRAITS
 local WEAKNESSES = weaknesses.WEAKNESSES
 
 -- Update turn UI, in case it is also open
@@ -142,6 +144,14 @@ ui.modules.config.modules.character.modules.stats.getOptions = function(options)
                 name = COLOURS.ERROR .. "These stats are not compatible with your " .. FEATS.CHAPLAIN_OF_VIOLENCE.name .. " feat.",
                 hidden = function()
                     return not character.hasFeat(FEATS.CHAPLAIN_OF_VIOLENCE) or rules.stats.validateStatsForChaplainOfViolence()
+                end,
+            },
+            veseerasIreWarning = {
+                order = 5,
+                type = "description",
+                name = COLOURS.ERROR .. "These stats are not compatible with your " .. TRAITS.VESEERAS_IRE.name .. " trait.",
+                hidden = function()
+                    return not character.hasTrait(TRAITS.VESEERAS_IRE) or rules.stats.validateStatsForVeseerasIre()
                 end,
             },
             reboundWarning = {

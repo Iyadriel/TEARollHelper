@@ -143,11 +143,13 @@ local function useVersatile()
 end
 
 local function useVeseerasIre()
+    rollState.state.attack.threshold.set(10)
+
     buffs.addTraitBuff(TRAITS.VESEERAS_IRE, {
-        BuffEffectStat:New(STATS.offence, character.getPlayerOffence()),
+        BuffEffectStat:New(STATS.offence, rules.offence.getBaseDamageBonus()),
     }, 1)
     buffs.addTraitBuff(TRAITS.VESEERAS_IRE, {
-        BuffEffectStat:New(STATS.defence, -character.getPlayerOffence()),
+        BuffEffectStat:New(STATS.defence, -ceil(character.getPlayerOffence() / 2)),
     }, 2)
 end
 
