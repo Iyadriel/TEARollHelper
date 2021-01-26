@@ -116,6 +116,12 @@ local function hasStaminaMastery()
     return getPlayerStamina() >= STAT_POINTS_MASTERY
 end
 
+-- [[ Special case: Focus ]]
+
+local function canUseFocus()
+    return hasFeat(FEATS.FOCUS) or hasOffenceMastery()
+end
+
 -- [[ Actions ]]
 
 local function canHeal(outOfCombat)
@@ -417,6 +423,8 @@ character.hasOffenceMastery = hasOffenceMastery
 character.hasDefenceMastery = hasDefenceMastery
 character.hasSpiritMastery = hasSpiritMastery
 character.hasStaminaMastery = hasStaminaMastery
+
+character.canUseFocus = canUseFocus
 
 character.canHeal = canHeal
 character.canBuff = canBuff
