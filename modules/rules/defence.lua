@@ -28,7 +28,7 @@ local function calculateDamageTaken(defenceType, threshold, defendValue, effecti
         end
         return effectiveIncomingDamage
     else
-        return effectiveIncomingDamage - defendValue
+        return max(0, effectiveIncomingDamage - defendValue)
     end
 end
 
