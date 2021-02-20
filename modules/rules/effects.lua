@@ -46,12 +46,14 @@ local function applyCorruptionModifier(healAmount)
 end
 
 local function calculateHealingReceived(incomingHealAmount, source, currentHealth, maxHealth)
-    local amountHealed
+    local amountHealed = incomingHealAmount
 
     if character.hasWeakness(WEAKNESSES.CORRUPTED) and source ~= INCOMING_HEAL_SOURCES.SELF then
-        amountHealed = applyCorruptionModifier(incomingHealAmount)
-    else
-        amountHealed = incomingHealAmount
+        amountHealed = applyCorruptionModifier(amountHealed)
+    end
+
+    if character.hasStaminaMastery() then
+        amountHealed = amountHealed + 2
     end
 
     local overhealing = max(0, currentHealth + amountHealed - maxHealth)
