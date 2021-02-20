@@ -43,6 +43,21 @@ local function getStatLabel(stat)
     end
 end
 
+local statSliderOrder = -1
+local function statSlider(stat, proficiencyDesc, masteryDesc)
+    statSliderOrder = statSliderOrder + 1
+
+    return {
+        type = "range",
+        name = getStatLabel(stat),
+        desc = "|nProficiency bonus: " .. proficiencyDesc .. ". |n|nMastery bonus: " .. masteryDesc .. ".",
+        min = STAT_MIN_VALUE,
+        max = STAT_MAX_VALUE,
+        step = 1,
+        order = statSliderOrder
+    }
+end
+
 --[[ local options = {
     order: Number,
 } ]]
@@ -75,42 +90,26 @@ ui.modules.config.modules.character.modules.stats.getOptions = function(options)
             return true
         end,
         args = {
-            offence = {
-                type = "range",
-                name = getStatLabel(STATS.offence),
-                desc = "Proficiency bonus: +2 base damage. |nMastery bonus: You have the Feat 'Focus' without it occupying your Feat slot (works even with Featless).",
-                min = STAT_MIN_VALUE,
-                max = STAT_MAX_VALUE,
-                step = 1,
-                order = 0
-            },
-            defence = {
-                type = "range",
-                name = getStatLabel(STATS.defence),
-                desc = "Proficiency bonus: Damage taken from failing a Melee Save is reduced to half rounded up. |nMastery bonus: You have 3 charges of 'Brace'. Each charge of Brace that you spend increases your Defence stat for your next Defense roll by +2. Every 15 damage that you prevent through Defence rolls and Melee Saves restore 1 charge of Brace.",
-                min = STAT_MIN_VALUE,
-                max = STAT_MAX_VALUE,
-                step = 1,
-                order = 1
-            },
-            spirit = {
-                type = "range",
-                name = getStatLabel(STATS.spirit),
-                desc = "Proficiency bonus: +1 Greater Heal slot, healing done increased by +2. |nMastery bonus: Increases healing done by +2 against KO'd targets.",
-                min = STAT_MIN_VALUE,
-                max = STAT_MAX_VALUE,
-                step = 1,
-                order = 2
-            },
-            stamina = {
-                type = "range",
-                name = getStatLabel(STATS.stamina),
-                desc = "Proficiency bonus: When at risk of receiving a critical wound, roll 1-4, if your result is 1 or 4 you resist the critical wound. |nMastery bonus: Receive +2 HP per heal from all sources. The roll made to resist going KO is no longer raw but instead applies your Stamina.",
-                min = STAT_MIN_VALUE,
-                max = STAT_MAX_VALUE,
-                step = 1,
-                order = 3
-            },
+            offence = statSlider(
+                STATS.offence,
+                "+2 base damage",
+                "You have the Feat 'Focus' without it occupying your Feat slot (works even with Featless)"
+            ),
+            defence = statSlider(
+                STATS.defence,
+                "Damage taken from failing a Melee Save is reduced to half rounded up",
+                "You have 3 charges of 'Brace'. Each charge of Brace that you spend increases your Defence stat for your next Defense roll by +2. Every 15 damage that you prevent through Defence rolls and Melee Saves restore 1 charge of Brace"
+            ),
+            spirit = statSlider(
+                STATS.spirit,
+                "+1 Greater Heal slot, healing done increased by +2",
+                "Increases healing done by +2 against KO'd targets"
+            ),
+            stamina = statSlider(
+                STATS.stamina,
+                "When at risk of receiving a critical wound, roll 1-4, if your result is 1 or 4 you resist the critical wound",
+                "Receive +2 HP per heal from all sources. The roll made to resist going KO is no longer raw but instead applies your Stamina"
+            ),
             availablePoints = {
                 order = 4,
                 type = "description",
