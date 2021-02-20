@@ -6,7 +6,7 @@ local rules = ns.rules
 
 local FEATS = feats.FEATS
 
-local BIG_FAIL_TREHSHOLD = 5
+local BIG_FAIL_THRESHOLD = 5
 
 local function calculateMeleeSaveValue(roll, damageType, defence, buff)
     local defenceStat = rules.common.calculateDefenceStat(damageType, defence, buff)
@@ -37,7 +37,7 @@ local function calculateCounterForceProcDmg(defence)
 end
 
 local function isSaveBigFail(defendValue, threshold)
-    return (defendValue + BIG_FAIL_TREHSHOLD) <= threshold
+    return (defendValue + BIG_FAIL_THRESHOLD) <= threshold
 end
 
 local function applyBigFailModifier(dmgRisk)
