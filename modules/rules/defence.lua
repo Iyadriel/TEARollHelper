@@ -65,16 +65,6 @@ local function hasDefensiveTacticianProc(damageTaken)
     return damageTaken <= 0
 end
 
--- Trait: Empowered Blades
-
-local function canUseEmpoweredBlades()
-    return character.hasTrait(TRAITS.EMPOWERED_BLADES)
-end
-
-local function empoweredBladesEnabled(damageTaken, damageType)
-    return damageTaken <= 0 and damageType == DAMAGE_TYPES.MAGICAL
-end
-
 local function shouldShowPreRollUI()
     return character.hasFeat(FEATS.LIVING_BARRICADE) or character.hasTrait(TRAITS.APEX_PROTECTOR) or character.hasTrait(TRAITS.ANQULANS_REDOUBT) or rules.other.shouldShowPreRollUI()
 end
@@ -94,9 +84,6 @@ rules.defence = {
 
     canProcDefensiveTactician = canProcDefensiveTactician,
     hasDefensiveTacticianProc = hasDefensiveTacticianProc,
-
-    canUseEmpoweredBlades = canUseEmpoweredBlades,
-    empoweredBladesEnabled = empoweredBladesEnabled,
 
     shouldShowPreRollUI = shouldShowPreRollUI,
     shouldShowDamageType = shouldShowDamageType,
