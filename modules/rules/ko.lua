@@ -13,6 +13,14 @@ local function getClingToConsciousnessThreshold()
     return character.hasRacialTrait(RACIAL_TRAITS.BRUSH_IT_OFF) and 12 or 15
 end
 
+local function isClingToConsciousnessSuccessful(roll)
+    if character.hasStaminaMastery() then
+        roll = roll + character.getPlayerStamina()
+    end
+
+    return roll >= getClingToConsciousnessThreshold()
+end
+
 local function getClingToConsciousnessDuration()
     local stamina = character.getPlayerStamina()
     return 1 + floor(stamina / 2)
@@ -31,7 +39,7 @@ local function getKOMaxHealthReduction()
 end
 
 rules.KO = {
-    getClingToConsciousnessThreshold = getClingToConsciousnessThreshold,
+    isClingToConsciousnessSuccessful = isClingToConsciousnessSuccessful,
     getClingToConsciousnessDuration = getClingToConsciousnessDuration,
 
     canRecoverFromClingingOn = canRecoverFromClingingOn,

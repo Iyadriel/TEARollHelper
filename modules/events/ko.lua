@@ -99,7 +99,7 @@ end)
 
 bus.addListener(EVENTS.ROLL_CHANGED, function(action, roll)
     if getState() == STATES.FADING and action == SPECIAL_ACTIONS.clingToConsciousness then
-        if roll >= rules.KO.getClingToConsciousnessThreshold() then
+        if rules.KO.isClingToConsciousnessSuccessful(roll) then
             local duration = BuffDuration:NewWithTurnType({
                 turnTypeID = TURN_TYPES.PLAYER.id,
                 remainingTurns = rules.KO.getClingToConsciousnessDuration()
