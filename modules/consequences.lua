@@ -83,10 +83,6 @@ local function useAnqulansRedoubt()
     buffs.addTraitBuff(TRAITS.ANQULANS_REDOUBT)
 end
 
-local function useEmpoweredBlades(defence)
-    buffs.addTraitBuff(TRAITS.EMPOWERED_BLADES, { BuffEffectDamageDone:New(ceil(defence.dmgRisk / 2)) })
-end
-
 local function useGreaterRestoration()
     return "You can remove a critical wound from yourself or someone else."
 end
@@ -230,11 +226,6 @@ local function confirmDefenceAction(defence)
 
     if defence.hasDefensiveTacticianProc then
         applyDefensiveTactician(defence.dmgRisk)
-    end
-
-    local empoweredBlades = defence.traits[TRAITS.EMPOWERED_BLADES.id]
-    if empoweredBlades.active then
-        useEmpoweredBlades(defence)
     end
 
     rollState.state.defend.defences.add(defence)

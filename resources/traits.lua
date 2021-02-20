@@ -18,7 +18,7 @@ local ACTIONS = constants.ACTIONS
 local STATS = constants.STATS
 local TURN_TYPES = constants.TURN_TYPES
 
-traits.TRAIT_KEYS = {"OTHER", ApexProtector.id, Artisan.id, "ASCEND", "ANQULANS_REDOUBT", Chastice.id, CriticalMass.id, "EMPOWERED_BLADES", "FAELUNES_REGROWTH", "FAULTLINE", "GREATER_RESTORATION", "HOLY_BULWARK", "LIFE_PULSE", "LIFE_WITHIN", "MOMENT_OF_EXCELLENCE", "PRESENCE_OF_VIRTUE", "REAP", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "SILAMELS_ACE", "VERSATILE", "VESEERAS_IRE", "VINDICATION"}
+traits.TRAIT_KEYS = {"OTHER", ApexProtector.id, Artisan.id, "ASCEND", "ANQULANS_REDOUBT", Chastice.id, CriticalMass.id, "FAELUNES_REGROWTH", "FAULTLINE", "GREATER_RESTORATION", "HOLY_BULWARK", "LIFE_PULSE", "LIFE_WITHIN", "MOMENT_OF_EXCELLENCE", "PRESENCE_OF_VIRTUE", "REAP", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "SILAMELS_ACE", "VERSATILE", "VESEERAS_IRE", "VINDICATION"}
 
 local TRAITS = {
     OTHER = {
@@ -42,15 +42,6 @@ local TRAITS = {
     },
     [Chastice.id] = Chastice,
     [CriticalMass.id] = CriticalMass,
-    EMPOWERED_BLADES = {
-        id = "EMPOWERED_BLADES",
-        name = "Empowered Blades",
-        desc = "Activate after a successful Defence roll against a magical attack to make your next successful attack deal additional Chaos damage equal to half of the prevented damage rounded up. Activate after rolling.",
-        icon = "Interface\\Icons\\ability_demonhunter_chaosstrike",
-        numCharges = 2,
-        isCustom = true,
-        player = "KELANRA",
-    },
     FAELUNES_REGROWTH = {
         id = "FAELUNES_REGROWTH",
         name = "Faelune's Regrowth",
@@ -170,16 +161,6 @@ local TRAIT_BUFF_SPECS = {
                 }),
                 BuffEffectStat:New(STATS.defence, 3),
             },
-        },
-    },
-    [TRAITS.EMPOWERED_BLADES.id] = {
-        {
-            duration = BuffDuration:New({
-                expireAfterActions = {
-                    [ACTIONS.attack] = true,
-                }
-            }),
-            -- effects provided in consequences.lua
         },
     },
     [TRAITS.FAELUNES_REGROWTH.id] = {

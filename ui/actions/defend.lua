@@ -225,11 +225,8 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                             return COLOURS.NOTE .. "Your total roll: " .. rolls.getDefence().defendValue
                         end
                     },
-                    useEmpoweredBlades = ui.helpers.traitToggle(ACTIONS.defend, TRAITS.EMPOWERED_BLADES, {
-                        order = 4,
-                    }),
                     confirm = ui.helpers.confirmActionButton(ACTIONS.defend, rolls.getDefence, {
-                        order = 5,
+                        order = 4,
                         hideMsg = true,
                         func = function()
                             local defence = rolls.getDefence()

@@ -31,7 +31,7 @@ TEARollHelper.COLOURS = {
     TRAITS = {
         GENERIC = '|cff00ccff',
 
-        EMPOWERED_BLADES = '|cff9de851',
+        -- EMPOWERED_BLADES = '|cff9de851',
         FAELUNES_REGROWTH = '|cff02752a',
         HOLY_BULWARK = '|cfff4c96f',
         MOMENT_OF_EXCELLENCE = '|cffa335ee',

@@ -150,7 +150,6 @@ local function getDefence(roll, rollBuff, defenceType, threshold, damageType, dm
     local defendValue, damageTaken, damagePrevented
     local retaliateDmg = 0
     local hasDefensiveTacticianProc = nil
-    local empoweredBladesEnabled = false
 
     local effectiveIncomingDamage = rules.effects.calculateEffectiveIncomingDamage(dmgRisk, damageTakenBuff, true)
 
@@ -167,10 +166,6 @@ local function getDefence(roll, rollBuff, defenceType, threshold, damageType, dm
         hasDefensiveTacticianProc = rules.defence.hasDefensiveTacticianProc(damageTaken)
     end
 
-    if rules.defence.canUseEmpoweredBlades() then
-        empoweredBladesEnabled = rules.defence.empoweredBladesEnabled(damageTaken, damageType)
-    end
-
     return {
         defendValue = defendValue,
         dmgRisk = dmgRisk,
@@ -181,13 +176,6 @@ local function getDefence(roll, rollBuff, defenceType, threshold, damageType, dm
         retaliateDmg = retaliateDmg,
 
         hasDefensiveTacticianProc = hasDefensiveTacticianProc,
-
-        traits = {
-            [TRAITS.EMPOWERED_BLADES.id] = {
-                canUse = empoweredBladesEnabled,
-                active = empoweredBladesEnabled and activeTraits[TRAITS.EMPOWERED_BLADES.id],
-            },
-        },
     }
 end
 

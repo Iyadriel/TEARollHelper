@@ -17,10 +17,6 @@ local function ascendToString()
     return COLOURS.BUFF .. " You apply your buff to a second target.|r"
 end
 
-local function empoweredBladesToString()
-    return COLOURS.TRAITS.EMPOWERED_BLADES .. " Your warglaives absorb the energy of the attack!|r"
-end
-
 local function faultlineToString()
     return " You apply your attack to up to 2 additional targets."
 end
@@ -47,7 +43,6 @@ end
 
 local traitActionToString = {
     [TRAITS.ASCEND.id] = ascendToString,
-    [TRAITS.EMPOWERED_BLADES.id] = empoweredBladesToString,
     [TRAITS.FAULTLINE.id] = faultlineToString,
     [TRAITS.LIFE_PULSE.id] = lifePulseToString,
     [TRAITS.PRESENCE_OF_VIRTUE.id] = presenceOfVirtueToString,
@@ -59,13 +54,15 @@ local traitActionToString = {
 local function getTraitMessages(action)
     local msg = ""
 
-    for traitID, traitAction in pairs(action.traits) do
-        if traitAction.active then
-            local trait = TRAITS[traitID]
-            if trait.GetActionText then
-                msg = msg .. trait:GetActionText(traitAction)
-            else
-                msg = msg .. traitActionToString[traitID](traitAction)
+    if action.traits then
+        for traitID, traitAction in pairs(action.traits) do
+            if traitAction.active then
+                local trait = TRAITS[traitID]
+                if trait.GetActionText then
+                    msg = msg .. trait:GetActionText(traitAction)
+                else
+                    msg = msg .. traitActionToString[traitID](traitAction)
+                end
             end
         end
     end
