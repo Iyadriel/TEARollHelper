@@ -213,7 +213,7 @@ local function meleeSaveToString(meleeSave)
 
     msg = msg .. "You save your ally"
 
-    if character.hasDefenceProficiency() then
+    if meleeSave.damagePrevented > 0 then
         msg = msg .. "," .. COLOURS.ROLES.TANK .. " preventing " .. meleeSave.damagePrevented .. " damage,"
     end
 
