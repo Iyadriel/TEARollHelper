@@ -44,10 +44,8 @@ local function calculateBaseAmountHealed(healValue)
 end
 
 local function applySpiritBonus(amountHealed)
-    if character.hasSpiritMastery() then
+    if character.hasSpiritProficiency() then
         return amountHealed + 2
-    elseif character.hasSpiritProficiency() then
-        return amountHealed + 1
     end
     return amountHealed
 end
