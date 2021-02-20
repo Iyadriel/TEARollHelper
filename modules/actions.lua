@@ -194,7 +194,7 @@ end
 local function getMeleeSave(roll, rollBuff, defenceType, threshold, damageType, dmgRiskToAlly, defence, defenceBuff, damageTakenBuff, activeTraits)
     threshold = threshold + rules.common.SAVE_THRESHOLD_INCREASE
 
-    local dmgRiskToPlayer = dmgRiskToAlly
+    local dmgRiskToPlayer = rules.meleeSave.calculateDamageRiskToPlayer(dmgRiskToAlly)
     local meleeSaveValue, damageTaken, damagePrevented
     local isBigFail
     local hasCounterForceProc = nil

@@ -91,7 +91,7 @@ ui.modules.turn.modules.character.getOptions = function(options)
                 name = "Defence",
                 inline = true,
                 hidden = function()
-                    return not character.hasDefenceProficiency()
+                    return not character.hasDefenceMastery()
                 end,
                 args = {
                     damagePrevented = {
