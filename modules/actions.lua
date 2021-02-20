@@ -191,9 +191,10 @@ local function getDefence(roll, rollBuff, defenceType, threshold, damageType, dm
     }
 end
 
-local function getMeleeSave(roll, rollBuff, defenceType, threshold, damageType, dmgRisk, defence, defenceBuff, damageTakenBuff, activeTraits)
+local function getMeleeSave(roll, rollBuff, defenceType, threshold, damageType, dmgRiskToAlly, defence, defenceBuff, damageTakenBuff, activeTraits)
     threshold = threshold + rules.common.SAVE_THRESHOLD_INCREASE
 
+    local dmgRiskToPlayer = dmgRiskToAlly
     local meleeSaveValue, damageTaken, damagePrevented
     local isBigFail
     local hasCounterForceProc = nil
@@ -203,17 +204,16 @@ local function getMeleeSave(roll, rollBuff, defenceType, threshold, damageType, 
     roll = rules.rolls.calculateRoll(roll, rollBuff)
     meleeSaveValue = rules.meleeSave.calculateMeleeSaveValue(roll, damageType, defence, defenceBuff)
 
-    -- the damage that the ally would have taken
-    damagePrevented = rules.meleeSave.calculateDamagePrevented(dmgRisk)
+    damagePrevented = rules.meleeSave.calculateDamagePrevented(dmgRiskToAlly)
 
     isBigFail = rules.meleeSave.isSaveBigFail(meleeSaveValue, threshold)
     -- in case of big fail, double incoming damage before other modifiers
     if isBigFail then
-        dmgRisk = rules.meleeSave.applyBigFailModifier(dmgRisk)
+        dmgRiskToPlayer = rules.meleeSave.applyBigFailModifier(dmgRiskToPlayer)
     end
 
     -- then apply modifiers
-    local effectiveIncomingDamage = rules.effects.calculateEffectiveIncomingDamage(dmgRisk, damageTakenBuff, true)
+    local effectiveIncomingDamage = rules.effects.calculateEffectiveIncomingDamage(dmgRiskToPlayer, damageTakenBuff, true)
 
     damageTaken = rules.defence.calculateDamageTaken(defenceType, threshold, meleeSaveValue, effectiveIncomingDamage)
 
@@ -230,7 +230,7 @@ local function getMeleeSave(roll, rollBuff, defenceType, threshold, damageType, 
 
     return {
         meleeSaveValue = meleeSaveValue,
-        dmgRisk = dmgRisk,
+        dmgRiskToPlayer = dmgRiskToPlayer,
         damageTaken = damageTaken,
         damagePrevented = damagePrevented,
         isBigFail = isBigFail,

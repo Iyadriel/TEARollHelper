@@ -249,7 +249,7 @@ local function confirmMeleeSaveAction(meleeSave)
     end
 
     if meleeSave.hasDefensiveTacticianProc then
-        applyDefensiveTactician(meleeSave.dmgRisk)
+        applyDefensiveTactician(meleeSave.dmgRiskToPlayer)
     end
 end
 
