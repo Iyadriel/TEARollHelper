@@ -217,6 +217,8 @@ local function confirmHealAction(heal)
 end
 
 local function confirmDefenceAction(defence)
+    state.defence.numBraceCharges.use(defence.numBraceCharges)
+
     if defence.damageTaken > 0 then
         state.health.applyDamage(defence.damageTaken)
     end

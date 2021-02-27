@@ -76,6 +76,7 @@ rolls.initState = function()
             threshold = nil,
             damageType = nil,
             damageRisk = nil,
+            numBraceCharges = 0,
             rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
             critType = CRIT_TYPES.RETALIATE,
@@ -294,6 +295,7 @@ rolls.state = {
         threshold = basicGetSet(ACTIONS.defend, "threshold"),
         damageType = basicGetSet(ACTIONS.defend, "damageType"),
         damageRisk = basicGetSet(ACTIONS.defend, "damageRisk"),
+        numBraceCharges = basicGetSet(ACTIONS.defend, "numBraceCharges"),
         rollMode = basicGetSet(ACTIONS.defend, "rollMode"),
         currentRoll = basicGetSet(ACTIONS.defend, "currentRoll"),
         critType = basicGetSet(ACTIONS.defend, "critType"),
@@ -315,6 +317,7 @@ rolls.state = {
 
         resetSlots = function()
             TEARollHelper:Debug("Resetting slots for defend")
+            rolls.state.defend.numBraceCharges.set(0)
             rolls.state.defend.activeTraits.reset()
         end,
     },
@@ -439,6 +442,12 @@ bus.addListener(EVENTS.BLOOD_HARVEST_CHARGES_CHANGED, function(numCharges)
     end
 end)
 
+bus.addListener(EVENTS.BRACE_CHARGES_CHANGED, function(numCharges)
+    if numCharges < state.defend.numBraceCharges then
+        rolls.state.defend.numBraceCharges.set(numCharges)
+    end
+end)
+
 bus.addListener(EVENTS.GREATER_HEAL_CHARGES_CHANGED, function(numCharges)
     if numCharges < state.healing.numGreaterHealSlots then
         rolls.state.healing.numGreaterHealSlots.set(numCharges)
@@ -523,7 +532,7 @@ local function getDefence()
     local damageTakenBuff = buffsState.buffs.damageTaken.get()
     local activeTraits = state.defend.activeTraits
 
-    return actions.getDefence(state.defend.currentRoll, rollBuff, state.defend.defenceType, state.defend.threshold, state.defend.damageType, state.defend.damageRisk, state.defend.critType, defence, defenceBuff, damageTakenBuff, activeTraits)
+    return actions.getDefence(state.defend.currentRoll, rollBuff, state.defend.defenceType, state.defend.threshold, state.defend.damageType, state.defend.damageRisk, state.defend.numBraceCharges, state.defend.critType, defence, defenceBuff, damageTakenBuff, activeTraits)
 end
 
 local function getMeleeSave()

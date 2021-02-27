@@ -25,6 +25,10 @@ bus.addListener(EVENTS.BLOOD_HARVEST_CHARGES_USED, function(numCharges)
     TEARollHelper:Print(COLOURS.FEATS.BLOOD_HARVEST .. "You used " .. numCharges .. " Blood Harvest charge(s).")
 end)
 
+bus.addListener(EVENTS.BRACE_CHARGES_USED, function(numCharges)
+    TEARollHelper:Print("You used " .. numCharges .. " Brace charge(s).")
+end)
+
 bus.addListener(EVENTS.GREATER_HEAL_CHARGES_USED, function(numCharges)
     TEARollHelper:Print("You used " .. numCharges .. " Greater Heal charge(s).")
 end)

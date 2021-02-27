@@ -5,6 +5,7 @@ local COLOURS = TEARollHelper.COLOURS
 local actions = ns.actions
 local buffsState = ns.state.buffs.state
 local character = ns.character
+local characterState = ns.state.character.state
 local consequences = ns.consequences
 local constants = ns.constants
 local environment = ns.state.environment
@@ -181,8 +182,38 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                     return not rolls.state.defend.currentRoll.get()
                 end,
                 args = {
-                    critType = {
+                    actions_defence_brace = {
                         order = 0,
+                        type = "range",
+                        name = "Brace",
+                        desc = "The amount of Brace charges to use. Each charge increases your Defence by 2.",
+                        min = 0,
+                        max = characterState.defence.numBraceCharges.get(),
+                        step = 1,
+                        hidden = function()
+                            return not character.hasDefenceMastery()
+                        end,
+                        disabled = function()
+                            return characterState.defence.numBraceCharges.get() == 0
+                        end,
+                        get = rolls.state.defend.numBraceCharges.get,
+                        set = function(info, value)
+                            rolls.state.defend.numBraceCharges.set(value)
+                        end,
+                        dialogControl = TEARollHelper:CreateCustomSlider("actions_defence_brace", {
+                            max = characterState.defence.numBraceCharges.get
+                        })
+                    },
+                    braceBottomMargin = {
+                        order = 1,
+                        type = "description",
+                        name = " ",
+                        hidden = function()
+                            return not character.hasDefenceMastery()
+                        end,
+                    },
+                    critType = {
+                        order = 2,
                         type = "select",
                         name = "Crit effect",
                         width = 0.8,
@@ -199,7 +230,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                         end
                     },
                     critTypeMargin = {
-                        order = 1,
+                        order = 3,
                         type = "description",
                         name = " ",
                         hidden = function()
@@ -207,7 +238,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                         end,
                     },
                     result = {
-                        order = 2,
+                        order = 4,
                         type = "description",
                         fontSize = "medium",
                         name = function()
@@ -215,7 +246,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                         end
                     },
                     defendValue = {
-                        order = 3,
+                        order = 5,
                         type = "description",
                         fontSize = "small",
                         hidden = function()
@@ -226,7 +257,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                         end
                     },
                     confirm = ui.helpers.confirmActionButton(ACTIONS.defend, rolls.getDefence, {
-                        order = 4,
+                        order = 6,
                         hideMsg = true,
                         func = function()
                             local defence = rolls.getDefence()

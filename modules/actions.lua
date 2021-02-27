@@ -145,7 +145,7 @@ local function getCC(roll, rollBuff, offence, offenceBuff, defence, defenceBuff)
     }
 end
 
-local function getDefence(roll, rollBuff, defenceType, threshold, damageType, dmgRisk, critType, defence, defenceBuff, damageTakenBuff, activeTraits)
+local function getDefence(roll, rollBuff, defenceType, threshold, damageType, dmgRisk, numBraceCharges, critType, defence, defenceBuff, damageTakenBuff, activeTraits)
     local isCrit = rules.defence.isCrit(roll)
     local defendValue, damageTaken, damagePrevented
     local retaliateDmg = 0
@@ -154,6 +154,7 @@ local function getDefence(roll, rollBuff, defenceType, threshold, damageType, dm
     local effectiveIncomingDamage = rules.effects.calculateEffectiveIncomingDamage(dmgRisk, damageTakenBuff, true)
 
     roll = rules.rolls.calculateRoll(roll, rollBuff)
+    defence = defence + rules.defence.calculateBraceDefenceBonus(numBraceCharges) -- brace increases defence stat, not the roll.
     defendValue = rules.defence.calculateDefendValue(roll, damageType, defence, defenceBuff)
     damageTaken = rules.defence.calculateDamageTaken(defenceType, threshold, defendValue, effectiveIncomingDamage)
     damagePrevented = rules.defence.calculateDamagePrevented(effectiveIncomingDamage, damageTaken)
@@ -171,6 +172,7 @@ local function getDefence(roll, rollBuff, defenceType, threshold, damageType, dm
         dmgRisk = dmgRisk,
         damageTaken = damageTaken,
         damagePrevented = damagePrevented,
+        numBraceCharges = numBraceCharges,
         isCrit = isCrit,
         critType = critType,
         retaliateDmg = retaliateDmg,

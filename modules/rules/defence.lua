@@ -21,6 +21,10 @@ local function calculateDefendValue(roll, damageType, defence, buff)
     return roll + rules.common.calculateDefenceStat(damageType, defence, buff)
 end
 
+local function calculateBraceDefenceBonus(numBraceCharges)
+    return numBraceCharges * 2
+end
+
 local function calculateDamageTaken(defenceType, threshold, defendValue, effectiveIncomingDamage)
     if defenceType == DEFENCE_TYPES.THRESHOLD then
         local safetyMargin = defendValue - threshold
@@ -67,7 +71,10 @@ local function hasDefensiveTacticianProc(damageTaken)
 end
 
 local function shouldShowPreRollUI()
-    return character.hasFeat(FEATS.LIVING_BARRICADE) or character.hasTrait(TRAITS.APEX_PROTECTOR) or character.hasTrait(TRAITS.ANQULANS_REDOUBT) or rules.other.shouldShowPreRollUI()
+    return character.hasFeat(FEATS.LIVING_BARRICADE)
+        or character.hasTrait(TRAITS.APEX_PROTECTOR)
+        or character.hasTrait(TRAITS.ANQULANS_REDOUBT)
+        or rules.other.shouldShowPreRollUI()
 end
 
 local function shouldShowDamageType()
@@ -79,6 +86,7 @@ rules.defence = {
     MAX_BRACE_CHARGES = MAX_BRACE_CHARGES,
 
     calculateDefendValue = calculateDefendValue,
+    calculateBraceDefenceBonus = calculateBraceDefenceBonus,
     calculateDamageTaken = calculateDamageTaken,
     calculateDamagePrevented = calculateDamagePrevented,
     isCrit = isCrit,

@@ -204,11 +204,13 @@ characterState.state = {
             set = function(numBraceCharges)
                 if numBraceCharges ~= state.defence.numBraceCharges then
                     state.defence.numBraceCharges = numBraceCharges
+                    bus.fire(EVENTS.BRACE_CHARGES_CHANGED, numBraceCharges)
                 end
             end,
-            use = function()
-                if state.defence.numBraceCharges > 0 then
-                    characterState.state.defence.numBraceCharges.set(state.defence.numBraceCharges - 1)
+            use = function(numBraceCharges)
+                if numBraceCharges > 0 and state.defence.numBraceCharges > 0 then
+                    characterState.state.defence.numBraceCharges.set(state.defence.numBraceCharges - numBraceCharges)
+                    bus.fire(EVENTS.BRACE_CHARGES_USED, numBraceCharges)
                 end
             end,
             restore = function()
