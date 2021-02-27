@@ -98,13 +98,26 @@ ui.modules.turn.modules.character.getOptions = function(options)
                         order = 0,
                         type = "range",
                         name = COLOURS.ROLES.TANK .. "Damage prevented",
-                        desc = "When you block incoming damage to yourself, or to someone else via Melee save, it counts towards your ”Damage prevented”. When that counter reaches 50 it resets back to zero and you can regain 1 charge to a trait of your choice.",
+                        desc = "When you block incoming damage to yourself, or to someone else via Melee save, it counts towards your ”Damage prevented”. When that counter reaches 15 it resets back to zero and you can regain 1 charge of Brace.",
                         min = 0,
                         max = rules.defence.MAX_DAMAGE_PREVENTED - 1,
                         step = 1,
                         get = state.defence.damagePrevented.get,
                         set = function(info, value)
                             state.defence.damagePrevented.set(value)
+                        end,
+                    },
+                    numBraceCharges = {
+                        order = 1,
+                        type = "range",
+                        name = COLOURS.ROLES.TANK .. "Brace",
+                        desc = "You have 3 charges of 'Brace'. Each charge of Brace that you spend increases your Defence stat for your next Defence roll by +2. Every 15 damage that you prevent through Defence rolls and Melee Saves restore 1 charge of Brace.",
+                        min = 0,
+                        max = rules.defence.MAX_BRACE_CHARGES,
+                        step = 1,
+                        get = state.defence.numBraceCharges.get,
+                        set = function(info, value)
+                            state.defence.numBraceCharges.set(value)
                         end,
                     },
                 }

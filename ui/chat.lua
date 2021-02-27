@@ -52,8 +52,8 @@ bus.addListener(EVENTS.CONSCIOUSNESS_CHANGED, function(consciousnessState)
     end
 end)
 
-bus.addListener(EVENTS.DAMAGE_PREVENTED_COUNTER_RESET, function()
-    TEARollHelper:Print(COLOURS.MASTERY .. "Your 'Damage prevented' counter was maxed out and has been reset.")
+bus.addListener(EVENTS.BRACE_CHARGE_RESTORED, function()
+    TEARollHelper:Print(COLOURS.MASTERY .. "1 charge of Brace restored.")
 end)
 
 bus.addListener(EVENTS.DAMAGE_TAKEN, function(incomingDamage, damageTaken, overkill)

@@ -17,6 +17,7 @@ local weaknesses = ns.resources.weaknesses
 local CONSCIOUSNESS_STATES = constants.CONSCIOUSNESS_STATES
 local EVENTS = bus.EVENTS
 local FEATS = feats.FEATS
+local MAX_BRACE_CHARGES = rules.defence.MAX_BRACE_CHARGES
 local TRAITS = traits.TRAITS
 local WEAKNESSES = weaknesses.WEAKNESSES
 local state
@@ -40,6 +41,7 @@ characterState.initState = function()
 
         defence = {
             damagePrevented = 0,
+            numBraceCharges = MAX_BRACE_CHARGES,
         },
 
         healing = {
@@ -192,9 +194,30 @@ characterState.state = {
             end,
             reset = function()
                 characterState.state.defence.damagePrevented.set(0)
-                bus.fire(EVENTS.DAMAGE_PREVENTED_COUNTER_RESET)
+                characterState.state.defence.numBraceCharges.restore()
             end,
-        }
+        },
+        numBraceCharges = {
+            get = function()
+                return state.defence.numBraceCharges
+            end,
+            set = function(numBraceCharges)
+                if numBraceCharges ~= state.defence.numBraceCharges then
+                    state.defence.numBraceCharges = numBraceCharges
+                end
+            end,
+            use = function()
+                if state.defence.numBraceCharges > 0 then
+                    characterState.state.defence.numBraceCharges.set(state.defence.numBraceCharges - 1)
+                end
+            end,
+            restore = function()
+                if state.defence.numBraceCharges < MAX_BRACE_CHARGES then
+                    characterState.state.defence.numBraceCharges.set(state.defence.numBraceCharges + 1)
+                    bus.fire(EVENTS.BRACE_CHARGE_RESTORED)
+                end
+            end,
+        },
     },
     healing = {
         numGreaterHealSlots = {
@@ -345,6 +368,7 @@ bus.addListener(EVENTS.CHARACTER_STAT_CHANGED, function(stat, value)
         end
     elseif stat == "defence" then
         characterState.state.defence.damagePrevented.set(0)
+        characterState.state.defence.numBraceCharges.set(MAX_BRACE_CHARGES)
     elseif stat == "spirit" then
         updateGreaterHealSlots("spirit stat changed")
     elseif stat == "stamina" then
