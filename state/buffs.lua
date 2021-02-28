@@ -2,6 +2,7 @@ local _, ns = ...
 
 local buffsState = ns.state.buffs
 local bus = ns.bus
+local character = ns.character
 local characterState = ns.state.character
 local constants = ns.constants
 local models = ns.models
@@ -246,10 +247,17 @@ local function removeWeaknessDebuff(weakness)
     end
 end
 
-bus.addListener(EVENTS.TRAIT_REMOVED, function(traitID)
-    local traitBuffs = buffsState.state.buffLookup.getTraitBuffs(TRAITS[traitID])
-    if traitBuffs then
-        for _, traitBuff in pairs(traitBuffs) do
+local function onTraitsChanged()
+    local activeBuffs = buffsState.state.activeBuffs.get()
+    local buffsToRemove = {}
+
+    for _, buff in ipairs(activeBuffs) do
+        if buff.traitID and not character.hasTraitByID(buff.traitID) then
+            table.insert(buffsToRemove, buff)
+        end
+    end
+
+    for _, traitBuff in ipairs(buffsToRemove) do
             traitBuff:Remove()
         end
     end
@@ -265,4 +273,4 @@ bus.addListener(EVENTS.RACIAL_TRAIT_CHANGED, function()
         racialBuff:Remove()
         TEARollHelper:Debug("Removed racial trait buff because racial trait in character sheet changed.")
     end
-end)
+bus.addListener(EVENTS.TRAITS_CHANGED, onTraitsChanged)

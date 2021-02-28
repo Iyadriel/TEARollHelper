@@ -419,14 +419,15 @@ bus.addListener(EVENTS.FEAT_CHANGED, function(featID)
     end
 end)
 
-bus.addListener(EVENTS.TRAIT_REMOVED, function(traitID)
-    if not turnState.state.inCombat.get() then
-        local trait = TRAITS[traitID]
-        if trait and trait.numCharges then -- check if trait exists in case it was removed from addon
+local function onTraitsChanged()
+    for traitID, trait in pairs(character.getPlayerTraits()) do
+        if trait.numCharges then
             characterState.state.featsAndTraits.numTraitCharges.set(traitID, rules.traits.getMaxTraitCharges(trait))
         end
     end
-end)
+end
+
+bus.addListener(EVENTS.TRAITS_CHANGED, onTraitsChanged)
 
 bus.addListener(EVENTS.WEAKNESS_ADDED, function(weaknessID)
     if weaknessID == WEAKNESSES.FRAGILE.id then
