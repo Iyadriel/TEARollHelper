@@ -379,6 +379,8 @@ local onStatUpdate = {
         end
     end,
     [STATS.defence] = function()
+        -- if player swaps away from build with brace, then back again later, we want them to have full brace charges.
+        -- but we don't want to reset them when swapping from one build with brace to another with brace.
         -- hence the check here.
         if not rules.defence.canUseBraceSystem() then
         characterState.state.defence.numBraceCharges.set(MAX_BRACE_CHARGES)
