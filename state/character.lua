@@ -420,8 +420,9 @@ bus.addListener(EVENTS.FEAT_CHANGED, function(featID)
 end)
 
 local function onTraitsChanged()
-    for traitID, trait in pairs(character.getPlayerTraits()) do
-        if trait.numCharges then
+    for traitID, trait in pairs(TRAITS) do
+        if trait.numCharges and not character.hasTrait(trait) then
+            -- reset charges of removed traits back to full.
             characterState.state.featsAndTraits.numTraitCharges.set(traitID, rules.traits.getMaxTraitCharges(trait))
         end
     end

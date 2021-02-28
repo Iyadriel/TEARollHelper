@@ -181,31 +181,14 @@ local function getPlayerTraitAtSlot(slotIndex)
     return TRAITS[traitID]
 end
 
-local function getPlayerTraits()
-    local returnTraits = {}
-
-    for slot, id in pairs(TEARollHelper.db.profile.traits) do
-        local trait = getPlayerTraitAtSlot(slot)
-        if trait then -- check against removed traits
-            returnTraits[id] = trait
-        end
-    end
-
-    return returnTraits
-end
-
 local function setPlayerTraitByID(index, traitID)
-    local oldTraitID = TEARollHelper.db.profile.traits[index]
     TEARollHelper.db.profile.traits[index] = traitID
     bus.fire(EVENTS.TRAITS_CHANGED)
-    bus.fire(EVENTS.TRAIT_REMOVED, oldTraitID)
 end
 
 local function clearPlayerTrait(index)
-    local oldTraitID = TEARollHelper.db.profile.traits[index]
     TEARollHelper.db.profile.traits[index] = TRAITS.OTHER.id
     bus.fire(EVENTS.TRAITS_CHANGED)
-    bus.fire(EVENTS.TRAIT_REMOVED, oldTraitID)
 end
 
 function clearExcessTraits()
@@ -452,7 +435,6 @@ character.hasTraitByID = hasTraitByID
 character.hasTrait = hasTrait
 character.getPlayerTraitIDAtSlot = getPlayerTraitIDAtSlot
 character.getPlayerTraitAtSlot = getPlayerTraitAtSlot
-character.getPlayerTraits = getPlayerTraits
 character.setPlayerTraitByID = setPlayerTraitByID
 character.clearExcessTraits = clearExcessTraits
 
