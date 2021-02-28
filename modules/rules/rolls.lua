@@ -28,7 +28,7 @@ local function getCritReq()
 end
 
 local function getMaxFatePoints()
-    return character.hasWeakness(WEAKNESSES.FATELESS) and 0 or 1
+    return character.hasWeakness(WEAKNESSES.FATELESS) and 0 or 2
 end
 
 local function shouldSuggestFatePoint(roll, attack, cc, healing, buff, defence, meleeSave, rangedSave)
