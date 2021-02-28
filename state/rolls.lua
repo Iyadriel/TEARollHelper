@@ -417,6 +417,12 @@ local function resetThresholds()
     rolls.state.utility.utilityTypeID.set(UTILITY_TYPES.OTHER.id)
 end
 
+local function resetAll()
+    resetSlots()
+    resetRolls()
+    resetThresholds()
+end
+
 bus.addListener(EVENTS.CHARACTER_STAT_CHANGED, resetSlots)
 bus.addListener(EVENTS.FEAT_CHANGED, function()
     resetSlots()
@@ -425,16 +431,9 @@ end)
 bus.addListener(EVENTS.TRAITS_CHANGED, resetSlots)
 bus.addListener(EVENTS.WEAKNESSES_CHANGED, resetSlots)
 bus.addListener(EVENTS.UTILITY_TRAITS_CHANGED, resetSlots)
-bus.addListener(EVENTS.RACIAL_TRAIT_CHANGED, function()
-    resetSlots() -- in case of utility bonus change
-    resetRolls() -- in case of crit threshold change
-    resetThresholds() -- in case of utility bonus change
-end)
-bus.addListener(EVENTS.TURN_STARTED, function()
-    resetSlots()
-    resetRolls()
-    resetThresholds()
-end)
+bus.addListener(EVENTS.RACIAL_TRAIT_CHANGED, resetAll)
+bus.addListener(EVENTS.PROFILE_CHANGED, resetAll)
+bus.addListener(EVENTS.TURN_STARTED, resetAll)
 
 bus.addListener(EVENTS.BLOOD_HARVEST_CHARGES_CHANGED, function(numCharges)
     if numCharges < state.attack.numBloodHarvestSlots then
