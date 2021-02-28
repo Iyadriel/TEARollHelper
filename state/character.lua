@@ -379,8 +379,12 @@ local onStatUpdate = {
         end
     end,
     [STATS.defence] = function()
-        characterState.state.defence.damagePrevented.set(0)
+        -- if player swaps away from 6 def, then back, we want them to have full brace charges.
+        -- but we don't want to reset them when swapping from one build with 6 def to another with 6 def.
+        -- hence, the mastery check.
+        if not character.hasDefenceMastery() then
         characterState.state.defence.numBraceCharges.set(MAX_BRACE_CHARGES)
+        end
     end,
     [STATS.spirit] = function()
         updateGreaterHealSlots("spirit stat changed")
