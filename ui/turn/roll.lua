@@ -73,12 +73,18 @@ ui.modules.turn.modules.roll.getOptions = function(options)
         return rollState.getRollModeModifier(action, turnTypeID)
     end
 
-    local function performRoll(isReroll)
+    local function performRoll(isFateRoll)
         local rollMode = state[options.action].rollMode.get()
         local rollModeMod = getRollModeModifier()
 
         rollHandler.setAction(options.action)
-        rollHandler.roll(rollMode, rollModeMod, isReroll)
+
+        if isFateRoll then
+            local currentRoll = state[options.action].currentRoll.get()
+            rollHandler.fateRoll(rollMode, rollModeMod, currentRoll)
+        else
+            rollHandler.roll(rollMode, rollModeMod, false)
+        end
     end
 
     return {

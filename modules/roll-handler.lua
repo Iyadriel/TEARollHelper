@@ -19,7 +19,8 @@ local rollValues = {
     action = nil,
     tempMomentOfExcellence = false,
     tempRollMode = nil,
-    tempIsReroll = nil,
+    tempMaxRoll = rules.rolls.MAX_ROLL,
+    tempIsFateRoll = nil,
 }
 local totalRequiredRolls = 1
 local remainingRolls = 1
@@ -44,7 +45,8 @@ local function resetTempValues()
     rollValues.tempMomentOfExcellence = false
     rollValues.tempRollMode = nil
     rollValues.tempRoll = nil
-    rollValues.tempIsReroll = nil
+    rollValues.tempMaxRoll = rules.rolls.MAX_ROLL
+    rollValues.tempIsFateRoll = nil
 end
 
 local function getMinRoll()
@@ -53,7 +55,7 @@ end
 
 local function sendRoll()
     gameEvents.listenForRolls()
-    RandomRoll(getMinRoll(), rules.rolls.MAX_ROLL)
+    RandomRoll(getMinRoll(), rollValues.tempMaxRoll)
 end
 
 local function getRequiredRollsForTurn()
@@ -68,14 +70,14 @@ local function getRequiredRollsForTurn()
     return numRolls
 end
 
-function doRoll(rollMode, rollModeModifier, isReroll)
+function doRoll(rollMode, rollModeModifier, isFateRoll)
     rollMode = rollMode + rollModeModifier
     rollMode = max(ROLL_MODES.DISADVANTAGE, min(ROLL_MODES.ADVANTAGE, rollMode))
 
     rollValues.tempMomentOfExcellence = false
     rollValues.tempRollMode = rollMode
     rollValues.isRolling = true
-    rollValues.tempIsReroll = isReroll
+    rollValues.tempIsFateRoll = isFateRoll
 
     updateUI() -- so we can update the button state
 
@@ -86,11 +88,16 @@ function doRoll(rollMode, rollModeModifier, isReroll)
     sendRoll()
 end
 
+local function doFateRoll(rollMode, rollModeModifier, currentRoll)
+    rollValues.tempMaxRoll = rules.rolls.MAX_ROLL - currentRoll
+    doRoll(rollMode, rollModeModifier, true)
+end
+
 local function doMomentOfExcellence()
     rollValues.tempMomentOfExcellence = true
     rollValues.tempRollMode = ROLL_MODES.NORMAL
     rollValues.isRolling = true
-    rollValues.tempIsReroll = false
+    rollValues.tempIsFateRoll = false
 
     updateUI() -- so we can update the button state
 
@@ -118,8 +125,8 @@ function handleRollResult(result)
     else
         rollValues.isRolling = false
 
-        if rollValues.tempIsReroll then
-            bus.fire(EVENTS.REROLLED, rollValues.action, rollValues.tempRoll)
+        if rollValues.tempIsFateRoll then
+            bus.fire(EVENTS.FATE_ROLLED, rollValues.action, rollValues.tempRoll)
         else
             setCurrentRoll(rollValues.tempRoll)
         end
@@ -134,5 +141,6 @@ rollHandler.isRolling = isRolling
 rollHandler.setCurrentRoll = setCurrentRoll
 rollHandler.setAction = setAction
 rollHandler.roll = doRoll
+rollHandler.fateRoll = doFateRoll
 rollHandler.doMomentOfExcellence = doMomentOfExcellence
 rollHandler.handleRollResult = handleRollResult

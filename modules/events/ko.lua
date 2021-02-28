@@ -112,7 +112,7 @@ bus.addListener(EVENTS.ROLL_CHANGED, function(action, roll)
     end
 end)
 
--- TODO listen to REROLLED, can go from unconscious to clinging on
+-- TODO listen to FATE_ROLLED, can go from unconscious to clinging on
 -- TODO need some UI to confirm roll, can't reroll if everything's automatic
 
 bus.addListener(EVENTS.BUFF_EXPIRED, function(id)

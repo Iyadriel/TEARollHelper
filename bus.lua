@@ -65,7 +65,7 @@ local EVENTS = {
 
     -- Rolling
     ROLL_CHANGED = "ROLL_CHANGED", -- action, roll
-    REROLLED = "REROLLED", -- action, roll
+    FATE_ROLLED = "FATE_ROLLED", -- action, roll
 
     -- Turn
     COMBAT_STARTED = "COMBAT_STARTED",

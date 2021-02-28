@@ -461,12 +461,10 @@ bus.addListener(EVENTS.ROLL_CHANGED, function(action, roll)
     rolls.state[action].currentRoll.set(roll)
 end)
 
-bus.addListener(EVENTS.REROLLED, function(action, roll)
+bus.addListener(EVENTS.FATE_ROLLED, function(action, roll)
     local currentRoll = rolls.state[action].currentRoll.get()
 
-    if roll > currentRoll then
-        rolls.state[action].currentRoll.set(roll)
-    end
+     rolls.state[action].currentRoll.set(currentRoll + roll)
 end)
 
 -- Turn actions
