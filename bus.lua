@@ -4,6 +4,7 @@ local bus = ns.bus
 
 local EVENTS = {
     -- System
+    PROFILE_CHANGED = "PROFILE_CHANGED",
     STATE_READY = "STATE_READY",
 
     -- Character sheet
