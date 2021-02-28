@@ -26,6 +26,12 @@ local TRAITS = traits.TRAITS
 local TURN_TYPES = constants.TURN_TYPES
 local WEAKNESSES = weaknesses.WEAKNESSES
 
+-- [[ System ]]
+
+bus.addListener(EVENTS.PROFILE_CHANGED, function()
+    ui.update(ui.modules.turn.name)
+end)
+
 -- [[ Buff effects ]]
 
 bus.addListener(EVENTS.MAX_HEALTH_EFFECT, function()
