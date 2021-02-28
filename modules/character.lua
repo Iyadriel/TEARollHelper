@@ -154,7 +154,6 @@ end
 
 function setPlayerFeatByID(featID)
     TEARollHelper.db.profile.featID = featID
-    clearExcessTraits()
     bus.fire(EVENTS.FEAT_CHANGED, featID)
 end
 

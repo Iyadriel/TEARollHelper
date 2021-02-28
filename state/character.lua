@@ -407,6 +407,8 @@ bus.addListener(EVENTS.FEAT_CHANGED, function(featID)
         end
     end
 
+    character.clearExcessTraits()
+
     if featID == FEATS.BLOOD_HARVEST.id and not turnState.state.inCombat.get() then
         local numBloodHarvestSlots = characterState.state.featsAndTraits.numBloodHarvestSlots
         local maxSlots = rules.offence.getMaxBloodHarvestSlots()
