@@ -22,6 +22,7 @@ local STATS = constants.STATS
 local TRAITS = traits.TRAITS
 local WEAKNESSES = weaknesses.WEAKNESSES
 local state
+local cache = {}
 
 local numTraitCharges = function()
     local numCharges = {}
@@ -61,6 +62,9 @@ characterState.initState = function()
 
         numFatePoints = rules.rolls.getMaxFatePoints(),
     }
+
+    cache.maxNumGreaterHealSlots = rules.healing.getMaxGreaterHealSlots()
+    cache.maxNumBloodHarvestSlots = rules.offence.getMaxBloodHarvestSlots()
 end
 
 local function basicGetSet(section, key, callback)
@@ -241,6 +245,23 @@ characterState.state = {
                     bus.fire(EVENTS.GREATER_HEAL_CHARGES_CHANGED, numCharges)
                 end
             end,
+            update = function()
+                local numSlots = state.healing.numGreaterHealSlots
+                local maxNumSlots = rules.healing.getMaxGreaterHealSlots()
+
+                if numSlots > maxNumSlots then
+                    characterState.state.healing.numGreaterHealSlots.set(maxNumSlots)
+                    TEARollHelper:Debug("Reduced remaining greater heal slots because max slots changed.")
+                elseif numSlots < maxNumSlots then
+                    local diff = maxNumSlots - cache.maxNumGreaterHealSlots
+                    if diff > 0 then
+                        TEARollHelper:Debug("Increased remaining greater heal slots by " .. diff .. " because max slots increased.")
+                        characterState.state.healing.numGreaterHealSlots.restore(diff)
+                    end
+                end
+
+                cache.maxNumGreaterHealSlots = maxNumSlots
+            end,
             use = function(numCharges)
                 if numCharges > 0 then
                     characterState.state.healing.numGreaterHealSlots.set(state.healing.numGreaterHealSlots - numCharges)
@@ -323,6 +344,23 @@ characterState.state = {
                     bus.fire(EVENTS.BLOOD_HARVEST_CHARGES_CHANGED, numBloodHarvestSlots)
                 end
             end,
+            update = function()
+                local numSlots = state.featsAndTraits.numBloodHarvestSlots
+                local maxNumSlots = rules.offence.getMaxBloodHarvestSlots()
+
+                if numSlots > maxNumSlots then
+                    characterState.state.featsAndTraits.numBloodHarvestSlots.set(maxNumSlots)
+                    TEARollHelper:Debug("Reduced remaining " .. FEATS.BLOOD_HARVEST.name .. " charges because max slots changed.")
+                elseif numSlots < maxNumSlots then
+                    local diff = maxNumSlots - cache.maxNumBloodHarvestSlots
+                    if diff > 0 then
+                        TEARollHelper:Debug("Increased remaining " .. FEATS.BLOOD_HARVEST.name .. " charges by " .. diff .. " because max slots increased.")
+                        characterState.state.featsAndTraits.numBloodHarvestSlots.set(numSlots + diff)
+                    end
+                end
+
+                cache.maxNumBloodHarvestSlots = maxNumSlots
+            end,
             use = function(numBloodHarvestSlots)
                 if numBloodHarvestSlots > 0 then
                     characterState.state.featsAndTraits.numBloodHarvestSlots.set(state.featsAndTraits.numBloodHarvestSlots - numBloodHarvestSlots)
@@ -349,18 +387,6 @@ characterState.state = {
     },
 }
 
-local function updateGreaterHealSlots(reason)
-    local remainingSlots = characterState.state.healing.numGreaterHealSlots.get()
-    local maxSlots = rules.healing.getMaxGreaterHealSlots()
-    if remainingSlots > maxSlots then
-        characterState.state.healing.numGreaterHealSlots.set(maxSlots)
-        TEARollHelper:Debug("Reduced remaining Greater Heal charges because " .. reason)
-    elseif remainingSlots < maxSlots and not turnState.state.inCombat.get() then
-        characterState.state.healing.numGreaterHealSlots.set(maxSlots)
-        TEARollHelper:Debug("Increased remaining Greater Heal charges because " .. reason)
-    end
-end
-
 local function resetRemainingOutOfCombatHeals(reason)
     characterState.state.healing.remainingOutOfCombatHeals.reset()
     TEARollHelper:Debug("Reset remaining out of combat heals because " .. reason)
@@ -368,15 +394,7 @@ end
 
 local onStatUpdate = {
     [STATS.offence] = function()
-        local remainingSlots = characterState.state.featsAndTraits.numBloodHarvestSlots.get()
-        local maxSlots = rules.offence.getMaxBloodHarvestSlots()
-        if remainingSlots > maxSlots then
-            characterState.state.featsAndTraits.numBloodHarvestSlots.set(maxSlots)
-            TEARollHelper:Debug("Reduced remaining " .. FEATS.BLOOD_HARVEST.name .. " charges because offence stat changed.")
-        elseif remainingSlots < maxSlots and not turnState.state.inCombat.get() then
-            characterState.state.featsAndTraits.numBloodHarvestSlots.set(maxSlots)
-            TEARollHelper:Debug("Increased remaining " .. FEATS.BLOOD_HARVEST.name .. " charges because offence stat changed.")
-        end
+        characterState.state.featsAndTraits.numBloodHarvestSlots.update()
     end,
     [STATS.defence] = function()
         -- if player swaps away from build with brace, then back again later, we want them to have full brace charges.
@@ -387,7 +405,7 @@ local onStatUpdate = {
         end
     end,
     [STATS.spirit] = function()
-        updateGreaterHealSlots("spirit stat changed")
+        characterState.state.healing.numGreaterHealSlots.update()
     end,
     [STATS.stamina] = function()
         updateMaxHealth({
@@ -400,8 +418,8 @@ bus.addListener(EVENTS.CHARACTER_STAT_CHANGED, function(stat, value)
     onStatUpdate[stat]()
 end)
 
-bus.addListener(EVENTS.FEAT_CHANGED, function(featID)
-    updateGreaterHealSlots("feat changed")
+local function onFeatUpdate()
+    characterState.state.healing.numGreaterHealSlots.update()
     resetRemainingOutOfCombatHeals("feat changed")
 
     local featBuffs = buffsState.state.buffLookup.getFeatBuffs()
@@ -412,21 +430,20 @@ bus.addListener(EVENTS.FEAT_CHANGED, function(featID)
     end
 
     character.clearExcessTraits()
-
-    if featID == FEATS.BLOOD_HARVEST.id and not turnState.state.inCombat.get() then
-        local numBloodHarvestSlots = characterState.state.featsAndTraits.numBloodHarvestSlots
-        local maxSlots = rules.offence.getMaxBloodHarvestSlots()
-        if numBloodHarvestSlots.get() < maxSlots then
-            numBloodHarvestSlots.set(maxSlots)
-            TEARollHelper:Debug("Increased remaining " .. FEATS.BLOOD_HARVEST.name .. " charges because feat changed out of combat.")
         end
+
+bus.addListener(EVENTS.FEAT_CHANGED, function(featID)
+    onFeatUpdate()
+
+    if featID == FEATS.BLOOD_HARVEST.id then
+        characterState.state.featsAndTraits.numBloodHarvestSlots.update()
     end
 end)
 
 local function onTraitsChanged()
     for traitID, trait in pairs(TRAITS) do
         if trait.numCharges and not character.hasTrait(trait) then
-            -- reset charges of removed traits back to full.
+            -- reset charges of removed traits back to full, in case player swaps back to one of them later.
             characterState.state.featsAndTraits.numTraitCharges.set(traitID, rules.traits.getMaxTraitCharges(trait))
         end
     end
@@ -445,7 +462,7 @@ bus.addListener(EVENTS.WEAKNESS_ADDED, function(weaknessID)
             TEARollHelper:Debug("Reduced remaining fate points because player now has Fateless weakness.")
         end
     elseif weaknessID == WEAKNESSES.TEMPERED_BENEVOLENCE.id then
-        updateGreaterHealSlots("player now has Tempered Benevolence weakness")
+        characterState.state.healing.numGreaterHealSlots.update()
     end
 end)
 
@@ -463,7 +480,7 @@ bus.addListener(EVENTS.WEAKNESS_REMOVED, function(weaknessID)
             TEARollHelper:Debug("Increased remaining fate points because player no longer has Fateless weakness.")
         end
     elseif weaknessID == WEAKNESSES.TEMPERED_BENEVOLENCE.id then
-        updateGreaterHealSlots("player no longer has Tempered Benevolence weakness")
+        characterState.state.healing.numGreaterHealSlots.update()
     end
 
     character.clearExcessTraits()
