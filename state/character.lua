@@ -18,6 +18,7 @@ local CONSCIOUSNESS_STATES = constants.CONSCIOUSNESS_STATES
 local EVENTS = bus.EVENTS
 local FEATS = feats.FEATS
 local MAX_BRACE_CHARGES = rules.defence.MAX_BRACE_CHARGES
+local STATS = constants.STATS
 local TRAITS = traits.TRAITS
 local WEAKNESSES = weaknesses.WEAKNESSES
 local state
@@ -365,8 +366,8 @@ local function resetRemainingOutOfCombatHeals(reason)
     TEARollHelper:Debug("Reset remaining out of combat heals because " .. reason)
 end
 
-bus.addListener(EVENTS.CHARACTER_STAT_CHANGED, function(stat, value)
-    if stat == "offence" then
+local onStatUpdate = {
+    [STATS.offence] = function()
         local remainingSlots = characterState.state.featsAndTraits.numBloodHarvestSlots.get()
         local maxSlots = rules.offence.getMaxBloodHarvestSlots()
         if remainingSlots > maxSlots then
@@ -376,16 +377,23 @@ bus.addListener(EVENTS.CHARACTER_STAT_CHANGED, function(stat, value)
             characterState.state.featsAndTraits.numBloodHarvestSlots.set(maxSlots)
             TEARollHelper:Debug("Increased remaining " .. FEATS.BLOOD_HARVEST.name .. " charges because offence stat changed.")
         end
-    elseif stat == "defence" then
+    end,
+    [STATS.defence] = function()
         characterState.state.defence.damagePrevented.set(0)
         characterState.state.defence.numBraceCharges.set(MAX_BRACE_CHARGES)
-    elseif stat == "spirit" then
+    end,
+    [STATS.spirit] = function()
         updateGreaterHealSlots("spirit stat changed")
-    elseif stat == "stamina" then
+    end,
+    [STATS.stamina] = function()
         updateMaxHealth({
             healIfNewMaxHealthHigher = true
         })
-    end
+    end,
+}
+
+bus.addListener(EVENTS.CHARACTER_STAT_CHANGED, function(stat, value)
+    onStatUpdate[stat]()
 end)
 
 bus.addListener(EVENTS.FEAT_CHANGED, function(featID)
