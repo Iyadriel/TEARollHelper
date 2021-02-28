@@ -248,9 +248,9 @@ local function onTraitsChanged()
     end
 
     for _, traitBuff in ipairs(buffsToRemove) do
-            traitBuff:Remove()
-        end
+        traitBuff:Remove()
     end
+end
 
 local function onWeaknessesChanged()
     local activeBuffs = buffsState.state.activeBuffs.get()
@@ -275,6 +275,13 @@ local function onRacialTraitChanged()
     end
 end
 
+local function onProfileChanged()
+    onTraitsChanged()
+    onWeaknessesChanged()
+    onRacialTraitChanged()
+end
+
 bus.addListener(EVENTS.TRAITS_CHANGED, onTraitsChanged)
 bus.addListener(EVENTS.WEAKNESSES_CHANGED, onWeaknessesChanged)
 bus.addListener(EVENTS.RACIAL_TRAIT_CHANGED, onRacialTraitChanged)
+bus.addListener(EVENTS.PROFILE_CHANGED, onProfileChanged)
