@@ -401,7 +401,7 @@ local onStatUpdate = {
         -- but we don't want to reset them when swapping from one build with brace to another with brace.
         -- hence the check here.
         if not rules.defence.canUseBraceSystem() then
-        characterState.state.defence.numBraceCharges.set(MAX_BRACE_CHARGES)
+            characterState.state.defence.numBraceCharges.set(MAX_BRACE_CHARGES)
         end
     end,
     [STATS.spirit] = function()
@@ -430,7 +430,7 @@ local function onFeatUpdate()
     end
 
     character.clearExcessTraits()
-        end
+end
 
 bus.addListener(EVENTS.FEAT_CHANGED, function(featID)
     onFeatUpdate()
@@ -484,6 +484,15 @@ bus.addListener(EVENTS.WEAKNESS_REMOVED, function(weaknessID)
     end
 
     character.clearExcessTraits()
+end)
+
+bus.addListener(EVENTS.PROFILE_CHANGED, function()
+    for stat in pairs(STATS) do
+        onStatUpdate[stat]()
+    end
+
+    onFeatUpdate()
+    onTraitsChanged()
 end)
 
 characterState.summariseHP = summariseHP
