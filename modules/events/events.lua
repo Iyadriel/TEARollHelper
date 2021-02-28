@@ -29,8 +29,12 @@ local WEAKNESSES = weaknesses.WEAKNESSES
 -- [[ Buff effects ]]
 
 bus.addListener(EVENTS.MAX_HEALTH_EFFECT, function()
-    local shouldRestoreMissingHealth = false
-    characterState.state.maxHealth.update(shouldRestoreMissingHealth)
+    characterState.state.maxHealth.update({
+        -- if the character gets a beneficial max HP buff, the difference isn't added to current HP unless specified.
+        -- in that case, the addon will apply the heal separately.
+        -- in other cases, max health changes should not increase current HP.
+        healIfNewMaxHealthHigher = false
+    })
 end)
 
 -- [[ Combat ]]

@@ -76,8 +76,9 @@ buffsState.state = {
         [STATS.defence] = basicGetSet("buffs", STATS.defence),
         [STATS.spirit] = basicGetSet("buffs", STATS.spirit),
         [STATS.stamina] = basicGetSet("buffs", STATS.stamina, function()
-            local shouldRestoreMissingHealth = true
-            characterState.state.maxHealth.update(shouldRestoreMissingHealth)
+            characterState.state.maxHealth.update({
+                healIfNewMaxHealthHigher = false
+            })
         end),
 
         roll = {

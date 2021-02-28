@@ -108,8 +108,8 @@ local function summariseState()
     return msg
 end
 
-local function updateMaxHealth(shouldRestoreMissingHealth)
-    characterState.state.maxHealth.update(shouldRestoreMissingHealth)
+local function updateMaxHealth(options)
+    characterState.state.maxHealth.update(options)
 end
 
 characterState.state = {
@@ -157,18 +157,26 @@ characterState.state = {
         get = function()
             return state.maxHealth
         end,
-        update = function(shouldRestoreMissingHealth)
+        update = function(options)
+            options = options or {}
+
             local health = characterState.state.health.get()
-            local maxHealth = character.calculatePlayerMaxHealth()
+            local oldMaxHealth = state.maxHealth
+            local newMaxHealth = character.calculatePlayerMaxHealth()
 
-            state.maxHealth = maxHealth
+            state.maxHealth = newMaxHealth
 
-            if health > maxHealth then
-                characterState.state.health.set(maxHealth)
+            if health > newMaxHealth then
+                characterState.state.health.set(newMaxHealth)
                 TEARollHelper:Debug("Reduced remaining HP because max HP changed.")
-            elseif shouldRestoreMissingHealth and health < maxHealth and not turnState.state.inCombat.get() then
-                characterState.state.health.set(maxHealth)
-                TEARollHelper:Debug("Increased remaining HP because max HP changed.")
+            elseif health < newMaxHealth then
+                if options.healIfNewMaxHealthHigher then
+                    local diff = newMaxHealth - oldMaxHealth
+                    if diff > 0 then
+                        TEARollHelper:Debug("Increased remaining HP by " .. diff .. " because max HP increased.")
+                        characterState.state.health.set(state.health + diff)
+                    end
+                end
             end
 
             bus.fire(EVENTS.CHARACTER_MAX_HEALTH, state.maxHealth)
@@ -374,7 +382,9 @@ bus.addListener(EVENTS.CHARACTER_STAT_CHANGED, function(stat, value)
     elseif stat == "spirit" then
         updateGreaterHealSlots("spirit stat changed")
     elseif stat == "stamina" then
-        updateMaxHealth(true)
+        updateMaxHealth({
+            healIfNewMaxHealthHigher = true
+        })
     end
 end)
 
@@ -410,7 +420,7 @@ end)
 
 bus.addListener(EVENTS.WEAKNESS_ADDED, function(weaknessID)
     if weaknessID == WEAKNESSES.FRAGILE.id then
-        updateMaxHealth(true)
+        updateMaxHealth()
     elseif weaknessID == WEAKNESSES.FATELESS.id then
         local numFatePoints = characterState.state.numFatePoints.get()
         local maxFatePoints = rules.rolls.getMaxFatePoints()
@@ -425,7 +435,10 @@ end)
 
 bus.addListener(EVENTS.WEAKNESS_REMOVED, function(weaknessID)
     if weaknessID == WEAKNESSES.FRAGILE.id then
-        updateMaxHealth(true)
+        updateMaxHealth({
+            -- weaknesses are only changed outside of events, so set HP to full.
+            healIfNewMaxHealthHigher = true
+        })
     elseif weaknessID == WEAKNESSES.FATELESS.id then
         local numFatePoints = characterState.state.numFatePoints.get()
         local maxFatePoints = rules.rolls.getMaxFatePoints()
