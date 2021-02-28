@@ -379,10 +379,8 @@ local onStatUpdate = {
         end
     end,
     [STATS.defence] = function()
-        -- if player swaps away from 6 def, then back, we want them to have full brace charges.
-        -- but we don't want to reset them when swapping from one build with 6 def to another with 6 def.
-        -- hence, the mastery check.
-        if not character.hasDefenceMastery() then
+        -- hence the check here.
+        if not rules.defence.canUseBraceSystem() then
         characterState.state.defence.numBraceCharges.set(MAX_BRACE_CHARGES)
         end
     end,

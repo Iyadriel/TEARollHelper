@@ -21,6 +21,10 @@ local function calculateDefendValue(roll, damageType, defence, buff)
     return roll + rules.common.calculateDefenceStat(damageType, defence, buff)
 end
 
+local function canUseBraceSystem()
+    return character.hasDefenceMastery()
+end
+
 local function calculateBraceDefenceBonus(numBraceCharges)
     return numBraceCharges * 2
 end
@@ -38,7 +42,7 @@ local function calculateDamageTaken(defenceType, threshold, defendValue, effecti
 end
 
 local function calculateDamagePrevented(dmgRisk, damageTaken)
-    if character.hasDefenceMastery() then
+    if canUseBraceSystem() then
         return dmgRisk - damageTaken
     end
     return 0
@@ -86,6 +90,7 @@ rules.defence = {
     MAX_BRACE_CHARGES = MAX_BRACE_CHARGES,
 
     calculateDefendValue = calculateDefendValue,
+    canUseBraceSystem = canUseBraceSystem,
     calculateBraceDefenceBonus = calculateBraceDefenceBonus,
     calculateDamageTaken = calculateDamageTaken,
     calculateDamagePrevented = calculateDamagePrevented,

@@ -191,7 +191,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                         max = characterState.defence.numBraceCharges.get(),
                         step = 1,
                         hidden = function()
-                            return not character.hasDefenceMastery()
+                            return not rules.defence.canUseBraceSystem()
                         end,
                         disabled = function()
                             return characterState.defence.numBraceCharges.get() == 0
@@ -209,7 +209,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                         type = "description",
                         name = " ",
                         hidden = function()
-                            return not character.hasDefenceMastery()
+                            return not rules.defence.canUseBraceSystem()
                         end,
                     },
                     critType = {
