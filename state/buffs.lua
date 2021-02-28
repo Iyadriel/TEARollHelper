@@ -7,7 +7,6 @@ local characterState = ns.state.character
 local constants = ns.constants
 local models = ns.models
 
-local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
 
 local BuffEffectAdvantage = models.BuffEffectAdvantage
@@ -17,7 +16,6 @@ local ACTIONS = constants.ACTIONS
 local EVENTS = bus.EVENTS
 local PLAYER_BUFF_TYPES = constants.PLAYER_BUFF_TYPES
 local STATS = constants.STATS
-local TRAITS = traits.TRAITS
 local TURN_TYPES = constants.TURN_TYPES
 local WEAKNESSES = weaknesses.WEAKNESSES
 local state
@@ -239,14 +237,6 @@ buffsState.state = {
     }
 }
 
-local function removeWeaknessDebuff(weakness)
-    local weaknessDebuff = buffsState.state.buffLookup.getWeaknessDebuff(weakness)
-    if weaknessDebuff then
-        weaknessDebuff:Remove()
-        TEARollHelper:Debug("Removed weakness debuff because player no longer has Weakness:", weakness.name)
-    end
-end
-
 local function onTraitsChanged()
     local activeBuffs = buffsState.state.activeBuffs.get()
     local buffsToRemove = {}
@@ -261,16 +251,30 @@ local function onTraitsChanged()
             traitBuff:Remove()
         end
     end
-end)
 
-bus.addListener(EVENTS.WEAKNESS_REMOVED, function(weaknessID)
-    removeWeaknessDebuff(WEAKNESSES[weaknessID])
-end)
+local function onWeaknessesChanged()
+    local activeBuffs = buffsState.state.activeBuffs.get()
+    local buffsToRemove = {}
 
-bus.addListener(EVENTS.RACIAL_TRAIT_CHANGED, function()
+    for _, buff in ipairs(activeBuffs) do
+        if buff.weaknessID and not character.hasWeaknessByID(buff.weaknessID) then
+            table.insert(buffsToRemove, buff)
+        end
+    end
+
+    for _, weaknessDebuff in ipairs(buffsToRemove) do
+        weaknessDebuff:Remove()
+    end
+end
+
+local function onRacialTraitChanged()
     local racialBuff = buffsState.state.buffLookup.getRacialBuff()
     if racialBuff then
         racialBuff:Remove()
         TEARollHelper:Debug("Removed racial trait buff because racial trait in character sheet changed.")
     end
+end
+
 bus.addListener(EVENTS.TRAITS_CHANGED, onTraitsChanged)
+bus.addListener(EVENTS.WEAKNESSES_CHANGED, onWeaknessesChanged)
+bus.addListener(EVENTS.RACIAL_TRAIT_CHANGED, onRacialTraitChanged)
