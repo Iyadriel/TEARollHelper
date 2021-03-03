@@ -1,13 +1,15 @@
 local _, ns = ...
 
 local character = ns.character
+local constants = ns.constants
 local rules = ns.rules
 local weaknesses = ns.resources.weaknesses
 
 local WEAKNESSES = weaknesses.WEAKNESSES
 
-local BASE_MAX_HEALTH = 25
+local STATS = constants.STATS
 
+local BASE_MAX_HEALTH = 25
 local BASE_STAT_POINTS = 12
 local MAX_STAT_POINTS = 16
 local NEGATIVE_POINTS_BUDGET = MAX_STAT_POINTS - BASE_STAT_POINTS
@@ -25,25 +27,11 @@ local STAT_POINT_COSTS = {
 local function getNegativePointsAssigned()
     local negativePointsAllocated = 0
 
-    local offence = character.getPlayerOffence()
-    local defence = character.getPlayerDefence()
-    local spirit = character.getPlayerSpirit()
-    local stamina = character.getPlayerStamina()
-
-    if offence < 0 then
-        negativePointsAllocated = negativePointsAllocated - offence
-    end
-
-    if defence < 0 then
-        negativePointsAllocated = negativePointsAllocated - defence
-    end
-
-    if spirit < 0 then
-        negativePointsAllocated = negativePointsAllocated - spirit
-    end
-
-    if stamina < 0 then
-        negativePointsAllocated = negativePointsAllocated - stamina
+    for stat in pairs(STATS) do
+        local value = character.getPlayerStat(stat)
+        if value < 0 then
+            negativePointsAllocated = negativePointsAllocated - value
+        end
     end
 
     return negativePointsAllocated
@@ -60,25 +48,11 @@ end
 local function getAvailableStatPoints()
     local points = BASE_STAT_POINTS
 
-    local offence = character.getPlayerOffence()
-    local defence = character.getPlayerDefence()
-    local spirit = character.getPlayerSpirit()
-    local stamina = character.getPlayerStamina()
-
-    if offence > 0 then
-        points = points - STAT_POINT_COSTS[offence]
-    end
-
-    if defence > 0 then
-        points = points - STAT_POINT_COSTS[defence]
-    end
-
-    if spirit > 0 then
-        points = points - STAT_POINT_COSTS[spirit]
-    end
-
-    if stamina > 0 then
-        points = points - STAT_POINT_COSTS[stamina]
+    for stat in pairs(STATS) do
+        local value = character.getPlayerStat(stat)
+        if value > 0 then
+            points = points - STAT_POINT_COSTS[value]
+        end
     end
 
     points = points + getNegativePointsUsed()
