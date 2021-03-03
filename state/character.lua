@@ -6,7 +6,6 @@ local character = ns.character
 local constants = ns.constants
 local rules = ns.rules
 local characterState = ns.state.character
-local turnState = ns.state.turn
 local utils = ns.utils
 
 local criticalWounds = ns.resources.criticalWounds
@@ -454,13 +453,6 @@ bus.addListener(EVENTS.TRAITS_CHANGED, onTraitsChanged)
 bus.addListener(EVENTS.WEAKNESS_ADDED, function(weaknessID)
     if weaknessID == WEAKNESSES.FRAGILE.id then
         updateMaxHealth()
-    elseif weaknessID == WEAKNESSES.FATELESS.id then
-        local numFatePoints = characterState.state.numFatePoints.get()
-        local maxFatePoints = rules.rolls.getMaxFatePoints()
-        if numFatePoints > maxFatePoints then
-            characterState.state.numFatePoints.set(maxFatePoints)
-            TEARollHelper:Debug("Reduced remaining fate points because player now has Fateless weakness.")
-        end
     elseif weaknessID == WEAKNESSES.TEMPERED_BENEVOLENCE.id then
         characterState.state.healing.numGreaterHealSlots.update()
     end
@@ -472,13 +464,6 @@ bus.addListener(EVENTS.WEAKNESS_REMOVED, function(weaknessID)
             -- weaknesses are only changed outside of events, so set HP to full.
             healIfNewMaxHealthHigher = true
         })
-    elseif weaknessID == WEAKNESSES.FATELESS.id then
-        local numFatePoints = characterState.state.numFatePoints.get()
-        local maxFatePoints = rules.rolls.getMaxFatePoints()
-        if numFatePoints < maxFatePoints and not turnState.state.inCombat.get() then
-            characterState.state.numFatePoints.set(maxFatePoints)
-            TEARollHelper:Debug("Increased remaining fate points because player no longer has Fateless weakness.")
-        end
     elseif weaknessID == WEAKNESSES.TEMPERED_BENEVOLENCE.id then
         characterState.state.healing.numGreaterHealSlots.update()
     end
@@ -493,6 +478,7 @@ bus.addListener(EVENTS.PROFILE_CHANGED, function()
 
     onFeatUpdate()
     onTraitsChanged()
+    -- weakness changes are currently covered by our stat updates.
 end)
 
 characterState.summariseHP = summariseHP

@@ -31,7 +31,7 @@ local WEAKNESSES = {
     FATELESS = {
         id = "FATELESS",
         name = "Fateless",
-        desc = "You no longer have access to your Fate Point.",
+        desc = "Your fate points can now only do one of the three listed things (your choice).",
         supported = true,
     },
     FEATLESS = {
