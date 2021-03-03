@@ -136,9 +136,12 @@ local TRAITS = {
     VESEERAS_IRE = {
         id = "VESEERAS_IRE",
         name = "Veseera's Ire",
-        desc = "Activate to set the threshold to hit on all enemies to 10+ (Only applies to you, does not affect enemies with a threshold already lower than 10+), and double the damage bonus of your Offence Mastery, for the current and next player turn. However, your defence stat is reduced by half of your base Offence rounded up for the duration. Activate and then roll. Requires at least 4/6 Offence to pick.",
+        desc = "Activate to set the threshold to hit on all enemies to 10+ (Only applies to you, does not affect enemies with a threshold already lower than 10+), and double the damage bonus of your Offence Mastery, for the current and next player turn. However, your defence stat is reduced by half of your base Offence rounded up for the duration. Activate and then roll.",
         icon = "Interface\\Icons\\spell_shadow_unstableaffliction_3",
         numCharges = 1,
+        requiredStats = {
+            [STATS.offence] = 4,
+        },
     },
     VINDICATION = {
         id = "VINDICATION",

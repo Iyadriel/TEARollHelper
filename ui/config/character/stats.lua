@@ -7,14 +7,12 @@ local constants = ns.constants
 local rules = ns.rules
 local ui = ns.ui
 
-local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
 
 local STATS = constants.STATS
 local STAT_LABELS = constants.STAT_LABELS
 local STAT_MIN_VALUE = rules.stats.STAT_MIN_VALUE
 local STAT_MAX_VALUE = rules.stats.STAT_MAX_VALUE
-local TRAITS = traits.TRAITS
 local WEAKNESSES = weaknesses.WEAKNESSES
 
 -- Update turn UI, in case it is also open
@@ -142,19 +140,47 @@ ui.modules.config.modules.character.modules.stats.getOptions = function(options)
                     return COLOURS.ERROR .. "These stats are not compatible with your " .. character.getPlayerFeat().name .. " feat."
                 end,
                 hidden = function()
-                    return rules.stats.validateStatsForFeat(character.getPlayerFeat())
+                    return rules.stats.validateStatsFor(character.getPlayerFeat())
                 end,
             },
-            veseerasIreWarning = {
-                order = 5,
+            traitWarning1 = {
+                order = 6,
                 type = "description",
-                name = COLOURS.ERROR .. "These stats are not compatible with your " .. TRAITS.VESEERAS_IRE.name .. " trait.",
+                name = function()
+                    local trait = character.getPlayerTraitAtSlot(1)
+                    return COLOURS.ERROR .. "These stats are not compatible with your " .. trait.name .. " trait."
+                end,
                 hidden = function()
-                    return not character.hasTrait(TRAITS.VESEERAS_IRE) or rules.stats.validateStatsForVeseerasIre()
+                    local trait = character.getPlayerTraitAtSlot(1)
+                    return not trait or rules.stats.validateStatsFor(trait)
+                end,
+            },
+            traitWarning2 = {
+                order = 7,
+                type = "description",
+                name = function()
+                    local trait = character.getPlayerTraitAtSlot(2)
+                    return COLOURS.ERROR .. "These stats are not compatible with your " .. trait.name .. " trait."
+                end,
+                hidden = function()
+                    local trait = character.getPlayerTraitAtSlot(2)
+                    return not trait or rules.stats.validateStatsFor(trait)
+                end,
+            },
+            traitWarning3 = {
+                order = 8,
+                type = "description",
+                name = function()
+                    local trait = character.getPlayerTraitAtSlot(3)
+                    return COLOURS.ERROR .. "These stats are not compatible with your " .. trait.name .. " trait."
+                end,
+                hidden = function()
+                    local trait = character.getPlayerTraitAtSlot(3)
+                    return not trait or rules.stats.validateStatsFor(trait)
                 end,
             },
             reboundWarning = {
-                order = 6,
+                order = 9,
                 type = "description",
                 name = COLOURS.ERROR .. "These stats are not compatible with your " .. WEAKNESSES.REBOUND.name .. " weakness.",
                 hidden = function()
@@ -162,7 +188,7 @@ ui.modules.config.modules.character.modules.stats.getOptions = function(options)
                 end,
             },
             temperedBenevolenceWarning = {
-                order = 7,
+                order = 10,
                 type = "description",
                 name = COLOURS.ERROR .. "These stats are not compatible with your " .. WEAKNESSES.TEMPERED_BENEVOLENCE.name .. " weakness.",
                 hidden = function()
@@ -170,7 +196,7 @@ ui.modules.config.modules.character.modules.stats.getOptions = function(options)
                 end,
             },
             overflowWarning = {
-                order = 8,
+                order = 11,
                 type = "description",
                 name = COLOURS.ERROR .. "These stats are not compatible with your " .. WEAKNESSES.OVERFLOW.name .. " weakness.",
                 hidden = function()

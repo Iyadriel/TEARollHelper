@@ -4,11 +4,14 @@ local buffsState = ns.state.buffs.state
 local character = ns.character
 local characterState = ns.state.character
 local consequences = ns.consequences
+local constants = ns.constants
 local rolls = ns.state.rolls
 local rules = ns.rules
 local ui = ns.ui
 
 local COLOURS = TEARollHelper.COLOURS
+local STAT_LABELS = constants.STAT_LABELS
+local STAT_MAX_VALUE = rules.stats.STAT_MAX_VALUE
 local state = characterState.state
 
 local function traitColour(trait)
@@ -17,9 +20,18 @@ end
 
 local function traitDescription(trait)
     if trait and trait.desc then
-        local numCharges = rules.traits.getMaxTraitCharges(trait)
-        local chargeText = numCharges > 1 and  " charges)|r" or  " charge)|r"
-        return trait.desc .. COLOURS.NOTE .. " (" .. numCharges .. chargeText
+        local text = trait.desc
+
+        if trait.requiredStats then
+            text = text .. COLOURS.NOTE .. " (Requires "
+            for stat, minValue in pairs(trait.requiredStats) do
+                text = text .. minValue .. "/" .. STAT_MAX_VALUE .. " " .. STAT_LABELS[stat] .. " or "
+            end
+
+            text = string.sub(text, 0, -5) .. ")|r"
+        end
+
+        return text
     end
     return ""
 end

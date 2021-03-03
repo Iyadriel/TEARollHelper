@@ -89,10 +89,6 @@ local function validateStatsFor(featOrTrait)
     return true
 end
 
-local function validateStatsForVeseerasIre()
-    return character.getPlayerOffence() >= 4
-end
-
 local function validateStatsForRebound()
     return max(character.getPlayerOffence(), character.getPlayerSpirit()) >= 4
 end
@@ -115,7 +111,6 @@ rules.stats = {
     calculateMaxHealth = calculateMaxHealth,
 
     validateStatsFor = validateStatsFor,
-    validateStatsForVeseerasIre = validateStatsForVeseerasIre,
     validateStatsForRebound = validateStatsForRebound,
     validateStatsForTemperedBenevolence = validateStatsForTemperedBenevolence,
     validateStatsForOverflow = validateStatsForOverflow,
