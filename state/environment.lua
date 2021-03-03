@@ -4,6 +4,7 @@ local bus = ns.bus
 local enemies = ns.resources.enemies
 local environment = ns.state.environment
 local models = ns.models
+local rules = ns.rules
 local zones = ns.resources.zones
 
 local ENEMIES = enemies.ENEMIES
@@ -97,12 +98,21 @@ environment.state = {
 }
 
 local function resetEnvironment()
-    environment.state.enemyId.set(ENEMIES.OTHER.id)
-    environment.state.zoneId.set(ZONES.OTHER.id)
-    environment.state.distanceFromEnemy.set(nil)
+    if not rules.environment.shouldShowEnemySelect() then
+        environment.state.enemyId.set(ENEMIES.OTHER.id)
+    end
+
+    if not rules.environment.shouldShowZoneSelect() then
+        environment.state.zoneId.set(ZONES.OTHER.id)
+    end
+
+    if not rules.environment.shouldShowDistanceFromEnemy() then
+        environment.state.distanceFromEnemy.set(nil)
+    end
 end
 
 bus.addListener(EVENTS.FEAT_CHANGED, resetEnvironment)
 bus.addListener(EVENTS.TRAITS_CHANGED, resetEnvironment)
 bus.addListener(EVENTS.WEAKNESSES_CHANGED, resetEnvironment)
 bus.addListener(EVENTS.RACIAL_TRAIT_CHANGED, resetEnvironment)
+bus.addListener(EVENTS.PROFILE_CHANGED, resetEnvironment)
