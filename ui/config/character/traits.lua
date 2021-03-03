@@ -103,8 +103,25 @@ ui.modules.config.modules.character.modules.traits.getOptions = function(options
                 local trait = character.getPlayerTraitAtSlot(slotIndex)
                 return COLOURS.NOTE .. (trait and (trait.note and trait.note .. "|n ") or "")
             end,
-            hidden = shouldHide,
+            hidden = function()
+                local trait = character.getPlayerTraitAtSlot(slotIndex)
+                return shouldHide() or (trait and not trait.note)
+            end,
             order = options.order + 2
+        },
+        traitCharges = {
+            type = "description",
+            name = function()
+                local trait = character.getPlayerTraitAtSlot(slotIndex)
+                if not (trait and trait.numCharges) then return " " end
+
+                local numCharges = rules.traits.getMaxTraitCharges(trait)
+                local chargeText = numCharges > 1 and  " charges|r" or  " charge|r"
+
+                return COLOURS.NOTE .. numCharges .. chargeText .. "|n "
+            end,
+            hidden = shouldHide,
+            order = options.order + 3
         },
     }
 end
