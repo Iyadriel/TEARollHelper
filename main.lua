@@ -56,6 +56,7 @@ function TEARollHelper:OnInitialize()
 
     local configOptions = config.getOptions()
     AceConfig:RegisterOptionsTable(config.name, configOptions, {"tea"})
+    AceConfigDialog:SetDefaultSize(config.name, 700, 550)
     ns.db.initDb(configOptions)
 
     self:InitState()
