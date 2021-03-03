@@ -76,14 +76,16 @@ local function calculateMaxHealth(stamina, staminaBuff, maxHealthBuff)
     return maxHealth
 end
 
-local function validateStatsForFeat(feat)
-    if feat.requiredStats then
-        for stat, minValue in pairs(feat.requiredStats) do
-            if character.getPlayerStat(stat) < minValue then
-                return false
+local function validateStatsFor(featOrTrait)
+    if featOrTrait.requiredStats then
+        for stat, minValue in pairs(featOrTrait.requiredStats) do
+            if character.getPlayerStat(stat) >= minValue then
+                return true
             end
         end
+        return false
     end
+
     return true
 end
 
@@ -112,7 +114,7 @@ rules.stats = {
     getAvailableStatPoints = getAvailableStatPoints,
     calculateMaxHealth = calculateMaxHealth,
 
-    validateStatsForFeat = validateStatsForFeat,
+    validateStatsFor = validateStatsFor,
     validateStatsForVeseerasIre = validateStatsForVeseerasIre,
     validateStatsForRebound = validateStatsForRebound,
     validateStatsForTemperedBenevolence = validateStatsForTemperedBenevolence,
