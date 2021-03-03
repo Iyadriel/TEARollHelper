@@ -94,7 +94,7 @@ ui.modules.config.modules.character.modules.feats.getOptions = function(options)
             type = "description",
             name = function()
                 local feat = character.getPlayerFeat()
-                return feat and feat.desc or ""
+                return ui.helpers.featDescription(feat)
             end,
             fontSize = "medium",
         },

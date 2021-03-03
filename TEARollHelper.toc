@@ -113,6 +113,7 @@ ui/widgets/slider.lua
 ui/colours.lua
 ui/helpers/debug-view.lua
 ui/helpers/confirm-action.lua
+ui/helpers/feats.lua
 ui/helpers/traits.lua
 ui/helpers/trp3.lua
 
