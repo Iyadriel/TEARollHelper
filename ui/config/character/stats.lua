@@ -30,9 +30,9 @@ local function getStatLabel(stat)
 
         if character.hasProficiency(stat) then
             if character.hasMastery(stat) then
-                label = label .. COLOURS.MASTERY .. " (Mastery)"
+                label = label .. COLOURS.MASTERY .. " (Master)"
             else
-                label = label .. COLOURS.PROFICIENCY .. " (Proficiency)"
+                label = label .. COLOURS.PROFICIENCY .. " (Proficient)"
             end
         end
         return label
