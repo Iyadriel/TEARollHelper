@@ -29,6 +29,7 @@ ns.resources = {
     zones = {},
 }
 ns.rollHandler = {}
+ns.rolls = {}
 ns.rules = {}
 ns.settings = {}
 ns.state = {

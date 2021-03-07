@@ -104,6 +104,7 @@ state/rolls.lua
 state/turn.lua
 modules/consequences.lua
 modules/roll-handler.lua
+modules/rolls.lua
 
 migrations.lua
 

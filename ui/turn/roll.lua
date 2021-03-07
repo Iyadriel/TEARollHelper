@@ -6,6 +6,7 @@ local characterState = ns.state.character
 local consequences = ns.consequences
 local constants = ns.constants
 local rollHandler = ns.rollHandler
+local rolls = ns.rolls
 local rollState = ns.state.rolls
 local rules = ns.rules
 local settings = ns.settings
@@ -66,27 +67,6 @@ end
     hidden: Function,
 } ]]
 ui.modules.turn.modules.roll.getOptions = function(options)
-    local function getRollModeModifier()
-        local action = options.action
-        local turnTypeID = turnState.state.type.get()
-
-        return rollState.getRollModeModifier(action, turnTypeID)
-    end
-
-    local function performRoll(isFateRoll)
-        local rollMode = state[options.action].rollMode.get()
-        local rollModeMod = getRollModeModifier()
-
-        rollHandler.setAction(options.action)
-
-        if isFateRoll then
-            local currentRoll = state[options.action].currentRoll.get()
-            rollHandler.fateRoll(rollMode, rollModeMod, currentRoll)
-        else
-            rollHandler.roll(rollMode, rollModeMod, false)
-        end
-    end
-
     return {
         type = "group",
         name = "Roll",
@@ -113,7 +93,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 order = 1,
                 type = "select",
                 name =  function()
-                    local rollModeMod = getRollModeModifier()
+                    local rollModeMod = rolls.getRollModeModifier()
                     if rollModeMod == ROLL_MODES.ADVANTAGE then
                         return "Roll mode" .. COLOURS.BUFF .. " (Advantage)"
                     elseif rollModeMod == ROLL_MODES.DISADVANTAGE then
@@ -123,7 +103,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 end,
                 desc =  function()
                     local msg = "Select the roll mode requested by the DM."
-                    local rollModeMod = getRollModeModifier()
+                    local rollModeMod = rolls.getRollModeModifier()
                     if rollModeMod == ROLL_MODES.ADVANTAGE then
                         msg = msg .. "|n|nYou have advantage! This is already taken into account. You do not need to change your roll mode here."
                     elseif rollModeMod == ROLL_MODES.DISADVANTAGE then
@@ -133,7 +113,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 end,
                 width = 0.75,
                 values = function()
-                    local rollModeMod = getRollModeModifier()
+                    local rollModeMod = rolls.getRollModeModifier()
                     if rollModeMod == ROLL_MODES.ADVANTAGE then
                         return ROLL_MODE_VALUES_ADVANTAGE
                     elseif rollModeMod == ROLL_MODES.DISADVANTAGE then
@@ -158,7 +138,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                     return rollHandler.isRolling()
                 end,
                 func = function()
-                    performRoll()
+                    rolls.performRoll(options.action)
                 end,
             },
             roll = {
@@ -187,11 +167,11 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                     local hidden = true
 
                     if settings.suggestFatePoints.get() and characterState.state.numFatePoints.get() > 0 then
-                        local roll = state[options.action].currentRoll.get()
+                        local action = options.action
+                        local roll = state[action].currentRoll.get()
 
                         if not roll then return true end
 
-                        local action = options.action
                         local attack, cc, healing, buff, defence, meleeSave, rangedSave
 
                         if action == ACTIONS.attack then
@@ -216,7 +196,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                     return hidden
                 end,
                 func = function()
-                    performRoll(true)
+                    rolls.performFateRoll(options.action)
                     consequences.useFatePoint()
                 end,
             },

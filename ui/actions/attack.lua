@@ -8,8 +8,8 @@ local characterState = ns.state.character.state
 local consequences = ns.consequences
 local constants = ns.constants
 local feats = ns.resources.feats
-local rollHandler = ns.rollHandler
-local rolls = ns.state.rolls
+local rolls = ns.rolls
+local rollState = ns.state.rolls
 local rules = ns.rules
 local traits = ns.resources.traits
 local ui = ns.ui
@@ -20,9 +20,8 @@ local ACTION_LABELS = constants.ACTION_LABELS
 local CRIT_TYPES = constants.CRIT_TYPES
 local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
-local TURN_TYPES = constants.TURN_TYPES
 
-local state = rolls.state
+local state = rollState.state
 
 --[[ local options = {
     order: Number
@@ -153,15 +152,15 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                         name = "Crit effect",
                         width = 0.8,
                         hidden = function()
-                            return not rolls.getAttack().isCrit
+                            return not rollState.getAttack().isCrit
                         end,
                         values = {
                             [CRIT_TYPES.VALUE_MOD] = "Double damage",
                             [CRIT_TYPES.MULTI_TARGET] = "Reap",
                         },
-                        get = rolls.state.attack.critType.get,
+                        get = rollState.state.attack.critType.get,
                         set = function(info, value)
-                            rolls.state.attack.critType.set(value)
+                            rollState.state.attack.critType.set(value)
                         end
                     },
                     critTypeMargin = {
@@ -169,7 +168,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                         type = "description",
                         name = " ",
                         hidden = function()
-                            return not rolls.getAttack().isCrit
+                            return not rollState.getAttack().isCrit
                         end,
                     },
                     dmg = {
@@ -178,7 +177,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                         desc = "How much damage you can deal to a target",
                         fontSize = "medium",
                         name = function()
-                            local attack = rolls.getAttack()
+                            local attack = rollState.getAttack()
                             return actions.toString(ACTIONS.attack, attack)
                         end
                     },
@@ -187,18 +186,11 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                         type = "execute",
                         name = COLOURS.FEATS.ADRENALINE .. "Attack again",
                         hidden = function()
-                            return not rolls.getAttack().hasAdrenalineProc
+                            return not rollState.getAttack().hasAdrenalineProc
                         end,
                         func = function()
-                            consequences.confirmAction(ACTIONS.attack, rolls.getAttack())
-
-                            local action = ACTIONS.attack
-
-                            local rollMode = state[action].rollMode.get()
-                            local rollModeMod = rolls.getRollModeModifier(action, TURN_TYPES.PLAYER.id)
-
-                            rollHandler.setAction(action)
-                            rollHandler.roll(rollMode, rollModeMod, false)
+                            consequences.confirmAction(ACTIONS.attack, rollState.getAttack())
+                            rolls.performRoll(ACTIONS.attack)
                         end
                     },
                     useBloodHarvest = {
@@ -241,14 +233,14 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                     useVindication = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.VINDICATION, {
                         order = 13,
                         name = function()
-                            return COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.VINDICATION.name ..  ": " .. COLOURS.HEALING .. "Heal for " .. rolls.getAttack().traits[TRAITS.VINDICATION.id].healingDone .. " HP"
+                            return COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.VINDICATION.name ..  ": " .. COLOURS.HEALING .. "Heal for " .. rollState.getAttack().traits[TRAITS.VINDICATION.id].healingDone .. " HP"
                         end,
                     }),
                     confirm = {
                         order = 14,
                         type = "execute",
                         name = function()
-                            local attack = rolls.getAttack()
+                            local attack = rollState.getAttack()
                             local colour
 
                             if attack.numBloodHarvestSlots > 0 then
@@ -260,13 +252,13 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                         end,
                         desc = "Confirm that you perform the stated action, consuming any charges and buffs used.",
                         hidden = function()
-                            local attack = rolls.getAttack()
+                            local attack = rollState.getAttack()
                             local shouldShow = attack.dmg > 0
 
                             return not shouldShow
                         end,
                         func = function()
-                            consequences.confirmAction(ACTIONS.attack, rolls.getAttack())
+                            consequences.confirmAction(ACTIONS.attack, rollState.getAttack())
                         end
                     },
                 }
@@ -277,7 +269,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                 name = "After rolling",
                 inline = true,
                 hidden = function()
-                    return not state.attack.currentRoll.get() or not (rolls.getAttack().dmg > 0) or not rules.offence.shouldShowPostRollUI()
+                    return not state.attack.currentRoll.get() or not (rollState.getAttack().dmg > 0) or not rules.offence.shouldShowPostRollUI()
                 end,
                 args = {
                 }
@@ -288,7 +280,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                 name = "Summary",
                 inline = true,
                 hidden = function()
-                    return rolls.state.attack.attacks.count() < 1
+                    return rollState.state.attack.attacks.count() < 1
                 end,
                 args = {
                     totalDamage = {
@@ -300,7 +292,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                             local totalDamage = 0
                             local totalHealing = 0
 
-                            for i, attack in ipairs(rolls.state.attack.attacks.get()) do
+                            for i, attack in ipairs(rollState.state.attack.attacks.get()) do
                                 msg = msg .. COLOURS.NOTE .. ">|r " .. actions.toString(ACTIONS.attack, attack) .. "|r|n"
 
                                 totalDamage = totalDamage + attack.dmg
@@ -324,7 +316,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                         width = 0.75,
                         name = "Clear",
                         func = function()
-                            rolls.state.attack.attacks.clear()
+                            rollState.state.attack.attacks.clear()
                         end,
                     }
                 }
