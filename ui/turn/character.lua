@@ -33,6 +33,9 @@ local function traitChargesSlider(order, trait)
         set = function(info, value)
             state.featsAndTraits.numTraitCharges.set(trait.id, value)
         end,
+        disabled = function()
+            return rules.traits.getMaxTraitCharges(trait) <= 0
+        end,
         hidden = function()
             return not character.hasTrait(trait)
         end,
