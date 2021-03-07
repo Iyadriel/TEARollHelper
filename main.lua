@@ -44,9 +44,18 @@ ns.utils = {}
 
 TEARollHelper = LibStub("AceAddon-3.0"):NewAddon("TEARollHelper", "AceBucket-3.0", "AceComm-3.0", "AceConsole-3.0", "AceEvent-3.0", "AceSerializer-3.0")
 
+local debugFrame = DEFAULT_CHAT_FRAME
+
+for i = 1, NUM_CHAT_WINDOWS do
+    local chatFrame = _G["ChatFrame"..i]
+    if chatFrame.name == "Debug" then
+        debugFrame = chatFrame
+    end
+end
+
 function TEARollHelper:Debug(...)
     if ns.settings.debug.get() then
-        TEARollHelper:Print("[debug]", ...)
+        TEARollHelper:Print(debugFrame, ...)
     end
 end
 
