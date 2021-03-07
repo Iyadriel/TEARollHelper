@@ -13,8 +13,11 @@ local function featDescription(feat)
         local text = feat.desc
         if feat.requiredStats then
             text = text .. COLOURS.NOTE .. " (Requires "
-            for stat, minValue in pairs(feat.requiredStats) do
-                text = text .. minValue .. "/" .. STAT_MAX_VALUE .. " " .. STAT_LABELS[stat] .. " or "
+            for _, pair in ipairs(feat.requiredStats) do
+                for stat, minValue in pairs(pair) do
+                    text = text .. minValue .. "/" .. STAT_MAX_VALUE .. " " .. STAT_LABELS[stat] .. " and "
+                end
+                text = string.sub(text, 0, -6) .. " or "
             end
 
             text = string.sub(text, 0, -5) .. ")|r"

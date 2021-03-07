@@ -38,8 +38,10 @@ local FEATS = {
         desc = "Healing a single friendly target for 3HP or more increases the damage of your next successful Offence Attack roll by +2. Using a Greater Heal slot increases the damage to +4. This bonus does not stack and is consumed on your next successful Offence Attack roll.",
         icon = "Interface\\Icons\\spell_holy_holyguidance",
         requiredStats = {
+            {
             [STATS.spirit] = 4,
         },
+    },
     },
     COUNTER_FORCE = {
         id = "COUNTER_FORCE",

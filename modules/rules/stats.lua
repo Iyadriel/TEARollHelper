@@ -78,11 +78,21 @@ end
 
 local function validateStatsFor(featOrTrait)
     if featOrTrait.requiredStats then
-        for stat, minValue in pairs(featOrTrait.requiredStats) do
-            if character.getPlayerStat(stat) >= minValue then
+        for _, pair in ipairs(featOrTrait.requiredStats) do
+            local pairOk = true
+
+            for stat, minValue in pairs(pair) do
+                if character.getPlayerStat(stat) < minValue then
+                    pairOk = false
+                    break
+                end
+            end
+
+            if pairOk then
                 return true
             end
         end
+
         return false
     end
 

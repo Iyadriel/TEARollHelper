@@ -24,8 +24,11 @@ local function traitDescription(trait)
 
         if trait.requiredStats then
             text = text .. COLOURS.NOTE .. " (Requires "
-            for stat, minValue in pairs(trait.requiredStats) do
-                text = text .. minValue .. "/" .. STAT_MAX_VALUE .. " " .. STAT_LABELS[stat] .. " or "
+            for _, pair in ipairs(trait.requiredStats) do
+                for stat, minValue in pairs(pair) do
+                    text = text .. minValue .. "/" .. STAT_MAX_VALUE .. " " .. STAT_LABELS[stat] .. " and "
+                end
+                text = string.sub(text, 0, -6) .. " or "
             end
 
             text = string.sub(text, 0, -5) .. ")|r"

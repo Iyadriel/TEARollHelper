@@ -140,7 +140,9 @@ local TRAITS = {
         icon = "Interface\\Icons\\spell_shadow_unstableaffliction_3",
         numCharges = 1,
         requiredStats = {
-            [STATS.offence] = 4,
+            {
+                [STATS.offence] = 4,
+            },
         },
     },
     VINDICATION = {
