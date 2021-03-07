@@ -77,10 +77,14 @@ local function setStat(stat, value)
 end
 
 local function hasProficiency(stat)
+    if character.hasWeakness(WEAKNESSES.ACOLYTE) then return false end
+
     return getPlayerStat(stat) >= STAT_POINTS_PROFICIENCY
 end
 
 local function hasMastery(stat)
+    if character.hasWeakness(WEAKNESSES.ACOLYTE) then return false end
+
     return getPlayerStat(stat) >= STAT_POINTS_MASTERY
 end
 

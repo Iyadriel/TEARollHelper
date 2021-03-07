@@ -12,9 +12,14 @@ local BuffEffectStat = models.BuffEffectStat
 local STATS = constants.STATS
 local TURN_TYPES = constants.TURN_TYPES
 
-weaknesses.WEAKNESS_KEYS = {"BRIGHT_BURNER", "BRUTE", "CORRUPTED", "FATELESS", "FEATLESS", "FRAGILE", "GLASS_CANNON", "OLD_SCARS", "OTHER", "OUTCAST", "OVERFLOW", "REBOUND", "TEMPERED_BENEVOLENCE", "TEMPO", "TIMID", "WOE_UPON_THE_AFFLICTED", "WORN"}
+weaknesses.WEAKNESS_KEYS = {"ACOLYTE", "BRIGHT_BURNER", "BRUTE", "CORRUPTED", "FATELESS", "FEATLESS", "FRAGILE", "GLASS_CANNON", "OLD_SCARS", "OTHER", "OUTCAST", "OVERFLOW", "REBOUND", "TEMPERED_BENEVOLENCE", "TEMPO", "TIMID", "WOE_UPON_THE_AFFLICTED", "WORN"}
 
 local WEAKNESSES = {
+    ACOLYTE = {
+        id = "ACOLYTE",
+        name = "Acolyte",
+        desc = "You no longer benefit from your chosen masteries.",
+    },
     BRIGHT_BURNER = {
         id = "BRIGHT_BURNER",
         name = "Bright Burner",
