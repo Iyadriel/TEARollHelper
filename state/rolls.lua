@@ -188,7 +188,6 @@ rolls.state = {
         },
 
         resetSlots = function()
-            TEARollHelper:Debug("Resetting slots for attack")
             rolls.state.attack.numBloodHarvestSlots.set(0)
             rolls.state.attack.numGreaterHealSlots.set(0)
             rolls.state.attack.targetIsKO.set(false)
@@ -239,7 +238,6 @@ rolls.state = {
         },
 
         resetSlots = function()
-            TEARollHelper:Debug("Resetting slots for healing")
             rolls.state.healing.numGreaterHealSlots.set(0)
             rolls.state.healing.targetIsKO.set(false)
             rolls.state.healing.activeTraits.reset()
@@ -267,7 +265,6 @@ rolls.state = {
         },
 
         resetSlots = function()
-            TEARollHelper:Debug("Resetting slots for buffing")
             rolls.state.buff.activeTraits.reset()
         end,
     },
@@ -316,7 +313,6 @@ rolls.state = {
         },
 
         resetSlots = function()
-            TEARollHelper:Debug("Resetting slots for defend")
             rolls.state.defend.numBraceCharges.set(0)
             rolls.state.defend.activeTraits.reset()
         end,
@@ -350,7 +346,6 @@ rolls.state = {
         },
 
         resetSlots = function()
-            TEARollHelper:Debug("Resetting slots for meleeSave")
             rolls.state.meleeSave.activeTraits.reset()
         end,
     },
@@ -373,7 +368,6 @@ rolls.state = {
         currentRoll = basicGetSet(ACTIONS.utility, "currentRoll"),
 
         resetSlots = function()
-            TEARollHelper:Debug("Resetting slots for utility")
             rolls.state.utility.utilityTraitSlot.set(0)
         end,
     },
@@ -385,6 +379,7 @@ rolls.state = {
 }
 
 local function resetSlots()
+    TEARollHelper:Debug("Resetting slots")
     rolls.state.attack.resetSlots()
     rolls.state.healing.resetSlots()
     rolls.state.buff.resetSlots()

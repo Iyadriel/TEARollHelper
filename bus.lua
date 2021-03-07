@@ -85,6 +85,12 @@ local EVENTS = {
 
 local listeners = {}
 
+local function printDebug(...)
+    if ns.settings.debug.get() then
+        TEARollHelper:Print("[bus]", ...)
+    end
+end
+
 local function addListener(event, callback)
     if not EVENTS[event] then
         TEARollHelper:Print("[bus] Attempted to add listener to invalid event:", event)
@@ -97,7 +103,7 @@ local function addListener(event, callback)
 end
 
 local function fire(event, ...)
-    TEARollHelper:Debug("[bus] Fired", event, ...)
+    printDebug(event, ...)
     if not listeners[event] then return end
     for _, callback in ipairs(listeners[event]) do
         callback(...)

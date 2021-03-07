@@ -182,13 +182,15 @@ local function getPlayerTraitAtSlot(slotIndex)
 end
 
 local function setPlayerTraitByID(index, traitID)
-    TEARollHelper.db.profile.traits[index] = traitID
-    bus.fire(EVENTS.TRAITS_CHANGED)
+    if getPlayerTraitIDAtSlot(index) ~= traitID then
+        TEARollHelper.db.profile.traits[index] = traitID
+        TEARollHelper:Debug("SET trait", index, "to", traitID)
+        bus.fire(EVENTS.TRAITS_CHANGED)
+    end
 end
 
 local function clearPlayerTrait(index)
-    TEARollHelper.db.profile.traits[index] = TRAITS.OTHER.id
-    bus.fire(EVENTS.TRAITS_CHANGED)
+    setPlayerTraitByID(index, TRAITS.OTHER.id)
 end
 
 function clearExcessTraits()

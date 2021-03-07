@@ -372,7 +372,10 @@ characterState.state = {
                 return state.featsAndTraits.numTraitCharges[traitID]
             end,
             set = function(traitID, numCharges)
+                if numCharges ~= state.featsAndTraits.numTraitCharges[traitID] then
+                    TEARollHelper:Debug("SET numTraitCharges for", traitID)
                 state.featsAndTraits.numTraitCharges[traitID] = numCharges
+                end
             end,
         },
     },

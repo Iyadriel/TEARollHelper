@@ -46,7 +46,7 @@ TEARollHelper = LibStub("AceAddon-3.0"):NewAddon("TEARollHelper", "AceBucket-3.0
 
 function TEARollHelper:Debug(...)
     if ns.settings.debug.get() then
-        TEARollHelper:Print("[DEBUG]", ...)
+        TEARollHelper:Print("[debug]", ...)
     end
 end
 
