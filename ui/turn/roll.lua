@@ -93,7 +93,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 order = 1,
                 type = "select",
                 name =  function()
-                    local rollModeMod = rolls.getRollModeModifier()
+                    local rollModeMod = rolls.getRollModeModifier(options.action)
                     if rollModeMod == ROLL_MODES.ADVANTAGE then
                         return "Roll mode" .. COLOURS.BUFF .. " (Advantage)"
                     elseif rollModeMod == ROLL_MODES.DISADVANTAGE then
@@ -103,7 +103,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 end,
                 desc =  function()
                     local msg = "Select the roll mode requested by the DM."
-                    local rollModeMod = rolls.getRollModeModifier()
+                    local rollModeMod = rolls.getRollModeModifier(options.action)
                     if rollModeMod == ROLL_MODES.ADVANTAGE then
                         msg = msg .. "|n|nYou have advantage! This is already taken into account. You do not need to change your roll mode here."
                     elseif rollModeMod == ROLL_MODES.DISADVANTAGE then
@@ -113,7 +113,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 end,
                 width = 0.75,
                 values = function()
-                    local rollModeMod = rolls.getRollModeModifier()
+                    local rollModeMod = rolls.getRollModeModifier(options.action)
                     if rollModeMod == ROLL_MODES.ADVANTAGE then
                         return ROLL_MODE_VALUES_ADVANTAGE
                     elseif rollModeMod == ROLL_MODES.DISADVANTAGE then
