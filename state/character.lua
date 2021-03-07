@@ -374,7 +374,7 @@ characterState.state = {
             set = function(traitID, numCharges)
                 if numCharges ~= state.featsAndTraits.numTraitCharges[traitID] then
                     TEARollHelper:Debug("SET numTraitCharges for", traitID)
-                state.featsAndTraits.numTraitCharges[traitID] = numCharges
+                    state.featsAndTraits.numTraitCharges[traitID] = numCharges
                 end
             end,
         },
@@ -442,19 +442,54 @@ bus.addListener(EVENTS.FEAT_CHANGED, function(featID)
     end
 end)
 
-local function onTraitsChanged()
+local function updateMaxTraitCharges(reason, options)
+    TEARollHelper:Debug("Updating max trait charges because " .. reason)
+
     for traitID, trait in pairs(TRAITS) do
-        if trait.numCharges and not character.hasTrait(trait) then
-            -- reset charges of removed traits back to full, in case player swaps back to one of them later.
-            characterState.state.featsAndTraits.numTraitCharges.set(traitID, rules.traits.getMaxTraitCharges(trait))
+        if trait.numCharges then
+            local curNumCharges = characterState.state.featsAndTraits.numTraitCharges.get(traitID)
+            local maxNumCharges = rules.traits.getMaxTraitCharges(trait)
+            local shouldAdjust = false
+
+            -- we use this if the update is caused by something that can't be be done on the fly in events (eg weaknesses)
+            -- when you change your character sheet outside of events you want all charges to be at max.
+            shouldAdjust = options and options.restoreAllCharges
+
+            if not shouldAdjust then
+                -- in case player swaps back to one of them later. Only for things that can be done during events.
+                shouldAdjust = options and options.restoreChargesOfRemovedTraits and not character.hasTrait(trait)
+            end
+
+            if not shouldAdjust then
+                -- adjust for new maximum if necessary.
+                shouldAdjust = curNumCharges > maxNumCharges
+            end
+
+            if shouldAdjust then
+                characterState.state.featsAndTraits.numTraitCharges.set(traitID, maxNumCharges)
+            end
         end
     end
 end
 
+local function onTraitsChanged()
+    updateMaxTraitCharges("traits changed", {
+        restoreChargesOfRemovedTraits = true
+    })
+end
+
 bus.addListener(EVENTS.TRAITS_CHANGED, onTraitsChanged)
 
+local function onBrightBurnerRemoved()
+    updateMaxTraitCharges("Bright Burner was removed", {
+        restoreAllCharges = true
+    })
+end
+
 bus.addListener(EVENTS.WEAKNESS_ADDED, function(weaknessID)
-    if weaknessID == WEAKNESSES.FRAGILE.id then
+    if weaknessID == WEAKNESSES.BRIGHT_BURNER.id then
+        updateMaxTraitCharges("Bright Burner was added")
+    elseif weaknessID == WEAKNESSES.FRAGILE.id then
         updateMaxHealth()
     elseif weaknessID == WEAKNESSES.TEMPERED_BENEVOLENCE.id then
         characterState.state.healing.numGreaterHealSlots.update()
@@ -462,7 +497,9 @@ bus.addListener(EVENTS.WEAKNESS_ADDED, function(weaknessID)
 end)
 
 bus.addListener(EVENTS.WEAKNESS_REMOVED, function(weaknessID)
-    if weaknessID == WEAKNESSES.FRAGILE.id then
+    if weaknessID == WEAKNESSES.BRIGHT_BURNER.id then
+        onBrightBurnerRemoved()
+    elseif weaknessID == WEAKNESSES.FRAGILE.id then
         updateMaxHealth({
             -- weaknesses are only changed outside of events, so set HP to full.
             healIfNewMaxHealthHigher = true
@@ -474,6 +511,14 @@ bus.addListener(EVENTS.WEAKNESS_REMOVED, function(weaknessID)
     character.clearExcessTraits()
 end)
 
+-- switching from a profile with Bright Burner to one without it should reset trait charges to max.
+-- this should not happen during events, but we rely on the player to not switch to a profile with different weaknesses during events.
+local characterHadBrightBurner = false
+
+bus.addListener(EVENTS.PROFILE_WILL_CHANGE, function()
+    characterHadBrightBurner = character.hasWeakness(WEAKNESSES.BRIGHT_BURNER)
+end)
+
 bus.addListener(EVENTS.PROFILE_CHANGED, function()
     for stat in pairs(STATS) do
         onStatUpdate[stat]()
@@ -481,7 +526,12 @@ bus.addListener(EVENTS.PROFILE_CHANGED, function()
 
     onFeatUpdate()
     onTraitsChanged()
-    -- weakness changes are currently covered by our stat updates.
+    -- weakness changes are currently covered by our stat/trait updates.
+    -- with exception of bright burner
+    if characterHadBrightBurner and not character.hasWeakness(WEAKNESSES.BRIGHT_BURNER) then
+        onBrightBurnerRemoved()
+        characterHadBrightBurner = false
+    end
 end)
 
 characterState.summariseHP = summariseHP

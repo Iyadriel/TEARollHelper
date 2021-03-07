@@ -5,10 +5,12 @@ local enemies = ns.resources.enemies
 local feats = ns.resources.feats
 local rules = ns.rules
 local traits = ns.resources.traits
+local weaknesses = ns.resources.weaknesses
 
 local ENEMIES = enemies.ENEMIES
 local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
+local WEAKNESSES = weaknesses.WEAKNESSES
 
 local MAX_NUM_TRAITS = 3
 local HOLY_BULWARK_ENEMIES = {
@@ -36,10 +38,17 @@ local function calculateMaxTraits()
 end
 
 local function getMaxTraitCharges(trait)
+    local numCharges = trait.numCharges
+
     if trait.id == TRAITS.VINDICATION.id and character.hasFeat(FEATS.DIVINE_PURPOSE) then
-        return 4
+        numCharges = 4
     end
-    return trait.numCharges
+
+    if character.hasWeakness(WEAKNESSES.BRIGHT_BURNER) then
+        numCharges = numCharges - 1
+    end
+
+    return numCharges
 end
 
 local function calculateRegrowthHealingPerTick(initialHealAmount)
