@@ -85,35 +85,35 @@ local function hasMastery(stat)
 end
 
 local function hasOffenceProficiency()
-    return getPlayerOffence() >= STAT_POINTS_PROFICIENCY
+    return hasProficiency(STATS.offence)
 end
 
 local function hasDefenceProficiency()
-    return getPlayerDefence() >= STAT_POINTS_PROFICIENCY
+    return hasProficiency(STATS.defence)
 end
 
 local function hasSpiritProficiency()
-    return getPlayerSpirit() >= STAT_POINTS_PROFICIENCY
+    return hasProficiency(STATS.spirit)
 end
 
 local function hasStaminaProficiency()
-    return getPlayerStamina() >= STAT_POINTS_PROFICIENCY
+    return hasProficiency(STATS.stamina)
 end
 
 local function hasOffenceMastery()
-    return getPlayerOffence() >= STAT_POINTS_MASTERY
+    return hasMastery(STATS.offence)
 end
 
 local function hasDefenceMastery()
-    return getPlayerDefence() >= STAT_POINTS_MASTERY
+    return hasMastery(STATS.defence)
 end
 
 local function hasSpiritMastery()
-    return getPlayerSpirit() >= STAT_POINTS_MASTERY
+    return hasMastery(STATS.spirit)
 end
 
 local function hasStaminaMastery()
-    return getPlayerStamina() >= STAT_POINTS_MASTERY
+    return hasMastery(STATS.stamina)
 end
 
 -- [[ Special case: Focus ]]
