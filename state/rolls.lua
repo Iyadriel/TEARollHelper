@@ -399,6 +399,15 @@ local function resetRolls()
     rolls.state[SPECIAL_ACTIONS.clingToConsciousness].currentRoll.set(nil)
 end
 
+local function resetRollModes()
+    for _, action in pairs(ACTIONS) do
+        local actionState = rolls.state[action]
+        actionState.rollMode.set(ROLL_MODES.NORMAL)
+    end
+
+    rolls.state[SPECIAL_ACTIONS.clingToConsciousness].rollMode.set(ROLL_MODES.NORMAL)
+end
+
 local function resetThresholds()
     rolls.state.attack.threshold.set(nil)
     rolls.state.defend.defenceType.set(DEFENCE_TYPES.THRESHOLD)
@@ -415,6 +424,7 @@ end
 local function resetAll()
     resetSlots()
     resetRolls()
+    resetRollModes()
     resetThresholds()
 end
 
@@ -424,7 +434,10 @@ bus.addListener(EVENTS.FEAT_CHANGED, function()
     resetRolls() -- in case of crit threshold change
 end)
 bus.addListener(EVENTS.TRAITS_CHANGED, resetSlots)
-bus.addListener(EVENTS.WEAKNESSES_CHANGED, resetSlots)
+bus.addListener(EVENTS.WEAKNESSES_CHANGED, function()
+    resetRollModes() -- because of underachiever
+    resetSlots()
+end)
 bus.addListener(EVENTS.UTILITY_TRAITS_CHANGED, resetSlots)
 bus.addListener(EVENTS.RACIAL_TRAIT_CHANGED, resetAll)
 bus.addListener(EVENTS.PROFILE_CHANGED, resetAll)

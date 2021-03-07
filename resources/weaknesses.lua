@@ -12,7 +12,7 @@ local BuffEffectStat = models.BuffEffectStat
 local STATS = constants.STATS
 local TURN_TYPES = constants.TURN_TYPES
 
-weaknesses.WEAKNESS_KEYS = {"ACOLYTE", "BRIGHT_BURNER", "BRUTE", "CORRUPTED", "FATELESS", "FEATLESS", "FRAGILE", "GLASS_CANNON", "OLD_SCARS", "OTHER", "OUTCAST", "OVERFLOW", "REBOUND", "TEMPERED_BENEVOLENCE", "TEMPO", "TIMID", "WOE_UPON_THE_AFFLICTED", "WORN"}
+weaknesses.WEAKNESS_KEYS = {"ACOLYTE", "BRIGHT_BURNER", "BRUTE", "CORRUPTED", "FATELESS", "FEATLESS", "FRAGILE", "GLASS_CANNON", "OLD_SCARS", "OTHER", "OUTCAST", "OVERFLOW", "REBOUND", "TEMPERED_BENEVOLENCE", "TEMPO", "TIMID", "UNDERACHIEVER", "WOE_UPON_THE_AFFLICTED", "WORN"}
 
 local WEAKNESSES = {
     ACOLYTE = {
@@ -100,6 +100,11 @@ local WEAKNESSES = {
         desc = "While in melee range of an enemy, your Offence, Defense, and Spirit stats are reduced by -2.",
         icon = "Interface\\Icons\\spell_misc_emotionafraid",
         distanceFromEnemy = "melee",
+    },
+    UNDERACHIEVER = {
+        id = "UNDERACHIEVER",
+        name = "Underachiever",
+        desc = "You cannot gain advantage on any roll under any circumstance.",
     },
     WOE_UPON_THE_AFFLICTED = {
         id = "WOE_UPON_THE_AFFLICTED",

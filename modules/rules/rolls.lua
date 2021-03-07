@@ -51,6 +51,10 @@ local function shouldSuggestFatePoint(roll, attack, cc, healing, buff, defence, 
     end
 end
 
+local function canHaveAdvantage()
+    return not character.hasWeakness(WEAKNESSES.UNDERACHIEVER)
+end
+
 local function getRollModeModifier(action, advantageBuff, disadvantageDebuff, enemyId, utilityTypeID)
     local modifier = 0
 
@@ -71,7 +75,9 @@ local function getRollModeModifier(action, advantageBuff, disadvantageDebuff, en
         modifier = modifier + rules.utility.getRollModeModifier(utilityTypeID)
     end
 
-    modifier = max(ROLL_MODES.DISADVANTAGE, min(ROLL_MODES.ADVANTAGE, modifier))
+    local maxModifier = canHaveAdvantage() and ROLL_MODES.ADVANTAGE or 0
+
+    modifier = max(ROLL_MODES.DISADVANTAGE, min(maxModifier, modifier))
 
     return modifier
 end
@@ -99,6 +105,7 @@ rules.rolls = {
     getMaxFatePoints = getMaxFatePoints,
     shouldSuggestFatePoint = shouldSuggestFatePoint,
 
+    canHaveAdvantage = canHaveAdvantage,
     getRollModeModifier = getRollModeModifier,
 
     canProcRebound = canProcRebound,

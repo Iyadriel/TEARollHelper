@@ -12,6 +12,7 @@ local rules = ns.rules
 local settings = ns.settings
 local turnState = ns.state.turn
 local ui = ns.ui
+local utils = ns.utils
 
 local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
@@ -114,12 +115,21 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 width = 0.75,
                 values = function()
                     local rollModeMod = rolls.getRollModeModifier(options.action)
+                    local values
+
                     if rollModeMod == ROLL_MODES.ADVANTAGE then
-                        return ROLL_MODE_VALUES_ADVANTAGE
+                        values = ROLL_MODE_VALUES_ADVANTAGE
                     elseif rollModeMod == ROLL_MODES.DISADVANTAGE then
-                        return ROLL_MODE_VALUES_DISADVANTAGE
+                        values = ROLL_MODE_VALUES_DISADVANTAGE
                     end
-                    return ROLL_MODE_VALUES_NORMAL
+                    values = ROLL_MODE_VALUES_NORMAL
+
+                    if not rules.rolls.canHaveAdvantage() then
+                        values = utils.shallowCopy(values)
+                        values[ROLL_MODES.ADVANTAGE] = nil
+                    end
+
+                    return values
                 end,
                 get = state[options.action].rollMode.get,
                 set = function(info, value)
