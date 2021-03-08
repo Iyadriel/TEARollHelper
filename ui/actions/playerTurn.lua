@@ -21,7 +21,7 @@ ui.modules.actions.modules.playerTurn.getSharedPreRollOptions = function(options
             name = COLOURS.FEATS.GENERIC .. "Enable " .. FEATS.FOCUS.name,
             desc = FEATS.FOCUS.desc,
             hidden = function()
-                return not character.canUseFocus() or buffsState.buffLookup.getFeatBuff(FEATS.FOCUS)
+                return not character.canUseFocus() or buffsState.buffLookup.getFeatBuffs(FEATS.FOCUS)
             end,
             func = consequences.enableFocus,
         },
@@ -30,7 +30,7 @@ ui.modules.actions.modules.playerTurn.getSharedPreRollOptions = function(options
             type = "description",
             name = COLOURS.FEATS.GENERIC .. FEATS.FOCUS.name .. " is active.",
             hidden = function()
-                return not buffsState.buffLookup.getFeatBuff(FEATS.FOCUS)
+                return not buffsState.buffLookup.getFeatBuffs(FEATS.FOCUS)
             end,
         },
     }

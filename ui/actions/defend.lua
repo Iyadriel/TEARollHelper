@@ -153,7 +153,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                             name = COLOURS.FEATS.GENERIC .. "Enable " .. FEATS.LIVING_BARRICADE.name,
                             desc = FEATS.LIVING_BARRICADE.desc,
                             hidden = function()
-                                return not character.hasFeat(FEATS.LIVING_BARRICADE) or buffsState.buffLookup.getFeatBuff(FEATS.LIVING_BARRICADE)
+                                return not character.hasFeat(FEATS.LIVING_BARRICADE) or buffsState.buffLookup.getFeatBuffs(FEATS.LIVING_BARRICADE)
                             end,
                             func = consequences.enableLivingBarricade,
                         },
@@ -162,7 +162,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                             type = "description",
                             name = COLOURS.FEATS.GENERIC .. FEATS.LIVING_BARRICADE.name .. " is active.",
                             hidden = function()
-                                return not (character.hasFeat(FEATS.LIVING_BARRICADE) and buffsState.buffLookup.getFeatBuff(FEATS.LIVING_BARRICADE))
+                                return not (character.hasFeat(FEATS.LIVING_BARRICADE) and buffsState.buffLookup.getFeatBuffs(FEATS.LIVING_BARRICADE))
                             end,
                         },
                     }

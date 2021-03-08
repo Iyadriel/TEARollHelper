@@ -181,11 +181,11 @@ buffsState.state = {
             end
             return nil
         end,
-        getFeatBuffs = function()
+        getFeatBuffs = function(feat)
             local activeBuffs = buffsState.state.activeBuffs.get()
             local featBuffs = {}
             for _, buff in ipairs(activeBuffs) do
-                if buff.featID then
+                if buff.featID == feat.id then
                     table.insert(featBuffs, buff)
                 end
             end
@@ -193,9 +193,6 @@ buffsState.state = {
                 return nil
             end
             return featBuffs
-        end,
-        getFeatBuff = function(feat)
-            return buffsState.state.buffLookup.get("feat_" .. feat.id)
         end,
         getTraitBuffs = function(trait)
             local activeBuffs = buffsState.state.activeBuffs.get()
@@ -237,6 +234,21 @@ buffsState.state = {
     }
 }
 
+local function onFeatChanged()
+    local activeBuffs = buffsState.state.activeBuffs.get()
+    local buffsToRemove = {}
+
+    for _, buff in ipairs(activeBuffs) do
+        if buff.featID and not character.hasFeatByID(buff.featID) then
+            table.insert(buffsToRemove, buff)
+        end
+    end
+
+    for _, featBuff in ipairs(buffsToRemove) do
+        featBuff:Remove()
+    end
+end
+
 local function onTraitsChanged()
     local activeBuffs = buffsState.state.activeBuffs.get()
     local buffsToRemove = {}
@@ -276,11 +288,13 @@ local function onRacialTraitChanged()
 end
 
 local function onProfileChanged()
+    onFeatChanged()
     onTraitsChanged()
     onWeaknessesChanged()
     onRacialTraitChanged()
 end
 
+bus.addListener(EVENTS.FEAT_CHANGED, onFeatChanged)
 bus.addListener(EVENTS.TRAITS_CHANGED, onTraitsChanged)
 bus.addListener(EVENTS.WEAKNESSES_CHANGED, onWeaknessesChanged)
 bus.addListener(EVENTS.RACIAL_TRAIT_CHANGED, onRacialTraitChanged)

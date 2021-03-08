@@ -423,14 +423,6 @@ end)
 local function onFeatUpdate()
     characterState.state.healing.numGreaterHealSlots.update()
     resetRemainingOutOfCombatHeals("feat changed")
-
-    local featBuffs = buffsState.state.buffLookup.getFeatBuffs()
-    if featBuffs then
-        for _, featBuff in ipairs(featBuffs) do
-            featBuff:Remove()
-        end
-    end
-
     character.clearExcessTraits()
 end
 

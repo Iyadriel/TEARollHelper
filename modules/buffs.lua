@@ -20,18 +20,26 @@ local RacialTraitBuff = models.RacialTraitBuff
 local TraitBuff = models.TraitBuff
 local WeaknessDebuff = models.WeaknessDebuff
 
-local function addFeatBuff(feat, providedEffects)
-    local existingBuff = buffsState.state.buffLookup.getFeatBuff(feat)
-    if existingBuff then
-        existingBuff:Remove()
+local function addFeatBuff(feat, providedEffects, index, forceReplace)
+    if not index then index = 1 end -- most feats only have 1 buff to add
+
+    -- when adding more than one buff, don't remove the previous ones
+    if index == 1 or forceReplace then
+        local existingBuffs = buffsState.state.buffLookup.getFeatBuffs(feat)
+        if existingBuffs then
+            for _, existingBuff in pairs(existingBuffs) do
+                existingBuff:Remove()
+            end
+        end
     end
 
-    local buffSpec = FEAT_BUFF_SPECS[feat.id]
+    local buffSpec = FEAT_BUFF_SPECS[feat.id][index]
 
     local newBuff = FeatBuff:New(
         feat,
         buffSpec.duration,
-        providedEffects or buffSpec.effects
+        providedEffects or buffSpec.effects,
+        index
     )
 
     newBuff:Apply()
@@ -40,11 +48,11 @@ local function addFeatBuff(feat, providedEffects)
     bus.fire(EVENTS.FEAT_BUFF_ADDED, feat.id)
 end
 
-local function addTraitBuff(trait, providedEffects, index)
+local function addTraitBuff(trait, providedEffects, index, forceReplace)
     if not index then index = 1 end -- most traits only have 1 buff to add
 
     -- when adding more than one buff, don't remove the previous ones
-    if index == 1 then
+    if index == 1 or forceReplace then
         local existingBuffs = buffsState.state.buffLookup.getTraitBuffs(trait)
         if existingBuffs then
             for _, existingBuff in pairs(existingBuffs) do

@@ -5,10 +5,10 @@ local models = ns.models
 local Buff = models.Buff
 local FeatBuff = Buff:NewFromObj({})
 
-function FeatBuff:New(feat, duration, effects)
+function FeatBuff:New(feat, duration, effects, specIndex)
     -- Base Buff object
     local buff = Buff:New(
-        "feat_" .. feat.id,
+        "feat_" .. feat.id .. "_" .. specIndex,
         feat.name,
         feat.icon,
         duration,
