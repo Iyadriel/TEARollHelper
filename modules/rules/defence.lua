@@ -8,7 +8,6 @@ local feats = ns.resources.feats
 local racialTraits = ns.resources.racialTraits
 local traits = ns.resources.traits
 
-local DAMAGE_TYPES = constants.DAMAGE_TYPES
 local DEFENCE_TYPES = constants.DEFENCE_TYPES
 local FEATS = feats.FEATS
 local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
