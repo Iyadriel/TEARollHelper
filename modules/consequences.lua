@@ -209,11 +209,21 @@ local function confirmHealAction(heal)
         characterState.state.healing.remainingOutOfCombatHeals.spendOne()
     end
 
+    if heal.hasBulwarkOfHopeProc then
+        buffs.addFeatBuff(FEATS.BULWARK_OF_HOPE, nil, 1, true)
+    end
+
     if heal.hasChaplainOfViolenceProc then
         buffs.addFeatBuff(FEATS.CHAPLAIN_OF_VIOLENCE, { BuffEffectDamageDone:New(heal.chaplainOfViolenceBonusDamage) })
     end
 
     rollState.state.healing.heals.add(heal)
+end
+
+local function confirmBuffAction(buff)
+    if buff.hasBulwarkOfHopeProc then
+        buffs.addFeatBuff(FEATS.BULWARK_OF_HOPE, nil, 1, true)
+    end
 end
 
 local function confirmDefenceAction(defence)
@@ -224,6 +234,10 @@ local function confirmDefenceAction(defence)
     end
     if defence.damagePrevented > 0 then
         state.defence.damagePrevented.increment(defence.damagePrevented)
+    end
+
+    if defence.hasBulwarkOfHopeProc then
+        buffs.addFeatBuff(FEATS.BULWARK_OF_HOPE, nil, 2, true)
     end
 
     if defence.hasDefensiveTacticianProc then
@@ -241,16 +255,28 @@ local function confirmMeleeSaveAction(meleeSave)
         state.defence.damagePrevented.increment(meleeSave.damagePrevented)
     end
 
+    if meleeSave.hasBulwarkOfHopeProc then
+        buffs.addFeatBuff(FEATS.BULWARK_OF_HOPE, nil, 2, true)
+    end
+
     if meleeSave.hasDefensiveTacticianProc then
         applyDefensiveTactician(meleeSave.dmgRiskToPlayer)
+    end
+end
+
+local function confirmRangedSaveAction(rangedSave)
+    if rangedSave.hasBulwarkOfHopeProc then
+        buffs.addFeatBuff(FEATS.BULWARK_OF_HOPE, nil, 2, true)
     end
 end
 
 local actionFns = {
     [ACTIONS.attack] = confirmAttackAction,
     [ACTIONS.healing] = confirmHealAction,
+    [ACTIONS.buff] = confirmBuffAction,
     [ACTIONS.defend] = confirmDefenceAction,
     [ACTIONS.meleeSave] = confirmMeleeSaveAction,
+    [ACTIONS.rangedSave] = confirmRangedSaveAction,
 }
 
 local function confirmAction(actionType, action, hideMsg)

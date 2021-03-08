@@ -15,7 +15,7 @@ local DAMAGE_TYPES = constants.DAMAGE_TYPES
 local STATS = constants.STATS
 local TURN_TYPES = constants.TURN_TYPES
 
-feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "CHAPLAIN_OF_VIOLENCE", "COUNTER_FORCE", "DEFENSIVE_TACTICIAN", "DIVINE_PURPOSE", "ETERNAL_SACRIFICE", "EXPANSIVE_ARSENAL", "FOCUS", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "LIVING_BARRICADE", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "MONSTER_HUNTER", "ONSLAUGHT", "PARAGON", "PENANCE", "PHALANX", "PROFESSIONAL", "SHEPHERD_OF_THE_WICKED", "TRAUMA_RESPONSE", "VENGEANCE", "WARDER"}
+feats.FEAT_KEYS = {"FEATLESS", "ADRENALINE", "BLOOD_HARVEST", "BULWARK_OF_HOPE", "CHAPLAIN_OF_VIOLENCE", "COUNTER_FORCE", "DEFENSIVE_TACTICIAN", "DIVINE_PURPOSE", "ETERNAL_SACRIFICE", "EXPANSIVE_ARSENAL", "FOCUS", "INSPIRING_PRESENCE", "KEEN_SENSE", "LEADER", "LIVING_BARRICADE", "MEDIC", "MENDER", "MERCY_FROM_PAIN", "MONSTER_HUNTER", "ONSLAUGHT", "PARAGON", "PENANCE", "PHALANX", "PROFESSIONAL", "SHEPHERD_OF_THE_WICKED", "TRAUMA_RESPONSE", "VENGEANCE", "WARDER"}
 
 local FEATS = {
     FEATLESS = {
@@ -32,6 +32,18 @@ local FEATS = {
         name = "Blood Harvest",
         desc = "For every 2 points you put into the Offence stat you gain a Harvest Slot. You can activate these Harvest Slots to spend them akin to a Greater Heal Slot. Spending a Harvest slot increases the damage of your next Offence attack by +5. This damage is dealt even if you miss. Only one Harvest Slot can be spent at a time.",
     },
+    BULWARK_OF_HOPE = {
+        id = "BULWARK_OF_HOPE",
+        name = "Bulwark of Hope",
+        desc = "Healing or buffing a player grants you advantage on your next Defence or Save roll. Defending yourself or performing a successful Save grants you advantage on your next Heal or Buff roll. Requires 4/6 in both Spirit and Defence to take.",
+        icon = "Interface\\Icons\\spell_holy_blessingofprotection",
+        requiredStats = {
+            {
+                [STATS.defence] = 4,
+                [STATS.spirit] = 4,
+            },
+        },
+    },
     CHAPLAIN_OF_VIOLENCE = {
         id = "CHAPLAIN_OF_VIOLENCE",
         name = "Chaplain of Violence",
@@ -39,9 +51,9 @@ local FEATS = {
         icon = "Interface\\Icons\\spell_holy_holyguidance",
         requiredStats = {
             {
-            [STATS.spirit] = 4,
+                [STATS.spirit] = 4,
+            },
         },
-    },
     },
     COUNTER_FORCE = {
         id = "COUNTER_FORCE",
@@ -195,58 +207,102 @@ local FEATS = {
 }
 
 local FEAT_BUFF_SPECS = {
-    [FEATS.CHAPLAIN_OF_VIOLENCE.id] = {
-        duration = BuffDuration:New({
-            expireAfterActions = {
-                [ACTIONS.attack] = true,
+    [FEATS.BULWARK_OF_HOPE.id] = {
+        {
+            duration = BuffDuration:New({
+                expireAfterActions = {
+                    [ACTIONS.defend] = true,
+                    [ACTIONS.meleeSave] = true,
+                    [ACTIONS.rangedSave] = true,
+                },
+            }),
+            effects = {
+                BuffEffectAdvantage:New({
+                    [ACTIONS.defend] = true,
+                    [ACTIONS.meleeSave] = true,
+                    [ACTIONS.rangedSave] = true,
+                }),
             },
-            expireOnCombatEnd = true,
-        }),
-        -- effects provided in consequences.lua
+        },
+        {
+            duration = BuffDuration:New({
+                expireAfterActions = {
+                    [ACTIONS.healing] = true,
+                    [ACTIONS.buff] = true,
+                },
+            }),
+            effects = {
+                BuffEffectAdvantage:New({
+                    [ACTIONS.healing] = true,
+                    [ACTIONS.buff] = true,
+                }),
+            },
+        },
+    },
+    [FEATS.CHAPLAIN_OF_VIOLENCE.id] = {
+        {
+            duration = BuffDuration:New({
+                expireAfterActions = {
+                    [ACTIONS.attack] = true,
+                },
+                expireOnCombatEnd = true,
+            }),
+            -- effects provided in consequences.lua
+        },
     },
     [FEATS.DEFENSIVE_TACTICIAN.id] = {
-        duration = BuffDuration:New({
-            expireAfterActions = {
-                [ACTIONS.attack] = true,
-            },
-            expireOnCombatEnd = true,
-        }),
-        -- effects provided in consequences.lua
+        {
+            duration = BuffDuration:New({
+                expireAfterActions = {
+                    [ACTIONS.attack] = true,
+                },
+                expireOnCombatEnd = true,
+            }),
+            -- effects provided in consequences.lua
+        },
     },
     [FEATS.FOCUS.id] = {
-        duration = BuffDuration:New({
-            remainingTurns = 1,
-        }),
-        effects = {
-            BuffEffectAdvantage:New(nil, TURN_TYPES.PLAYER.id),
-            BuffEffectDisadvantage:New(nil, TURN_TYPES.ENEMY.id),
+        {
+            duration = BuffDuration:New({
+                remainingTurns = 1,
+            }),
+            effects = {
+                BuffEffectAdvantage:New(nil, TURN_TYPES.PLAYER.id),
+                BuffEffectDisadvantage:New(nil, TURN_TYPES.ENEMY.id),
+            },
         },
     },
     [FEATS.LIVING_BARRICADE.id] = {
-        duration = BuffDuration:NewWithTurnType({
-            turnTypeID = TURN_TYPES.ENEMY.id,
-            remainingTurns = 0,
-        }),
-        effects = {
-            BuffEffectDamageTaken:New(-3),
+        {
+            duration = BuffDuration:NewWithTurnType({
+                turnTypeID = TURN_TYPES.ENEMY.id,
+                remainingTurns = 0,
+            }),
+            effects = {
+                BuffEffectDamageTaken:New(-3),
+            },
         },
     },
     [FEATS.MERCY_FROM_PAIN.id] = {
-        duration = BuffDuration:New({
-            expireAfterActions = {
-                [ACTIONS.healing] = true,
-            },
-            expireOnCombatEnd = true,
-        }),
-        -- effects provided in consequences.lua
+        {
+            duration = BuffDuration:New({
+                expireAfterActions = {
+                    [ACTIONS.healing] = true,
+                },
+                expireOnCombatEnd = true,
+            }),
+            -- effects provided in consequences.lua
+        },
     },
     [FEATS.VENGEANCE.id] = {
-        duration = BuffDuration:NewWithTurnType({
-            turnTypeID = TURN_TYPES.PLAYER.id,
-            remainingTurns = 1,
-        }),
-        effects = {
-            BuffEffectStat:New(STATS.offence, 4),
+        {
+            duration = BuffDuration:NewWithTurnType({
+                turnTypeID = TURN_TYPES.PLAYER.id,
+                remainingTurns = 1,
+            }),
+            effects = {
+                BuffEffectStat:New(STATS.offence, 4),
+            },
         },
     },
 }

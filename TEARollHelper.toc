@@ -92,6 +92,7 @@ modules/rules/healing.lua
 modules/rules/buffing.lua
 modules/rules/meleeSave.lua
 modules/rules/rangedSave.lua
+modules/rules/feats.lua
 modules/rules/traits.lua
 modules/rules/utility.lua
 modules/rules/ko.lua

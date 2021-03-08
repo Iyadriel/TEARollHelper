@@ -63,6 +63,12 @@ local function calculateRetaliationDamage(defence)
     return dmg
 end
 
+-- Feat: Bulwark of Hope
+
+local function hasBulwarkOfHopeProc(damageTaken)
+    return damageTaken <= 0
+end
+
 -- Feat: Defensive Tactician
 
 local function canProcDefensiveTactician()
@@ -95,6 +101,8 @@ rules.defence = {
     calculateDamagePrevented = calculateDamagePrevented,
     isCrit = isCrit,
     calculateRetaliationDamage = calculateRetaliationDamage,
+
+    hasBulwarkOfHopeProc = hasBulwarkOfHopeProc,
 
     canProcDefensiveTactician = canProcDefensiveTactician,
     hasDefensiveTacticianProc = hasDefensiveTacticianProc,

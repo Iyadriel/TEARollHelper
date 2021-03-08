@@ -142,6 +142,12 @@ local function getMaxOutOfCombatHeals()
     return character.hasFeat(FEATS.MEDIC) and 5 or 3
 end
 
+-- Feat:  Bulwark of Hope
+
+local function hasBulwarkOfHopeProc(amountHealed)
+    return amountHealed > 0
+end
+
 -- Feat: Chaplain of Violence
 
 local function canProcChaplainOfViolence()
@@ -198,6 +204,8 @@ rules.healing = {
     applyOutOfCombatBaseAmountBonus = applyOutOfCombatBaseAmountBonus,
     getOutOfCombatBonus = getOutOfCombatBonus,
     getMaxOutOfCombatHeals = getMaxOutOfCombatHeals,
+
+    hasBulwarkOfHopeProc = hasBulwarkOfHopeProc,
 
     canProcChaplainOfViolence = canProcChaplainOfViolence,
     hasChaplainOfViolenceProc = hasChaplainOfViolenceProc,

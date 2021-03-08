@@ -58,6 +58,12 @@ local function applyCritModifier(amountBuffed, critType)
     return amountBuffed
 end
 
+-- Feat:  Bulwark of Hope
+
+local function hasBulwarkOfHopeProc(amountBuffed)
+    return amountBuffed > 0
+end
+
 local function shouldShowPreRollUI()
     return rules.playerTurn.shouldShowPreRollUI() or rules.other.shouldShowPreRollUI()
 end
@@ -69,6 +75,8 @@ rules.buffing = {
     calculateBuffAmount = calculateBuffAmount,
     isCrit = isCrit,
     applyCritModifier = applyCritModifier,
+
+    hasBulwarkOfHopeProc = hasBulwarkOfHopeProc,
 
     shouldShowPreRollUI = shouldShowPreRollUI,
 }

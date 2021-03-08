@@ -149,6 +149,7 @@ local function getDefence(roll, rollBuff, defenceType, threshold, damageType, dm
     local isCrit = rules.defence.isCrit(roll)
     local defendValue, damageTaken, damagePrevented
     local retaliateDmg = 0
+    local hasBulwarkOfHopeProc = nil
     local hasDefensiveTacticianProc = nil
 
     local effectiveIncomingDamage = rules.effects.calculateEffectiveIncomingDamage(dmgRisk, damageTakenBuff, true)
@@ -161,6 +162,10 @@ local function getDefence(roll, rollBuff, defenceType, threshold, damageType, dm
 
     if isCrit then
         retaliateDmg = rules.defence.calculateRetaliationDamage(defence)
+    end
+
+    if rules.feats.canProcBulwarkOfHope() then
+        hasBulwarkOfHopeProc = rules.defence.hasBulwarkOfHopeProc(damageTaken)
     end
 
     if rules.defence.canProcDefensiveTactician() then
@@ -177,6 +182,7 @@ local function getDefence(roll, rollBuff, defenceType, threshold, damageType, dm
         critType = critType,
         retaliateDmg = retaliateDmg,
 
+        hasBulwarkOfHopeProc = hasBulwarkOfHopeProc,
         hasDefensiveTacticianProc = hasDefensiveTacticianProc,
     }
 end
@@ -189,6 +195,7 @@ local function getMeleeSave(roll, rollBuff, defenceType, threshold, damageType, 
     local isBigFail
     local hasCounterForceProc = nil
     local counterForceDmg = 0
+    local hasBulwarkOfHopeProc = nil
     local hasDefensiveTacticianProc = nil
 
     roll = rules.rolls.calculateRoll(roll, rollBuff)
@@ -206,6 +213,10 @@ local function getMeleeSave(roll, rollBuff, defenceType, threshold, damageType, 
     local effectiveIncomingDamage = rules.effects.calculateEffectiveIncomingDamage(dmgRiskToPlayer, damageTakenBuff, true)
 
     damageTaken = rules.defence.calculateDamageTaken(defenceType, threshold, meleeSaveValue, effectiveIncomingDamage)
+
+    if rules.feats.canProcBulwarkOfHope() then
+        hasBulwarkOfHopeProc = rules.defence.hasBulwarkOfHopeProc(damageTaken)
+    end
 
     if rules.meleeSave.canProcCounterForce() then
         hasCounterForceProc = rules.meleeSave.hasCounterForceProc(meleeSaveValue, threshold)
@@ -227,6 +238,7 @@ local function getMeleeSave(roll, rollBuff, defenceType, threshold, damageType, 
 
         hasCounterForceProc = hasCounterForceProc,
         counterForceDmg = counterForceDmg,
+        hasBulwarkOfHopeProc = hasBulwarkOfHopeProc,
         hasDefensiveTacticianProc = hasDefensiveTacticianProc,
 
         traits = {
@@ -241,6 +253,8 @@ end
 local function getRangedSave(roll, rollBuff, defenceType, threshold, spirit, buff)
     threshold = threshold + rules.common.SAVE_THRESHOLD_INCREASE
 
+    local hasBulwarkOfHopeProc = nil
+
     roll = rules.rolls.calculateRoll(roll, rollBuff)
     local saveValue = rules.rangedSave.calculateRangedSaveValue(roll, spirit, buff)
     local canFullyProtect = rules.rangedSave.canFullyProtect(defenceType, threshold, saveValue)
@@ -250,10 +264,16 @@ local function getRangedSave(roll, rollBuff, defenceType, threshold, spirit, buf
         damageReduction = rules.rangedSave.calculateDamageReduction(spirit)
     end
 
+    if rules.feats.canProcBulwarkOfHope() then
+        hasBulwarkOfHopeProc = canFullyProtect
+    end
+
     return {
         saveValue = saveValue,
         canFullyProtect = canFullyProtect,
         damageReduction = damageReduction,
+
+        hasBulwarkOfHopeProc = hasBulwarkOfHopeProc,
     }
 end
 
@@ -262,6 +282,7 @@ local function getHealing(roll, rollBuff, critType, spirit, spiritBuff, healingD
     local healValue
     local amountHealed = 0
     local isCrit = rules.healing.isCrit(roll)
+    local hasBulwarkOfHopeProc = nil
     local hasChaplainOfViolenceProc = nil
     local chaplainOfViolenceBonusDamage = 0
     local usesParagon = rules.healing.usesParagon()
@@ -301,6 +322,10 @@ local function getHealing(roll, rollBuff, critType, spirit, spiritBuff, healingD
             amountHealed = rules.healing.applyCritModifier(amountHealed, critType)
         end
 
+        if rules.feats.canProcBulwarkOfHope() then
+            hasBulwarkOfHopeProc = rules.healing.hasBulwarkOfHopeProc(amountHealed)
+        end
+
         if rules.healing.canProcChaplainOfViolence() then
             hasChaplainOfViolenceProc = rules.healing.hasChaplainOfViolenceProc(amountHealed)
         end
@@ -323,6 +348,7 @@ local function getHealing(roll, rollBuff, critType, spirit, spiritBuff, healingD
         critType = critType,
         outOfCombat = outOfCombat,
         numGreaterHealSlots = numGreaterHealSlots,
+        hasBulwarkOfHopeProc = hasBulwarkOfHopeProc,
         hasChaplainOfViolenceProc = hasChaplainOfViolenceProc,
         chaplainOfViolenceBonusDamage = chaplainOfViolenceBonusDamage,
         usesParagon = usesParagon,
@@ -345,6 +371,7 @@ local function getBuff(roll, rollBuff, critType, spirit, spiritBuff, offence, of
     local buffValue
     local amountBuffed
     local isCrit = rules.buffing.isCrit(roll)
+    local hasBulwarkOfHopeProc = nil
 
     roll = rules.rolls.calculateRoll(roll, rollBuff)
     buffValue = rules.buffing.calculateBuffValue(roll, spirit, spiritBuff, offence, offenceBuff)
@@ -355,10 +382,15 @@ local function getBuff(roll, rollBuff, critType, spirit, spiritBuff, offence, of
         amountBuffed = rules.buffing.applyCritModifier(amountBuffed, critType)
     end
 
+    if rules.feats.canProcBulwarkOfHope() then
+        hasBulwarkOfHopeProc = rules.buffing.hasBulwarkOfHopeProc(amountBuffed)
+    end
+
     return {
         amountBuffed = amountBuffed,
         isCrit = isCrit,
         critType = critType,
+        hasBulwarkOfHopeProc = hasBulwarkOfHopeProc,
         usesInspiringPresence = rules.buffing.usesInspiringPresence(),
         traits = {
             [TRAITS.ASCEND.id] = {
