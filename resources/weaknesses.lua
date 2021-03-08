@@ -12,7 +12,27 @@ local BuffEffectStat = models.BuffEffectStat
 local STATS = constants.STATS
 local TURN_TYPES = constants.TURN_TYPES
 
-weaknesses.WEAKNESS_KEYS = {"ACOLYTE", "BRIGHT_BURNER", "BRUTE", "CORRUPTED", "FATELESS", "FEATLESS", "FRAGILE", "GLASS_CANNON", "OLD_SCARS", "OTHER", "OUTCAST", "OVERFLOW", "REBOUND", "TEMPERED_BENEVOLENCE", "TEMPO", "TIMID", "UNDERACHIEVER", "WOE_UPON_THE_AFFLICTED", "WORN"}
+weaknesses.WEAKNESS_KEYS = {
+    "ACOLYTE",
+    "BRIGHT_BURNER",
+    "BRUTE",
+    "CORRUPTED",
+    "FATELESS",
+    "FEATLESS",
+    "FRAGILE",
+    "GLASS_CANNON",
+    "OLD_SCARS",
+    "OTHER",
+    "OUTCAST",
+    "OVERFLOW",
+    "REBOUND",
+    "TEMPERED_BENEVOLENCE",
+    "TEMPO",
+    "TIMID",
+    "UNDERACHIEVER",
+    "WOE_UPON_THE_AFFLICTED",
+    "WORN",
+}
 
 local WEAKNESSES = {
     ACOLYTE = {

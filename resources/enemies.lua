@@ -2,7 +2,15 @@ local _, ns = ...
 
 local enemies = ns.resources.enemies
 
-enemies.ENEMY_KEYS = {"OTHER", "DEMON", "ELDRITCH", "FEL", "MECHANICAL", "UNDEAD", "VOID"}
+enemies.ENEMY_KEYS = {
+    "OTHER",
+    "DEMON",
+    "ELDRITCH",
+    "FEL",
+    "MECHANICAL",
+    "UNDEAD",
+    "VOID",
+}
 
 enemies.ENEMIES = {
     OTHER = {

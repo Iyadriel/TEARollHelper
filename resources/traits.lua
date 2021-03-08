@@ -18,7 +18,31 @@ local ACTIONS = constants.ACTIONS
 local STATS = constants.STATS
 local TURN_TYPES = constants.TURN_TYPES
 
-traits.TRAIT_KEYS = {"OTHER", ApexProtector.id, Artisan.id, "ASCEND", "ANQULANS_REDOUBT", Chastice.id, CriticalMass.id, "FAELUNES_REGROWTH", "FAULTLINE", "GREATER_RESTORATION", "HOLY_BULWARK", "LIFE_PULSE", "LIFE_WITHIN", "MOMENT_OF_EXCELLENCE", "PRESENCE_OF_VIRTUE", "REAP", "SECOND_WIND", "SHATTER_SOUL", "SHIELD_SLAM", "SILAMELS_ACE", "VERSATILE", "VESEERAS_IRE", "VINDICATION"}
+traits.TRAIT_KEYS = {
+    "OTHER",
+    ApexProtector.id,
+    Artisan.id,
+    "ASCEND",
+    "ANQULANS_REDOUBT",
+    Chastice.id,
+    CriticalMass.id,
+    "FAELUNES_REGROWTH",
+    "FAULTLINE",
+    "GREATER_RESTORATION",
+    "HOLY_BULWARK",
+    "LIFE_PULSE",
+    "LIFE_WITHIN",
+    "MOMENT_OF_EXCELLENCE",
+    "PRESENCE_OF_VIRTUE",
+    "REAP",
+    "SECOND_WIND",
+    "SHATTER_SOUL",
+    "SHIELD_SLAM",
+    "SILAMELS_ACE",
+    "VERSATILE",
+    "VESEERAS_IRE",
+    "VINDICATION",
+}
 
 local TRAITS = {
     OTHER = {
