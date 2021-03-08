@@ -64,7 +64,7 @@ local FEATS = {
     BULWARK_OF_HOPE = {
         id = "BULWARK_OF_HOPE",
         name = "Bulwark of Hope",
-        desc = "Healing or buffing a player grants you advantage on your next Defence or Save roll. Defending yourself or performing a successful Save grants you advantage on your next Heal or Buff roll. Requires 4/6 in both Spirit and Defence to take.",
+        desc = "Healing or buffing a player grants you advantage on your next Defence or Save roll. Defending yourself or performing a successful Save grants you advantage on your next Heal or Buff roll.",
         icon = "Interface\\Icons\\spell_holy_blessingofprotection",
         requiredStats = {
             {
