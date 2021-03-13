@@ -1,4 +1,4 @@
-## Interface: 90002
+## Interface: 90005
 ## Title: The Evernight Aegis Roll Helper
 ## Author: Iyadriel
 ## Version: 1.6.1
