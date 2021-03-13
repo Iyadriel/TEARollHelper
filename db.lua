@@ -54,10 +54,6 @@ local defaults = {
     }
 }
 
-local function onProfileShutdown()
-    bus.fire(EVENTS.PROFILE_WILL_CHANGE)
-end
-
 local function onProfileChanged()
     bus.fire(EVENTS.PROFILE_CHANGED)
 end
@@ -66,7 +62,6 @@ db.initDb = function(options)
     TEARollHelper.db = AceDB:New("TeaRollHelperDB", defaults)
     options.args.profile = AceDBOptions:GetOptionsTable(TEARollHelper.db)
 
-    TEARollHelper.db.RegisterCallback(TEARollHelper, "OnProfileShutdown", onProfileShutdown)
     TEARollHelper.db.RegisterCallback(TEARollHelper, "OnProfileChanged", onProfileChanged)
     TEARollHelper.db.RegisterCallback(TEARollHelper, "OnProfileCopied", onProfileChanged)
     TEARollHelper.db.RegisterCallback(TEARollHelper, "OnProfileReset", onProfileChanged)

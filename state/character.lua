@@ -64,6 +64,9 @@ characterState.initState = function()
     cache.maxNumGreaterHealSlots = rules.healing.getMaxGreaterHealSlots()
     cache.maxNumBraceCharges = rules.defence.getMaxBraceCharges()
     cache.maxNumBloodHarvestSlots = rules.offence.getMaxBloodHarvestSlots()
+    -- switching from a profile with Bright Burner to one without it should reset trait charges to max.
+    -- this should not happen during events, but we rely on the player to not switch to a profile with different weaknesses during events.
+    cache.hasBrightBurner = character.hasWeakness(WEAKNESSES.BRIGHT_BURNER)
 end
 
 local function basicGetSet(section, key, callback)
@@ -498,15 +501,21 @@ end
 
 bus.addListener(EVENTS.TRAITS_CHANGED, onTraitsChanged)
 
+local function onBrightBurnerAdded()
+    updateMaxTraitCharges("Bright Burner was added")
+    cache.hasBrightBurner = true
+end
+
 local function onBrightBurnerRemoved()
     updateMaxTraitCharges("Bright Burner was removed", {
         restoreAllCharges = true
     })
+    cache.hasBrightBurner = false
 end
 
 bus.addListener(EVENTS.WEAKNESS_ADDED, function(weaknessID)
     if weaknessID == WEAKNESSES.BRIGHT_BURNER.id then
-        updateMaxTraitCharges("Bright Burner was added")
+        onBrightBurnerAdded()
     elseif weaknessID == WEAKNESSES.FRAGILE.id then
         updateMaxHealth()
     elseif weaknessID == WEAKNESSES.TEMPERED_BENEVOLENCE.id then
@@ -529,14 +538,6 @@ bus.addListener(EVENTS.WEAKNESS_REMOVED, function(weaknessID)
     character.clearExcessTraits()
 end)
 
--- switching from a profile with Bright Burner to one without it should reset trait charges to max.
--- this should not happen during events, but we rely on the player to not switch to a profile with different weaknesses during events.
-local characterHadBrightBurner = false
-
-bus.addListener(EVENTS.PROFILE_WILL_CHANGE, function()
-    characterHadBrightBurner = character.hasWeakness(WEAKNESSES.BRIGHT_BURNER)
-end)
-
 bus.addListener(EVENTS.PROFILE_CHANGED, function()
     for stat in pairs(STATS) do
         onStatUpdate[stat]()
@@ -545,11 +546,11 @@ bus.addListener(EVENTS.PROFILE_CHANGED, function()
     onFeatUpdate()
     onTraitsChanged()
     -- weakness changes are currently covered by our stat/trait updates.
-    -- with exception of bright burner
-    if characterHadBrightBurner and not character.hasWeakness(WEAKNESSES.BRIGHT_BURNER) then
+    -- with exception of bright burner being removed (added is also handled by onTraitsChanged)
+    if cache.hasBrightBurner and not character.hasWeakness(WEAKNESSES.BRIGHT_BURNER) then
         onBrightBurnerRemoved()
-        characterHadBrightBurner = false
     end
+    cache.hasBrightBurner  = character.hasWeakness(WEAKNESSES.BRIGHT_BURNER)
 end)
 
 characterState.summariseHP = summariseHP
