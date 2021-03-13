@@ -35,6 +35,8 @@ local function getBaseDamageBonus()
     if character.hasOffenceProficiency() then
         if character.hasFeat(FEATS.CYCLES_OF_LIFE_AND_DEATH) then
             return 1
+        elseif character.hasFeat(FEATS.MASTER) then
+            return 4
         end
 
         return 2

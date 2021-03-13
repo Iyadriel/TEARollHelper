@@ -49,6 +49,10 @@ local function applySpiritBonus(amountHealed)
             return amountHealed + 1
         end
 
+        if character.hasFeat(FEATS.MASTER) then
+            return amountHealed + 3
+        end
+
         return amountHealed + 2
     end
 
@@ -94,7 +98,11 @@ local function getMaxGreaterHealSlots()
     local numSlots = getBaseGreaterHealSlots()
 
     if character.hasSpiritProficiency() and not character.hasWeakness(WEAKNESSES.TEMPERED_BENEVOLENCE) then
-        numSlots = numSlots + 1
+        if character.hasFeat(FEATS.MASTER) then
+            numSlots = numSlots + 2
+        else
+            numSlots = numSlots + 1
+        end
     end
 
     if character.hasFeat(FEATS.MENDER) then

@@ -55,7 +55,7 @@ local function canHaveAdvantage()
     return not character.hasWeakness(WEAKNESSES.UNDERACHIEVER)
 end
 
-local function getRollModeModifier(action, advantageBuff, disadvantageDebuff, enemyId, utilityTypeID)
+local function getRollModeModifier(action, turnTypeID, advantageBuff, disadvantageDebuff, enemyId, utilityTypeID)
     local modifier = 0
 
     if advantageBuff then
@@ -63,6 +63,10 @@ local function getRollModeModifier(action, advantageBuff, disadvantageDebuff, en
     end
     if disadvantageDebuff then
         modifier = modifier - 1
+    end
+
+    if turnTypeID == TURN_TYPES.PLAYER.id and character.hasFeat(FEATS.MASTER) and character.hasOffenceMastery() then
+        modifier = modifier + 1
     end
 
     if action == ACTIONS.attack then

@@ -32,6 +32,7 @@ feats.FEAT_KEYS = {
     "KEEN_SENSE",
     "LEADER",
     "LIVING_BARRICADE",
+    "MASTER",
     "MEDIC",
     "MENDER",
     "MERCY_FROM_PAIN",
@@ -168,6 +169,11 @@ local FEATS = {
         desc = "When tasked with doing multiple defense rolls in the same enemy turn (saves not included) you take 3 less damage from all sources for the duration of the enemy turn.",
         note = "Activate manually from the Defend action tab.",
         icon = "Interface\\Icons\\ability_warrior_shieldwall",
+    },
+    MASTER = {
+        id = "MASTER",
+        name = "Master",
+        desc = "The mastery bonuses granted to you by your chosen stats are enhanced.",
     },
     MEDIC = {
         id = "MEDIC",

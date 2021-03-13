@@ -7,6 +7,7 @@ local character = ns.character
 local characterState = ns.state.character.state
 local consequences = ns.consequences
 local constants = ns.constants
+local feats = ns.resources.feats
 local rolls = ns.state.rolls
 local rules = ns.rules
 local traits = ns.resources.traits
@@ -16,6 +17,7 @@ local utils = ns.utils
 local ACTIONS = constants.ACTIONS
 local ACTION_LABELS = constants.ACTION_LABELS
 local CRIT_TYPES = constants.CRIT_TYPES
+local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
 local TURN_TYPES = constants.TURN_TYPES
 
@@ -267,6 +269,14 @@ ui.modules.actions.modules.healing.getOptions = function(options)
                         order = 1,
                         checkBuff = true,
                     }),
+                    masterText = {
+                        order = 2,
+                        type = "description",
+                        name = COLOURS.FEATS.GENERIC .. "You can remove an extra Critical Wound from the same player at no cost.|r",
+                        hidden = function()
+                            return not character.hasFeat(FEATS.MASTER)
+                        end,
+                    }
                 }
             }
         }

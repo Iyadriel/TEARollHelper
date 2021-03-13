@@ -123,7 +123,7 @@ end
 -- [[ Special case: Focus ]]
 
 local function canUseFocus()
-    return hasFeat(FEATS.FOCUS) or hasOffenceMastery()
+    return hasFeat(FEATS.FOCUS) or (hasOffenceMastery() and not hasFeat(FEATS.MASTER))
 end
 
 -- [[ Actions ]]

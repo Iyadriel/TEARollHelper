@@ -605,7 +605,7 @@ local function getRollModeModifier(action, turnTypeID)
     local enemyId = environment.state.enemyId.get()
     local utilityTypeID = state.utility.utilityTypeID
 
-    local modifier = rules.rolls.getRollModeModifier(action, advantageBuff, disadvantageDebuff, enemyId, utilityTypeID)
+    local modifier = rules.rolls.getRollModeModifier(action, turnTypeID, advantageBuff, disadvantageDebuff, enemyId, utilityTypeID)
 
     return modifier
 end
