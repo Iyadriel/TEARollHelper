@@ -14,7 +14,6 @@ local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
 local TRAITS = traits.TRAITS
 
 local MAX_DAMAGE_PREVENTED = 15
-local MAX_BRACE_CHARGES = 3
 
 local function calculateDefendValue(roll, damageType, defence, buff)
     return roll + rules.common.calculateDefenceStat(damageType, defence, buff)
@@ -22,6 +21,10 @@ end
 
 local function canUseBraceSystem()
     return character.hasDefenceMastery()
+end
+
+local function getMaxBraceCharges()
+    return character.hasFeat(FEATS.MASTER) and 5 or 3
 end
 
 local function calculateBraceDefenceBonus(numBraceCharges)
@@ -92,10 +95,10 @@ end
 
 rules.defence = {
     MAX_DAMAGE_PREVENTED = MAX_DAMAGE_PREVENTED,
-    MAX_BRACE_CHARGES = MAX_BRACE_CHARGES,
 
     calculateDefendValue = calculateDefendValue,
     canUseBraceSystem = canUseBraceSystem,
+    getMaxBraceCharges = getMaxBraceCharges,
     calculateBraceDefenceBonus = calculateBraceDefenceBonus,
     calculateDamageTaken = calculateDamageTaken,
     calculateDamagePrevented = calculateDamagePrevented,

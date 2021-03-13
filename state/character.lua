@@ -16,7 +16,6 @@ local weaknesses = ns.resources.weaknesses
 local CONSCIOUSNESS_STATES = constants.CONSCIOUSNESS_STATES
 local EVENTS = bus.EVENTS
 local FEATS = feats.FEATS
-local MAX_BRACE_CHARGES = rules.defence.MAX_BRACE_CHARGES
 local STATS = constants.STATS
 local TRAITS = traits.TRAITS
 local WEAKNESSES = weaknesses.WEAKNESSES
@@ -42,7 +41,7 @@ characterState.initState = function()
 
         defence = {
             damagePrevented = 0,
-            numBraceCharges = MAX_BRACE_CHARGES,
+            numBraceCharges = rules.defence.getMaxBraceCharges(),
         },
 
         healing = {
@@ -63,6 +62,7 @@ characterState.initState = function()
     }
 
     cache.maxNumGreaterHealSlots = rules.healing.getMaxGreaterHealSlots()
+    cache.maxNumBraceCharges = rules.defence.getMaxBraceCharges()
     cache.maxNumBloodHarvestSlots = rules.offence.getMaxBloodHarvestSlots()
 end
 
@@ -206,7 +206,7 @@ characterState.state = {
             end,
             reset = function()
                 characterState.state.defence.damagePrevented.set(0)
-                characterState.state.defence.numBraceCharges.restore()
+                characterState.state.defence.numBraceCharges.restoreOne()
             end,
         },
         numBraceCharges = {
@@ -219,15 +219,40 @@ characterState.state = {
                     bus.fire(EVENTS.BRACE_CHARGES_CHANGED, numBraceCharges)
                 end
             end,
+            update = function()
+                local numSlots = state.defence.numBraceCharges
+                local maxNumSlots = rules.defence.getMaxBraceCharges()
+
+                if numSlots > maxNumSlots then
+                    characterState.state.defence.numBraceCharges.set(maxNumSlots)
+                    TEARollHelper:Debug("Reduced remaining Brace charges because max slots changed.")
+                elseif numSlots < maxNumSlots then
+                    local diff = maxNumSlots - cache.maxNumBraceCharges
+                    if diff > 0 then
+                        TEARollHelper:Debug("Increased remaining Brace charges by " .. diff .. " because max slots increased.")
+                        characterState.state.defence.numBraceCharges.restore(diff)
+                    end
+                end
+
+                cache.maxNumBraceCharges = maxNumSlots
+            end,
             use = function(numBraceCharges)
                 if numBraceCharges > 0 and state.defence.numBraceCharges > 0 then
                     characterState.state.defence.numBraceCharges.set(state.defence.numBraceCharges - numBraceCharges)
                     bus.fire(EVENTS.BRACE_CHARGES_USED, numBraceCharges)
                 end
             end,
-            restore = function()
-                if state.defence.numBraceCharges < MAX_BRACE_CHARGES then
+            restore = function(numCharges)
+                if state.defence.numBraceCharges + numCharges <= rules.defence.getMaxBraceCharges() then
+                    characterState.state.defence.numBraceCharges.set(state.defence.numBraceCharges + numCharges)
+                end
+            end,
+            --  used when cycling dmg prevented
+            restoreOne = function()
+                if state.defence.numBraceCharges < rules.defence.getMaxBraceCharges() then
                     characterState.state.defence.numBraceCharges.set(state.defence.numBraceCharges + 1)
+
+                    -- prints msg to chat
                     bus.fire(EVENTS.BRACE_CHARGE_RESTORED)
                 end
             end,
@@ -403,7 +428,7 @@ local onStatUpdate = {
         -- but we don't want to reset them when swapping from one build with brace to another with brace.
         -- hence the check here.
         if not rules.defence.canUseBraceSystem() then
-            characterState.state.defence.numBraceCharges.set(MAX_BRACE_CHARGES)
+            characterState.state.defence.numBraceCharges.set(rules.defence.getMaxBraceCharges()) -- TODO
         end
     end,
     [STATS.spirit] = function()
@@ -421,6 +446,7 @@ bus.addListener(EVENTS.CHARACTER_STAT_CHANGED, function(stat, value)
 end)
 
 local function onFeatUpdate()
+    characterState.state.defence.numBraceCharges.update()
     characterState.state.healing.numGreaterHealSlots.update()
     resetRemainingOutOfCombatHeals("feat changed")
     character.clearExcessTraits()

@@ -38,6 +38,10 @@ end
 
 local function calculateDamageRiskToPlayer(dmgRiskToAlly)
     if character.hasDefenceProficiency() then
+        if character.hasFeat(FEATS.MASTER) then
+            return ceil(dmgRiskToAlly / 3)
+        end
+
         return ceil(dmgRiskToAlly / 2)
     end
 
