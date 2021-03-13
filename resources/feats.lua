@@ -42,6 +42,7 @@ feats.FEAT_KEYS = {
     "PROFESSIONAL",
     "SHEPHERD_OF_THE_WICKED",
     "TRAUMA_RESPONSE",
+    "VANGUARD",
     "VENGEANCE",
     "WARDER",
 }
@@ -219,6 +220,17 @@ local FEATS = {
         id = "TRAUMA_RESPONSE",
         name = "Trauma Response",
         desc = "Your cost for removing a Critical Wound from yourself or another character is now 1 Greater Heal Slot.",
+    },
+    VANGUARD = {
+        id = "VANGUARD",
+        name = "Vanguard",
+        desc = "Your damage dealt is increased by half of your Defence rounded down. Your damage taken is decreased and your healing received is increased by half of your Offense rounded down.",
+        requiredStats = {
+            {
+                [STATS.offence] = 4,
+                [STATS.defence] = 4,
+            },
+        },
     },
     VENGEANCE = {
         id = "VENGEANCE",

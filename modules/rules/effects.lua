@@ -3,15 +3,22 @@ local _, ns = ...
 local character = ns.character
 local constants = ns.constants
 local environment = ns.state.environment
+local feats = ns.resources.feats
 local rules = ns.rules
 local weaknesses = ns.resources.weaknesses
 
-local INCOMING_HEAL_SOURCES = constants.INCOMING_HEAL_SOURCES
+local FEATS = feats.FEATS
 local WEAKNESSES = weaknesses.WEAKNESSES
+
+local INCOMING_HEAL_SOURCES = constants.INCOMING_HEAL_SOURCES
 
 local function calculateEffectiveIncomingDamage(incomingDamage, damageTakenBuff, canBeMitigated)
     if damageTakenBuff > 0 or canBeMitigated then
         incomingDamage = incomingDamage + damageTakenBuff
+    end
+
+    if character.hasFeat(FEATS.VANGUARD) then
+        incomingDamage = rules.feats.applyVanguardDamageReduction(incomingDamage)
     end
 
     if character.hasWeakness(WEAKNESSES.GLASS_CANNON) then
@@ -47,6 +54,10 @@ end
 
 local function calculateHealingReceived(incomingHealAmount, source, currentHealth, maxHealth)
     local amountHealed = incomingHealAmount
+
+    if character.hasFeat(FEATS.VANGUARD) then
+        amountHealed = rules.feats.applyVanguardDamageHealingReceivedBonus(amountHealed)
+    end
 
     if character.hasWeakness(WEAKNESSES.CORRUPTED) and source ~= INCOMING_HEAL_SOURCES.SELF then
         amountHealed = applyCorruptionModifier(amountHealed)

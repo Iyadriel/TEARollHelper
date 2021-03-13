@@ -47,6 +47,7 @@ local function getAttack(attackIndex, roll, rollBuff, critType, threshold, stat,
     roll = rules.rolls.calculateRoll(roll, rollBuff)
     attackValue = rules.offence.calculateAttackValue(roll, stat, statBuff)
     dmg = rules.offence.calculateAttackDmg(threshold, attackValue, baseDmgBuff, damageDoneBuff)
+    dmg = rules.damageDone.calculateDamageDone(dmg)
 
     if rules.offence.canProcAdrenaline(attackIndex) then
         hasAdrenalineProc = rules.offence.hasAdrenalineProc(threshold, attackValue)
@@ -162,6 +163,7 @@ local function getDefence(roll, rollBuff, defenceType, threshold, damageType, dm
 
     if isCrit then
         retaliateDmg = rules.defence.calculateRetaliationDamage(defence)
+        retaliateDmg = rules.damageDone.calculateDamageDone(retaliateDmg)
     end
 
     if rules.feats.canProcBulwarkOfHope() then
@@ -222,6 +224,7 @@ local function getMeleeSave(roll, rollBuff, defenceType, threshold, damageType, 
         hasCounterForceProc = rules.meleeSave.hasCounterForceProc(meleeSaveValue, threshold)
         if hasCounterForceProc then
             counterForceDmg = rules.meleeSave.calculateCounterForceProcDmg(defence)
+            counterForceDmg = rules.damageDone.calculateDamageDone(counterForceDmg)
         end
     end
 
@@ -339,6 +342,7 @@ local function getHealing(roll, rollBuff, critType, spirit, spiritBuff, healingD
     chasticeActive = canUseChastice and activeTraits[Chastice.id]
     if chasticeActive then
         chasticeDmg = Chastice:GetDamageDone(amountHealed)
+        chasticeDmg = rules.damageDone.calculateDamageDone(chasticeDmg)
     end
 
     return {
@@ -428,12 +432,13 @@ local function getHolyBulwark(dmgRisk, damageTakenBuff, isSave)
     return {
         dmgRisk = dmgRisk,
         damagePrevented = damagePrevented,
-        retaliateDmg = dmgRisk
+        retaliateDmg = rules.damageDone.calculateDamageDone(dmgRisk)
     }
 end
 
 local function getShieldSlam(baseDmgBuff, defence, defenceBuff)
     local dmg = rules.traits.calculateShieldSlamDmg(baseDmgBuff, defence, defenceBuff)
+    dmg = rules.damageDone.calculateDamageDone(dmg)
 
     return {
         dmg = dmg
