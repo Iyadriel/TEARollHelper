@@ -2,9 +2,11 @@ local _, ns = ...
 
 local character = ns.character
 local constants = ns.constants
+local feats = ns.resources.feats
 local rules = ns.rules
 local weaknesses = ns.resources.weaknesses
 
+local FEATS = feats.FEATS
 local WEAKNESSES = weaknesses.WEAKNESSES
 
 local STATS = constants.STATS
@@ -65,7 +67,8 @@ local function calculateMaxHealth(stamina, staminaBuff, maxHealthBuff)
     maxHealthBuff = maxHealthBuff or 0
     stamina = stamina + staminaBuff
 
-    local maxHealth = BASE_MAX_HEALTH + (stamina * 2) + maxHealthBuff
+    local HP_PER_STAMINA = character.hasFeat(FEATS.MASTER) and 3 or 2
+    local maxHealth = BASE_MAX_HEALTH + (stamina * HP_PER_STAMINA) + maxHealthBuff
 
     if character.hasWeakness(WEAKNESSES.FRAGILE) then
         maxHealth = maxHealth - 8

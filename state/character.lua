@@ -449,6 +449,9 @@ bus.addListener(EVENTS.CHARACTER_STAT_CHANGED, function(stat, value)
 end)
 
 local function onFeatUpdate()
+    updateMaxHealth({
+        healIfNewMaxHealthHigher = true
+    })
     characterState.state.defence.numBraceCharges.update()
     characterState.state.healing.numGreaterHealSlots.update()
     resetRemainingOutOfCombatHeals("feat changed")
