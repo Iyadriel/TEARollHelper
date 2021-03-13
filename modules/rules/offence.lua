@@ -15,7 +15,6 @@ local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
 local TRAITS = traits.TRAITS
 local WEAKNESSES = weaknesses.WEAKNESSES
 
-local PROFICIENCY_BASE_DMG_BONUS = 2
 local NUM_OFFENCE_PER_BLOOD_HARVEST_SLOT = 2
 
 -- Crits
@@ -34,7 +33,11 @@ end
 
 local function getBaseDamageBonus()
     if character.hasOffenceProficiency() then
-        return PROFICIENCY_BASE_DMG_BONUS
+        if character.hasFeat(FEATS.CYCLES_OF_LIFE_AND_DEATH) then
+            return 1
+        end
+
+        return 2
     end
 
     return 0

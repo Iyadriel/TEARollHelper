@@ -45,8 +45,13 @@ end
 
 local function applySpiritBonus(amountHealed)
     if character.hasSpiritProficiency() then
+        if character.hasFeat(FEATS.CYCLES_OF_LIFE_AND_DEATH) then
+            return amountHealed + 1
+        end
+
         return amountHealed + 2
     end
+
     return amountHealed
 end
 

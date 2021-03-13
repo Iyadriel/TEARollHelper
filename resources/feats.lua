@@ -22,6 +22,7 @@ feats.FEAT_KEYS = {
     "BULWARK_OF_HOPE",
     "CHAPLAIN_OF_VIOLENCE",
     "COUNTER_FORCE",
+    "CYCLES_OF_LIFE_AND_DEATH",
     "DEFENSIVE_TACTICIAN",
     "DIVINE_PURPOSE",
     "ETERNAL_SACRIFICE",
@@ -89,6 +90,18 @@ local FEATS = {
         id = "COUNTER_FORCE",
         name = "Counter-Force",
         desc = "Your melee save rolls only benefit from half of your Defence stat (rounded up), but if you manage the roll you deal damage back to the attacker by an amount equal to your Defence stat.",
+    },
+    CYCLES_OF_LIFE_AND_DEATH = {
+        id = "CYCLES_OF_LIFE_AND_DEATH",
+        name = "Cycles of Life and Death",
+        desc = "The benefits from your chosen masteries are half as effective, but when rolling Offence Attack or Spirit Healing on a player turn you can perform both actions at the same time.",
+        note = "The addon will adjust your masteries, but Attack and Healing will still be displayed as separate actions.",
+        requiredStats = {
+            {
+                [STATS.offence] = 4,
+                [STATS.spirit] = 4,
+            },
+        },
     },
     DEFENSIVE_TACTICIAN = {
         id = "DEFENSIVE_TACTICIAN",
