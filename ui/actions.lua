@@ -49,22 +49,26 @@ ui.modules.actions.getOptions = function(options)
             end,
             args = {
                 lifeWithin = lifeWithin,
-                shieldSlam = ui.helpers.traitButton(TRAITS.SHIELD_SLAM, {
+                markOfBenevolence = ui.helpers.traitButton(TRAITS.MARK_OF_BENEVOLENCE, {
                     order = 2,
+                    width = "full",
+                }),
+                shieldSlam = ui.helpers.traitButton(TRAITS.SHIELD_SLAM, {
+                    order = 3,
                     name = function()
                         return COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.SHIELD_SLAM.name .. ": Deal " .. rolls.traits.getShieldSlam().dmg .. " damage"
                     end,
                     width = "full",
                 }),
-                attack = ui.modules.actions.modules.attack.getOptions({ order = 3 }),
-                cc = ui.modules.actions.modules.cc.getOptions({ order = 4 }),
+                attack = ui.modules.actions.modules.attack.getOptions({ order = 4 }),
+                cc = ui.modules.actions.modules.cc.getOptions({ order = 5 }),
                 heal = ui.modules.actions.modules.healing.getOptions({
-                    order = 5,
+                    order = 6,
                     outOfCombat = false,
                     turnTypeID = TURN_TYPES.PLAYER.id,
                 }),
-                buff = ui.modules.actions.modules.buff.getOptions({ order = 6 }),
-                utility = ui.modules.actions.modules.utility.getOptions({ order = 7, turnTypeID = TURN_TYPES.PLAYER.id }),
+                buff = ui.modules.actions.modules.buff.getOptions({ order = 7 }),
+                utility = ui.modules.actions.modules.utility.getOptions({ order = 8, turnTypeID = TURN_TYPES.PLAYER.id }),
             }
         },
         enemyTurn = {

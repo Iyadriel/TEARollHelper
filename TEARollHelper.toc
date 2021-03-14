@@ -30,6 +30,7 @@ models/buff-effect/buff-effect-damage-taken.lua
 models/buff-effect/buff-effect-disadvantage.lua
 models/buff-effect/buff-effect-dot.lua
 models/buff-effect/buff-effect-healing-done.lua
+models/buff-effect/buff-effect-healing-taken.lua
 models/buff-effect/buff-effect-hot.lua
 models/buff-effect/buff-effect-max-health.lua
 models/buff-effect/buff-effect-roll.lua
@@ -46,6 +47,7 @@ models/trait/apex-protector.lua
 models/trait/artisan.lua
 models/trait/chastice.lua
 models/trait/critical-mass.lua
+models/trait/mark-of-benevolence.lua
 models/unit.lua
 
 resources/critical-wounds.lua
@@ -138,6 +140,7 @@ ui/actions-tostring.lua
 ui/buffs.lua
 ui/buffs/buff-button.lua
 ui/buffs/new-buff.lua
+ui/buffs/special-buffs.lua
 ui/chat.lua
 
 ui/config.lua

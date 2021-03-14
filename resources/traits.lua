@@ -13,6 +13,7 @@ local ApexProtector = models.ApexProtector:New()
 local Artisan = models.Artisan:New()
 local Chastice = models.Chastice:New()
 local CriticalMass = models.CriticalMass:New()
+local MarkOfBenevolence = models.MarkOfBenevolence:New()
 
 local ACTIONS = constants.ACTIONS
 local STATS = constants.STATS
@@ -32,6 +33,7 @@ traits.TRAIT_KEYS = {
     "HOLY_BULWARK",
     "LIFE_PULSE",
     "LIFE_WITHIN",
+    MarkOfBenevolence.id,
     "MOMENT_OF_EXCELLENCE",
     "PRESENCE_OF_VIRTUE",
     "REAP",
@@ -104,6 +106,7 @@ local TRAITS = {
         icon = "Interface\\Icons\\ability_druid_flourish",
         numCharges = 1,
     },
+    [MarkOfBenevolence.id] = MarkOfBenevolence,
     MOMENT_OF_EXCELLENCE = {
         id = "MOMENT_OF_EXCELLENCE",
         name = "Moment of Excellence",

@@ -19,7 +19,7 @@ local function applyVanguardDamageReduction(dmg)
     return dmg - halfOfOffenceRoundedDown()
 end
 
-local function applyVanguardDamageHealingReceivedBonus(incomingHealAmount)
+local function applyVanguardHealingReceivedBonus(incomingHealAmount)
     return incomingHealAmount + halfOfOffenceRoundedDown()
 end
 
@@ -28,5 +28,5 @@ rules.feats = {
     canProc = canProc,
     applyVanguardDamageDoneBonus = applyVanguardDamageDoneBonus,
     applyVanguardDamageReduction = applyVanguardDamageReduction,
-    applyVanguardDamageHealingReceivedBonus = applyVanguardDamageHealingReceivedBonus,
+    applyVanguardHealingReceivedBonus = applyVanguardHealingReceivedBonus,
 }

@@ -38,6 +38,7 @@ buffsState.initState = function()
             damageDone = 0,
             damageTaken = 0,
             healingDone = 0,
+            healingTaken = 0,
             utilityBonus = 0,
         },
 
@@ -93,6 +94,7 @@ buffsState.state = {
         damageDone = basicGetSet("buffs", "damageDone"),
         damageTaken = basicGetSet("buffs", "damageTaken"),
         healingDone = basicGetSet("buffs", "healingDone"),
+        healingTaken = basicGetSet("buffs", "healingTaken"),
         utilityBonus = basicGetSet("buffs", "utilityBonus"),
     },
     activeBuffs = {

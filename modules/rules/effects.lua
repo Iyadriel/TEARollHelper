@@ -52,11 +52,11 @@ local function applyCorruptionModifier(healAmount)
     return floor(healAmount / 2)
 end
 
-local function calculateHealingReceived(incomingHealAmount, source, currentHealth, maxHealth)
-    local amountHealed = incomingHealAmount
+local function calculateHealingReceived(incomingHealAmount, source, currentHealth, maxHealth, healingTakenBuff)
+    local amountHealed = incomingHealAmount + healingTakenBuff
 
     if character.hasFeat(FEATS.VANGUARD) then
-        amountHealed = rules.feats.applyVanguardDamageHealingReceivedBonus(amountHealed)
+        amountHealed = rules.feats.applyVanguardHealingReceivedBonus(amountHealed)
     end
 
     if character.hasWeakness(WEAKNESSES.CORRUPTED) and source ~= INCOMING_HEAL_SOURCES.SELF then

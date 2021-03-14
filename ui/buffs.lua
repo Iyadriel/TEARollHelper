@@ -10,6 +10,7 @@ local MAX_BUFFS = 8
 ui.modules.buffs.modules = {
     buffButton = {},
     newBuff = {},
+    specialBuffs = {},
 }
 
 --[[ local options = {
@@ -57,6 +58,7 @@ ui.modules.buffs.getOptions = function(options)
                 end)()
             },
             newBuff = ui.modules.buffs.modules.newBuff.getOptions({ order = 1 }),
+            specialBuffs = ui.modules.buffs.modules.specialBuffs.getOptions({ order = 2 }),
         }
     }
 end
