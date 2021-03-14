@@ -31,6 +31,7 @@ feats.FEAT_KEYS = {
     "INSPIRING_PRESENCE",
     "KEEN_SENSE",
     "LEADER",
+    "LIFE_SENTINEL",
     "LIVING_BARRICADE",
     "MASTER",
     "MEDIC",
@@ -162,6 +163,11 @@ local FEATS = {
         name = "Leader",
         desc = "You can now buff with the Offence stat instead of the Spirit stat.",
         note = "The addon will automatically use the highest stat.",
+    },
+    LIFE_SENTINEL = {
+        id = "LIFE_SENTINEL",
+        name = "Life Sentinel",
+        desc = "Place a blessing on a friendly player, whenever you heal someone the amount of healing is duplicated onto your chosen player. You can switch out the chosen player once per player turn. Healing the blessed player causes no additional benefits, a player can only benefit from one Life Sentinel at a time.",
     },
     LIVING_BARRICADE = {
         id = "LIVING_BARRICADE",

@@ -349,6 +349,7 @@ local function getHealing(roll, rollBuff, critType, spirit, spiritBuff, healingD
         hasBulwarkOfHopeProc = hasBulwarkOfHopeProc,
         hasChaplainOfViolenceProc = hasChaplainOfViolenceProc,
         chaplainOfViolenceBonusDamage = chaplainOfViolenceBonusDamage,
+        hasLifeSentinelProc = rules.feats.canProc(FEATS.LIFE_SENTINEL),
         usesParagon = usesParagon,
         playersHealableWithParagon = playersHealableWithParagon,
         traits = {

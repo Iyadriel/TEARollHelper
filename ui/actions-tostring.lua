@@ -164,6 +164,10 @@ local function healingToString(healing)
                 msg = msg .. healColour .. "You heal for " .. amount .. " HP.|r"
             end
         end
+
+        if healing.hasLifeSentinelProc then
+            msg = msg .. COLOURS.FEATS.GENERIC .. " You also heal your blessed player for " .. amount .. " HP.|r"
+        end
     elseif not healing.canStillHeal then
         msg = COLOURS.ERROR .. "You must use Greater Heals if you want to perform more healing out of combat."
     else
