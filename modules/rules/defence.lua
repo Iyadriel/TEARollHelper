@@ -74,10 +74,6 @@ end
 
 -- Feat: Defensive Tactician
 
-local function canProcDefensiveTactician()
-    return character.hasFeat(FEATS.DEFENSIVE_TACTICIAN)
-end
-
 local function hasDefensiveTacticianProc(damageTaken)
     return damageTaken <= 0
 end
@@ -106,8 +102,6 @@ rules.defence = {
     calculateRetaliationDamage = calculateRetaliationDamage,
 
     hasBulwarkOfHopeProc = hasBulwarkOfHopeProc,
-
-    canProcDefensiveTactician = canProcDefensiveTactician,
     hasDefensiveTacticianProc = hasDefensiveTacticianProc,
 
     shouldShowPreRollUI = shouldShowPreRollUI,

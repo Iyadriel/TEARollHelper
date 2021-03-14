@@ -24,9 +24,6 @@ local function calculateDamagePrevented(dmgRisk)
     end
     return 0
 end
-local function canProcCounterForce()
-    return character.hasFeat(FEATS.COUNTER_FORCE)
-end
 
 local function hasCounterForceProc(meleeSaveValue, threshold)
     return meleeSaveValue >= threshold
@@ -74,7 +71,6 @@ rules.meleeSave = {
     calculateMeleeSaveValue = calculateMeleeSaveValue,
     calculateDamagePrevented = calculateDamagePrevented,
 
-    canProcCounterForce = canProcCounterForce,
     hasCounterForceProc = hasCounterForceProc,
     calculateCounterForceProcDmg = calculateCounterForceProcDmg,
 

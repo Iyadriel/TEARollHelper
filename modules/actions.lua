@@ -3,9 +3,11 @@ local _, ns = ...
 local constants = ns.constants
 local rules = ns.rules
 
+local feats = ns.resources.feats
 local traits = ns.resources.traits
 
 local CRIT_TYPES = constants.CRIT_TYPES
+local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
 
 local Chastice = TRAITS.CHASTICE
@@ -49,8 +51,8 @@ local function getAttack(attackIndex, roll, rollBuff, critType, threshold, stat,
     dmg = rules.offence.calculateAttackDmg(threshold, attackValue, baseDmgBuff, damageDoneBuff)
     dmg = rules.damageDone.calculateDamageDone(dmg)
 
-    if rules.offence.canProcAdrenaline(attackIndex) then
-        hasAdrenalineProc = rules.offence.hasAdrenalineProc(threshold, attackValue)
+    if rules.feats.canProc(FEATS.ADRENALINE) then
+        hasAdrenalineProc = rules.offence.hasAdrenalineProc(attackIndex, threshold, attackValue)
     end
 
     if rules.offence.canUseBloodHarvest() then
@@ -76,7 +78,7 @@ local function getAttack(attackIndex, roll, rollBuff, critType, threshold, stat,
         shatterSoulEnabled = rules.offence.shatterSoulEnabled(dmg, enemyId)
     end
 
-    if rules.offence.canProcMercyFromPain() then
+    if rules.feats.canProc(FEATS.MERCY_FROM_PAIN) then
         hasMercyFromPainProc = rules.offence.hasMercyFromPainProc(dmg)
     end
 
@@ -84,7 +86,7 @@ local function getAttack(attackIndex, roll, rollBuff, critType, threshold, stat,
         mercyFromPainBonusHealing = rules.offence.calculateMercyFromPainBonusHealing(isAOE)
     end
 
-    if rules.offence.canProcVengeance() then
+    if rules.feats.canProc(FEATS.VENGEANCE) then
         hasVengeanceProc = rules.offence.hasVengeanceProc(originalRoll)
     end
 
@@ -166,11 +168,11 @@ local function getDefence(roll, rollBuff, defenceType, threshold, damageType, dm
         retaliateDmg = rules.damageDone.calculateDamageDone(retaliateDmg)
     end
 
-    if rules.feats.canProcBulwarkOfHope() then
+    if rules.feats.canProc(FEATS.BULWARK_OF_HOPE) then
         hasBulwarkOfHopeProc = rules.defence.hasBulwarkOfHopeProc(damageTaken)
     end
 
-    if rules.defence.canProcDefensiveTactician() then
+    if rules.feats.canProc(FEATS.DEFENSIVE_TACTICIAN) then
         hasDefensiveTacticianProc = rules.defence.hasDefensiveTacticianProc(damageTaken)
     end
 
@@ -216,11 +218,11 @@ local function getMeleeSave(roll, rollBuff, defenceType, threshold, damageType, 
 
     damageTaken = rules.defence.calculateDamageTaken(defenceType, threshold, meleeSaveValue, effectiveIncomingDamage)
 
-    if rules.feats.canProcBulwarkOfHope() then
+    if rules.feats.canProc(FEATS.BULWARK_OF_HOPE) then
         hasBulwarkOfHopeProc = rules.defence.hasBulwarkOfHopeProc(damageTaken)
     end
 
-    if rules.meleeSave.canProcCounterForce() then
+    if rules.feats.canProc(FEATS.COUNTER_FORCE) then
         hasCounterForceProc = rules.meleeSave.hasCounterForceProc(meleeSaveValue, threshold)
         if hasCounterForceProc then
             counterForceDmg = rules.meleeSave.calculateCounterForceProcDmg(defence)
@@ -228,7 +230,7 @@ local function getMeleeSave(roll, rollBuff, defenceType, threshold, damageType, 
         end
     end
 
-    if rules.defence.canProcDefensiveTactician() then
+    if rules.feats.canProc(FEATS.DEFENSIVE_TACTICIAN) then
         hasDefensiveTacticianProc = rules.defence.hasDefensiveTacticianProc(damageTaken)
     end
 
@@ -267,7 +269,7 @@ local function getRangedSave(roll, rollBuff, defenceType, threshold, spirit, buf
         damageReduction = rules.rangedSave.calculateDamageReduction(spirit)
     end
 
-    if rules.feats.canProcBulwarkOfHope() then
+    if rules.feats.canProc(FEATS.BULWARK_OF_HOPE) then
         hasBulwarkOfHopeProc = canFullyProtect
     end
 
@@ -325,11 +327,11 @@ local function getHealing(roll, rollBuff, critType, spirit, spiritBuff, healingD
             amountHealed = rules.healing.applyCritModifier(amountHealed, critType)
         end
 
-        if rules.feats.canProcBulwarkOfHope() then
+        if rules.feats.canProc(FEATS.BULWARK_OF_HOPE) then
             hasBulwarkOfHopeProc = rules.healing.hasBulwarkOfHopeProc(amountHealed)
         end
 
-        if rules.healing.canProcChaplainOfViolence() then
+        if rules.feats.canProc(FEATS.CHAPLAIN_OF_VIOLENCE) then
             hasChaplainOfViolenceProc = rules.healing.hasChaplainOfViolenceProc(amountHealed)
         end
 
@@ -386,7 +388,7 @@ local function getBuff(roll, rollBuff, critType, spirit, spiritBuff, offence, of
         amountBuffed = rules.buffing.applyCritModifier(amountBuffed, critType)
     end
 
-    if rules.feats.canProcBulwarkOfHope() then
+    if rules.feats.canProc(FEATS.BULWARK_OF_HOPE) then
         hasBulwarkOfHopeProc = rules.buffing.hasBulwarkOfHopeProc(amountBuffed)
     end
 

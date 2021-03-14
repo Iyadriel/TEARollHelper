@@ -3,12 +3,8 @@ local _, ns = ...
 local character = ns.character
 local rules = ns.rules
 
-local feats = ns.resources.feats
-
-local FEATS = feats.FEATS
-
-local function canProcBulwarkOfHope()
-    return character.hasFeat(FEATS.BULWARK_OF_HOPE)
+local function canProc(feat)
+    return character.hasFeat(feat);
 end
 
 local function halfOfOffenceRoundedDown()
@@ -29,7 +25,7 @@ end
 
 
 rules.feats = {
-    canProcBulwarkOfHope = canProcBulwarkOfHope,
+    canProc = canProc,
     applyVanguardDamageDoneBonus = applyVanguardDamageDoneBonus,
     applyVanguardDamageReduction = applyVanguardDamageReduction,
     applyVanguardDamageHealingReceivedBonus = applyVanguardDamageHealingReceivedBonus,

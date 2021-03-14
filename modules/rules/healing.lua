@@ -163,10 +163,6 @@ end
 
 -- Feat: Chaplain of Violence
 
-local function canProcChaplainOfViolence()
-    return character.hasFeat(FEATS.CHAPLAIN_OF_VIOLENCE)
-end
-
 local function hasChaplainOfViolenceProc(amountHealed)
     return amountHealed >= 3
 end
@@ -220,7 +216,6 @@ rules.healing = {
 
     hasBulwarkOfHopeProc = hasBulwarkOfHopeProc,
 
-    canProcChaplainOfViolence = canProcChaplainOfViolence,
     hasChaplainOfViolenceProc = hasChaplainOfViolenceProc,
     calculateChaplainOfViolenceBonusDamage = calculateChaplainOfViolenceBonusDamage,
 

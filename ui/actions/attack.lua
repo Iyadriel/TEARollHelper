@@ -89,7 +89,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                         name = "Damage multiple targets",
                         desc = "Spread your damage over multiple targets. This may affect how certain feats and traits behave.",
                         hidden = function()
-                            return not rules.offence.canProcMercyFromPain()
+                            return not rules.feats.canProc(FEATS.MERCY_FROM_PAIN)
                         end,
                         get = state.attack.isAOE.get,
                         set = function(info, value)
@@ -143,7 +143,7 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                         type = "description",
                         name = " ",
                         hidden = function()
-                            return not (rules.offence.canProcMercyFromPain() or character.hasFeat(FEATS.PENANCE))
+                            return not (rules.feats.canProc(FEATS.MERCY_FROM_PAIN) or character.hasFeat(FEATS.PENANCE))
                         end,
                     },
                     critType = {

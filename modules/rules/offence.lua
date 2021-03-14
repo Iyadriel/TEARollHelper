@@ -113,12 +113,8 @@ end
 
 -- Feat: Adrenaline
 
-local function canProcAdrenaline(attackIndex)
-    return attackIndex == 1 and character.hasFeat(FEATS.ADRENALINE)
-end
-
-local function hasAdrenalineProc(threshold, attackValue)
-    return attackValue >= threshold + 6
+local function hasAdrenalineProc(attackIndex, threshold, attackValue)
+    return attackIndex == 1 and attackValue >= threshold + 6
 end
 
 -- Feat: Blood Harvest
@@ -140,10 +136,6 @@ end
 
 -- Feat: Mercy from Pain
 
-local function canProcMercyFromPain()
-    return character.hasFeat(FEATS.MERCY_FROM_PAIN)
-end
-
 local function hasMercyFromPainProc(dmgDealt)
     return dmgDealt >= 5
 end
@@ -153,10 +145,6 @@ local function calculateMercyFromPainBonusHealing(attackIsAOE)
 end
 
 -- Feat: Vengeance
-
-local function canProcVengeance()
-    return character.hasFeat(FEATS.VENGEANCE)
-end
 
 local function hasVengeanceProc(roll)
     return roll >= 16
@@ -203,18 +191,15 @@ rules.offence = {
 
     getRollModeModifier = getRollModeModifier,
 
-    canProcAdrenaline = canProcAdrenaline,
     hasAdrenalineProc = hasAdrenalineProc,
 
     canUseBloodHarvest = canUseBloodHarvest,
     getMaxBloodHarvestSlots = getMaxBloodHarvestSlots,
     calculateBloodHarvestBonus = calculateBloodHarvestBonus,
 
-    canProcMercyFromPain = canProcMercyFromPain,
     hasMercyFromPainProc = hasMercyFromPainProc,
     calculateMercyFromPainBonusHealing = calculateMercyFromPainBonusHealing,
 
-    canProcVengeance = canProcVengeance,
     hasVengeanceProc = hasVengeanceProc,
 
     canUseShatterSoul = canUseShatterSoul,
