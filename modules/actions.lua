@@ -170,9 +170,7 @@ local function getDefence(roll, rollBuff, defenceType, threshold, damageType, dm
 
     if rules.feats.canProc(FEATS.BULWARK_OF_HOPE) then
         hasBulwarkOfHopeProc = rules.defence.hasBulwarkOfHopeProc(damageTaken)
-    end
-
-    if rules.feats.canProc(FEATS.DEFENSIVE_TACTICIAN) then
+    elseif rules.feats.canProc(FEATS.DEFENSIVE_TACTICIAN) then
         hasDefensiveTacticianProc = rules.defence.hasDefensiveTacticianProc(damageTaken)
     end
 
@@ -220,17 +218,13 @@ local function getMeleeSave(roll, rollBuff, defenceType, threshold, damageType, 
 
     if rules.feats.canProc(FEATS.BULWARK_OF_HOPE) then
         hasBulwarkOfHopeProc = rules.defence.hasBulwarkOfHopeProc(damageTaken)
-    end
-
-    if rules.feats.canProc(FEATS.COUNTER_FORCE) then
+    elseif rules.feats.canProc(FEATS.COUNTER_FORCE) then
         hasCounterForceProc = rules.meleeSave.hasCounterForceProc(meleeSaveValue, threshold)
         if hasCounterForceProc then
             counterForceDmg = rules.meleeSave.calculateCounterForceProcDmg(defence)
             counterForceDmg = rules.damageDone.calculateDamageDone(counterForceDmg)
         end
-    end
-
-    if rules.feats.canProc(FEATS.DEFENSIVE_TACTICIAN) then
+    elseif rules.feats.canProc(FEATS.DEFENSIVE_TACTICIAN) then
         hasDefensiveTacticianProc = rules.defence.hasDefensiveTacticianProc(damageTaken)
     end
 
@@ -329,9 +323,7 @@ local function getHealing(roll, rollBuff, critType, spirit, spiritBuff, healingD
 
         if rules.feats.canProc(FEATS.BULWARK_OF_HOPE) then
             hasBulwarkOfHopeProc = rules.healing.hasBulwarkOfHopeProc(amountHealed)
-        end
-
-        if rules.feats.canProc(FEATS.CHAPLAIN_OF_VIOLENCE) then
+        elseif rules.feats.canProc(FEATS.CHAPLAIN_OF_VIOLENCE) then
             hasChaplainOfViolenceProc = rules.healing.hasChaplainOfViolenceProc(amountHealed)
         end
 
