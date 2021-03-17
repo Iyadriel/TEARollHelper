@@ -126,6 +126,24 @@ local function basicGetSet(section, key, callback)
     }
 end
 
+local function activeTraits(action)
+    return {
+        get = function(trait)
+            return state[action].activeTraits[trait.id]
+        end,
+        toggle = function(trait)
+            if state[action].activeTraits[trait.id] then
+                state[action].activeTraits[trait.id] = false
+            else
+                state[action].activeTraits[trait.id] = true
+            end
+        end,
+        reset = function()
+            state[action].activeTraits = {}
+        end,
+    }
+end
+
 rolls.state = {
     shared = {
         versatile = {
@@ -171,21 +189,7 @@ rolls.state = {
         rollMode = basicGetSet(ACTIONS.attack, "rollMode"),
         currentRoll = basicGetSet(ACTIONS.attack, "currentRoll"),
         critType = basicGetSet(ACTIONS.attack, "critType"),
-        activeTraits = {
-            get = function(trait)
-                return state.attack.activeTraits[trait.id]
-            end,
-            toggle = function(trait)
-                if state.attack.activeTraits[trait.id] then
-                    state.attack.activeTraits[trait.id] = false
-                else
-                    state.attack.activeTraits[trait.id] = true
-                end
-            end,
-            reset = function()
-                state.attack.activeTraits = {}
-            end,
-        },
+        activeTraits = activeTraits(ACTIONS.attack),
 
         resetSlots = function()
             rolls.state.attack.numBloodHarvestSlots.set(0)
@@ -221,21 +225,7 @@ rolls.state = {
         rollMode = basicGetSet(ACTIONS.healing, "rollMode"),
         currentRoll = basicGetSet(ACTIONS.healing, "currentRoll"),
         critType = basicGetSet(ACTIONS.healing, "critType"),
-        activeTraits = {
-            get = function(trait)
-                return state.healing.activeTraits[trait.id]
-            end,
-            toggle = function(trait)
-                if state.healing.activeTraits[trait.id] then
-                    state.healing.activeTraits[trait.id] = false
-                else
-                    state.healing.activeTraits[trait.id] = true
-                end
-            end,
-            reset = function()
-                state.healing.activeTraits = {}
-            end,
-        },
+        activeTraits = activeTraits(ACTIONS.healing),
 
         resetSlots = function()
             rolls.state.healing.numGreaterHealSlots.set(0)
@@ -248,21 +238,7 @@ rolls.state = {
         rollMode = basicGetSet(ACTIONS.buff, "rollMode"),
         currentRoll = basicGetSet(ACTIONS.buff, "currentRoll"),
         critType = basicGetSet(ACTIONS.buff, "critType"),
-        activeTraits = {
-            get = function(trait)
-                return state.buff.activeTraits[trait.id]
-            end,
-            toggle = function(trait)
-                if state.buff.activeTraits[trait.id] then
-                    state.buff.activeTraits[trait.id] = false
-                else
-                    state.buff.activeTraits[trait.id] = true
-                end
-            end,
-            reset = function()
-                state.buff.activeTraits = {}
-            end,
-        },
+        activeTraits = activeTraits(ACTIONS.buff),
 
         resetSlots = function()
             rolls.state.buff.activeTraits.reset()
@@ -296,21 +272,7 @@ rolls.state = {
         rollMode = basicGetSet(ACTIONS.defend, "rollMode"),
         currentRoll = basicGetSet(ACTIONS.defend, "currentRoll"),
         critType = basicGetSet(ACTIONS.defend, "critType"),
-        activeTraits = {
-            get = function(trait)
-                return state.defend.activeTraits[trait.id]
-            end,
-            toggle = function(trait)
-                if state.defend.activeTraits[trait.id] then
-                    state.defend.activeTraits[trait.id] = false
-                else
-                    state.defend.activeTraits[trait.id] = true
-                end
-            end,
-            reset = function()
-                state.defend.activeTraits = {}
-            end,
-        },
+        activeTraits = activeTraits(ACTIONS.defend),
 
         resetSlots = function()
             rolls.state.defend.numBraceCharges.set(0)
@@ -329,21 +291,7 @@ rolls.state = {
         damageRisk = basicGetSet(ACTIONS.meleeSave, "damageRisk"),
         rollMode = basicGetSet(ACTIONS.meleeSave, "rollMode"),
         currentRoll = basicGetSet(ACTIONS.meleeSave, "currentRoll"),
-        activeTraits = {
-            get = function(trait)
-                return state.meleeSave.activeTraits[trait.id]
-            end,
-            toggle = function(trait)
-                if state.meleeSave.activeTraits[trait.id] then
-                    state.meleeSave.activeTraits[trait.id] = false
-                else
-                    state.meleeSave.activeTraits[trait.id] = true
-                end
-            end,
-            reset = function()
-                state.meleeSave.activeTraits = {}
-            end,
-        },
+        activeTraits = activeTraits(ACTIONS.meleeSave),
 
         resetSlots = function()
             rolls.state.meleeSave.activeTraits.reset()
