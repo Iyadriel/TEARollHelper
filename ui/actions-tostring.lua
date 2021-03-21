@@ -118,12 +118,12 @@ local function buffToString(buff)
     if buff.amountBuffed > 0 then
         if buff.isCrit then
             if buff.critType == CRIT_TYPES.VALUE_MOD then
-                msg = COLOURS.CRITICAL .. "BIG BUFF!|r " .. COLOURS.BUFF .. "You buff 1 person for " .. buff.amountBuffed .. " (" .. buff.amountBuffedForDamage .. " if buffing damage)!"
+                msg = COLOURS.CRITICAL .. "BIG BUFF!|r " .. COLOURS.BUFF .. "You buff 1 person's roll by " .. buff.amountBuffed .. " (" .. buff.amountBuffedForDamage .. " if buffing damage)!"
             else
-                msg = COLOURS.CRITICAL .. "MANY BUFFS!|r " .. COLOURS.BUFF .. "You buff 3 people for " .. buff.amountBuffed .. " (" .. buff.amountBuffedForDamage .. " if buffing damage)!"
+                msg = COLOURS.CRITICAL .. "MANY BUFFS!|r " .. COLOURS.BUFF .. "You buff 3 people's 's rolls by " .. buff.amountBuffed .. " (" .. buff.amountBuffedForDamage .. " if buffing damage)!"
             end
         else
-            msg = COLOURS.BUFF .. "You buff someone for " .. buff.amountBuffed .. " (" .. buff.amountBuffedForDamage .. " if buffing damage)."
+            msg = COLOURS.BUFF .. "You buff someone's roll by " .. buff.amountBuffed .. " (" .. buff.amountBuffedForDamage .. " if buffing damage)."
         end
 
         if buff.usesInspiringPresence then
