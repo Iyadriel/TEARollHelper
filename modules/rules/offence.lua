@@ -31,61 +31,12 @@ local function isCrit(roll)
     return roll >= critReq
 end
 
--- Core
-
-local function getBaseDamageBonus()
-    if character.hasOffenceProficiency() then
-        if character.hasFeat(FEATS.CYCLES_OF_LIFE_AND_DEATH) then
-            return 1
-        elseif character.hasFeat(FEATS.MASTER) then
-            return 4
-        end
-
-        return 2
-    end
-
-    return 0
-end
-
-local function getBaseDamage()
-    return 1 + getBaseDamageBonus()
-end
-
-local function getBaseDamageAfterBuffs(baseDmgBuff)
-    return getBaseDamage() + baseDmgBuff
-end
-
 local function calculateAttackValue(roll, offence, buff)
     return roll + rules.common.calculateOffenceStat(offence, buff)
 end
 
-local function calculateAttackDmg(threshold, attackValue, baseDmgBuff, damageDoneBuff)
-    local overkill = attackValue - threshold
-    local damage = 0
-
-    if overkill >= 0 then
-        local baseDamage = getBaseDamageAfterBuffs(baseDmgBuff)
-        damage = baseDamage + floor(overkill / 2) + damageDoneBuff
-
-        if character.hasWeakness(WEAKNESSES.GLASS_CANNON) then
-            damage = damage + 2
-        end
-    elseif character.hasFeat(FEATS.ONSLAUGHT) then
-        local baseDamage = getBaseDamageAfterBuffs(baseDmgBuff)
-        damage = baseDamage + damageDoneBuff
-    end
-
-    return damage
-end
-
-local function applyCritModifier(dmg)
-    dmg = dmg * 2
-
-    if character.hasRacialTrait(RACIAL_TRAITS.MIGHT_OF_THE_MOUNTAIN) then
-        dmg = dmg + 4
-    end
-
-    return dmg
+local function isSuccessful(attackValue, threshold)
+    return attackValue >= threshold
 end
 
 -- Enemies
@@ -119,51 +70,10 @@ local function hasAdrenalineProc(attackIndex, threshold, attackValue)
     return attackIndex == 1 and attackValue >= threshold + 6
 end
 
--- Feat: Blood Harvest
-
-local function canUseBloodHarvest()
-    return character.hasFeat(FEATS.BLOOD_HARVEST)
-end
-
-local function getMaxBloodHarvestSlots()
-    local offence = character.getPlayerOffence()
-    local numSlots = max(0, floor(offence / NUM_OFFENCE_PER_BLOOD_HARVEST_SLOT))
-
-    return numSlots
-end
-
-local function calculateBloodHarvestBonus(numBloodHarvestSlots)
-    return numBloodHarvestSlots * 5
-end
-
--- Feat: Mercy from Pain
-
-local function hasMercyFromPainProc(dmgDealt)
-    return dmgDealt >= 5
-end
-
-local function calculateMercyFromPainBonusHealing(attackIsAOE)
-    return attackIsAOE and 4 or 2
-end
-
 -- Feat: Vengeance
 
 local function hasVengeanceProc(roll)
     return roll >= 16
-end
-
--- Trait: Vindication
-
-local function canProcVindication()
-    return character.hasTrait(TRAITS.VINDICATION)
-end
-
-local function hasVindicationProc(dmgDealt)
-    return dmgDealt > 0
-end
-
-local function calculateVindicationHealing(dmgDealt)
-    return ceil(dmgDealt / 2)
 end
 
 -- Rolling
@@ -174,21 +84,13 @@ end
 
 rules.offence = {
     isCrit = isCrit,
-
-    getBaseDamageBonus = getBaseDamageBonus,
-    getBaseDamageAfterBuffs = getBaseDamageAfterBuffs,
     calculateAttackValue = calculateAttackValue,
-    calculateAttackDmg = calculateAttackDmg,
-    applyCritModifier = applyCritModifier,
+    isSuccessful = isSuccessful,
 
     getRollModeModifier = getRollModeModifier,
 
     hasAdrenalineProc = hasAdrenalineProc,
     hasVengeanceProc = hasVengeanceProc,
-
-    canProcVindication = canProcVindication,
-    hasVindicationProc = hasVindicationProc,
-    calculateVindicationHealing = calculateVindicationHealing,
 
     shouldShowPreRollUI = shouldShowPreRollUI,
 }

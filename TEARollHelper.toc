@@ -83,11 +83,11 @@ launchers.lua
 modules/rules.lua
 modules/rules/rolls.lua
 modules/rules/stats.lua
-modules/rules/damage-done.lua
 modules/rules/effects.lua
 modules/rules/environment.lua
 modules/rules/playerTurn.lua
 modules/rules/offence.lua
+modules/rules/damage.lua
 modules/rules/defence.lua
 modules/rules/cc.lua
 modules/rules/critical-wounds.lua

@@ -134,7 +134,7 @@ local function useVeseerasIre()
     rollState.state.attack.threshold.set(10)
 
     buffs.addTraitBuff(TRAITS.VESEERAS_IRE, {
-        BuffEffectStat:New(STATS.offence, rules.offence.getBaseDamageBonus()),
+        BuffEffectStat:New(STATS.offence, rules.damage.getBaseDamageBonus()),
     }, 1)
     buffs.addTraitBuff(TRAITS.VESEERAS_IRE, {
         BuffEffectStat:New(STATS.defence, -ceil(character.getPlayerOffence() / 2)),
@@ -174,23 +174,26 @@ end
 
 -- [[ Actions ]]
 
-local function confirmAttackAction(attack)
-    if character.hasFeat(FEATS.ETERNAL_SACRIFICE) and attack.dmg > 0 then
+local function confirmDamageAction(damage)
+    if character.hasFeat(FEATS.ETERNAL_SACRIFICE) and damage.dmg > 0 then
         -- TODO: only melee attacks
         characterState.state.health.heal(rules.feats.ETERNAL_SACRIFICE_HEAL_AMOUNT, INCOMING_HEAL_SOURCES.SELF)
     end
 
-    characterState.state.featsAndTraits.numBloodHarvestSlots.use(attack.numBloodHarvestSlots)
-    characterState.state.healing.numGreaterHealSlots.use(attack.numGreaterHealSlots)
+    characterState.state.featsAndTraits.numBloodHarvestSlots.use(damage.numBloodHarvestSlots)
+    characterState.state.healing.numGreaterHealSlots.use(damage.numGreaterHealSlots)
 
-    if attack.hasMercyFromPainProc then
-        buffs.addFeatBuff(FEATS.MERCY_FROM_PAIN, { BuffEffectHealingDone:New(attack.mercyFromPainBonusHealing) })
+    if damage.hasMercyFromPainProc then
+        buffs.addFeatBuff(FEATS.MERCY_FROM_PAIN, { BuffEffectHealingDone:New(damage.mercyFromPainBonusHealing) })
     end
 
-    if attack.hasVengeanceProc then
+    if damage.hasVengeanceProc then
         buffs.addFeatBuff(FEATS.VENGEANCE)
     end
+end
 
+local function confirmAttackAction(attack)
+    confirmDamageAction(attack.actions.damage)
     rollState.state.attack.attacks.add(attack)
 end
 
@@ -271,6 +274,16 @@ local actionFns = {
     [ACTIONS.rangedSave] = confirmRangedSaveAction,
 }
 
+local function useTraitCharges(action)
+    if action.traits then
+        for traitID, traitAction in pairs(action.traits) do
+            if traitAction.active then
+                useTraitCharge(TRAITS[traitID])
+            end
+        end
+    end
+end
+
 local function confirmAction(actionType, action, hideMsg)
     bus.fire(EVENTS.ACTION_PERFORMED, actionType, action, hideMsg)
 
@@ -279,11 +292,11 @@ local function confirmAction(actionType, action, hideMsg)
         actionFns[actionType](action)
     end
 
-    if action.traits then
-        for traitID, traitAction in pairs(action.traits) do
-            if traitAction.active then
-                useTraitCharge(TRAITS[traitID])
-            end
+    useTraitCharges(action)
+
+    if action.actions then
+        for _, subAction in pairs(action.actions) do
+            useTraitCharges(subAction)
         end
     end
 

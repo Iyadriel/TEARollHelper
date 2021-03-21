@@ -4,6 +4,7 @@ local constants = ns.constants
 
 local ACTIONS = {
     attack = "attack",
+    damage = "damage",
     cc = "cc",
     healing = "healing",
     buff = "buff",
@@ -15,6 +16,7 @@ local ACTIONS = {
 
 local ACTION_LABELS = {
     attack = "Attack",
+    damage = "Damage",
     cc = "CC",
     healing = "Heal",
     buff = "Buff",

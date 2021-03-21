@@ -29,82 +29,103 @@ end
 
 -- [[ Actions ]]
 
-local function getAttack(attackIndex, roll, rollBuff, critType, threshold, stat, statBuff, baseDmgBuff, damageDoneBuff, healingDoneBuff, enemyId, isAOE, numGreaterHealSlots, targetIsKO, numBloodHarvestSlots, activeTraits)
-    local attackValue
-    local dmg
-    local amountHealed = 0
-    local originalRoll = roll
+local function getAttack(attackIndex, roll, rollBuff, critType, threshold, stat, statBuff, baseDmgBuff, damageDoneBuff, enemyId, damageAction)
+    local attackValue, isSuccessful
     local isCrit = rules.offence.isCrit(roll)
     local hasAdrenalineProc = nil
-    local hasMercyFromPainProc = nil
-    local mercyFromPainBonusHealing = 0
-    local canUseCriticalMass = nil
-    local criticalMassActive = nil
-    local criticalMassBonusDamage = 0
-    local shatterSoulEnabled = false
-    local hasVengeanceProc = nil
-    local hasVindicationProc = nil
-    local vindicationHealing = 0
 
     roll = rules.rolls.calculateRoll(roll, rollBuff)
     attackValue = rules.offence.calculateAttackValue(roll, stat, statBuff)
-    dmg = rules.offence.calculateAttackDmg(threshold, attackValue, baseDmgBuff, damageDoneBuff)
-    dmg = rules.damageDone.calculateDamageDone(dmg)
+    isSuccessful = rules.offence.isSuccessful(attackValue, threshold)
 
     if rules.feats.canProc(FEATS.ADRENALINE) then
         hasAdrenalineProc = rules.offence.hasAdrenalineProc(attackIndex, threshold, attackValue)
     end
 
-    if rules.offence.canUseBloodHarvest() then
-        dmg = dmg + rules.offence.calculateBloodHarvestBonus(numBloodHarvestSlots)
-    end
-
-    if numGreaterHealSlots > 0 then
-        amountHealed = getAmountHealedWithPenance(numGreaterHealSlots, healingDoneBuff, targetIsKO)
-    end
-
-    canUseCriticalMass = CriticalMass:IsUsable(dmg)
-    criticalMassActive = canUseCriticalMass and activeTraits[CriticalMass.id]
-    if criticalMassActive then
-        criticalMassBonusDamage = CriticalMass:GetBonusDamage()
-        dmg = dmg + criticalMassBonusDamage
-    end
-
-    if isCrit and critType == CRIT_TYPES.VALUE_MOD then
-        dmg = rules.offence.applyCritModifier(dmg)
-    end
-
-    if rules.offence.canUseShatterSoul() then
-        shatterSoulEnabled = rules.offence.shatterSoulEnabled(dmg, enemyId)
-    end
-
-    if rules.feats.canProc(FEATS.MERCY_FROM_PAIN) then
-        hasMercyFromPainProc = rules.offence.hasMercyFromPainProc(dmg)
-    end
-
-    if hasMercyFromPainProc then
-        mercyFromPainBonusHealing = rules.offence.calculateMercyFromPainBonusHealing(isAOE)
-    end
-
-    if rules.feats.canProc(FEATS.VENGEANCE) then
-        hasVengeanceProc = rules.offence.hasVengeanceProc(originalRoll)
-    end
-
-    if rules.offence.canProcVindication() then
-        hasVindicationProc = rules.offence.hasVindicationProc(dmg)
-        if hasVindicationProc then
-            vindicationHealing = rules.offence.calculateVindicationHealing(dmg)
-        end
+    if not isSuccessful and rules.feats.canProc(FEATS.ONSLAUGHT) then
+        damageAction.dmg = rules.damage.calculateOnslaughtDamage(baseDmgBuff, damageDoneBuff)
     end
 
     return {
         attackValue = attackValue,
-        dmg = dmg,
-        amountHealed = amountHealed,
+        isSuccessful = isSuccessful,
         isCrit = isCrit,
         critType = critType,
         enemyId = enemyId,
         hasAdrenalineProc = hasAdrenalineProc,
+
+        actions = {
+            damage = damageAction,
+        },
+    }
+end
+
+local function getDamage(attackRoll, damageRoll, rollBuff, critType, baseDmgBuff, damageDoneBuff, healingDoneBuff, isAOE, numGreaterHealSlots, targetIsKO, numBloodHarvestSlots, activeTraits)
+    local damageValue
+    local dmg = 0
+    local amountHealed = 0
+    local isCrit = rules.offence.isCrit(attackRoll)
+    local hasMercyFromPainProc = nil
+    local mercyFromPainBonusHealing = 0
+    local canUseCriticalMass = nil
+    local criticalMassActive = nil
+    local criticalMassBonusDamage = 0
+    local hasVengeanceProc = nil
+    local hasVindicationProc = nil
+    local vindicationHealing = 0
+
+    if damageRoll then
+        damageRoll = rules.rolls.calculateRoll(damageRoll, rollBuff)
+        damageValue = rules.damage.calculateDamageValue(damageRoll)
+        dmg = rules.damage.calculateAttackDmg(damageValue, baseDmgBuff, damageDoneBuff)
+        dmg = rules.damage.calculateEffectiveOutgoingDamage(dmg)
+    end
+
+    if rules.feats.canProc(FEATS.BLOOD_HARVEST) then
+        dmg = dmg + rules.damage.calculateBloodHarvestBonus(numBloodHarvestSlots)
+    end
+
+    if damageRoll then
+        if numGreaterHealSlots > 0 then
+            amountHealed = getAmountHealedWithPenance(numGreaterHealSlots, healingDoneBuff, targetIsKO)
+        end
+
+        canUseCriticalMass = CriticalMass:IsUsable(dmg)
+        criticalMassActive = canUseCriticalMass and activeTraits[CriticalMass.id]
+        if criticalMassActive then
+            criticalMassBonusDamage = CriticalMass:GetBonusDamage()
+            dmg = dmg + criticalMassBonusDamage
+        end
+
+        if isCrit and critType == CRIT_TYPES.VALUE_MOD then
+            dmg = rules.damage.applyCritModifier(dmg)
+        end
+
+        if rules.feats.canProc(FEATS.MERCY_FROM_PAIN) then
+            hasMercyFromPainProc = rules.damage.hasMercyFromPainProc(dmg)
+        end
+
+        if hasMercyFromPainProc then
+            mercyFromPainBonusHealing = rules.damage.calculateMercyFromPainBonusHealing(isAOE)
+        end
+
+        if rules.feats.canProc(FEATS.VENGEANCE) then
+            hasVengeanceProc = rules.offence.hasVengeanceProc(attackRoll)
+        end
+
+        if rules.damage.canProcVindication() then
+            hasVindicationProc = rules.damage.hasVindicationProc(dmg)
+            if hasVindicationProc then
+                vindicationHealing = rules.damage.calculateVindicationHealing(dmg)
+            end
+        end
+    end
+
+    return {
+        dmg = dmg,
+        amountHealed = amountHealed,
+        isCrit = isCrit,
+        critType = critType,
         numGreaterHealSlots = numGreaterHealSlots,
         numBloodHarvestSlots = numBloodHarvestSlots,
         hasMercyFromPainProc = hasMercyFromPainProc,
@@ -123,10 +144,6 @@ local function getAttack(attackIndex, roll, rollBuff, critType, threshold, stat,
             [TRAITS.REAP.id] = {
                 canUse = dmg > 0,
                 active = dmg > 0 and activeTraits[TRAITS.REAP.id],
-            },
-            [TRAITS.SHATTER_SOUL.id] = {
-                canUse = shatterSoulEnabled,
-                active = shatterSoulEnabled and activeTraits[TRAITS.SHATTER_SOUL.id],
             },
             [TRAITS.VINDICATION.id] = {
                 canUse = hasVindicationProc,
@@ -165,7 +182,7 @@ local function getDefence(roll, rollBuff, defenceType, threshold, damageType, dm
 
     if isCrit then
         retaliateDmg = rules.defence.calculateRetaliationDamage(defence)
-        retaliateDmg = rules.damageDone.calculateDamageDone(retaliateDmg)
+        retaliateDmg = rules.damage.calculateEffectiveOutgoingDamage(retaliateDmg)
     end
 
     if rules.feats.canProc(FEATS.BULWARK_OF_HOPE) then
@@ -222,7 +239,7 @@ local function getMeleeSave(roll, rollBuff, defenceType, threshold, damageType, 
         hasCounterForceProc = rules.meleeSave.hasCounterForceProc(meleeSaveValue, threshold)
         if hasCounterForceProc then
             counterForceDmg = rules.meleeSave.calculateCounterForceProcDmg(defence)
-            counterForceDmg = rules.damageDone.calculateDamageDone(counterForceDmg)
+            counterForceDmg = rules.damage.calculateEffectiveOutgoingDamage(counterForceDmg)
         end
     elseif rules.feats.canProc(FEATS.DEFENSIVE_TACTICIAN) then
         hasDefensiveTacticianProc = rules.defence.hasDefensiveTacticianProc(damageTaken)
@@ -336,7 +353,7 @@ local function getHealing(roll, rollBuff, critType, spirit, spiritBuff, healingD
     chasticeActive = canUseChastice and activeTraits[Chastice.id]
     if chasticeActive then
         chasticeDmg = Chastice:GetDamageDone(amountHealed)
-        chasticeDmg = rules.damageDone.calculateDamageDone(chasticeDmg)
+        chasticeDmg = rules.damage.calculateEffectiveOutgoingDamage(chasticeDmg)
     end
 
     return {
@@ -427,13 +444,13 @@ local function getHolyBulwark(dmgRisk, damageTakenBuff, isSave)
     return {
         dmgRisk = dmgRisk,
         damagePrevented = damagePrevented,
-        retaliateDmg = rules.damageDone.calculateDamageDone(dmgRisk)
+        retaliateDmg = rules.damage.calculateEffectiveOutgoingDamage(dmgRisk)
     }
 end
 
 local function getShieldSlam(baseDmgBuff, defence, defenceBuff)
     local dmg = rules.traits.calculateShieldSlamDmg(baseDmgBuff, defence, defenceBuff)
-    dmg = rules.damageDone.calculateDamageDone(dmg)
+    dmg = rules.damage.calculateEffectiveOutgoingDamage(dmg)
 
     return {
         dmg = dmg
@@ -441,6 +458,7 @@ local function getShieldSlam(baseDmgBuff, defence, defenceBuff)
 end
 
 ns.actions.getAttack = getAttack
+ns.actions.getDamage = getDamage
 ns.actions.getCC = getCC
 ns.actions.getDefence = getDefence
 ns.actions.getMeleeSave = getMeleeSave

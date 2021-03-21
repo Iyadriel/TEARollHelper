@@ -69,18 +69,37 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                 end
             },
             preRoll = preRoll,
-            roll = ui.modules.turn.modules.roll.getOptions({
+            hitRoll = ui.modules.turn.modules.roll.getOptions({
                 order = 2,
                 action = ACTIONS.attack,
-                hidden = shouldHideRoll,
+                name = function()
+                    local attack = rollState.getAttack()
+                    if attack and attack.isSuccessful then
+                        return COLOURS.SUCCESS .. "Hit roll"
+                    end
+                    return "Hit roll"
+                end,
+                hidden = function()
+                    return shouldHideRoll()
+                end,
+            }),
+            damageRoll = ui.modules.turn.modules.roll.getOptions({
+                order = 3,
+                action = ACTIONS.damage,
+                name = "Damage roll",
+                hidden = function()
+                    return not state.attack.currentRoll.get() or not rollState.getAttack().isSuccessful
+                end,
+                hideMomentOfExcellence = true,
             }),
             attack = {
-                order = 3,
+                order = 4,
                 type = "group",
                 name = ACTION_LABELS.attack,
                 inline = true,
                 hidden = function()
-                    return not state.attack.currentRoll.get()
+                    local shouldShow = state.attack.currentRoll.get() and (not rollState.getAttack().isSuccessful or state.damage.currentRoll.get())
+                    return not shouldShow
                 end,
                 args = {
                     isAOE = {
@@ -91,9 +110,9 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                         hidden = function()
                             return not rules.feats.canProc(FEATS.MERCY_FROM_PAIN)
                         end,
-                        get = state.attack.isAOE.get,
+                        get = state.damage.isAOE.get,
                         set = function(info, value)
-                            state.attack.isAOE.set(value)
+                            state.damage.isAOE.set(value)
                         end
                     },
                     penance = {
@@ -115,9 +134,9 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                                 disabled = function()
                                     return characterState.healing.numGreaterHealSlots.get() == 0
                                 end,
-                                get = state.attack.numGreaterHealSlots.get,
+                                get = state.damage.numGreaterHealSlots.get,
                                 set = function(info, value)
-                                    state.attack.numGreaterHealSlots.set(value)
+                                    state.damage.numGreaterHealSlots.set(value)
                                 end,
                                 dialogControl = TEARollHelper:CreateCustomSlider("actions_attack_greaterHeals", {
                                     max = characterState.healing.numGreaterHealSlots.get
@@ -129,11 +148,11 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                                 name = "Heal target is unconscious",
                                 desc = COLOURS.MASTERY .. "Your Spirit mastery increases healing done to KO'd targets by +3.",
                                 hidden = function()
-                                    return not rules.healing.canUseTargetKOBonus() or state.attack.numGreaterHealSlots.get() < 1
+                                    return not rules.healing.canUseTargetKOBonus() or state.damage.numGreaterHealSlots.get() < 1
                                 end,
-                                get = state.attack.targetIsKO.get,
+                                get = state.damage.targetIsKO.get,
                                 set = function(info, value)
-                                    state.attack.targetIsKO.set(value)
+                                    state.damage.targetIsKO.set(value)
                                 end,
                             },
                         }
@@ -202,77 +221,64 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                         end,
                         desc = FEATS.BLOOD_HARVEST.desc,
                         hidden = function()
-                            if rules.offence.canUseBloodHarvest() then
-                                return rules.offence.getMaxBloodHarvestSlots() <= 0 or characterState.featsAndTraits.numBloodHarvestSlots.get() <= 0
+                            if rules.feats.canProc(FEATS.BLOOD_HARVEST) then
+                                return rules.damage.getMaxBloodHarvestSlots() <= 0 or characterState.featsAndTraits.numBloodHarvestSlots.get() <= 0
                             end
                             return true
                         end,
                         get = function()
-                            return state.attack.numBloodHarvestSlots.get() > 0
+                            return state.damage.numBloodHarvestSlots.get() > 0
                         end,
                         set = function()
-                            if state.attack.numBloodHarvestSlots.get() > 0 then
-                                state.attack.numBloodHarvestSlots.set(0)
+                            if state.damage.numBloodHarvestSlots.get() > 0 then
+                                state.damage.numBloodHarvestSlots.set(0)
                             else
-                                state.attack.numBloodHarvestSlots.set(1)
+                                state.damage.numBloodHarvestSlots.set(1)
                             end
                         end,
                     },
-                    useCriticalMass = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.CRITICAL_MASS, {
+                    useCriticalMass = ui.helpers.traitToggle(ACTIONS.damage, TRAITS.CRITICAL_MASS, {
                         order = 9,
                     }),
-                    useFaultline = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.FAULTLINE, {
+                    useFaultline = ui.helpers.traitToggle(ACTIONS.damage, TRAITS.FAULTLINE, {
                         order = 10,
                     }),
-                    useReap = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.REAP, {
+                    useReap = ui.helpers.traitToggle(ACTIONS.damage, TRAITS.REAP, {
                         order = 11,
                     }),
-                    useVindication = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.VINDICATION, {
-                        order = 13,
+                    useVindication = ui.helpers.traitToggle(ACTIONS.damage, TRAITS.VINDICATION, {
+                        order = 12,
                         name = function()
-                            return COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.VINDICATION.name ..  ": " .. COLOURS.HEALING .. "Heal for " .. rollState.getAttack().traits[TRAITS.VINDICATION.id].healingDone .. " HP"
+                            local vindication = rollState.getAttack().actions.damage.traits[TRAITS.VINDICATION.id]
+                            if not vindication then return "" end
+                            return COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.VINDICATION.name ..  ": " .. COLOURS.HEALING .. "Heal for " .. vindication.healingDone .. " HP"
                         end,
                     }),
                     confirm = {
-                        order = 14,
+                        order = 13,
                         type = "execute",
                         name = function()
                             local attack = rollState.getAttack()
+                            local damage = attack.actions.damage
                             local colour
 
-                            if attack.numBloodHarvestSlots > 0 then
+                            if damage.numBloodHarvestSlots > 0 then
                                 colour = COLOURS.FEATS.BLOOD_HARVEST
-                            elseif attack.hasMercyFromPainProc then
+                            elseif damage.hasMercyFromPainProc then
                                 colour = COLOURS.FEATS.MERCY_FROM_PAIN
                             end
+
                             return colour and colour .. "Confirm" or "Confirm"
                         end,
                         desc = "Confirm that you perform the stated action, consuming any charges and buffs used.",
-                        hidden = function()
-                            local attack = rollState.getAttack()
-                            local shouldShow = attack.dmg > 0
-
-                            return not shouldShow
-                        end,
                         func = function()
                             consequences.confirmAction(ACTIONS.attack, rollState.getAttack())
                         end
                     },
                 }
             },
---[[             postRoll = {
-                order = 4,
-                type = "group",
-                name = "After rolling",
-                inline = true,
-                hidden = function()
-                    return not state.attack.currentRoll.get() or not (rollState.getAttack().dmg > 0) or not rules.offence.shouldShowPostRollUI()
-                end,
-                args = {
-                }
-            }, ]]
             summary = {
-                order = 4,
+                order = 5,
                 type = "group",
                 name = "Summary",
                 inline = true,
@@ -292,8 +298,9 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                             for i, attack in ipairs(rollState.state.attack.attacks.get()) do
                                 msg = msg .. COLOURS.NOTE .. ">|r " .. actions.toString(ACTIONS.attack, attack) .. "|r|n"
 
-                                totalDamage = totalDamage + attack.dmg
-                                totalHealing = totalHealing + attack.amountHealed
+                                local damageAction = attack.actions.damage
+                                totalDamage = totalDamage + damageAction.dmg
+                                totalHealing = totalHealing + damageAction.amountHealed
                             end
 
                             msg = msg .. COLOURS.NOTE .. "|nTotal:|r " .. totalDamage .. " damage"

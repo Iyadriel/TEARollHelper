@@ -16,6 +16,10 @@ local MIN_ROLL = 1
 local DEFAULT_MAX_ROLL = 20
 
 local function getMaxRoll(action)
+    if action == ACTIONS.damage then
+        return 10
+    end
+
     return DEFAULT_MAX_ROLL
 end
 
@@ -38,6 +42,9 @@ end
 local fatePointChecks = {
     [ACTIONS.attack] = function(action)
         return not action.isSuccessful
+    end,
+    [ACTIONS.damage] = function(damage)
+        return false -- currently not allowed
     end,
     [ACTIONS.cc] = function(cc)
         return cc.ccValue <= 10
@@ -85,7 +92,7 @@ local function getRollModeModifier(action, turnTypeID, advantageBuff, disadvanta
         modifier = modifier + 1
     end
 
-    if action == ACTIONS.attack then
+    if action == ACTIONS.attack or action == ACTIONS.damage then
         modifier = modifier + rules.offence.getRollModeModifier(enemyId)
     elseif action == ACTIONS.meleeSave then
         modifier = modifier + rules.meleeSave.getRollModeModifier()

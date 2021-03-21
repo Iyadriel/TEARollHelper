@@ -66,35 +66,36 @@ local function getTraitMessages(action)
 end
 
 local function attackToString(attack)
+    local damage = attack.actions.damage
     local msg = ""
 
-    if attack.dmg > 0 then
-        if attack.isCrit then
-            if attack.critType == CRIT_TYPES.VALUE_MOD then
-                msg = msg .. COLOURS.CRITICAL .. "CRITICAL HIT!|r You deal " .. tostring(attack.dmg) .. " damage!"
+    if damage.dmg > 0 then
+        if damage.isCrit then
+            if damage.critType == CRIT_TYPES.VALUE_MOD then
+                msg = msg .. COLOURS.CRITICAL .. "CRITICAL HIT!|r You deal " .. tostring(damage.dmg) .. " damage!"
             else
-                msg = msg .. COLOURS.CRITICAL .. "BIG DAMAGE!|r You deal " .. tostring(attack.dmg) .. " damage to all enemies in melee range of you or your target!"
+                msg = msg .. COLOURS.CRITICAL .. "BIG DAMAGE!|r You deal " .. tostring(damage.dmg) .. " damage to all enemies in melee range of you or your target!"
             end
         else
-            msg = msg .. "You deal " .. tostring(attack.dmg) .. " damage."
+            msg = msg .. "You deal " .. tostring(damage.dmg) .. " damage."
         end
 
         if attack.hasAdrenalineProc then
-            msg = msg .. COLOURS.FEATS.ADRENALINE .. "|nADRENALINE! You attack the same target a second time!|r "
+            msg = msg .. COLOURS.FEATS.ADRENALINE .. "|nADRENALINE! You damage the same target a second time!|r "
         end
 
-        if attack.hasVengeanceProc then
+        if damage.hasVengeanceProc then
             msg = msg .. COLOURS.FEATS.VENGEANCE .. " VENGEANCE!"
         end
     else
         msg = msg .. COLOURS.NOTE .. "You can't deal any damage with this roll."
     end
 
-    if attack.amountHealed > 0 then
-        msg = msg .. COLOURS.HEALING .. " You heal for " .. attack.amountHealed .. " HP.|r"
+    if damage.amountHealed > 0 then
+        msg = msg .. COLOURS.HEALING .. " You heal for " .. damage.amountHealed .. " HP.|r"
     end
 
-    msg = msg .. getTraitMessages(attack)
+    msg = msg .. getTraitMessages(damage)
 
     return msg
 end

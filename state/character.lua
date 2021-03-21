@@ -54,7 +54,7 @@ characterState.initState = function()
         criticalWounds = {},
 
         featsAndTraits = {
-            numBloodHarvestSlots = rules.offence.getMaxBloodHarvestSlots(),
+            numBloodHarvestSlots = rules.damage.getMaxBloodHarvestSlots(),
             numTraitCharges = numTraitCharges(),
         },
 
@@ -63,7 +63,7 @@ characterState.initState = function()
 
     cache.maxNumGreaterHealSlots = rules.healing.getMaxGreaterHealSlots()
     cache.maxNumBraceCharges = rules.defence.getMaxBraceCharges()
-    cache.maxNumBloodHarvestSlots = rules.offence.getMaxBloodHarvestSlots()
+    cache.maxNumBloodHarvestSlots = rules.damage.getMaxBloodHarvestSlots()
     -- switching from a profile with Bright Burner to one without it should reset trait charges to max.
     -- this should not happen during events, but we rely on the player to not switch to a profile with different weaknesses during events.
     cache.hasBrightBurner = character.hasWeakness(WEAKNESSES.BRIGHT_BURNER)
@@ -375,7 +375,7 @@ characterState.state = {
             end,
             update = function()
                 local numSlots = state.featsAndTraits.numBloodHarvestSlots
-                local maxNumSlots = rules.offence.getMaxBloodHarvestSlots()
+                local maxNumSlots = rules.damage.getMaxBloodHarvestSlots()
 
                 if numSlots > maxNumSlots then
                     characterState.state.featsAndTraits.numBloodHarvestSlots.set(maxNumSlots)

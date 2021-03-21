@@ -59,7 +59,7 @@ local function canUseHolyBulwark(enemyId)
 end
 
 local function calculateShieldSlamDmg(baseDmgBuff, defence, defenceBuff)
-    local baseDmg = rules.offence.getBaseDamageAfterBuffs(baseDmgBuff)
+    local baseDmg = rules.damage.getBaseDamageAfterBuffs(baseDmgBuff)
     local defenceStat = rules.common.calculateDefenceStat(nil, defence, defenceBuff)
 
     return baseDmg + max(0, defenceStat)

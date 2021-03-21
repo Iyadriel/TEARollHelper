@@ -38,13 +38,19 @@ rolls.initState = function()
         [ACTIONS.attack] = {
             attacks = {},
             threshold = nil,
+            rollMode = ROLL_MODES.NORMAL,
+            currentRoll = nil,
+            critType = CRIT_TYPES.VALUE_MOD,
+            activeTraits = {},
+        },
+
+        [ACTIONS.damage] = {
             numBloodHarvestSlots = 0,
             numGreaterHealSlots = 0, -- for penance
             targetIsKO = false, -- for penance
             isAOE = false,
             rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
-            critType = CRIT_TYPES.VALUE_MOD,
             activeTraits = {},
         },
 
@@ -182,21 +188,32 @@ rolls.state = {
             end,
         },
         threshold = basicGetSet(ACTIONS.attack, "threshold"),
-        numBloodHarvestSlots = basicGetSet(ACTIONS.attack, "numBloodHarvestSlots"),
-        numGreaterHealSlots = basicGetSet(ACTIONS.attack, "numGreaterHealSlots"),
-        targetIsKO = basicGetSet(ACTIONS.attack, "targetIsKO"),
-        isAOE = basicGetSet(ACTIONS.attack, "isAOE"),
         rollMode = basicGetSet(ACTIONS.attack, "rollMode"),
         currentRoll = basicGetSet(ACTIONS.attack, "currentRoll"),
         critType = basicGetSet(ACTIONS.attack, "critType"),
         activeTraits = activeTraits(ACTIONS.attack),
 
         resetSlots = function()
-            rolls.state.attack.numBloodHarvestSlots.set(0)
-            rolls.state.attack.numGreaterHealSlots.set(0)
-            rolls.state.attack.targetIsKO.set(false)
-            rolls.state.attack.isAOE.set(false)
             rolls.state.attack.activeTraits.reset()
+            rolls.state.damage.resetSlots()
+        end,
+    },
+
+    [ACTIONS.damage] = {
+        numBloodHarvestSlots = basicGetSet(ACTIONS.damage, "numBloodHarvestSlots"),
+        numGreaterHealSlots = basicGetSet(ACTIONS.damage, "numGreaterHealSlots"),
+        targetIsKO = basicGetSet(ACTIONS.damage, "targetIsKO"),
+        isAOE = basicGetSet(ACTIONS.damage, "isAOE"),
+        rollMode = basicGetSet(ACTIONS.damage, "rollMode"),
+        currentRoll = basicGetSet(ACTIONS.damage, "currentRoll"),
+        activeTraits = activeTraits(ACTIONS.damage),
+
+        resetSlots = function()
+            rolls.state.damage.numBloodHarvestSlots.set(0)
+            rolls.state.damage.numGreaterHealSlots.set(0)
+            rolls.state.damage.targetIsKO.set(false)
+            rolls.state.damage.isAOE.set(false)
+            rolls.state.damage.activeTraits.reset()
         end,
     },
 
@@ -392,8 +409,8 @@ bus.addListener(EVENTS.PROFILE_CHANGED, resetAll)
 bus.addListener(EVENTS.TURN_STARTED, resetAll)
 
 bus.addListener(EVENTS.BLOOD_HARVEST_CHARGES_CHANGED, function(numCharges)
-    if numCharges < state.attack.numBloodHarvestSlots then
-        rolls.state.attack.numBloodHarvestSlots.set(numCharges)
+    if numCharges < state.damage.numBloodHarvestSlots then
+        rolls.state.damage.numBloodHarvestSlots.set(numCharges)
     end
 end)
 
@@ -407,13 +424,19 @@ bus.addListener(EVENTS.GREATER_HEAL_CHARGES_CHANGED, function(numCharges)
     if numCharges < state.healing.numGreaterHealSlots then
         rolls.state.healing.numGreaterHealSlots.set(numCharges)
     end
-    if numCharges < state.attack.numGreaterHealSlots then
-        rolls.state.attack.numGreaterHealSlots.set(numCharges)
+    if numCharges < state.damage.numGreaterHealSlots then
+        rolls.state.damage.numGreaterHealSlots.set(numCharges)
     end
 end)
 
 bus.addListener(EVENTS.ROLL_CHANGED, function(action, roll)
     rolls.state[action].currentRoll.set(roll)
+
+    -- damage action is invalidated when attack roll changes.
+    if action == ACTIONS.attack then
+        rolls.state.damage.currentRoll.set(nil)
+        rolls.state.damage.resetSlots()
+    end
 end)
 
 bus.addListener(EVENTS.FATE_ROLLED, function(action, roll)
@@ -428,22 +451,54 @@ local function getRollBuff()
     return buffsState.buffs.roll.get(turnState.state.type.get())
 end
 
+local function getDamage()
+    local rollBuff = getRollBuff()
+    local healingDoneBuff = buffsState.buffs.healingDone.get()
+    local baseDmgBuff = buffsState.buffs.baseDamage.get()
+    local damageDoneBuff = buffsState.buffs.damageDone.get()
+
+    return actions.getDamage(
+        state.attack.currentRoll,
+        state.damage.currentRoll,
+        rollBuff,
+        state.attack.critType,
+        baseDmgBuff,
+        damageDoneBuff,
+        healingDoneBuff,
+        state.damage.isAOE,
+        state.damage.numGreaterHealSlots,
+        state.damage.targetIsKO,
+        state.damage.numBloodHarvestSlots,
+        state.damage.activeTraits
+    )
+end
+
 local function getAttack()
+    if not state.attack.currentRoll then return nil end
+
     local attackIndex = rolls.state.attack.attacks.count() + 1
     local rollBuff = getRollBuff()
     local whichStat = character.hasFeat(FEATS.PENANCE) and STATS.spirit or STATS.offence
     local stat = character.getPlayerStat(whichStat)
     local statBuff = buffsState.buffs[whichStat].get()
-    local healingDoneBuff = buffsState.buffs.healingDone.get()
     local baseDmgBuff = buffsState.buffs.baseDamage.get()
     local damageDoneBuff = buffsState.buffs.damageDone.get()
     local enemyId = environment.state.enemyId.get()
-    local isAOE = state.attack.isAOE
     local threshold = state.attack.threshold
-    local numBloodHarvestSlots = state.attack.numBloodHarvestSlots
-    local activeTraits = state.attack.activeTraits
 
-    return actions.getAttack(attackIndex, state.attack.currentRoll, rollBuff, state.attack.critType, threshold, stat, statBuff, baseDmgBuff, damageDoneBuff, healingDoneBuff, enemyId, isAOE, state.attack.numGreaterHealSlots, state.attack.targetIsKO, numBloodHarvestSlots, activeTraits)
+    return actions.getAttack(
+        attackIndex,
+        state.attack.currentRoll,
+        rollBuff,
+        state.attack.critType,
+        threshold,
+        stat,
+        statBuff,
+        baseDmgBuff,
+        damageDoneBuff,
+        enemyId,
+        getDamage()
+    )
 end
 
 local function getCC()
@@ -516,6 +571,7 @@ end
 
 local ACTION_METHODS = {
     [ACTIONS.attack] = getAttack,
+    [ACTIONS.damage] = getDamage,
     [ACTIONS.cc] = getCC,
     [ACTIONS.healing] = getHealing,
     [ACTIONS.buff] = getBuff,
@@ -559,6 +615,7 @@ local function getRollModeModifier(action, turnTypeID)
 end
 
 rolls.getAttack = getAttack
+rolls.getDamage = getDamage
 rolls.getCC = getCC
 rolls.getHealing = getHealing
 rolls.getBuff = getBuff

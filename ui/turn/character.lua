@@ -231,20 +231,20 @@ ui.modules.turn.modules.character.getOptions = function(options)
                         name = COLOURS.FEATS.BLOOD_HARVEST .. "Blood Harvest slots",
                         desc = "How many Blood Harvest slots you have left",
                         min = 0,
-                        max = rules.offence.getMaxBloodHarvestSlots(),
+                        max = rules.damage.getMaxBloodHarvestSlots(),
                         step = 1,
                         get = state.featsAndTraits.numBloodHarvestSlots.get,
                         set = function(info, value)
                             state.featsAndTraits.numBloodHarvestSlots.set(value)
                         end,
                         hidden = function()
-                            return not rules.offence.canUseBloodHarvest()
+                            return not rules.feats.canProc(FEATS.BLOOD_HARVEST)
                         end,
                         disabled = function()
-                            return rules.offence.getMaxBloodHarvestSlots() == 0
+                            return rules.damage.getMaxBloodHarvestSlots() == 0
                         end,
                         dialogControl = TEARollHelper:CreateCustomSlider("turn_character_numBloodHarvestSlots", {
-                            max = rules.offence.getMaxBloodHarvestSlots
+                            max = rules.damage.getMaxBloodHarvestSlots
                         })
                     },
                 }, (function()

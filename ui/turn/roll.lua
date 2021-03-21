@@ -64,7 +64,9 @@ end
 
 --[[ local options = {
     order: Number,
-    action: String, -- attack, healing, buff, defend, meleeSave, rangedSave, utility
+    action: String, -- attack, damage, healing, buff, defend, meleeSave, rangedSave, utility
+    name: String = "Roll",
+    hideMomentOfExcellence: Boolean = false,
     hidden: Function,
 } ]]
 ui.modules.turn.modules.roll.getOptions = function(options)
@@ -72,7 +74,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
 
     return {
         type = "group",
-        name = "Roll",
+        name = options.name or "Roll",
         inline = true,
         order = options.order,
         hidden = options.hidden or false,
@@ -84,7 +86,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 name = COLOURS.TRAITS.MOMENT_OF_EXCELLENCE .. ui.iconString("Interface\\Buttons\\UI-GroupLoot-Dice-Up", "small", false) .. "Moment of Excellence",
                 hidden = function()
                     local trait = TRAITS.MOMENT_OF_EXCELLENCE
-                    return not character.hasTrait(trait) or characterState.state.featsAndTraits.numTraitCharges.get(trait.id) <= 0
+                    return options.hideMomentOfExcellence or not character.hasTrait(trait) or characterState.state.featsAndTraits.numTraitCharges.get(trait.id) <= 0
                 end,
                 func = function()
                     rollHandler.setAction(options.action)
@@ -145,7 +147,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                     return rollHandler.isRolling() and "Rolling..." or ui.iconString("Interface\\Buttons\\UI-GroupLoot-Dice-Up", "small", false) .. "Roll"
                 end,
                 desc = "Do a /roll " .. maxRoll .. ".",
-                width = 1.3,
+                width = 1.2,
                 disabled = function()
                     return rollHandler.isRolling()
                 end,
