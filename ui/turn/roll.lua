@@ -68,6 +68,8 @@ end
     hidden: Function,
 } ]]
 ui.modules.turn.modules.roll.getOptions = function(options)
+    local maxRoll = rules.rolls.getMaxRoll(options.action)
+
     return {
         type = "group",
         name = "Roll",
@@ -142,7 +144,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 name = function()
                     return rollHandler.isRolling() and "Rolling..." or ui.iconString("Interface\\Buttons\\UI-GroupLoot-Dice-Up", "small", false) .. "Roll"
                 end,
-                desc = "Do a /roll " .. rules.rolls.MAX_ROLL .. ".",
+                desc = "Do a /roll " .. maxRoll .. ".",
                 width = 1.3,
                 disabled = function()
                     return rollHandler.isRolling()
@@ -157,7 +159,7 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 type = "range",
                 desc = "The number you rolled",
                 min = 1,
-                max = rules.rolls.MAX_ROLL,
+                max = maxRoll,
                 step = 1,
                 get = function()
                     return state[options.action].currentRoll.get()

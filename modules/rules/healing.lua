@@ -7,6 +7,7 @@ local racialTraits = ns.resources.racialTraits
 local rules = ns.rules
 local weaknesses = ns.resources.weaknesses
 
+local ACTIONS = constants.ACTIONS
 local CRIT_TYPES = constants.CRIT_TYPES
 local FEATS = feats.FEATS
 local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
@@ -64,7 +65,7 @@ local function applyHealingDoneBuff(amountHealed, healingDoneBuff)
 end
 
 local function isCrit(roll)
-    local critReq = rules.rolls.getCritReq(roll)
+    local critReq = rules.rolls.getCritReq(ACTIONS.healing)
 
     return roll >= critReq
 end

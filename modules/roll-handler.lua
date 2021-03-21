@@ -19,7 +19,7 @@ local rollValues = {
     action = nil,
     tempMomentOfExcellence = false,
     tempRollMode = nil,
-    tempMaxRoll = rules.rolls.MAX_ROLL,
+    tempMaxRoll = nil,
     tempIsFateRoll = nil,
 }
 local totalRequiredRolls = 1
@@ -39,13 +39,14 @@ end
 
 local function setAction(action)
     rollValues.action = action
+    rollValues.tempMaxRoll = rules.rolls.getMaxRoll(action)
 end
 
 local function resetTempValues()
     rollValues.tempMomentOfExcellence = false
     rollValues.tempRollMode = nil
     rollValues.tempRoll = nil
-    rollValues.tempMaxRoll = rules.rolls.MAX_ROLL
+    rollValues.tempMaxRoll = nil
     rollValues.tempIsFateRoll = nil
 end
 
@@ -88,8 +89,8 @@ function doRoll(rollMode, rollModeModifier, isFateRoll)
     sendRoll()
 end
 
-local function doFateRoll(rollMode, rollModeModifier, currentRoll)
-    rollValues.tempMaxRoll = rules.rolls.MAX_ROLL - currentRoll
+local function doFateRoll(currentRoll, rollMode, rollModeModifier)
+    rollValues.tempMaxRoll = rollValues.tempMaxRoll - currentRoll
     doRoll(rollMode, rollModeModifier, true)
 end
 

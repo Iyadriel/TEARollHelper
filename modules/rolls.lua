@@ -33,7 +33,7 @@ local function performFateRoll(action)
     prepareRoll(action)
 
     local currentRoll = state[action].currentRoll.get()
-    rollHandler.fateRoll(rollMode, rollModeMod, currentRoll)
+    rollHandler.fateRoll(currentRoll, rollMode, rollModeMod)
 end
 
 rolls.getRollModeModifier = getRollModeModifier

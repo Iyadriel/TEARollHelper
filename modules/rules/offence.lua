@@ -1,6 +1,7 @@
 local _, ns = ...
 
 local character = ns.character
+local constants = ns.constants
 local rules = ns.rules
 
 local enemies = ns.resources.enemies
@@ -9,6 +10,7 @@ local racialTraits = ns.resources.racialTraits
 local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
 
+local ACTIONS = constants.ACTIONS
 local ENEMIES = enemies.ENEMIES
 local FEATS = feats.FEATS
 local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
@@ -20,7 +22,7 @@ local NUM_OFFENCE_PER_BLOOD_HARVEST_SLOT = 2
 -- Crits
 
 local function isCrit(roll)
-    local critReq = rules.rolls.getCritReq(roll)
+    local critReq = rules.rolls.getCritReq(ACTIONS.attack)
 
     if character.hasRacialTrait(RACIAL_TRAITS.VICIOUSNESS) then
         critReq = critReq - 1

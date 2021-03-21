@@ -6,6 +6,7 @@ local feats = ns.resources.feats
 local rules = ns.rules
 local weaknesses = ns.resources.weaknesses
 
+local ACTIONS = constants.ACTIONS
 local CRIT_TYPES = constants.CRIT_TYPES
 local FEATS = feats.FEATS
 local WEAKNESSES = weaknesses.WEAKNESSES
@@ -45,7 +46,7 @@ local function calculateBuffAmount(buffValue)
 end
 
 local function isCrit(roll)
-    local critReq = rules.rolls.getCritReq(roll)
+    local critReq = rules.rolls.getCritReq(ACTIONS.buff)
 
     return roll >= critReq
 end

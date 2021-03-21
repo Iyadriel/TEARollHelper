@@ -13,14 +13,18 @@ local TURN_TYPES = constants.TURN_TYPES
 local WEAKNESSES = weaknesses.WEAKNESSES
 
 local MIN_ROLL = 1
-local MAX_ROLL = 20
+local DEFAULT_MAX_ROLL = 20
+
+local function getMaxRoll(action)
+    return DEFAULT_MAX_ROLL
+end
 
 local function calculateRoll(roll, rollBuff)
     return roll + rollBuff
 end
 
-local function getCritReq()
-    local critReq = MAX_ROLL
+local function getCritReq(action)
+    local critReq = getMaxRoll(action)
     if character.hasFeat(FEATS.KEEN_SENSE) then
         critReq = critReq - 1
     end
@@ -100,7 +104,7 @@ end
 
 rules.rolls = {
     MIN_ROLL = MIN_ROLL,
-    MAX_ROLL = MAX_ROLL,
+    getMaxRoll = getMaxRoll,
 
     calculateRoll = calculateRoll,
 

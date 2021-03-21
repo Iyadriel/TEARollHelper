@@ -8,6 +8,7 @@ local feats = ns.resources.feats
 local racialTraits = ns.resources.racialTraits
 local traits = ns.resources.traits
 
+local ACTIONS = constants.ACTIONS
 local DEFENCE_TYPES = constants.DEFENCE_TYPES
 local FEATS = feats.FEATS
 local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
@@ -51,7 +52,7 @@ local function calculateDamagePrevented(dmgRisk, damageTaken)
 end
 
 local function isCrit(roll)
-    local critReq = rules.rolls.getCritReq(roll)
+    local critReq = rules.rolls.getCritReq(ACTIONS.defend)
 
     return roll >= critReq
 end
