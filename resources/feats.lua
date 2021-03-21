@@ -58,7 +58,7 @@ local FEATS = {
     ADRENALINE = {
         id = "ADRENALINE",
         name = "Adrenaline",
-        desc = "Beating the threshold by 8 or more with an Offence attack roll lets you perform a second attack against the same target. Cannot trigger more than once per player turn.",
+        desc = "Beating the threshold by 6 or more with an Offence attack roll lets you perform a second attack against the same target. Cannot trigger more than once per player turn.",
     },
     BLOOD_HARVEST = {
         id = "BLOOD_HARVEST",
