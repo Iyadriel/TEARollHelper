@@ -6,6 +6,7 @@ local models = ns.models
 
 local BuffDuration = models.BuffDuration
 local BuffEffectAdvantage = models.BuffEffectAdvantage
+local BuffEffectDamageDone = models.BuffEffectDamageDone
 local BuffEffectDamageTaken = models.BuffEffectDamageTaken
 local BuffEffectDisadvantage = models.BuffEffectDisadvantage
 local BuffEffectStat = models.BuffEffectStat
@@ -260,7 +261,7 @@ local FEATS = {
     VENGEANCE = {
         id = "VENGEANCE",
         name = "Vengeance",
-        desc = "When the raw result of your Offence attack roll is 16 or higher, you gain an additional +4 to Offence for your next player round.",
+        desc = "When the raw result of your Offence attack roll is 16 or higher, you gain an additional +4 to Offence and +2 damage for your next player round.",
         icon = "Interface\\Icons\\ability_racial_spatialrift",
         isCustom = true,
         player = "CALLEAN",
@@ -368,6 +369,7 @@ local FEAT_BUFF_SPECS = {
             }),
             effects = {
                 BuffEffectStat:New(STATS.offence, 4),
+                BuffEffectDamageDone:New(2),
             },
         },
     },
