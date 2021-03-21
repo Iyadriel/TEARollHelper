@@ -27,6 +27,7 @@ ui.modules.buffs.modules.newBuff.getOptions = function(options)
                 width = 0.55,
                 values = {
                     [PLAYER_BUFF_TYPES.ROLL] = "Roll",
+                    [PLAYER_BUFF_TYPES.DAMAGE_ROLL] = "Damage roll",
                     [PLAYER_BUFF_TYPES.STAT] = "Stat",
                     [PLAYER_BUFF_TYPES.BASE_DMG] = "Base dmg",
                     [PLAYER_BUFF_TYPES.ADVANTAGE] = "Advantage",
@@ -34,6 +35,7 @@ ui.modules.buffs.modules.newBuff.getOptions = function(options)
                 },
                 sorting = {
                     PLAYER_BUFF_TYPES.ROLL,
+                    PLAYER_BUFF_TYPES.DAMAGE_ROLL,
                     PLAYER_BUFF_TYPES.STAT,
                     PLAYER_BUFF_TYPES.BASE_DMG,
                     PLAYER_BUFF_TYPES.ADVANTAGE,
@@ -55,7 +57,8 @@ ui.modules.buffs.modules.newBuff.getOptions = function(options)
                 },
                 sorting = {TURN_TYPES.PLAYER.id, TURN_TYPES.ENEMY.id},
                 hidden = function()
-                    return buffsState.newPlayerBuff.type.get() ~= PLAYER_BUFF_TYPES.ROLL
+                    local type = buffsState.newPlayerBuff.type.get()
+                    return type ~= PLAYER_BUFF_TYPES.ROLL
                 end,
                 get = buffsState.newPlayerBuff.turnTypeID.get,
                 set = function(info, value)
@@ -96,7 +99,7 @@ ui.modules.buffs.modules.newBuff.getOptions = function(options)
                 end,
                 hidden = function()
                     local type = buffsState.newPlayerBuff.type.get()
-                    return type ~= PLAYER_BUFF_TYPES.ROLL and type ~= PLAYER_BUFF_TYPES.STAT and type ~= PLAYER_BUFF_TYPES.BASE_DMG
+                    return not(type == PLAYER_BUFF_TYPES.ROLL or type == PLAYER_BUFF_TYPES.DAMAGE_ROLL) and type ~= PLAYER_BUFF_TYPES.STAT and type ~= PLAYER_BUFF_TYPES.BASE_DMG
                 end,
                 get = function()
                     return tostring(buffsState.newPlayerBuff.amount.get())
@@ -137,7 +140,8 @@ ui.modules.buffs.modules.newBuff.getOptions = function(options)
                 name = "Expire after next turn",
                 desc = "This will remove the buff after the next turn. You can always clear buffs manually by right-clicking.",
                 hidden = function()
-                    return buffsState.newPlayerBuff.type.get() == PLAYER_BUFF_TYPES.ROLL
+                    local type = buffsState.newPlayerBuff.type.get()
+                    return type == PLAYER_BUFF_TYPES.ROLL or type == PLAYER_BUFF_TYPES.DAMAGE_ROLL
                 end,
                 get = buffsState.newPlayerBuff.expireAfterNextTurn.get,
                 set = function(info, value)
@@ -150,7 +154,8 @@ ui.modules.buffs.modules.newBuff.getOptions = function(options)
                 name = "Expire after first action",
                 desc = "This will remove the buff when you confirm any action in your turn. This is how most buffs work, so leave this enabled if you're not sure.",
                 hidden = function()
-                    return buffsState.newPlayerBuff.type.get() == PLAYER_BUFF_TYPES.ROLL
+                    local type = buffsState.newPlayerBuff.type.get()
+                    return type == PLAYER_BUFF_TYPES.ROLL or type == PLAYER_BUFF_TYPES.DAMAGE_ROLL
                 end,
                 get = buffsState.newPlayerBuff.expireAfterAnyAction.get,
                 set = function(info, value)
@@ -172,6 +177,9 @@ ui.modules.buffs.modules.newBuff.getOptions = function(options)
                         local turnTypeID = newBuff.turnTypeID.get()
                         local amount = newBuff.amount.get()
                         buffs.addRollBuff(turnTypeID, amount, label)
+                    elseif buffType == PLAYER_BUFF_TYPES.DAMAGE_ROLL then
+                        local amount = newBuff.amount.get()
+                        buffs.addDamageRollBuff(amount, label)
                     elseif buffType == PLAYER_BUFF_TYPES.STAT then
                         local stat = newBuff.stat.get()
                         local amount = newBuff.amount.get()

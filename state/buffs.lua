@@ -32,6 +32,7 @@ buffsState.initState = function()
                 [TURN_TYPES.PLAYER.id] = 0,
                 [TURN_TYPES.ENEMY.id] = 0,
                 [TURN_TYPES.OUT_OF_COMBAT.id] = 0, -- unused, but simplifies some logic
+                damage = 0,
             },
             maxHealth = 0,
             baseDamage = 0,
@@ -82,11 +83,11 @@ buffsState.state = {
         end),
 
         roll = {
-            get = function(turnTypeID)
-                return state.buffs.roll[turnTypeID]
+            get = function(kind)
+                return state.buffs.roll[kind]
             end,
-            set = function(turnTypeID, value)
-                state.buffs.roll[turnTypeID] = value
+            set = function(kind, value)
+                state.buffs.roll[kind] = value
             end,
         },
         maxHealth = basicGetSet("buffs", "maxHealth"),
@@ -144,8 +145,8 @@ buffsState.state = {
         get = function(id)
             return state.buffLookup[id]
         end,
-        getPlayerRollBuff = function(turnTypeID)
-            return buffsState.state.buffLookup.get("player_roll_" .. turnTypeID)
+        getPlayerRollBuff = function(kind)
+            return buffsState.state.buffLookup.get("player_roll_" .. kind)
         end,
         getPlayerStatBuff = function(stat)
             return buffsState.state.buffLookup.get("player_" .. stat)

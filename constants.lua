@@ -79,10 +79,11 @@ local INCOMING_HEAL_SOURCES = {
 
 local PLAYER_BUFF_TYPES = {
     ROLL = 0,
-    STAT = 1,
-    BASE_DMG = 2,
-    ADVANTAGE = 3,
-    DISADVANTAGE = 4,
+    DAMAGE_ROLL = 1,
+    STAT = 2,
+    BASE_DMG = 3,
+    ADVANTAGE = 4,
+    DISADVANTAGE = 5,
 }
 
 local ROLL_MODES = {

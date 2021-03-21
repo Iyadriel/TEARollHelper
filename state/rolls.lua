@@ -457,8 +457,12 @@ local function getRollBuff()
     return buffsState.buffs.roll.get(turnState.state.type.get())
 end
 
+local function getDamageRollBuff()
+    return buffsState.buffs.roll.get("damage")
+end
+
 local function getDamage()
-    local rollBuff = getRollBuff()
+    local rollBuff = getDamageRollBuff()
     local healingDoneBuff = buffsState.buffs.healingDone.get()
     local baseDmgBuff = buffsState.buffs.baseDamage.get()
     local damageDoneBuff = buffsState.buffs.damageDone.get()
@@ -621,7 +625,6 @@ local function getRollModeModifier(action, turnTypeID)
 end
 
 rolls.getAttack = getAttack
-rolls.getDamage = getDamage
 rolls.getCC = getCC
 rolls.getHealing = getHealing
 rolls.getBuff = getBuff

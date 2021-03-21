@@ -295,7 +295,8 @@ local function confirmAction(actionType, action, hideMsg)
     useTraitCharges(action)
 
     if action.actions then
-        for _, subAction in pairs(action.actions) do
+        for subActionType, subAction in pairs(action.actions) do
+            bus.fire(EVENTS.ACTION_PERFORMED, subActionType, subAction, true)
             useTraitCharges(subAction)
         end
     end

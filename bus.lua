@@ -52,6 +52,7 @@ local EVENTS = {
     -- Buffs
     ROLL_BUFFS_CHANGED = "ROLL_BUFFS_CHANGED",
     ROLL_BUFF_ADDED = "ROLL_BUFF_ADDED", -- turnTypeID, amount
+    DAMAGE_ROLL_BUFF_ADDED = "DAMAGE_ROLL_BUFF_ADDED", -- amount
     STAT_BUFF_ADDED = "STAT_BUFF_ADDED", -- stat, amount
     BASE_DMG_BUFF_ADDED = "BASE_DMG_BUFF_ADDED", -- amount
     BUFF_STACK_ADDED = "BUFF_STACK_ADDED", -- buff

@@ -5,6 +5,7 @@ local bus = ns.bus
 local constants = ns.constants
 local models = ns.models
 
+local ACTIONS = constants.ACTIONS
 local EVENTS = bus.EVENTS
 local STAT_LABELS = constants.STAT_LABELS
 local TURN_TYPES = constants.TURN_TYPES
@@ -42,13 +43,14 @@ local function getPlayerBuffDuration(expireAfterNextTurn, expireAfterAnyAction)
 end
 
 local function addRollBuff(turnTypeID, amount, label)
-    local existingBuff = buffsState.state.buffLookup.getPlayerRollBuff(turnTypeID)
+    local kind = turnTypeID
+    local existingBuff = buffsState.state.buffLookup.getPlayerRollBuff(kind)
     if existingBuff then
         existingBuff:Remove()
     end
 
     local buff = Buff:New(
-        "player_roll_" .. turnTypeID,
+        "player_roll_" .. kind,
         label,
         TURN_TYPE_ICONS[turnTypeID],
         BuffDuration:NewWithTurnType({
@@ -57,13 +59,41 @@ local function addRollBuff(turnTypeID, amount, label)
             expireAfterAnyAction = true,
         }),
         true,
-        { BuffEffectRoll:New(turnTypeID, amount) }
+        { BuffEffectRoll:New(kind, amount) }
     )
 
     buff:Apply()
 
     -- TODO use effect in model instead
-    bus.fire(EVENTS.ROLL_BUFF_ADDED, turnTypeID, amount)
+    bus.fire(EVENTS.ROLL_BUFF_ADDED, kind, amount)
+end
+
+local function addDamageRollBuff(amount, label)
+    local kind = "damage"
+    local existingBuff = buffsState.state.buffLookup.getPlayerRollBuff(kind)
+    if existingBuff then
+        existingBuff:Remove()
+    end
+
+    local buff = Buff:New(
+        "player_roll_" .. kind,
+        label,
+        "Interface\\Icons\\ability_warrior_victoryrush",
+        BuffDuration:NewWithTurnType({
+            turnTypeID = TURN_TYPES.PLAYER.id,
+            remainingTurns = 0,
+            expireAfterActions = {
+                [ACTIONS.damage] = true,
+            },
+        }),
+        true,
+        { BuffEffectRoll:New(kind, amount) }
+    )
+
+    buff:Apply()
+
+    -- TODO use effect in model instead
+    bus.fire(EVENTS.DAMAGE_ROLL_BUFF_ADDED, amount)
 end
 
 local function addStatBuff(stat, amount, label, expireAfterNextTurn, expireAfterAnyAction)
@@ -160,6 +190,7 @@ local function addDisadvantageDebuff(action, label, expireAfterNextTurn, expireA
 end
 
 ns.buffs.addRollBuff = addRollBuff
+ns.buffs.addDamageRollBuff = addDamageRollBuff
 ns.buffs.addStatBuff = addStatBuff
 ns.buffs.addBaseDmgBuff = addBaseDmgBuff
 ns.buffs.addAdvantageBuff = addAdvantageBuff

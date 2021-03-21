@@ -9,9 +9,9 @@ local EVENTS = bus.EVENTS
 local BuffEffect = models.BuffEffect
 local BuffEffectRoll = BuffEffect:NewFromObj({})
 
-function BuffEffectRoll:New(turnTypeID, value)
+function BuffEffectRoll:New(kind, value)
     local buff = BuffEffect:NewFromObj({
-        turnTypeID = turnTypeID,
+        kind = kind,
         value = value
     })
 
@@ -22,15 +22,15 @@ function BuffEffectRoll:New(turnTypeID, value)
 end
 
 function BuffEffectRoll:Apply()
-    local newValue = buffsState.state.buffs.roll.get(self.turnTypeID) + self.value
-    buffsState.state.buffs.roll.set(self.turnTypeID, newValue)
+    local newValue = buffsState.state.buffs.roll.get(self.turn) + self.value
+    buffsState.state.buffs.roll.set(self.turn, newValue)
 
     bus.fire(EVENTS.ROLL_BUFFS_CHANGED)
 end
 
 function BuffEffectRoll:Remove()
-    local newValue = buffsState.state.buffs.roll.get(self.turnTypeID) - self.value
-    buffsState.state.buffs.roll.set(self.turnTypeID, newValue)
+    local newValue = buffsState.state.buffs.roll.get(self.turn) - self.value
+    buffsState.state.buffs.roll.set(self.turn, newValue)
 
     bus.fire(EVENTS.ROLL_BUFFS_CHANGED)
 end
