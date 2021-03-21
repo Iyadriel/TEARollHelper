@@ -106,14 +106,6 @@ local function useSecondWind()
     state.health.heal(rules.traits.SECOND_WIND_HEAL_AMOUNT, INCOMING_HEAL_SOURCES.SELF)
 end
 
-local function useShatterSoul(attack)
-    state.health.heal(rules.traits.SHATTER_SOUL_HEAL_AMOUNT, INCOMING_HEAL_SOURCES.SELF)
-
-    if attack.enemyId == ENEMIES.DEMON.id then
-        buffs.addTraitBuff(TRAITS.SHATTER_SOUL)
-    end
-end
-
 local function useShieldSlam()
     return actions.traitToString(TRAITS.SHIELD_SLAM, rollState.traits.getShieldSlam())
 end
@@ -183,6 +175,11 @@ end
 -- [[ Actions ]]
 
 local function confirmAttackAction(attack)
+    if character.hasFeat(FEATS.ETERNAL_SACRIFICE) and attack.dmg > 0 then
+        -- TODO: only melee attacks
+        characterState.state.health.heal(rules.feats.ETERNAL_SACRIFICE_HEAL_AMOUNT, INCOMING_HEAL_SOURCES.SELF)
+    end
+
     characterState.state.featsAndTraits.numBloodHarvestSlots.use(attack.numBloodHarvestSlots)
     characterState.state.healing.numGreaterHealSlots.use(attack.numGreaterHealSlots)
 
@@ -192,11 +189,6 @@ local function confirmAttackAction(attack)
 
     if attack.hasVengeanceProc then
         buffs.addFeatBuff(FEATS.VENGEANCE)
-    end
-
-    local shatterSoul = attack.traits[TRAITS.SHATTER_SOUL.id]
-    if shatterSoul.active then
-        useShatterSoul(attack)
     end
 
     rollState.state.attack.attacks.add(attack)

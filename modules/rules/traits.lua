@@ -21,7 +21,6 @@ local HOLY_BULWARK_ENEMIES = {
 }
 local LIFE_WITHIN_HEAL_AMOUNT = 10
 local SECOND_WIND_HEAL_AMOUNT = 15
-local SHATTER_SOUL_HEAL_AMOUNT = 6
 
 local function calculateMaxTraits()
     local maxTraits = 1
@@ -70,7 +69,6 @@ rules.traits = {
     MAX_NUM_TRAITS = MAX_NUM_TRAITS,
     LIFE_WITHIN_HEAL_AMOUNT = LIFE_WITHIN_HEAL_AMOUNT,
     SECOND_WIND_HEAL_AMOUNT = SECOND_WIND_HEAL_AMOUNT,
-    SHATTER_SOUL_HEAL_AMOUNT = SHATTER_SOUL_HEAL_AMOUNT,
 
     calculateMaxTraits = calculateMaxTraits,
     getMaxTraitCharges = getMaxTraitCharges,

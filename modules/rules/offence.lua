@@ -152,16 +152,6 @@ local function hasVengeanceProc(roll)
     return roll >= 16
 end
 
--- Trait: Shatter Soul
-
-local function canUseShatterSoul()
-    return character.hasTrait(TRAITS.SHATTER_SOUL)
-end
-
-local function shatterSoulEnabled(dmgDealt, enemyId)
-    return dmgDealt > 0 and enemyId ~= ENEMIES.MECHANICAL.id
-end
-
 -- Trait: Vindication
 
 local function canProcVindication()
@@ -194,18 +184,7 @@ rules.offence = {
     getRollModeModifier = getRollModeModifier,
 
     hasAdrenalineProc = hasAdrenalineProc,
-
-    canUseBloodHarvest = canUseBloodHarvest,
-    getMaxBloodHarvestSlots = getMaxBloodHarvestSlots,
-    calculateBloodHarvestBonus = calculateBloodHarvestBonus,
-
-    hasMercyFromPainProc = hasMercyFromPainProc,
-    calculateMercyFromPainBonusHealing = calculateMercyFromPainBonusHealing,
-
     hasVengeanceProc = hasVengeanceProc,
-
-    canUseShatterSoul = canUseShatterSoul,
-    shatterSoulEnabled = shatterSoulEnabled,
 
     canProcVindication = canProcVindication,
     hasVindicationProc = hasVindicationProc,

@@ -38,7 +38,6 @@ traits.TRAIT_KEYS = {
     "PRESENCE_OF_VIRTUE",
     "REAP",
     "SECOND_WIND",
-    "SHATTER_SOUL",
     "SHIELD_SLAM",
     "SILAMELS_ACE",
     "VERSATILE",
@@ -131,15 +130,6 @@ local TRAITS = {
         desc = "Activate outside of combat to regain 15HP. Can be used once, recharges after every combat. Activate without rolling.",
         numCharges = 1,
     },
-    SHATTER_SOUL = {
-        id = "SHATTER_SOUL",
-        name = "Shatter Soul",
-        desc = "Activate after a successful attack to heal yourself for 6 HP. The target of your attack must not be mechanical. If the target is a demon, your Offence is also increased by +6 on the next player turn. Activate after rolling.",
-        icon = "Interface\\Icons\\ability_demonhunter_shatteredsouls",
-        numCharges = 3,
-        isCustom = true,
-        player = "KELANRA",
-    },
     SHIELD_SLAM = {
         id = "SHIELD_SLAM",
         name = "Shield Slam",
@@ -211,17 +201,6 @@ local TRAIT_BUFF_SPECS = {
             }),
             effects = {
                 BuffEffectMaxHealth:New(10)
-            },
-        },
-    },
-    [TRAITS.SHATTER_SOUL.id] = {
-        {
-            duration = BuffDuration:NewWithTurnType({
-                turnTypeID = TURN_TYPES.PLAYER.id,
-                remainingTurns = 1,
-            }),
-            effects = {
-                BuffEffectStat:New(STATS.offence, 6)
             },
         },
     },

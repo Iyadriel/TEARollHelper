@@ -37,7 +37,7 @@ TEARollHelper.COLOURS = {
         MARK_OF_BENEVOLENCE = '|cffebc653',
         MOMENT_OF_EXCELLENCE = '|cffa335ee',
         REAP = '|cffc41f3b',
-        SHATTER_SOUL = '|cffa22fc8',
+        -- SHATTER_SOUL = '|cffa22fc8',
         SILAMELS_ACE = '|cff59b8b6',
         VESEERAS_IRE = '|cff852f5b',
     },

@@ -33,10 +33,6 @@ local function reapToString()
     return COLOURS.TRAITS.REAP .. " You damage all enemies in melee range of you or your target!|r"
 end
 
-local function shatterSoulToString()
-    return COLOURS.TRAITS.SHATTER_SOUL .. " You shatter the enemy's soul!|r"
-end
-
 local function vindicationToString(vindication)
     return COLOURS.HEALING .. " You heal for " .. vindication.healingDone .. " HP.|r"
 end
@@ -47,7 +43,6 @@ local traitActionToString = {
     [TRAITS.LIFE_PULSE.id] = lifePulseToString,
     [TRAITS.PRESENCE_OF_VIRTUE.id] = presenceOfVirtueToString,
     [TRAITS.REAP.id] = reapToString,
-    [TRAITS.SHATTER_SOUL.id] = shatterSoulToString,
     [TRAITS.VINDICATION.id] = vindicationToString,
 }
 

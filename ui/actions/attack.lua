@@ -227,9 +227,6 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                     useReap = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.REAP, {
                         order = 11,
                     }),
-                    useShatterSoul = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.SHATTER_SOUL, {
-                        order = 12,
-                    }),
                     useVindication = ui.helpers.traitToggle(ACTIONS.attack, TRAITS.VINDICATION, {
                         order = 13,
                         name = function()
