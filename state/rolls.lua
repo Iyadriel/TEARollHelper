@@ -439,6 +439,12 @@ bus.addListener(EVENTS.ROLL_CHANGED, function(action, roll)
     end
 end)
 
+bus.addListener(EVENTS.ROLL_BUFFS_CHANGED, function()
+    -- it's possible that the attack is no longer successful, so we need to clear our damage action if we have anything set.
+    rolls.state.damage.currentRoll.set(nil)
+    rolls.state.damage.resetSlots()
+end)
+
 bus.addListener(EVENTS.FATE_ROLLED, function(action, roll)
     local currentRoll = rolls.state[action].currentRoll.get()
 

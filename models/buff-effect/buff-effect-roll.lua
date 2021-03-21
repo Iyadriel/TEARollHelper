@@ -1,7 +1,10 @@
 local _, ns = ...
 
 local buffsState = ns.state.buffs
+local bus = ns.bus
 local models = ns.models
+
+local EVENTS = bus.EVENTS
 
 local BuffEffect = models.BuffEffect
 local BuffEffectRoll = BuffEffect:NewFromObj({})
@@ -21,11 +24,15 @@ end
 function BuffEffectRoll:Apply()
     local newValue = buffsState.state.buffs.roll.get(self.turnTypeID) + self.value
     buffsState.state.buffs.roll.set(self.turnTypeID, newValue)
+
+    bus.fire(EVENTS.ROLL_BUFFS_CHANGED)
 end
 
 function BuffEffectRoll:Remove()
     local newValue = buffsState.state.buffs.roll.get(self.turnTypeID) - self.value
     buffsState.state.buffs.roll.set(self.turnTypeID, newValue)
+
+    bus.fire(EVENTS.ROLL_BUFFS_CHANGED)
 end
 
 function BuffEffectRoll:GetTooltipText()
