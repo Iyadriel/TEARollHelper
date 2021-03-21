@@ -35,21 +35,33 @@ local function getMaxFatePoints()
     return 2
 end
 
-local function shouldSuggestFatePoint(roll, attack, cc, healing, buff, defence, meleeSave, rangedSave)
-    if attack then
-        return attack.dmg <= 0
-    elseif cc then
+local fatePointChecks = {
+    [ACTIONS.attack] = function(action)
+        return not action.isSuccessful
+    end,
+    [ACTIONS.cc] = function(cc)
         return cc.ccValue <= 10
-    elseif healing then
+    end,
+    [ACTIONS.healing] = function(healing)
         return healing.amountHealed <= 1
-    elseif buff then
+    end,
+    [ACTIONS.buff] = function(buff)
         return buff.amountBuffed <= 2
-    elseif defence then
+    end,
+    [ACTIONS.defend] = function(defence)
         return defence.damageTaken > 0
-    elseif meleeSave then
+    end,
+    [ACTIONS.meleeSave] = function(meleeSave)
         return meleeSave.damageTaken > 0
-    elseif rangedSave then
+    end,
+    [ACTIONS.rangedSave] = function(rangedSave)
         return not rangedSave.canFullyProtect
+    end,
+}
+
+local function shouldSuggestFatePoint(roll, actionType, action)
+    if fatePointChecks[actionType] then
+        return fatePointChecks[actionType](action)
     else
         return roll <= 5
     end
