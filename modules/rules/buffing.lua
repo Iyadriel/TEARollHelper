@@ -45,6 +45,10 @@ local function calculateBuffAmount(buffValue)
     return ceil(buffValue / 2)
 end
 
+local function calculateBuffAmountForDamage(buffValue)
+    return ceil(buffValue / 4)
+end
+
 local function isCrit(roll)
     local critReq = rules.rolls.getCritReq(ACTIONS.buff)
 
@@ -61,8 +65,8 @@ end
 
 -- Feat:  Bulwark of Hope
 
-local function hasBulwarkOfHopeProc(amountBuffed)
-    return amountBuffed > 0
+local function hasBulwarkOfHopeProc(hasBulwarkOfHopeProc)
+    return hasBulwarkOfHopeProc > 0
 end
 
 local function shouldShowPreRollUI()
@@ -74,6 +78,7 @@ rules.buffing = {
     usesInspiringPresence = usesInspiringPresence,
     calculateBuffValue = calculateBuffValue,
     calculateBuffAmount = calculateBuffAmount,
+    calculateBuffAmountForDamage = calculateBuffAmountForDamage,
     isCrit = isCrit,
     applyCritModifier = applyCritModifier,
 

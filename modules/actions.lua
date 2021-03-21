@@ -385,7 +385,7 @@ end
 
 local function getBuff(roll, rollBuff, critType, spirit, spiritBuff, offence, offenceBuff, activeTraits)
     local buffValue
-    local amountBuffed
+    local amountBuffed, amountBuffedForDamage
     local isCrit = rules.buffing.isCrit(roll)
     local hasBulwarkOfHopeProc = nil
 
@@ -393,25 +393,28 @@ local function getBuff(roll, rollBuff, critType, spirit, spiritBuff, offence, of
     buffValue = rules.buffing.calculateBuffValue(roll, spirit, spiritBuff, offence, offenceBuff)
 
     amountBuffed = rules.buffing.calculateBuffAmount(buffValue)
+    amountBuffedForDamage = rules.buffing.calculateBuffAmountForDamage(buffValue)
 
     if isCrit then
         amountBuffed = rules.buffing.applyCritModifier(amountBuffed, critType)
+        amountBuffedForDamage = rules.buffing.applyCritModifier(amountBuffedForDamage, critType)
     end
 
     if rules.feats.canProc(FEATS.BULWARK_OF_HOPE) then
-        hasBulwarkOfHopeProc = rules.buffing.hasBulwarkOfHopeProc(amountBuffed)
+        hasBulwarkOfHopeProc = rules.buffing.hasBulwarkOfHopeProc(buffValue)
     end
 
     return {
         amountBuffed = amountBuffed,
+        amountBuffedForDamage = amountBuffedForDamage,
         isCrit = isCrit,
         critType = critType,
         hasBulwarkOfHopeProc = hasBulwarkOfHopeProc,
         usesInspiringPresence = rules.buffing.usesInspiringPresence(),
         traits = {
             [TRAITS.ASCEND.id] = {
-                canUse = amountBuffed > 0,
-                active = amountBuffed > 0 and activeTraits[TRAITS.ASCEND.id],
+                canUse = buffValue > 0,
+                active = buffValue > 0 and activeTraits[TRAITS.ASCEND.id],
             },
         },
     }

@@ -116,15 +116,14 @@ local function buffToString(buff)
     local msg
 
     if buff.amountBuffed > 0 then
-        local amount = tostring(buff.amountBuffed)
         if buff.isCrit then
             if buff.critType == CRIT_TYPES.VALUE_MOD then
-                msg = COLOURS.CRITICAL .. "BIG BUFF!|r " .. COLOURS.BUFF .. "You buff 1 person for " .. amount .. "!"
+                msg = COLOURS.CRITICAL .. "BIG BUFF!|r " .. COLOURS.BUFF .. "You buff 1 person for " .. buff.amountBuffed .. " (" .. buff.amountBuffedForDamage .. " if buffing damage)!"
             else
-                msg = COLOURS.CRITICAL .. "MANY BUFFS!|r " .. COLOURS.BUFF .. "You buff 3 people for " .. amount .. "!"
+                msg = COLOURS.CRITICAL .. "MANY BUFFS!|r " .. COLOURS.BUFF .. "You buff 3 people for " .. buff.amountBuffed .. " (" .. buff.amountBuffedForDamage .. " if buffing damage)!"
             end
         else
-            msg = COLOURS.BUFF .. "You buff someone for " .. amount .. "."
+            msg = COLOURS.BUFF .. "You buff someone for " .. buff.amountBuffed .. " (" .. buff.amountBuffedForDamage .. " if buffing damage)."
         end
 
         if buff.usesInspiringPresence then
