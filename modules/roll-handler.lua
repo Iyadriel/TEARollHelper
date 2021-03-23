@@ -19,6 +19,7 @@ local rollValues = {
     action = nil,
     tempMomentOfExcellence = false,
     tempRollMode = nil,
+    tempMinRoll = nil,
     tempMaxRoll = nil,
     tempIsFateRoll = nil,
 }
@@ -46,12 +47,13 @@ local function resetTempValues()
     rollValues.tempMomentOfExcellence = false
     rollValues.tempRollMode = nil
     rollValues.tempRoll = nil
+    rollValues.tempMinRoll = nil
     rollValues.tempMaxRoll = nil
     rollValues.tempIsFateRoll = nil
 end
 
 local function getMinRoll()
-    return rollValues.tempMomentOfExcellence and 20 or rules.rolls.MIN_ROLL
+    return rollValues.tempMomentOfExcellence and 20 or rollValues.tempMinRoll
 end
 
 local function sendRoll()
@@ -71,13 +73,14 @@ local function getRequiredRollsForTurn()
     return numRolls
 end
 
-function doRoll(rollMode, rollModeModifier, isFateRoll)
+function doRoll(rollMode, rollModeModifier, minRoll, isFateRoll)
     rollMode = rollMode + rollModeModifier
     rollMode = max(ROLL_MODES.DISADVANTAGE, min(ROLL_MODES.ADVANTAGE, rollMode))
 
     rollValues.tempMomentOfExcellence = false
     rollValues.tempRollMode = rollMode
     rollValues.isRolling = true
+    rollValues.tempMinRoll = minRoll
     rollValues.tempIsFateRoll = isFateRoll
 
     updateUI() -- so we can update the button state
@@ -89,9 +92,9 @@ function doRoll(rollMode, rollModeModifier, isFateRoll)
     sendRoll()
 end
 
-local function doFateRoll(currentRoll, rollMode, rollModeModifier)
+local function doFateRoll(currentRoll, rollMode, rollModeModifier, minRoll)
     rollValues.tempMaxRoll = rollValues.tempMaxRoll - currentRoll
-    doRoll(rollMode, rollModeModifier, true)
+    doRoll(rollMode, rollModeModifier, minRoll, true)
 end
 
 local function doMomentOfExcellence()
