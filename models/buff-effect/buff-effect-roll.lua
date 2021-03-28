@@ -22,15 +22,15 @@ function BuffEffectRoll:New(kind, value)
 end
 
 function BuffEffectRoll:Apply()
-    local newValue = buffsState.state.buffs.roll.get(self.turn) + self.value
-    buffsState.state.buffs.roll.set(self.turn, newValue)
+    local newValue = buffsState.state.buffs.roll.get(self.kind) + self.value
+    buffsState.state.buffs.roll.set(self.kind, newValue)
 
     bus.fire(EVENTS.ROLL_BUFFS_CHANGED)
 end
 
 function BuffEffectRoll:Remove()
-    local newValue = buffsState.state.buffs.roll.get(self.turn) - self.value
-    buffsState.state.buffs.roll.set(self.turn, newValue)
+    local newValue = buffsState.state.buffs.roll.get(self.kind) - self.value
+    buffsState.state.buffs.roll.set(self.kind, newValue)
 
     bus.fire(EVENTS.ROLL_BUFFS_CHANGED)
 end
