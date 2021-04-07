@@ -62,13 +62,16 @@ local function getAvailableStatPoints()
     return points
 end
 
+local function getHpPerStamina()
+    return (character.hasStaminaMastery() and character.hasFeat(FEATS.MASTER)) and 3 or 2
+end
+
 local function calculateMaxHealth(stamina, staminaBuff, maxHealthBuff)
     staminaBuff = staminaBuff or 0
     maxHealthBuff = maxHealthBuff or 0
     stamina = stamina + staminaBuff
 
-    local HP_PER_STAMINA = character.hasFeat(FEATS.MASTER) and 3 or 2
-    local maxHealth = BASE_MAX_HEALTH + (stamina * HP_PER_STAMINA) + maxHealthBuff
+    local maxHealth = BASE_MAX_HEALTH + (stamina * getHpPerStamina()) + maxHealthBuff
 
     if character.hasWeakness(WEAKNESSES.FRAGILE) then
         maxHealth = maxHealth - 8
