@@ -7,7 +7,7 @@ local BuffEffectDamageDone = models.BuffEffectDamageDone
 local BuffEffectDamageTaken = models.BuffEffectDamageTaken
 local BuffEffectHealingTaken = models.BuffEffectHealingTaken
 local Trait = models.Trait
-local Buff = models.Buff
+local TraitBuff = models.TraitBuff
 local MarkOfBenevolence = Trait:NewFromObj({})
 
 function MarkOfBenevolence:New()
@@ -16,7 +16,7 @@ function MarkOfBenevolence:New()
         "MARK_OF_BENEVOLENCE",
         "Mark of Benevolence",
         "Activate on a player turn to bless a friendly player, the blessed player deal 3 more damage, take 3 less damage, and receives 3 more healing from all sources for the current player turn and the following enemy turn. Cannot be cast on yourself. Activate outside of rolling.",
-        nil,
+        "Interface\\Icons\\spell_holy_aspiration",
         2
     )
 
@@ -32,20 +32,19 @@ function MarkOfBenevolence:Activate()
     return "You bless a player with Mark of Benevolence!"
 end
 
-function MarkOfBenevolence:CreateBuff()
-    return Buff:New(
-        "special_" .. self.id,
-        self.name,
-        "Interface\\Icons\\spell_holy_aspiration",
+function MarkOfBenevolence:CreateBuff(index)
+    return TraitBuff:New(
+        self,
         BuffDuration:New({
             remainingTurns = 1,
         }),
-        true,
         {
             BuffEffectDamageDone:New(3),
             BuffEffectDamageTaken:New(-3),
             BuffEffectHealingTaken:New(3),
-        }
+        },
+        index,
+        true
     )
 end
 

@@ -2,7 +2,7 @@ local _, ns = ...
 
 local COLOURS = TEARollHelper.COLOURS
 
-local buffsState = ns.state.buffs
+local buffs = ns.buffs
 local ui = ns.ui
 
 local traits = ns.resources.traits
@@ -13,8 +13,6 @@ local TRAITS = traits.TRAITS
     order: Number
 } ]]
 ui.modules.buffs.modules.specialBuffs.getOptions = function(options)
-    local markOfBenevolenceBuff = TRAITS.MARK_OF_BENEVOLENCE:CreateBuff()
-
     return {
         order = options.order,
         type = "group",
@@ -26,13 +24,7 @@ ui.modules.buffs.modules.specialBuffs.getOptions = function(options)
                 type = "execute",
                 name = COLOURS.TRAITS.MARK_OF_BENEVOLENCE .. "Add " .. TRAITS.MARK_OF_BENEVOLENCE.name,
                 func = function()
-                    local existingBuff = buffsState.state.buffLookup.get(markOfBenevolenceBuff.id)
-                    if existingBuff then
-                        existingBuff:Remove()
-                    end
-
-                    markOfBenevolenceBuff:RefreshDuration()
-                    markOfBenevolenceBuff:Apply()
+                    buffs.addTraitBuff(TRAITS.MARK_OF_BENEVOLENCE)
                 end,
             },
         },
