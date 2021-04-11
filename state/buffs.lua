@@ -52,7 +52,6 @@ buffsState.initState = function()
             stat = STATS.offence,
             amount = 1,
             action = ACTIONS.attack,
-            label = "",
             expireAfterNextTurn = true,
             expireAfterAnyAction = true,
         },
@@ -111,7 +110,6 @@ buffsState.state = {
             buffsState.state.newPlayerBuff.turnTypeID.set(TURN_TYPES.PLAYER.id)
             buffsState.state.newPlayerBuff.stat.set(STATS.offence)
             buffsState.state.newPlayerBuff.amount.set(1)
-            buffsState.state.newPlayerBuff.label.set("")
             buffsState.state.newPlayerBuff.expireAfterNextTurn.set(true)
             buffsState.state.newPlayerBuff.expireAfterAnyAction.set(true)
         end,
@@ -231,7 +229,6 @@ buffsState.state = {
         stat = basicGetSet("newPlayerBuff", "stat"),
         amount = basicGetSet("newPlayerBuff", "amount"),
         action = basicGetSet("newPlayerBuff", "action"),
-        label = basicGetSet("newPlayerBuff", "label"),
         expireAfterNextTurn = basicGetSet("newPlayerBuff", "expireAfterNextTurn"),
         expireAfterAnyAction = basicGetSet("newPlayerBuff", "expireAfterAnyAction"),
     }

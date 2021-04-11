@@ -42,7 +42,7 @@ local function getPlayerBuffDuration(expireAfterNextTurn, expireAfterAnyAction)
     })
 end
 
-local function addRollBuff(turnTypeID, amount, label)
+local function addRollBuff(turnTypeID, amount)
     local kind = turnTypeID
     local existingBuff = buffsState.state.buffLookup.getPlayerRollBuff(kind)
     if existingBuff then
@@ -51,7 +51,7 @@ local function addRollBuff(turnTypeID, amount, label)
 
     local buff = Buff:New(
         "player_roll_" .. kind,
-        label,
+        "Roll",
         TURN_TYPE_ICONS[turnTypeID],
         BuffDuration:NewWithTurnType({
             turnTypeID = turnTypeID,
@@ -68,7 +68,7 @@ local function addRollBuff(turnTypeID, amount, label)
     bus.fire(EVENTS.ROLL_BUFF_ADDED, kind, amount)
 end
 
-local function addDamageRollBuff(amount, label)
+local function addDamageRollBuff(amount)
     local kind = "damage"
     local existingBuff = buffsState.state.buffLookup.getPlayerRollBuff(kind)
     if existingBuff then
@@ -77,7 +77,7 @@ local function addDamageRollBuff(amount, label)
 
     local buff = Buff:New(
         "player_roll_" .. kind,
-        label,
+        "Damage roll",
         "Interface\\Icons\\ability_warrior_victoryrush",
         BuffDuration:NewWithTurnType({
             turnTypeID = TURN_TYPES.PLAYER.id,
@@ -96,19 +96,15 @@ local function addDamageRollBuff(amount, label)
     bus.fire(EVENTS.DAMAGE_ROLL_BUFF_ADDED, amount)
 end
 
-local function addStatBuff(stat, amount, label, expireAfterNextTurn, expireAfterAnyAction)
+local function addStatBuff(stat, amount, expireAfterNextTurn, expireAfterAnyAction)
     local existingBuff = buffsState.state.buffLookup.getPlayerStatBuff(stat)
     if existingBuff then
         existingBuff:Remove()
     end
 
-    if label:trim() == "" then
-        label = STAT_LABELS[stat]
-    end
-
     local buff = Buff:New(
         "player_" .. stat,
-        label,
+        STAT_LABELS[stat],
         STAT_TYPE_ICONS[stat],
         getPlayerBuffDuration(expireAfterNextTurn, expireAfterAnyAction),
         true,
@@ -120,19 +116,15 @@ local function addStatBuff(stat, amount, label, expireAfterNextTurn, expireAfter
     bus.fire(EVENTS.STAT_BUFF_ADDED, stat, amount)
 end
 
-local function addBaseDmgBuff(amount, label, expireAfterNextTurn, expireAfterAnyAction)
+local function addBaseDmgBuff(amount, expireAfterNextTurn, expireAfterAnyAction)
     local existingBuff = buffsState.state.buffLookup.getPlayerBaseDmgBuff()
     if existingBuff then
         existingBuff:Remove()
     end
 
-    if label:trim() == "" then
-        label = "Base damage"
-    end
-
     local buff = Buff:New(
         "player_baseDmg",
-        label,
+        "Base damage",
         "Interface\\Icons\\ability_warrior_victoryrush",
         getPlayerBuffDuration(expireAfterNextTurn, expireAfterAnyAction),
         true,
@@ -145,19 +137,15 @@ local function addBaseDmgBuff(amount, label, expireAfterNextTurn, expireAfterAny
     bus.fire(EVENTS.BASE_DMG_BUFF_ADDED, amount)
 end
 
-local function addAdvantageBuff(action, label, expireAfterNextTurn, expireAfterAnyAction)
+local function addAdvantageBuff(action, expireAfterNextTurn, expireAfterAnyAction)
     local existingBuff = buffsState.state.buffLookup.getPlayerAdvantageBuff(action)
     if existingBuff then
         existingBuff:Remove()
     end
 
-    if label:trim() == "" then
-        label = "Advantage"
-    end
-
     local buff = Buff:New(
         "player_advantage_" .. action,
-        label,
+        "Advantage",
         "Interface\\Icons\\spell_holy_borrowedtime",
         getPlayerBuffDuration(expireAfterNextTurn, expireAfterAnyAction),
         true,
@@ -167,19 +155,15 @@ local function addAdvantageBuff(action, label, expireAfterNextTurn, expireAfterA
     buff:Apply()
 end
 
-local function addDisadvantageDebuff(action, label, expireAfterNextTurn, expireAfterAnyAction)
+local function addDisadvantageDebuff(action, expireAfterNextTurn, expireAfterAnyAction)
     local existingBuff = buffsState.state.buffLookup.getPlayerDisadvantageDebuff(action)
     if existingBuff then
         existingBuff:Remove()
     end
 
-    if label:trim() == "" then
-        label = "Disadvantage"
-    end
-
     local buff = Buff:New(
         "player_disadvantage_" .. action,
-        label,
+        "Disadvantage",
         "Interface\\Icons\\achievement_bg_overcome500disadvantage",
         getPlayerBuffDuration(expireAfterNextTurn, expireAfterAnyAction),
         true,
