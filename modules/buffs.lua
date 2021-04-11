@@ -39,7 +39,8 @@ local function addFeatBuff(feat, providedEffects, index, forceReplace)
         feat,
         buffSpec.duration,
         providedEffects or buffSpec.effects,
-        index
+        index,
+        buffSpec.castOnOthers or false
     )
 
     newBuff:Apply()

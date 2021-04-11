@@ -239,7 +239,7 @@ local function onFeatChanged()
     local buffsToRemove = {}
 
     for _, buff in ipairs(activeBuffs) do
-        if buff.featID and not character.hasFeatByID(buff.featID) then
+        if buff.featID and not buff.castOnOthers and not character.hasFeatByID(buff.featID) then
             table.insert(buffsToRemove, buff)
         end
     end
