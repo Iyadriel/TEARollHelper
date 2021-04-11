@@ -22,7 +22,7 @@ ui.modules.buffs.modules.specialBuffs.getOptions = function(options)
             markOfBenevolence = {
                 order = 0,
                 type = "execute",
-                name = COLOURS.TRAITS.MARK_OF_BENEVOLENCE .. "Add " .. TRAITS.MARK_OF_BENEVOLENCE.name,
+                name = COLOURS.TRAITS.MARK_OF_BENEVOLENCE .. TRAITS.MARK_OF_BENEVOLENCE.name,
                 func = function()
                     buffs.addTraitBuff(TRAITS.MARK_OF_BENEVOLENCE)
                 end,
