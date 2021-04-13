@@ -5,10 +5,8 @@ local COLOURS = TEARollHelper.COLOURS
 local buffs = ns.buffs
 local ui = ns.ui
 
-local feats = ns.resources.feats
 local traits = ns.resources.traits
 
-local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
 
 --[[ local options = {
@@ -32,9 +30,9 @@ ui.modules.buffs.modules.specialBuffs.getOptions = function(options)
             trueshotAura = {
                 order = 1,
                 type = "execute",
-                name = COLOURS.FEATS.TRUESHOT_AURA .. FEATS.TRUESHOT_AURA.name,
+                name = COLOURS.TRAITS.TRUESHOT_AURA .. TRAITS.TRUESHOT_AURA.name,
                 func = function()
-                    buffs.addFeatBuff(FEATS.TRUESHOT_AURA)
+                    buffs.addTraitBuff(TRAITS.TRUESHOT_AURA)
                 end,
             },
         },

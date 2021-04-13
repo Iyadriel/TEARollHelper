@@ -48,6 +48,7 @@ models/trait/artisan.lua
 models/trait/chastice.lua
 models/trait/critical-mass.lua
 models/trait/mark-of-benevolence.lua
+models/trait/trueshot-aura.lua
 models/unit.lua
 
 resources/critical-wounds.lua

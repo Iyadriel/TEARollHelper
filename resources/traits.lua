@@ -14,6 +14,7 @@ local Artisan = models.Artisan:New()
 local Chastice = models.Chastice:New()
 local CriticalMass = models.CriticalMass:New()
 local MarkOfBenevolence = models.MarkOfBenevolence:New()
+local TrueshotAura = models.TrueshotAura:New()
 
 local ACTIONS = constants.ACTIONS
 local STATS = constants.STATS
@@ -40,6 +41,7 @@ traits.TRAIT_KEYS = {
     "SECOND_WIND",
     "SHIELD_SLAM",
     "SILAMELS_ACE",
+    TrueshotAura.id,
     "VERSATILE",
     "VESEERAS_IRE",
     "VINDICATION",
@@ -143,6 +145,7 @@ local TRAITS = {
         icon = "Interface\\Icons\\inv_glowingazeritespire",
         numCharges = 2,
     },
+    [TrueshotAura.id] = TrueshotAura,
     VERSATILE = {
         id = "VERSATILE",
         name = "Versatile",

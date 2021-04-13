@@ -6,7 +6,6 @@ local models = ns.models
 
 local BuffDuration = models.BuffDuration
 local BuffEffectAdvantage = models.BuffEffectAdvantage
-local BuffEffectBaseDamage = models.BuffEffectBaseDamage
 local BuffEffectDamageDone = models.BuffEffectDamageDone
 local BuffEffectDamageTaken = models.BuffEffectDamageTaken
 local BuffEffectDisadvantage = models.BuffEffectDisadvantage
@@ -47,7 +46,6 @@ feats.FEAT_KEYS = {
     "PROFESSIONAL",
     "SHEPHERD_OF_THE_WICKED",
     "TRAUMA_RESPONSE",
-    "TRUESHOT_AURA",
     "VANGUARD",
     "VENGEANCE",
     "WARDER",
@@ -249,14 +247,6 @@ local FEATS = {
         name = "Trauma Response",
         desc = "Your cost for removing a Critical Wound from yourself or another character is now 1 Greater Heal Slot.",
     },
-    TRUESHOT_AURA = {
-        id = "TRUESHOT_AURA",
-        name = "Trueshot Aura",
-        desc = "Increase offence and base damage by +2 for friendly characters in melee range of yourself.",
-        icon = "Interface\\Icons\\ability_trueshot",
-        isCustom = true,
-        player = "IYADRIEL",
-    },
     VANGUARD = {
         id = "VANGUARD",
         name = "Vanguard",
@@ -369,15 +359,6 @@ local FEAT_BUFF_SPECS = {
                 expireOnCombatEnd = true,
             }),
             -- effects provided in consequences.lua
-        },
-    },
-    [FEATS.TRUESHOT_AURA.id] = {
-        {
-            effects = {
-                BuffEffectStat:New(STATS.offence, 2),
-                BuffEffectBaseDamage:New(2),
-            },
-            castOnOthers = true,
         },
     },
     [FEATS.VENGEANCE.id] = {

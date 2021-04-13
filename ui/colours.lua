@@ -25,7 +25,6 @@ TEARollHelper.COLOURS = {
         BLOOD_HARVEST = '|cffff6b6b',
         CHAPLAIN_OF_VIOLENCE = '|cffebe8bb',
         MERCY_FROM_PAIN = '|cffebe8bb',
-        TRUESHOT_AURA = '|cfffffdfc',
         VENGEANCE = '|cff7b15d5',
     },
 
@@ -40,6 +39,7 @@ TEARollHelper.COLOURS = {
         REAP = '|cffc41f3b',
         -- SHATTER_SOUL = '|cffa22fc8',
         SILAMELS_ACE = '|cff59b8b6',
+        TRUESHOT_AURA = '|cfffffdfc',
         VESEERAS_IRE = '|cff852f5b',
     },
 
