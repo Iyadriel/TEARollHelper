@@ -97,7 +97,7 @@ local TRAITS = {
     LIFE_PULSE = {
         id = "LIFE_PULSE",
         name = "Life Pulse",
-        desc = "Activate to apply the result of a Heal to the target and all friendly characters in melee range of that target. Activate after rolling.",
+        desc = "Activate to apply the result of a Heal to all friendly targets that you can see. Activate after rolling.",
         numCharges = 2,
     },
     LIFE_WITHIN = {

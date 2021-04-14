@@ -22,7 +22,7 @@ local function faultlineToString()
 end
 
 local function lifePulseToString()
-    return COLOURS.HEALING .. " You heal everyone in melee range of your target.|r"
+    return COLOURS.HEALING .. " You heal everyone in your line of sight!|r"
 end
 
 local function presenceOfVirtueToString()
