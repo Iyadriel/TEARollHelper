@@ -30,7 +30,7 @@ local function hasCounterForceProc(meleeSaveValue, threshold)
 end
 
 local function calculateCounterForceProcDmg(defence)
-    return defence -- big maths
+    return defence * 2
 end
 
 local function calculateDamageRiskToPlayer(dmgRiskToAlly)
