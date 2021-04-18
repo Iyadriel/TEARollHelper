@@ -155,12 +155,12 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                     rolls.performRoll(options.action)
                 end,
             },
-            roll = {
+            ["roll_result_" .. options.action]  = {
                 order = 3,
                 name = "Roll result",
                 type = "range",
                 desc = "The number you rolled",
-                min = 1,
+                min = rolls.getMinRoll(options.action),
                 max = maxRoll,
                 step = 1,
                 get = function()
@@ -169,7 +169,12 @@ ui.modules.turn.modules.roll.getOptions = function(options)
                 set = function(info, value)
                     rollHandler.setAction(options.action)
                     rollHandler.setCurrentRoll(value)
-                end
+                end,
+                dialogControl = TEARollHelper:CreateCustomSlider("roll_result_" .. options.action, {
+                    min = function()
+                        return rolls.getMinRoll(options.action)
+                    end,
+                })
             },
             useFatePoint = {
                 order = 4,

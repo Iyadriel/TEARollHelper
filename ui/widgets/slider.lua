@@ -14,6 +14,10 @@ local function setSliderValues(widget)
     local callbacks = CALLBACKS[widget.tea_optionKey]
     local option = callbacks.option
 
+    if callbacks.min then
+        option.min = callbacks.min()
+    end
+
     if callbacks.max then
         option.max = callbacks.max()
     end
@@ -40,7 +44,11 @@ local function onSetParent(frame)
         -- Update the values. Ace calls SetParent after SetSliderValues, which means we'll have the wrong values on the slider's first show unless we do this.
         local min, max, step = option.softMin or option.min or 0, option.softMax or option.max or 100, option.bigStep or option.step or 0
         widget:SetSliderValues(min, max, step)
-        widget:SetValue(option.get())
+
+        local value = option.get()
+        if value then
+            widget:SetValue(value)
+        end
     end
 end
 

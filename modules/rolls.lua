@@ -23,7 +23,7 @@ end
 
 local function getMinRoll(action)
     if action == ACTIONS.damage
-    and (rollState.getAttack().isCrit or buffsState.state.buffLookup.getTraitBuffs(TRAITS.VESEERAS_IRE)) then
+    and ((rollState.getAttack() and rollState.getAttack().isCrit) or buffsState.state.buffLookup.getTraitBuffs(TRAITS.VESEERAS_IRE)) then
         return 5
     end
 
@@ -56,5 +56,6 @@ local function performFateRoll(action)
 end
 
 rolls.getRollModeModifier = getRollModeModifier
+rolls.getMinRoll = getMinRoll
 rolls.performRoll = performRoll
 rolls.performFateRoll = performFateRoll
