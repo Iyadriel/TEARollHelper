@@ -141,7 +141,8 @@ local TRAITS = {
     SILAMELS_ACE = {
         id = "SILAMELS_ACE",
         name = "Silamel's Ace",
-        desc = "Activate to have one of your Utility Trait bonuses apply to your next Offence, Defence or Spirit roll. Your emote must adhere to the theme of the chosen utility Trait, and the trait itself must be at least somewhat applicable. Activate and then roll.",
+        desc = "Activate to have one of your Utility Trait bonuses apply to your next Offence, Defence or Spirit roll. Your emote must adhere to the theme of the chosen utility Trait, and the trait itself must be at least somewhat applicable."
+                .. "|nIf used to enhance an Offence Attack roll it also gives you a bonus to damage dealt for that roll equal to half your Utility bonus rounded up. Activate and then roll.",
         icon = "Interface\\Icons\\inv_glowingazeritespire",
         numCharges = 2,
     },
@@ -208,6 +209,12 @@ local TRAIT_BUFF_SPECS = {
         },
     },
     [TRAITS.SILAMELS_ACE.id] = {
+        {
+            duration = BuffDuration:New({
+                expireAfterAnyAction = true,
+            }),
+            -- effects provided in consequences.lua
+        },
         {
             duration = BuffDuration:New({
                 expireAfterAnyAction = true,

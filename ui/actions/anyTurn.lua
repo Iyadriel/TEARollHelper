@@ -72,10 +72,10 @@ ui.modules.actions.modules.anyTurn.getSharedPreRollOptions = function(options)
         versatileActive = ui.helpers.traitActiveText(TRAITS.VERSATILE, options.order),
         useSilamelsAce = ui.helpers.traitButton(TRAITS.SILAMELS_ACE, {
             order = options.order + 1,
-            hidden = function()
-                return options.action == ACTIONS.utility or not character.hasTrait(TRAITS.SILAMELS_ACE) or buffsState.buffLookup.getTraitBuffs(TRAITS.SILAMELS_ACE)
-            end,
             checkBuff = true,
+            func = function()
+                consequences.useTrait(TRAITS.SILAMELS_ACE)(options.action)
+            end,
         }),
         silamelsAceActive = ui.helpers.traitActiveText(TRAITS.SILAMELS_ACE, options.order + 1)
     }

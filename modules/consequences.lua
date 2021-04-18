@@ -110,7 +110,7 @@ local function useShieldSlam()
     return actions.traitToString(TRAITS.SHIELD_SLAM, rollState.traits.getShieldSlam())
 end
 
-local function useSilamelsAce()
+local function useSilamelsAce(action)
     local utilityBonusBuff = buffsState.state.buffs.utilityBonus.get()
     local amount = rules.utility.calculateUtilityTraitBonus(utilityBonusBuff)
 
@@ -118,7 +118,15 @@ local function useSilamelsAce()
         BuffEffectStat:New(STATS.offence, amount),
         BuffEffectStat:New(STATS.defence, amount),
         BuffEffectStat:New(STATS.spirit, amount),
-    })
+    }, 1)
+
+    if action == ACTIONS.attack then
+        amount = ceil(amount / 2)
+
+        buffs.addTraitBuff(TRAITS.SILAMELS_ACE, {
+            BuffEffectDamageDone:New(amount),
+        }, 2)
+    end
 end
 
 local function useVersatile()
