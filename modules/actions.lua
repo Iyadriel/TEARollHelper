@@ -172,7 +172,7 @@ local function getDefence(roll, rollBuff, defenceType, threshold, damageType, dm
     local hasBulwarkOfHopeProc = nil
     local hasDefensiveTacticianProc = nil
 
-    local effectiveIncomingDamage = rules.effects.calculateEffectiveIncomingDamage(dmgRisk, damageTakenBuff, true)
+    local effectiveIncomingDamage = rules.defence.calculateEffectiveIncomingDamage(defenceType, dmgRisk, damageTakenBuff)
 
     roll = rules.rolls.calculateRoll(roll, rollBuff)
     defence = defence + rules.defence.calculateBraceDefenceBonus(numBraceCharges) -- brace increases defence stat, not the roll.

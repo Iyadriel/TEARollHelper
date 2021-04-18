@@ -32,6 +32,13 @@ local function calculateBraceDefenceBonus(numBraceCharges)
     return numBraceCharges * 2
 end
 
+local function calculateEffectiveIncomingDamage(defenceType, incomingDamage, damageTakenBuff)
+    if character.hasFeat(FEATS.LIVING_BARRICADE) and defenceType == DEFENCE_TYPES.DAMAGE_REDUCTION then
+        incomingDamage = incomingDamage - 5
+    end
+    return rules.effects.calculateEffectiveIncomingDamage(incomingDamage, damageTakenBuff, true)
+end
+
 local function calculateDamageTaken(defenceType, threshold, defendValue, effectiveIncomingDamage)
     if defenceType == DEFENCE_TYPES.THRESHOLD then
         local safetyMargin = defendValue - threshold
@@ -97,6 +104,7 @@ rules.defence = {
     canUseBraceSystem = canUseBraceSystem,
     getMaxBraceCharges = getMaxBraceCharges,
     calculateBraceDefenceBonus = calculateBraceDefenceBonus,
+    calculateEffectiveIncomingDamage = calculateEffectiveIncomingDamage,
     calculateDamageTaken = calculateDamageTaken,
     calculateDamagePrevented = calculateDamagePrevented,
     isCrit = isCrit,
