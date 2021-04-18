@@ -76,7 +76,6 @@ ui.modules.actions.modules.anyTurn.getSharedPreRollOptions = function(options)
                 return options.action == ACTIONS.utility or not character.hasTrait(TRAITS.SILAMELS_ACE) or buffsState.buffLookup.getTraitBuffs(TRAITS.SILAMELS_ACE)
             end,
             checkBuff = true,
-            actionArgs = options.actionArgs,
         }),
         silamelsAceActive = ui.helpers.traitActiveText(TRAITS.SILAMELS_ACE, options.order + 1)
     }
