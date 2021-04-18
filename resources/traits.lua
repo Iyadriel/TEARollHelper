@@ -91,7 +91,8 @@ local TRAITS = {
     HOLY_BULWARK = {
         id = "HOLY_BULWARK",
         name = "Holy Bulwark",
-        desc = "Activate on an enemy turn to block the damage incoming towards yourself or an ally from an enemy attack, then deal the blocked damage back to the attacker. Only works against enemies who are Undead, Demonic, Void, or Eldritch. Activate outside of rolling.",
+        desc = "Activate on an enemy turn to block the damage incoming towards yourself or an ally from an enemy attack, then deal the blocked damage back to the attacker."
+            .. "|nOnly works against enemies who are Undead, Demonic, Void, or Eldritch. Activate outside of rolling.",
         numCharges = 1,
     },
     LIFE_PULSE = {
@@ -150,14 +151,16 @@ local TRAITS = {
     VERSATILE = {
         id = "VERSATILE",
         name = "Versatile",
-        desc = "Activate to choose one stat, and transfer its value to another stat of your choice for the duration of your next roll. Activate before rolling. Does not grant additional Greater Heal Slots. If you use Versatile to gain HP, and then have that amount or less HP left total by the end of your turn, you go down to 1 HP rather than 0 HP.",
+        desc = "Activate to choose one stat, and transfer its value to another stat of your choice for the duration of your next roll. Activate before rolling. Does not grant additional Greater Heal Slots."
+            .. "|nIf you use Versatile to gain HP, and then have that amount or less HP left total by the end of your turn, you go down to 1 HP rather than 0 HP.",
         icon = "Interface\\Icons\\spell_arcane_arcanetactics",
         numCharges = 3,
     },
     VESEERAS_IRE = {
         id = "VESEERAS_IRE",
         name = "Veseera's Ire",
-        desc = "Activate to set the threshold to hit on all enemies to 10+ (Only applies to you, does not affect enemies with a threshold already lower than 10+), and double the damage bonus of your Offence Mastery, for the current and next player turn. However, your defence stat is reduced by half of your base Offence rounded up for the duration. Activate and then roll.",
+        desc = "Activate to set the threshold to hit on all enemies to 10+ (Only applies to you, does not affect enemies with a threshold already lower than 10+), and double the damage bonus of your Offence Mastery, for the current and next player turn."
+            .. "|nHowever, your defence stat is reduced by half of your base Offence rounded up for the duration. Activate and then roll.",
         icon = "Interface\\Icons\\spell_shadow_unstableaffliction_3",
         numCharges = 1,
         requiredStats = {
