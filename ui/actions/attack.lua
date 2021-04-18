@@ -212,30 +212,32 @@ ui.modules.actions.modules.attack.getOptions = function(options)
                             rolls.performRoll(ACTIONS.attack)
                         end
                     },
-                    useBloodHarvest = {
+                    actions_attack_bloodHarvest = {
                         order = 8,
-                        type = "toggle",
-                        width = "full",
+                        type = "range",
                         name = function()
-                            return COLOURS.FEATS.BLOOD_HARVEST .. "Use " .. FEATS.BLOOD_HARVEST.name
+                            return COLOURS.FEATS.BLOOD_HARVEST .. FEATS.BLOOD_HARVEST.name
                         end,
-                        desc = FEATS.BLOOD_HARVEST.desc,
+                        desc = "The amount of " .. FEATS.BLOOD_HARVEST.name .. " slots to use.",
+                        min = 0,
+                        max = rules.damage.MAX_NUM_BLOOD_HARVEST_PER_ATTACK,
+                        step = 1,
                         hidden = function()
                             if rules.feats.canProc(FEATS.BLOOD_HARVEST) then
                                 return rules.damage.getMaxBloodHarvestSlots() <= 0 or characterState.featsAndTraits.numBloodHarvestSlots.get() <= 0
                             end
                             return true
                         end,
-                        get = function()
-                            return state.damage.numBloodHarvestSlots.get() > 0
+                        get = state.damage.numBloodHarvestSlots.get,
+                        set = function(info, value)
+                            state.damage.numBloodHarvestSlots.set(value)
                         end,
-                        set = function()
-                            if state.damage.numBloodHarvestSlots.get() > 0 then
-                                state.damage.numBloodHarvestSlots.set(0)
-                            else
-                                state.damage.numBloodHarvestSlots.set(1)
-                            end
-                        end,
+                        dialogControl = TEARollHelper:CreateCustomSlider("actions_attack_bloodHarvest", {
+                            max = function()
+                                local numSlots = characterState.featsAndTraits.numBloodHarvestSlots.get()
+                                return min(numSlots, rules.damage.MAX_NUM_BLOOD_HARVEST_PER_ATTACK)
+                            end,
+                        })
                     },
                     useCriticalMass = ui.helpers.traitToggle(ACTIONS.damage, TRAITS.CRITICAL_MASS, {
                         order = 9,

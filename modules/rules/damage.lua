@@ -12,7 +12,7 @@ local RACIAL_TRAITS = racialTraits.RACIAL_TRAITS
 local TRAITS = traits.TRAITS
 local WEAKNESSES = weaknesses.WEAKNESSES
 
-local NUM_OFFENCE_PER_BLOOD_HARVEST_SLOT = 2
+local MAX_NUM_BLOOD_HARVEST_PER_ATTACK = 3
 
 local function getBaseDamageBonus()
     if character.hasOffenceProficiency() then
@@ -72,13 +72,11 @@ end
 
 local function getMaxBloodHarvestSlots()
     local offence = character.getPlayerOffence()
-    local numSlots = max(0, floor(offence / NUM_OFFENCE_PER_BLOOD_HARVEST_SLOT))
-
-    return numSlots
+    return max(0, offence)
 end
 
 local function calculateBloodHarvestBonus(numBloodHarvestSlots)
-    return numBloodHarvestSlots * 5
+    return numBloodHarvestSlots * 3
 end
 
 -- Feat: Onslaught
@@ -113,6 +111,8 @@ local function calculateVindicationHealing(dmgDealt)
 end
 
 rules.damage = {
+    MAX_NUM_BLOOD_HARVEST_PER_ATTACK = MAX_NUM_BLOOD_HARVEST_PER_ATTACK,
+
     getBaseDamageBonus = getBaseDamageBonus,
     getBaseDamageAfterBuffs = getBaseDamageAfterBuffs,
     calculateDamageValue = calculateDamageValue,

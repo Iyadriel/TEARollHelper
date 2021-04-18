@@ -64,7 +64,7 @@ local FEATS = {
     BLOOD_HARVEST = {
         id = "BLOOD_HARVEST",
         name = "Blood Harvest",
-        desc = "For every 2 points you put into the Offence stat you gain a Harvest Slot. You can activate these Harvest Slots to spend them akin to a Greater Heal Slot. Spending a Harvest slot increases the damage of your next Offence attack by +5. This damage is dealt even if you miss. Only one Harvest Slot can be spent at a time.",
+        desc = "For every point you put into the Offence stat you gain a Harvest Slot. You can activate these Harvest Slots to spend them akin to a Greater Heal Slot. Spending a Harvest slot increases the damage of your next Offence attack by +3. This damage is dealt even if you miss. You can activate up to 3 Harvest Slots at the same time.",
     },
     BULWARK_OF_HOPE = {
         id = "BULWARK_OF_HOPE",
