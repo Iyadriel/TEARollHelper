@@ -58,6 +58,10 @@ local function calculateDamagePrevented(dmgRisk, damageTaken)
     return 0
 end
 
+local function isConsideredSuccessful(damageTaken)
+    return damageTaken <= 0
+end
+
 local function isCrit(roll)
     local critReq = rules.rolls.getCritReq(ACTIONS.defend)
 
@@ -74,16 +78,22 @@ local function calculateRetaliationDamage(defence)
     return dmg
 end
 
+-- Feat: Avenging Guardian
+
+local function hasAvengingGuardianProc(damageTaken)
+    return isConsideredSuccessful(damageTaken)
+end
+
 -- Feat: Bulwark of Hope
 
 local function hasBulwarkOfHopeProc(damageTaken)
-    return damageTaken <= 0
+    return isConsideredSuccessful(damageTaken)
 end
 
 -- Feat: Defensive Tactician
 
 local function hasDefensiveTacticianProc(damageTaken)
-    return damageTaken <= 0
+    return isConsideredSuccessful(damageTaken)
 end
 
 local function shouldShowPreRollUI()
@@ -110,6 +120,7 @@ rules.defence = {
     isCrit = isCrit,
     calculateRetaliationDamage = calculateRetaliationDamage,
 
+    hasAvengingGuardianProc = hasAvengingGuardianProc,
     hasBulwarkOfHopeProc = hasBulwarkOfHopeProc,
     hasDefensiveTacticianProc = hasDefensiveTacticianProc,
 

@@ -488,7 +488,14 @@ local function getAttack()
 
     local attackIndex = rolls.state.attack.attacks.count() + 1
     local rollBuff = getRollBuff()
-    local whichStat = character.hasFeat(FEATS.PENANCE) and STATS.spirit or STATS.offence
+    local whichStat
+    if buffsState.buffLookup.getFeatBuffs(FEATS.AVENGING_GUARDIAN) then
+        whichStat = rules.feats.getStatForAvengingGuardian()
+    elseif character.hasFeat(FEATS.PENANCE) then
+        whichStat = STATS.spirit
+    else
+        whichStat = STATS.offence
+    end
     local stat = character.getPlayerStat(whichStat)
     local statBuff = buffsState.buffs[whichStat].get()
     local baseDmgBuff = buffsState.buffs.baseDamage.get()
@@ -514,7 +521,9 @@ end
 local function getCC()
     local rollBuff = getRollBuff()
     local whichStat
-    if character.hasFeat(FEATS.SHEPHERD_OF_THE_WICKED) then
+    if buffsState.buffLookup.getFeatBuffs(FEATS.AVENGING_GUARDIAN) then
+        whichStat = rules.feats.getStatForAvengingGuardian()
+    elseif character.hasFeat(FEATS.SHEPHERD_OF_THE_WICKED) then
         whichStat = STATS.defence
     else
         whichStat = STATS.offence

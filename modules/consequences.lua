@@ -66,6 +66,13 @@ end
 
 -- Feats
 
+local function applyAvengingGuardian()
+    buffs.addFeatBuff(FEATS.AVENGING_GUARDIAN, {
+        BuffEffectDamageDone:New(rules.feats.calculateAvengingGuardianBonusDmg()),
+        BuffEffectSpecial:New("You roll attack or CC with your Defence/Spirit stat (whichever is higher)."),
+    })
+end
+
 local function applyDefensiveTactician(dmgRisk)
     buffs.addFeatBuff(FEATS.DEFENSIVE_TACTICIAN, { BuffEffectDamageDone:New(floor(dmgRisk / 2)) })
 end
@@ -260,6 +267,10 @@ local function confirmMeleeSaveAction(meleeSave)
         state.defence.damagePrevented.increment(meleeSave.damagePrevented)
     end
 
+    if meleeSave.hasAvengingGuardianProc then
+        applyAvengingGuardian()
+    end
+
     if meleeSave.hasBulwarkOfHopeProc then
         buffs.addFeatBuff(FEATS.BULWARK_OF_HOPE, nil, 2, true)
     end
@@ -270,6 +281,10 @@ local function confirmMeleeSaveAction(meleeSave)
 end
 
 local function confirmRangedSaveAction(rangedSave)
+    if rangedSave.hasAvengingGuardianProc then
+        applyAvengingGuardian()
+    end
+
     if rangedSave.hasBulwarkOfHopeProc then
         buffs.addFeatBuff(FEATS.BULWARK_OF_HOPE, nil, 2, true)
     end

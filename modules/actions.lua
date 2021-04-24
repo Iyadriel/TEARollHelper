@@ -214,6 +214,7 @@ local function getMeleeSave(roll, rollBuff, defenceType, threshold, damageType, 
     local isBigFail
     local hasCounterForceProc = nil
     local counterForceDmg = 0
+    local hasAvengingGuardianProc = nil
     local hasBulwarkOfHopeProc = nil
     local hasDefensiveTacticianProc = nil
 
@@ -233,7 +234,9 @@ local function getMeleeSave(roll, rollBuff, defenceType, threshold, damageType, 
 
     damageTaken = rules.defence.calculateDamageTaken(defenceType, threshold, meleeSaveValue, effectiveIncomingDamage)
 
-    if rules.feats.canProc(FEATS.BULWARK_OF_HOPE) then
+    if rules.feats.canProc(FEATS.AVENGING_GUARDIAN) then
+        hasAvengingGuardianProc = rules.defence.hasAvengingGuardianProc(damageTaken)
+    elseif rules.feats.canProc(FEATS.BULWARK_OF_HOPE) then
         hasBulwarkOfHopeProc = rules.defence.hasBulwarkOfHopeProc(damageTaken)
     elseif rules.feats.canProc(FEATS.COUNTER_FORCE) then
         hasCounterForceProc = rules.meleeSave.hasCounterForceProc(meleeSaveValue, threshold)
@@ -254,6 +257,7 @@ local function getMeleeSave(roll, rollBuff, defenceType, threshold, damageType, 
 
         hasCounterForceProc = hasCounterForceProc,
         counterForceDmg = counterForceDmg,
+        hasAvengingGuardianProc = hasAvengingGuardianProc,
         hasBulwarkOfHopeProc = hasBulwarkOfHopeProc,
         hasDefensiveTacticianProc = hasDefensiveTacticianProc,
 
@@ -269,6 +273,7 @@ end
 local function getRangedSave(roll, rollBuff, defenceType, threshold, spirit, buff)
     threshold = threshold + rules.common.SAVE_THRESHOLD_INCREASE
 
+    local hasAvengingGuardianProc = nil
     local hasBulwarkOfHopeProc = nil
 
     roll = rules.rolls.calculateRoll(roll, rollBuff)
@@ -280,7 +285,9 @@ local function getRangedSave(roll, rollBuff, defenceType, threshold, spirit, buf
         damageReduction = rules.rangedSave.calculateDamageReduction(spirit)
     end
 
-    if rules.feats.canProc(FEATS.BULWARK_OF_HOPE) then
+    if rules.feats.canProc(FEATS.AVENGING_GUARDIAN) then
+        hasAvengingGuardianProc = canFullyProtect
+    elseif rules.feats.canProc(FEATS.BULWARK_OF_HOPE) then
         hasBulwarkOfHopeProc = canFullyProtect
     end
 
@@ -289,6 +296,7 @@ local function getRangedSave(roll, rollBuff, defenceType, threshold, spirit, buf
         canFullyProtect = canFullyProtect,
         damageReduction = damageReduction,
 
+        hasAvengingGuardianProc = hasAvengingGuardianProc,
         hasBulwarkOfHopeProc = hasBulwarkOfHopeProc,
     }
 end

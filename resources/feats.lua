@@ -19,6 +19,7 @@ local TURN_TYPES = constants.TURN_TYPES
 feats.FEAT_KEYS = {
     "FEATLESS",
     "ADRENALINE",
+    "AVENGING_GUARDIAN",
     "BLOOD_HARVEST",
     "BULWARK_OF_HOPE",
     "CHAPLAIN_OF_VIOLENCE",
@@ -60,6 +61,20 @@ local FEATS = {
         id = "ADRENALINE",
         name = "Adrenaline",
         desc = "Beating the threshold by 6 or more with an Offence attack roll lets you perform a second attack against the same target. Cannot trigger more than once per player turn.",
+    },
+    AVENGING_GUARDIAN = {
+        id = "AVENGING_GUARDIAN",
+        name = "Avenging Guardian",
+        desc = "Performing a successful save on someone else allows you to roll attack/cc on the next player turn with your Defence or Spirit stat and gives you a bonus to damage dealt equal to half your Defence or Spirit stat rounded up.",
+        icon = "Interface\\Icons\\ability_paladin_holyavenger",
+        requiredStats = {
+            {
+                [STATS.defence] = 4,
+            },
+            {
+                [STATS.spirit] = 4,
+            },
+        },
     },
     BLOOD_HARVEST = {
         id = "BLOOD_HARVEST",
@@ -273,6 +288,15 @@ local FEATS = {
 }
 
 local FEAT_BUFF_SPECS = {
+    [FEATS.AVENGING_GUARDIAN.id] = {
+        {
+            duration = BuffDuration:NewWithTurnType({
+                turnTypeID = TURN_TYPES.PLAYER.id,
+                remainingTurns = 1,
+            }),
+            -- effects provided in consequences.lua
+        },
+    },
     [FEATS.BULWARK_OF_HOPE.id] = {
         {
             duration = BuffDuration:New({
