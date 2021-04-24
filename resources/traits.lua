@@ -14,6 +14,7 @@ local Artisan = models.Artisan:New()
 local Chastice = models.Chastice:New()
 local CriticalMass = models.CriticalMass:New()
 local MarkOfBenevolence = models.MarkOfBenevolence:New()
+local RetaliateAndDecimate = models.RetaliateAndDecimate:New()
 local TrueshotAura = models.TrueshotAura:New()
 
 local ACTIONS = constants.ACTIONS
@@ -38,6 +39,7 @@ traits.TRAIT_KEYS = {
     "MOMENT_OF_EXCELLENCE",
     "PRESENCE_OF_VIRTUE",
     "REAP",
+    RetaliateAndDecimate.id,
     "SECOND_WIND",
     "SHIELD_SLAM",
     "SILAMELS_ACE",
@@ -127,6 +129,7 @@ local TRAITS = {
         desc = "Activate to apply the result of an Offence roll to all enemies in melee range around you, or in melee range around your target. Activate after rolling.",
         numCharges = 2,
     },
+    [RetaliateAndDecimate.id] = RetaliateAndDecimate,
     SECOND_WIND = {
         id = "SECOND_WIND",
         name = "Second Wind",

@@ -129,8 +129,15 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                     consequences.useTrait(TRAITS.HOLY_BULWARK)(false)
                 end,
             }),
-            preRoll = ui.modules.turn.modules.roll.getPreRollOptions({
+            useRetaliateAndDecimate = ui.helpers.traitButton(TRAITS.RETALIATE_AND_DECIMATE, {
                 order = 5,
+                hidden = function()
+                    return not character.hasTrait(TRAITS.RETALIATE_AND_DECIMATE) or not rolls.state.defend.damageRisk.get()
+                end,
+                width = "full",
+            }),
+            preRoll = ui.modules.turn.modules.roll.getPreRollOptions({
+                order = 6,
                 hidden = function()
                     return shouldHideRoll() or not rules.defence.shouldShowPreRollUI()
                 end,
@@ -169,12 +176,12 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                 ),
             }),
             roll = ui.modules.turn.modules.roll.getOptions({
-                order = 6,
+                order = 7,
                 action = ACTIONS.defend,
                 hidden = shouldHideRoll,
             }),
             defend = {
-                order = 7,
+                order = 8,
                 type = "group",
                 name = ACTION_LABELS.defend,
                 inline = true,
@@ -268,7 +275,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                 }
             },
             summary = {
-                order = 8,
+                order = 9,
                 type = "group",
                 name = "Summary",
                 inline = true,
@@ -316,7 +323,7 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                 }
             },
 --[[             postRoll = {
-                order = 8,
+                order = 10,
                 type = "group",
                 name = "After rolling",
                 inline = true,
