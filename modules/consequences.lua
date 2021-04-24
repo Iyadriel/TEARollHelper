@@ -21,6 +21,7 @@ local BuffEffectBaseDamage = models.BuffEffectBaseDamage
 local BuffEffectDamageDone = models.BuffEffectDamageDone
 local BuffEffectHealingDone = models.BuffEffectHealingDone
 local BuffEffectHealingOverTime = models.BuffEffectHealingOverTime
+local BuffEffectSpecial = models.BuffEffectSpecial
 local BuffEffectStat = models.BuffEffectStat
 
 local ACTIONS = constants.ACTIONS
@@ -143,6 +144,7 @@ local function useVeseerasIre()
 
     buffs.addTraitBuff(TRAITS.VESEERAS_IRE, {
         BuffEffectBaseDamage:New(rules.damage.getBaseDamageBonus()),
+        BuffEffectSpecial:New("You roll 5-10 for damage instead of 1-10."),
     }, 1)
     buffs.addTraitBuff(TRAITS.VESEERAS_IRE, {
         BuffEffectStat:New(STATS.defence, -ceil(character.getPlayerOffence() / 2)),
