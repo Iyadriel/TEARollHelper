@@ -240,7 +240,6 @@ local FEATS = {
         id = "SHEPHERD_OF_THE_WICKED",
         name = "Shepherd of the Wicked",
         desc = "You can now roll CC rolls with your Defence stat instead of your Offence stat.",
-        note = "The addon will automatically use the highest stat.",
     },
     TRAUMA_RESPONSE = {
         id = "TRAUMA_RESPONSE",

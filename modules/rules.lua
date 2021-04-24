@@ -11,8 +11,12 @@ local WEAKNESSES = weaknesses.WEAKNESSES
 -- threshold for saving is higher than the original defence threshold
 local SAVE_THRESHOLD_INCREASE = 3
 
+local function calculateGenericStat(stat, statBuff)
+    return stat + statBuff
+end
+
 local function calculateOffenceStat(offence, buff)
-    return offence + buff
+    return calculateGenericStat(offence, buff)
 end
 
 -- damageType can be nil if defence stat is being used for a non-defensive action.
@@ -28,7 +32,7 @@ local function calculateDefenceStat(damageType, defence, buff)
 end
 
 local function calculateSpiritStat(spirit, buff)
-    return spirit + buff
+    return calculateGenericStat(spirit, buff)
 end
 
 local function canUseFeats()
@@ -43,6 +47,7 @@ end
 rules.common = {
     SAVE_THRESHOLD_INCREASE = SAVE_THRESHOLD_INCREASE,
 
+    calculateGenericStat = calculateGenericStat,
     calculateOffenceStat = calculateOffenceStat,
     calculateDefenceStat = calculateDefenceStat,
     calculateSpiritStat = calculateSpiritStat,

@@ -513,12 +513,16 @@ end
 
 local function getCC()
     local rollBuff = getRollBuff()
-    local offence = character.getPlayerOffence()
-    local offenceBuff = buffsState.buffs.offence.get()
-    local defence = character.getPlayerDefence()
-    local defenceBuff = buffsState.buffs.defence.get()
+    local whichStat
+    if character.hasFeat(FEATS.SHEPHERD_OF_THE_WICKED) then
+        whichStat = STATS.defence
+    else
+        whichStat = STATS.offence
+    end
+    local stat = character.getPlayerStat(whichStat)
+    local statBuff = buffsState.buffs[whichStat].get()
 
-    return actions.getCC(state.cc.currentRoll, rollBuff, offence, offenceBuff, defence, defenceBuff)
+    return actions.getCC(state.cc.currentRoll, rollBuff, stat, statBuff)
 end
 
 local function getHealing(outOfCombat)

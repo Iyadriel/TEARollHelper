@@ -154,10 +154,10 @@ local function getDamage(attackRoll, damageRoll, rollBuff, critType, baseDmgBuff
     }
 end
 
-local function getCC(roll, rollBuff, offence, offenceBuff, defence, defenceBuff)
+local function getCC(roll, rollBuff, stat, statBuff)
     local isCrit = rules.cc.isCrit(roll)
     roll = rules.rolls.calculateRoll(roll, rollBuff)
-    local ccValue = rules.cc.calculateCCValue(roll, offence, offenceBuff, defence, defenceBuff)
+    local ccValue = rules.cc.calculateCCValue(roll, stat, statBuff)
 
     return {
         ccValue = ccValue,

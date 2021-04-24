@@ -31,8 +31,8 @@ local function isCrit(roll)
     return roll >= critReq
 end
 
-local function calculateAttackValue(roll, offence, buff)
-    return roll + rules.common.calculateOffenceStat(offence, buff)
+local function calculateAttackValue(roll, stat, statBuff)
+    return roll + rules.common.calculateGenericStat(stat, statBuff)
 end
 
 local function isSuccessful(attackValue, threshold)
