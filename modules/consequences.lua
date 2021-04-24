@@ -17,13 +17,13 @@ local feats = ns.resources.feats
 local traits = ns.resources.traits
 local weaknesses = ns.resources.weaknesses
 
+local BuffEffectBaseDamage = models.BuffEffectBaseDamage
 local BuffEffectDamageDone = models.BuffEffectDamageDone
 local BuffEffectHealingDone = models.BuffEffectHealingDone
 local BuffEffectHealingOverTime = models.BuffEffectHealingOverTime
 local BuffEffectStat = models.BuffEffectStat
 
 local ACTIONS = constants.ACTIONS
-local ENEMIES = enemies.ENEMIES
 local EVENTS = bus.EVENTS
 local FEATS = feats.FEATS
 local INCOMING_HEAL_SOURCES = constants.INCOMING_HEAL_SOURCES
@@ -142,7 +142,7 @@ local function useVeseerasIre()
     rollState.state.attack.threshold.set(10)
 
     buffs.addTraitBuff(TRAITS.VESEERAS_IRE, {
-        BuffEffectStat:New(STATS.offence, rules.damage.getBaseDamageBonus()),
+        BuffEffectBaseDamage:New(rules.damage.getBaseDamageBonus()),
     }, 1)
     buffs.addTraitBuff(TRAITS.VESEERAS_IRE, {
         BuffEffectStat:New(STATS.defence, -ceil(character.getPlayerOffence() / 2)),
