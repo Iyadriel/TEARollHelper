@@ -12,6 +12,7 @@ local rules = ns.rules
 local turnState = ns.state.turn
 
 local feats = ns.resources.feats
+local traits = ns.resources.traits
 local utilityTypes = ns.resources.utilityTypes
 
 local ACTIONS = constants.ACTIONS
@@ -22,6 +23,7 @@ local FEATS = feats.FEATS
 local ROLL_MODES = constants.ROLL_MODES
 local SPECIAL_ACTIONS = constants.SPECIAL_ACTIONS
 local STATS = constants.STATS
+local TRAITS = traits.TRAITS
 local UTILITY_TYPES = utilityTypes.UTILITY_TYPES
 
 local state
@@ -558,12 +560,31 @@ end
 
 local function getDefence()
     local rollBuff = getRollBuff()
-    local defence = character.getPlayerDefence()
-    local defenceBuff = buffsState.buffs.defence.get()
+    local whichStat
+    if buffsState.buffLookup.getTraitBuffs(TRAITS.WAY_OF_THE_STAB) then
+        whichStat = STATS.offence
+    else
+        whichStat = STATS.defence
+    end
+    local stat = character.getPlayerStat(whichStat)
+    local statBuff = buffsState.buffs[whichStat].get()
     local damageTakenBuff = buffsState.buffs.damageTaken.get()
     local activeTraits = state.defend.activeTraits
 
-    return actions.getDefence(state.defend.currentRoll, rollBuff, state.defend.defenceType, state.defend.threshold, state.defend.damageType, state.defend.damageRisk, state.defend.numBraceCharges, state.defend.critType, defence, defenceBuff, damageTakenBuff, activeTraits)
+    return actions.getDefence(
+        state.defend.currentRoll,
+        rollBuff,
+        state.defend.defenceType,
+        state.defend.threshold,
+        state.defend.damageType,
+        state.defend.damageRisk,
+        state.defend.numBraceCharges,
+        state.defend.critType,
+        stat,
+        statBuff,
+        damageTakenBuff,
+        activeTraits
+    )
 end
 
 local function getMeleeSave()

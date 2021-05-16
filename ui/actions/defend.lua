@@ -172,6 +172,12 @@ ui.modules.actions.modules.defend.getOptions = function(options)
                                 return not (character.hasFeat(FEATS.LIVING_BARRICADE) and buffsState.buffLookup.getFeatBuffs(FEATS.LIVING_BARRICADE))
                             end,
                         },
+                        useWayOfTheStab = ui.helpers.traitButton(TRAITS.WAY_OF_THE_STAB, {
+                            order = 3,
+                            width = "full",
+                            checkBuff = true,
+                        }),
+                        wayOfTheStabActive = ui.helpers.traitActiveText(TRAITS.WAY_OF_THE_STAB, 3),
                     }
                 ),
             }),

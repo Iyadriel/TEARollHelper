@@ -50,6 +50,7 @@ models/trait/critical-mass.lua
 models/trait/mark-of-benevolence.lua
 models/trait/retaliate-and-decimate.lua
 models/trait/trueshot-aura.lua
+models/trait/way-of-the-stab.lua
 models/unit.lua
 
 resources/critical-wounds.lua

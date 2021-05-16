@@ -100,6 +100,7 @@ local function shouldShowPreRollUI()
     return character.hasFeat(FEATS.LIVING_BARRICADE)
         or character.hasTrait(TRAITS.APEX_PROTECTOR)
         or character.hasTrait(TRAITS.ANQULANS_REDOUBT)
+        or character.hasTrait(TRAITS.WAY_OF_THE_STAB)
         or rules.other.shouldShowPreRollUI()
 end
 

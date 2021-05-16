@@ -16,6 +16,7 @@ local CriticalMass = models.CriticalMass:New()
 local MarkOfBenevolence = models.MarkOfBenevolence:New()
 local RetaliateAndDecimate = models.RetaliateAndDecimate:New()
 local TrueshotAura = models.TrueshotAura:New()
+local WayOfTheStab = models.WayOfTheStab:New()
 
 local ACTIONS = constants.ACTIONS
 local STATS = constants.STATS
@@ -47,6 +48,7 @@ traits.TRAIT_KEYS = {
     "VERSATILE",
     "VESEERAS_IRE",
     "VINDICATION",
+    WayOfTheStab.id,
 }
 
 local TRAITS = {
@@ -179,6 +181,7 @@ local TRAITS = {
         desc = "Activate after a successful Offence attack roll in order to replicate half the damage done rounded up as healing. You can spread this healing as you wish among friendly targets.",
         numCharges = 2,
     },
+    [WayOfTheStab.id] = WayOfTheStab,
 }
 
 local TRAIT_BUFF_SPECS = {
