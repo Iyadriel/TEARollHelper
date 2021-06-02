@@ -492,7 +492,9 @@ local function getAttack()
     local rollBuff = getRollBuff()
     local whichStat
     if buffsState.buffLookup.getFeatBuffs(FEATS.AVENGING_GUARDIAN) then
-        whichStat = rules.feats.getStatForAvengingGuardian()
+        local defenceBuff = buffsState.buffs.defence.get()
+        local spiritBuff = buffsState.buffs.spirit.get()
+        whichStat = rules.feats.getStatForAvengingGuardian(defenceBuff, spiritBuff)
     elseif character.hasFeat(FEATS.PENANCE) then
         whichStat = STATS.spirit
     else
@@ -524,7 +526,9 @@ local function getCC()
     local rollBuff = getRollBuff()
     local whichStat
     if buffsState.buffLookup.getFeatBuffs(FEATS.AVENGING_GUARDIAN) then
-        whichStat = rules.feats.getStatForAvengingGuardian()
+        local defenceBuff = buffsState.buffs.defence.get()
+        local spiritBuff = buffsState.buffs.spirit.get()
+        whichStat = rules.feats.getStatForAvengingGuardian(defenceBuff, spiritBuff)
     elseif character.hasFeat(FEATS.SHEPHERD_OF_THE_WICKED) then
         whichStat = STATS.defence
     else

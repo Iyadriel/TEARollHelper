@@ -12,15 +12,19 @@ local function canProc(feat)
     return character.hasFeat(feat);
 end
 
-local function getStatForAvengingGuardian()
-    if character.getPlayerDefence() >= character.getPlayerSpirit() then
+local function getStatForAvengingGuardian(defenceBuff, spiritBuff)
+    local defence = rules.common.calculateDefenceStat(nil, character.getPlayerDefence(), defenceBuff)
+    local spirit = rules.common.calculateSpiritStat(character.getPlayerSpirit(), spiritBuff)
+    if defence >= spirit then
         return STATS.defence
     end
     return STATS.spirit
 end
 
-local function calculateAvengingGuardianBonusDmg()
-    return ceil(max(character.getPlayerDefence(), character.getPlayerSpirit()) / 2)
+local function calculateAvengingGuardianBonusDmg(defenceBuff, spiritBuff)
+    local defence = rules.common.calculateDefenceStat(nil, character.getPlayerDefence(), defenceBuff)
+    local spirit = rules.common.calculateSpiritStat(character.getPlayerSpirit(), spiritBuff)
+    return ceil(max(defence, spirit) / 2)
 end
 
 local function halfOfOffenceRoundedDown()

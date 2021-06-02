@@ -67,8 +67,10 @@ end
 -- Feats
 
 local function applyAvengingGuardian()
+    local defenceBuff = buffsState.state.buffs.defence.get()
+    local spiritBuff = buffsState.state.buffs.spirit.get()
     buffs.addFeatBuff(FEATS.AVENGING_GUARDIAN, {
-        BuffEffectDamageDone:New(rules.feats.calculateAvengingGuardianBonusDmg()),
+        BuffEffectDamageDone:New(rules.feats.calculateAvengingGuardianBonusDmg(defenceBuff, spiritBuff)),
         BuffEffectSpecial:New("You roll attack or CC with your Defence/Spirit stat (whichever is higher)."),
     })
 end
