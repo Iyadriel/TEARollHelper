@@ -68,7 +68,8 @@ local function isCrit(roll)
     return roll >= critReq
 end
 
-local function calculateRetaliationDamage(defence)
+local function calculateRetaliationDamage(stat, statBuff)
+    local defence = rules.common.calculateDefenceStat(nil, stat, statBuff)
     local dmg = 1 + (defence * 2)
 
     if character.hasRacialTrait(RACIAL_TRAITS.MIGHT_OF_THE_MOUNTAIN) then

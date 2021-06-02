@@ -201,7 +201,7 @@ local function getDefence(roll, rollBuff, defenceType, threshold, damageType, dm
     damagePrevented = rules.defence.calculateDamagePrevented(dmgRisk, damageTaken)
 
     if isCrit then
-        retaliateDmg = rules.defence.calculateRetaliationDamage(stat)
+        retaliateDmg = rules.defence.calculateRetaliationDamage(stat, statBuff)
         retaliateDmg = rules.damage.calculateEffectiveOutgoingDamage(retaliateDmg)
     end
 
