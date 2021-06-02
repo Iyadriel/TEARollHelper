@@ -165,6 +165,18 @@ local function getCC(roll, rollBuff, stat, statBuff)
     }
 end
 
+local function calculateDamageTaken(calculator)
+    local dmg = calculator.incomingDmg
+    dmg = calculator.doAction(dmg)
+    if dmg  > 0 then
+        dmg = calculator.applyGeneralModifiers(dmg)
+        if calculator.applyActionModifiers then
+            dmg = calculator.applyActionModifiers(dmg)
+        end
+    end
+    return dmg
+end
+
 local function getDefence(roll, rollBuff, defenceType, threshold, damageType, dmgRisk, numBraceCharges, critType, stat, statBuff, damageTakenBuff, activeTraits)
     local isCrit = rules.defence.isCrit(roll)
     local defendValue, damageTaken, damagePrevented
@@ -172,13 +184,21 @@ local function getDefence(roll, rollBuff, defenceType, threshold, damageType, dm
     local hasBulwarkOfHopeProc = nil
     local hasDefensiveTacticianProc = nil
 
-    local effectiveIncomingDamage = rules.defence.calculateEffectiveIncomingDamage(defenceType, dmgRisk, damageTakenBuff)
-
     roll = rules.rolls.calculateRoll(roll, rollBuff)
     stat = stat + rules.defence.calculateBraceDefenceBonus(numBraceCharges) -- brace increases defence stat, not the roll.
     defendValue = rules.defence.calculateDefendValue(roll, damageType, stat, statBuff)
-    damageTaken = rules.defence.calculateDamageTaken(defenceType, threshold, defendValue, effectiveIncomingDamage)
-    damagePrevented = rules.defence.calculateDamagePrevented(effectiveIncomingDamage, damageTaken)
+
+    damageTaken = calculateDamageTaken({
+        incomingDmg = dmgRisk,
+        doAction = function (dmg)
+            return rules.defence.calculateDamageAfterDefence(defenceType, threshold, defendValue, dmg)
+        end,
+        applyGeneralModifiers = function (dmg)
+            return rules.defence.calculateEffectiveIncomingDamage(defenceType, dmg, damageTakenBuff)
+        end,
+    })
+
+    damagePrevented = rules.defence.calculateDamagePrevented(dmgRisk, damageTaken)
 
     if isCrit then
         retaliateDmg = rules.defence.calculateRetaliationDamage(stat)
@@ -209,7 +229,7 @@ end
 local function getMeleeSave(roll, rollBuff, defenceType, threshold, damageType, dmgRiskToAlly, defence, defenceBuff, damageTakenBuff, activeTraits)
     threshold = threshold + rules.common.SAVE_THRESHOLD_INCREASE
 
-    local dmgRiskToPlayer = rules.meleeSave.calculateDamageRiskToPlayer(dmgRiskToAlly)
+    local dmgRiskToPlayer = dmgRiskToAlly
     local meleeSaveValue, damageTaken, damagePrevented
     local isBigFail
     local hasCounterForceProc = nil
@@ -229,10 +249,18 @@ local function getMeleeSave(roll, rollBuff, defenceType, threshold, damageType, 
         dmgRiskToPlayer = rules.meleeSave.applyBigFailModifier(dmgRiskToPlayer)
     end
 
-    -- then apply modifiers
-    local effectiveIncomingDamage = rules.effects.calculateEffectiveIncomingDamage(dmgRiskToPlayer, damageTakenBuff, true)
-
-    damageTaken = rules.defence.calculateDamageTaken(defenceType, threshold, meleeSaveValue, effectiveIncomingDamage)
+    damageTaken = calculateDamageTaken({
+        incomingDmg = dmgRiskToPlayer,
+        doAction = function (dmg)
+            return rules.defence.calculateDamageAfterDefence(defenceType, threshold, meleeSaveValue, dmg)
+        end,
+        applyGeneralModifiers = function (dmg)
+            return rules.effects.calculateEffectiveIncomingDamage(dmg, damageTakenBuff, true)
+        end,
+        applyActionModifiers = function (dmg)
+            return rules.meleeSave.applyExtraMeleeSaveDamageTakenReductions(dmg)
+        end,
+    })
 
     if rules.feats.canProc(FEATS.AVENGING_GUARDIAN) then
         hasAvengingGuardianProc = rules.defence.hasAvengingGuardianProc(damageTaken)

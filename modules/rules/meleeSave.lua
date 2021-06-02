@@ -33,16 +33,16 @@ local function calculateCounterForceProcDmg(defence)
     return defence * 2
 end
 
-local function calculateDamageRiskToPlayer(dmgRiskToAlly)
+local function applyExtraMeleeSaveDamageTakenReductions(damageTaken)
     if character.hasDefenceProficiency() then
         if character.hasFeat(FEATS.MASTER) then
-            return ceil(dmgRiskToAlly / 3)
+            return ceil(damageTaken / 3)
         end
 
-        return ceil(dmgRiskToAlly / 2)
+        return ceil(damageTaken / 2)
     end
 
-    return dmgRiskToAlly
+    return damageTaken
 end
 
 local function isSaveBigFail(defendValue, threshold)
@@ -74,7 +74,7 @@ rules.meleeSave = {
     hasCounterForceProc = hasCounterForceProc,
     calculateCounterForceProcDmg = calculateCounterForceProcDmg,
 
-    calculateDamageRiskToPlayer = calculateDamageRiskToPlayer,
+    applyExtraMeleeSaveDamageTakenReductions = applyExtraMeleeSaveDamageTakenReductions,
     isSaveBigFail = isSaveBigFail,
     applyBigFailModifier = applyBigFailModifier,
 

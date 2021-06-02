@@ -39,7 +39,7 @@ local function calculateEffectiveIncomingDamage(defenceType, incomingDamage, dam
     return rules.effects.calculateEffectiveIncomingDamage(incomingDamage, damageTakenBuff, true)
 end
 
-local function calculateDamageTaken(defenceType, threshold, defendValue, effectiveIncomingDamage)
+local function calculateDamageAfterDefence(defenceType, threshold, defendValue, effectiveIncomingDamage)
     if defenceType == DEFENCE_TYPES.THRESHOLD then
         local safetyMargin = defendValue - threshold
         if safetyMargin >= 0 then
@@ -116,7 +116,7 @@ rules.defence = {
     getMaxBraceCharges = getMaxBraceCharges,
     calculateBraceDefenceBonus = calculateBraceDefenceBonus,
     calculateEffectiveIncomingDamage = calculateEffectiveIncomingDamage,
-    calculateDamageTaken = calculateDamageTaken,
+    calculateDamageAfterDefence = calculateDamageAfterDefence,
     calculateDamagePrevented = calculateDamagePrevented,
     isCrit = isCrit,
     calculateRetaliationDamage = calculateRetaliationDamage,
