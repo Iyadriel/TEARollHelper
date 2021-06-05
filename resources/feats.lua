@@ -35,6 +35,7 @@ feats.FEAT_KEYS = {
     "LEADER",
     "LIFE_SENTINEL",
     "LIVING_BARRICADE",
+    "MARKSMAN",
     "MASTER",
     "MEDIC",
     "MENDER",
@@ -193,6 +194,11 @@ local FEATS = {
         desc = "When tasked with doing multiple defense rolls in the same enemy turn (saves not included) you take 3 less damage from all sources for the duration of the enemy turn. Likewise when tasked with reducing an amount of damage taken with a defence roll, you reduce that damage taken by an additional 5.",
         note = "The multiple rolls part must be activated manually from the Defend action tab. The 5 dmg reduction part is applied automatically.",
         icon = "Interface\\Icons\\ability_warrior_shieldwall",
+    },
+    MARKSMAN = {
+        id = "MARKSMAN",
+        name = "Marksman",
+        desc = "Your damage rolls are now 5-10. When dealing your base damage you deal it as if you rolled 5 on a damage roll.",
     },
     MASTER = {
         id = "MASTER",

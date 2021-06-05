@@ -29,7 +29,8 @@ local function getBaseDamageBonus()
 end
 
 local function getBaseDamage()
-    return 1 + getBaseDamageBonus()
+    local baseDamage = character.hasFeat(FEATS.MARKSMAN) and 5 or 1
+    return baseDamage + getBaseDamageBonus()
 end
 
 local function getBaseDamageAfterBuffs(baseDmgBuff)

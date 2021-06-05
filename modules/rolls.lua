@@ -1,6 +1,7 @@
 local _, ns = ...
 
 local constants = ns.constants
+local character = ns.character
 local buffsState = ns.state.buffs
 local rollHandler = ns.rollHandler
 local rolls = ns.rolls
@@ -8,9 +9,11 @@ local rules = ns.rules
 local rollState = ns.state.rolls
 local turnState = ns.state.turn
 
+local feats = ns.resources.feats
 local traits = ns.resources.traits
 
 local ACTIONS = constants.ACTIONS
+local FEATS = feats.FEATS
 local TRAITS = traits.TRAITS
 
 local state = rollState.state
@@ -22,8 +25,11 @@ local function getRollModeModifier(action)
 end
 
 local function getMinRoll(action)
-    if action == ACTIONS.damage
-    and ((rollState.getAttack() and rollState.getAttack().isCrit) or buffsState.state.buffLookup.getTraitBuffs(TRAITS.VESEERAS_IRE)) then
+    if action == ACTIONS.damage and (
+        (rollState.getAttack() and rollState.getAttack().isCrit)
+        or buffsState.state.buffLookup.getTraitBuffs(TRAITS.VESEERAS_IRE)
+        or character.hasFeat(FEATS.MARKSMAN)
+    ) then
         return 5
     end
 
