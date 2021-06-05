@@ -199,7 +199,7 @@ local FEATS = {
     MARKSMAN = {
         id = "MARKSMAN",
         name = "Marksman",
-        desc = "Your damage rolls are now 5-10. When dealing your base damage you deal it as if you rolled 5 on a damage roll.",
+        desc = "Your damage rolls are now 5-10. When dealing only your base damage, your base damage is 5.",
     },
     MASTER = {
         id = "MASTER",
