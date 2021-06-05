@@ -64,8 +64,13 @@ ui.modules.actions.modules.cc.getOptions = function(options)
                             return actions.toString(ACTIONS.cc, rolls.getCC())
                         end
                     },
+                    useIHoldYouHurt = ui.helpers.traitToggle(
+                        ACTIONS.cc,
+                        TRAITS.I_HOLD_YOU_HURT,
+                        { order = 1 }
+                    ),
                     confirm = ui.helpers.confirmActionButton(ACTIONS.cc, rolls.getCC, {
-                        order = 1,
+                        order = 2,
                      }),
                 }
             }
