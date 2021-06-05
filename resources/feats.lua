@@ -42,6 +42,7 @@ feats.FEAT_KEYS = {
     "MERCY_FROM_PAIN",
     "MONSTER_HUNTER",
     "ONSLAUGHT",
+    "PAIN_BY_PROXY",
     "PARAGON",
     "PENANCE",
     "PHALANX",
@@ -238,6 +239,11 @@ local FEATS = {
         id = "ONSLAUGHT",
         name = "Onslaught",
         desc = "When rolling an Offence Attack roll against a target and failing to meet the threshold to hit, you still deal your base damage to the target.",
+    },
+    PAIN_BY_PROXY = {
+        id = "PAIN_BY_PROXY",
+        name = "Pain by Proxy",
+        desc = "Choose one of the following feats; Adrenaline, Focus, Onslaught. Another player character of your choice benefits from the chosen feat. You may change player and/or feat on a player turn or outside of combat, this occupies your player turn.",
     },
     PARAGON = {
         id = "PARAGON",
