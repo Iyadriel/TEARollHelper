@@ -52,7 +52,7 @@ local function traitButton(trait, options)
         order = options.order,
         type = "execute",
         width = options.width,
-        name = options.name or traitColour(trait) .. "Use " .. trait.name,
+        name = options.name or traitColour(trait) .. trait.name,
         desc = traitDescription(trait),
         hidden = options.hidden or function()
             return not character.hasTrait(trait) or (options.checkBuff and buffsState.buffLookup.getTraitBuffs(trait))
