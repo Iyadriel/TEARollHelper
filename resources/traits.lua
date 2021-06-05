@@ -14,6 +14,7 @@ local Artisan = models.Artisan:New()
 local BlessedStrike = models.BlessedStrike:New()
 local Chastice = models.Chastice:New()
 local CriticalMass = models.CriticalMass:New()
+local HoldTheLine = models.HoldTheLine:New()
 local MarkOfBenevolence = models.MarkOfBenevolence:New()
 local RetaliateAndDecimate = models.RetaliateAndDecimate:New()
 local TrueshotAura = models.TrueshotAura:New()
@@ -35,6 +36,7 @@ traits.TRAIT_KEYS = {
     "FAELUNES_REGROWTH",
     "FAULTLINE",
     "GREATER_RESTORATION",
+    HoldTheLine.id,
     "HOLY_BULWARK",
     "LIFE_PULSE",
     "LIFE_WITHIN",
@@ -95,6 +97,7 @@ local TRAITS = {
         desc = "Activate to remove a Critical Wound from yourself or another character without it costing any Greater Heal Slots. Activate outside of rolling.",
         numCharges = 2,
     },
+    [HoldTheLine.id] = HoldTheLine,
     HOLY_BULWARK = {
         id = "HOLY_BULWARK",
         name = "Holy Bulwark",
