@@ -15,6 +15,7 @@ local BlessedStrike = models.BlessedStrike:New()
 local Chastice = models.Chastice:New()
 local CriticalMass = models.CriticalMass:New()
 local HoldTheLine = models.HoldTheLine:New()
+local IHoldYouHurt = models.IHoldYouHurt:New()
 local MarkOfBenevolence = models.MarkOfBenevolence:New()
 local RetaliateAndDecimate = models.RetaliateAndDecimate:New()
 local TrueshotAura = models.TrueshotAura:New()
@@ -38,6 +39,7 @@ traits.TRAIT_KEYS = {
     "GREATER_RESTORATION",
     HoldTheLine.id,
     "HOLY_BULWARK",
+    IHoldYouHurt.id,
     "LIFE_PULSE",
     "LIFE_WITHIN",
     MarkOfBenevolence.id,
@@ -105,6 +107,7 @@ local TRAITS = {
             .. "|nOnly works against enemies who are Undead, Demonic, Void, or Eldritch. Activate outside of rolling.",
         numCharges = 1,
     },
+    [IHoldYouHurt.id] = IHoldYouHurt,
     LIFE_PULSE = {
         id = "LIFE_PULSE",
         name = "Life Pulse",

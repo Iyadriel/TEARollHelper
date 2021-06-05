@@ -49,6 +49,7 @@ models/trait/blessed-strike.lua
 models/trait/chastice.lua
 models/trait/critical-mass.lua
 models/trait/hold-the-line.lua
+models/trait/i-hold-you-hurt.lua
 models/trait/mark-of-benevolence.lua
 models/trait/retaliate-and-decimate.lua
 models/trait/trueshot-aura.lua

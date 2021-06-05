@@ -12,6 +12,7 @@ local TRAITS = traits.TRAITS
 
 local Chastice = TRAITS.CHASTICE
 local CriticalMass = TRAITS.CRITICAL_MASS
+local IHoldYouHurt = TRAITS.I_HOLD_YOU_HURT
 
 local function getAmountHealedWithPenance(numGreaterHealSlots, healingDoneBuff, targetIsKO)
     local amountHealed = 0
@@ -154,7 +155,7 @@ local function getDamage(attackRoll, damageRoll, rollBuff, critType, baseDmgBuff
     }
 end
 
-local function getCC(roll, rollBuff, stat, statBuff)
+local function getCC(roll, rollBuff, stat, statBuff, activeTraits)
     local isCrit = rules.cc.isCrit(roll)
     roll = rules.rolls.calculateRoll(roll, rollBuff)
     local ccValue = rules.cc.calculateCCValue(roll, stat, statBuff)
@@ -162,6 +163,13 @@ local function getCC(roll, rollBuff, stat, statBuff)
     return {
         ccValue = ccValue,
         isCrit = isCrit,
+        traits = {
+            [IHoldYouHurt.id] = {
+                canUse = ccValue > 0,
+                active = ccValue > 0 and activeTraits[IHoldYouHurt.id],
+                damageBonus = IHoldYouHurt:calculateDamageDoneBonus(ccValue),
+            },
+        },
     }
 end
 
