@@ -35,7 +35,7 @@ ui.modules.actions.modules = {
     groupName: String
 } ]]
 ui.modules.actions.getOptions = function(options)
-    local lifeWithin = ui.helpers.traitButton(TRAITS.LIFE_WITHIN, { order = 1})
+    local lifeWithin = ui.helpers.traitButton(TRAITS.LIFE_WITHIN, { order = 2})
 
     return {
         KO = ui.modules.actions.modules.KO.getOptions({ order = options.order }),
@@ -48,27 +48,31 @@ ui.modules.actions.getOptions = function(options)
                 return turnState.type.get() ~= TURN_TYPES.PLAYER.id
             end,
             args = {
+                blessedStrike = ui.helpers.traitButton(TRAITS.BLESSED_STRIKE, {
+                    order = 1,
+                    width = "full",
+                }),
                 lifeWithin = lifeWithin,
                 markOfBenevolence = ui.helpers.traitButton(TRAITS.MARK_OF_BENEVOLENCE, {
-                    order = 2,
+                    order = 3,
                     width = "full",
                 }),
                 shieldSlam = ui.helpers.traitButton(TRAITS.SHIELD_SLAM, {
-                    order = 3,
+                    order = 4,
                     name = function()
                         return COLOURS.TRAITS.GENERIC .. "Use " .. TRAITS.SHIELD_SLAM.name .. ": Deal " .. rolls.traits.getShieldSlam().dmg .. " damage"
                     end,
                     width = "full",
                 }),
-                attack = ui.modules.actions.modules.attack.getOptions({ order = 4 }),
-                cc = ui.modules.actions.modules.cc.getOptions({ order = 5 }),
+                attack = ui.modules.actions.modules.attack.getOptions({ order = 5 }),
+                cc = ui.modules.actions.modules.cc.getOptions({ order = 6 }),
                 heal = ui.modules.actions.modules.healing.getOptions({
-                    order = 6,
+                    order = 7,
                     outOfCombat = false,
                     turnTypeID = TURN_TYPES.PLAYER.id,
                 }),
-                buff = ui.modules.actions.modules.buff.getOptions({ order = 7 }),
-                utility = ui.modules.actions.modules.utility.getOptions({ order = 8, turnTypeID = TURN_TYPES.PLAYER.id }),
+                buff = ui.modules.actions.modules.buff.getOptions({ order = 8 }),
+                utility = ui.modules.actions.modules.utility.getOptions({ order = 9, turnTypeID = TURN_TYPES.PLAYER.id }),
             }
         },
         enemyTurn = {

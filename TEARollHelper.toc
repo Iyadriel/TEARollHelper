@@ -45,6 +45,7 @@ models/party-member.lua
 models/trait.lua
 models/trait/apex-protector.lua
 models/trait/artisan.lua
+models/trait/blessed-strike.lua
 models/trait/chastice.lua
 models/trait/critical-mass.lua
 models/trait/mark-of-benevolence.lua

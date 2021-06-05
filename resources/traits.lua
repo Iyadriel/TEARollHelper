@@ -11,6 +11,7 @@ local BuffEffectStat = models.BuffEffectStat
 
 local ApexProtector = models.ApexProtector:New()
 local Artisan = models.Artisan:New()
+local BlessedStrike = models.BlessedStrike:New()
 local Chastice = models.Chastice:New()
 local CriticalMass = models.CriticalMass:New()
 local MarkOfBenevolence = models.MarkOfBenevolence:New()
@@ -28,6 +29,7 @@ traits.TRAIT_KEYS = {
     Artisan.id,
     "ASCEND",
     "ANQULANS_REDOUBT",
+    BlessedStrike.id,
     Chastice.id,
     CriticalMass.id,
     "FAELUNES_REGROWTH",
@@ -71,6 +73,7 @@ local TRAITS = {
         icon = "Interface\\Icons\\spell_holy_greaterblessingofsanctuary",
         numCharges = 2,
     },
+    [BlessedStrike.id] = BlessedStrike,
     [Chastice.id] = Chastice,
     [CriticalMass.id] = CriticalMass,
     FAELUNES_REGROWTH = {
