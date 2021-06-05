@@ -47,6 +47,7 @@ feats.FEAT_KEYS = {
     "PROFESSIONAL",
     "SHEPHERD_OF_THE_WICKED",
     "TRAUMA_RESPONSE",
+    "VALIANT_WATCHER",
     "VANGUARD",
     "VENGEANCE",
     "WARDER",
@@ -260,6 +261,11 @@ local FEATS = {
         id = "TRAUMA_RESPONSE",
         name = "Trauma Response",
         desc = "Your cost for removing a Critical Wound from yourself or another character is now 1 Greater Heal Slot.",
+    },
+    VALIANT_WATCHER = {
+        id = "VALIANT_WATCHER",
+        name = "Valiant Watcher",
+        desc = "You can perform save rolls despite taking damage on the same enemy turn.",
     },
     VANGUARD = {
         id = "VANGUARD",
