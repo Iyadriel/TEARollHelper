@@ -109,6 +109,8 @@ local function CCToString(cc)
         msg = "The result of your CC roll is " .. cc.ccValue .. "."
     end
 
+    msg = msg .. getTraitMessages(cc)
+
     return msg
 end
 

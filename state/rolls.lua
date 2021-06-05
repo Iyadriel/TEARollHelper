@@ -59,6 +59,7 @@ rolls.initState = function()
         [ACTIONS.cc] = {
             rollMode = ROLL_MODES.NORMAL,
             currentRoll = nil,
+            activeTraits = {},
         },
 
         [ACTIONS.healing] = {
@@ -222,6 +223,11 @@ rolls.state = {
     [ACTIONS.cc] = {
         rollMode = basicGetSet(ACTIONS.cc, "rollMode"),
         currentRoll = basicGetSet(ACTIONS.cc, "currentRoll"),
+        activeTraits = activeTraits(ACTIONS.cc),
+
+        resetSlots = function()
+            rolls.state.cc.activeTraits.reset()
+        end,
     },
 
     [ACTIONS.healing] = {
@@ -348,6 +354,7 @@ rolls.state = {
 local function resetSlots()
     TEARollHelper:Debug("Resetting slots")
     rolls.state.attack.resetSlots()
+    rolls.state.cc.resetSlots()
     rolls.state.healing.resetSlots()
     rolls.state.buff.resetSlots()
     rolls.state.defend.resetSlots()
@@ -538,8 +545,9 @@ local function getCC()
     end
     local stat = character.getPlayerStat(whichStat)
     local statBuff = buffsState.buffs[whichStat].get()
+    local activeTraits = state.cc.activeTraits
 
-    return actions.getCC(state.cc.currentRoll, rollBuff, stat, statBuff)
+    return actions.getCC(state.cc.currentRoll, rollBuff, stat, statBuff, activeTraits)
 end
 
 local function getHealing(outOfCombat)
