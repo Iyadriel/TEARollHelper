@@ -40,11 +40,16 @@ local function calculateDamageValue(roll)
     return roll
 end
 
-local function calculateAttackDmg(damageValue, baseDmgBuff, damageDoneBuff)
+local function calculateAttackDmg(damageValue, baseDmgBuff, damageDoneBuff, enemyId)
     local damage = getBaseDamageAfterBuffs(baseDmgBuff) + damageValue + damageDoneBuff
 
     if character.hasWeakness(WEAKNESSES.GLASS_CANNON) then
         damage = damage + 2
+    end
+
+    local featPassives = character.getPlayerFeat().passives
+    if featPassives and featPassives.bonusDmgAgainstEnemies and featPassives.bonusDmgAgainstEnemies[enemyId] then
+        damage = damage + featPassives.bonusDmgAgainstEnemies[enemyId]
     end
 
     return damage

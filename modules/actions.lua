@@ -60,7 +60,7 @@ local function getAttack(attackIndex, roll, rollBuff, critType, threshold, stat,
     }
 end
 
-local function getDamage(attackRoll, damageRoll, rollBuff, critType, baseDmgBuff, damageDoneBuff, healingDoneBuff, isAOE, numGreaterHealSlots, targetIsKO, numBloodHarvestSlots, activeTraits)
+local function getDamage(attackRoll, damageRoll, rollBuff, critType, baseDmgBuff, damageDoneBuff, healingDoneBuff, enemyId, isAOE, numGreaterHealSlots, targetIsKO, numBloodHarvestSlots, activeTraits)
     local damageValue
     local dmg = 0
     local amountHealed = 0
@@ -77,7 +77,7 @@ local function getDamage(attackRoll, damageRoll, rollBuff, critType, baseDmgBuff
     if damageRoll then
         damageRoll = rules.rolls.calculateRoll(damageRoll, rollBuff)
         damageValue = rules.damage.calculateDamageValue(damageRoll)
-        dmg = rules.damage.calculateAttackDmg(damageValue, baseDmgBuff, damageDoneBuff)
+        dmg = rules.damage.calculateAttackDmg(damageValue, baseDmgBuff, damageDoneBuff, enemyId)
         dmg = rules.damage.calculateEffectiveOutgoingDamage(dmg)
     end
 

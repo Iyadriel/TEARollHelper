@@ -13,7 +13,7 @@ local WEAKNESSES = weaknesses.WEAKNESSES
 local function shouldShowEnemySelect()
     local featPassives = character.getPlayerFeat().passives
 
-    return featPassives and featPassives.advantageAgainstEnemies
+    return (featPassives and (featPassives.advantageAgainstEnemies or featPassives.bonusDmgAgainstEnemies))
         or character.getPlayerRacialTrait().buffAgainstEnemies
         or character.hasFeat(FEATS.ETERNAL_SACRIFICE)
         or character.hasTrait(TRAITS.HOLY_BULWARK)

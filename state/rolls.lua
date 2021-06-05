@@ -468,6 +468,7 @@ local function getDamage()
     local healingDoneBuff = buffsState.buffs.healingDone.get()
     local baseDmgBuff = buffsState.buffs.baseDamage.get()
     local damageDoneBuff = buffsState.buffs.damageDone.get()
+    local enemyId = environment.state.enemyId.get()
 
     return actions.getDamage(
         state.attack.currentRoll,
@@ -477,6 +478,7 @@ local function getDamage()
         baseDmgBuff,
         damageDoneBuff,
         healingDoneBuff,
+        enemyId,
         state.damage.isAOE,
         state.damage.numGreaterHealSlots,
         state.damage.targetIsKO,
