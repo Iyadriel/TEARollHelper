@@ -240,9 +240,7 @@ end)
 
 -- TODO find a way to update only the party tab
 local function updatePartyUI()
-    if settings.refreshOnPartyUpdate.get() then
-        ui.update(ui.modules.turn.name)
-    end
+    ui.update(ui.modules.turn.name)
 end
 
 bus.addListener(EVENTS.PARTY_MEMBER_ADDED, updatePartyUI)

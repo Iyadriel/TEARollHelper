@@ -44,7 +44,6 @@ local defaults = {
             autoUpdateTRP = false,
             debug = false,
             minimapIcon = {},
-            refreshOnPartyUpdate = true,
             showCustomFeatsTraits = false,
             suggestFatePoints = true,
         },

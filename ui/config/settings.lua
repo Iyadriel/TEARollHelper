@@ -100,17 +100,6 @@ ui.modules.config.modules.settings.getOptions = function()
                             settings.debug.set(value)
                         end,
                     },
-                    refreshOnPartyUpdate = {
-                        order = 1,
-                        type = "toggle",
-                        name = "Refresh UI on party update",
-                        desc = "Automatically update the UI when the addon receives an update from a party member. This is best left enabled unless it's causing issues.",
-                        width = "full",
-                        get = settings.refreshOnPartyUpdate.get,
-                        set = function(info, value)
-                            settings.refreshOnPartyUpdate.set(value)
-                        end,
-                    },
                 }
             }
         }
