@@ -13,7 +13,7 @@ function CriticalMass:New()
         "Critical Mass",
         "Activate after a successful Offence Attack roll to deal bonus damage equal to your base Offence stat. Activate after rolling.",
         "",
-        2
+        4
     )
 
     setmetatable(trait, self)
